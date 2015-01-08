@@ -1,1 +1,1 @@
-# gigaspace-sql-console
+# GigaSpaces SQL Console
