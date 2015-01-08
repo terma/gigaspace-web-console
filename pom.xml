@@ -42,14 +42,14 @@
             <groupId>com.gigaspaces</groupId>
             <artifactId>gs-openspaces</artifactId>
             <version>${gsVersion}</version>
-            <scope>provided</scope>
+            <!--<scope>provided</scope>-->
         </dependency>
 
         <dependency>
             <groupId>com.gigaspaces</groupId>
             <artifactId>gs-runtime</artifactId>
             <version>${gsVersion}</version>
-            <scope>provided</scope>
+            <!--<scope>provided</scope>-->
         </dependency>
 
         <!-- test -->
@@ -57,13 +57,6 @@
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-webapp</artifactId>
-            <version>9.3.0.M1</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-jsp</artifactId>
             <version>9.3.0.M1</version>
             <scope>test</scope>
         </dependency>
@@ -100,6 +93,9 @@
                             <value>file:src/test/resources/no-converters-config.json</value>
                         </systemProperty>
                     </systemProperties>
+                    <webApp>
+                        <contextPath>/gs-sql-console</contextPath>
+                    </webApp>
                 </configuration>
             </plugin>
 

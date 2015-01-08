@@ -267,7 +267,7 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
         $scope.status = "Executing...";
 
         $http({
-            url: "/execute",
+            url: "execute",
             method: "POST",
             data: request,
             timeout: executionCanceller.promise,
@@ -336,7 +336,7 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
         };
 
         $http({
-            url: "/counts",
+            url: "counts",
             method: "POST",
             data: request,
             headers: {'Content-Type': "application/json"}
@@ -373,7 +373,7 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
 
     $scope.loadConfig = function () {
         $http({
-            url: "/config",
+            url: "config",
             method: "POST",
             headers: {'Content-Type': "application/json"}
         }).success(function (res) {
