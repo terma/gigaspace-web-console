@@ -125,7 +125,8 @@
     </build>
 
     <scm>
-        <developerConnection>https://gitlab.com/terma/gigaspace-sql-console.git</developerConnection>
+        <developerConnection>scm:git:https://gitlab.com/terma/gigaspace-sql-console.git</developerConnection>
+        <connection>scm:git:https://gitlab.com/terma/gigaspace-sql-console.git</connection>
     </scm>
 
 </project>
