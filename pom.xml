@@ -4,7 +4,7 @@
 
     <groupId>com.github.terma</groupId>
     <artifactId>gigaspace-sql-console</artifactId>
-    <version>0.0.2</version>
+    <version>0.0.3-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <dependencies>
@@ -119,7 +119,7 @@
     <scm>
         <developerConnection>scm:git:https://gitlab.com/terma/gigaspace-sql-console.git</developerConnection>
         <connection>scm:git:https://gitlab.com/terma/gigaspace-sql-console.git</connection>
-      <tag>gigaspace-sql-console-0.0.2</tag>
+      <tag>HEAD</tag>
   </scm>
 
 </project>
