@@ -1,5 +1,7 @@
 {
-  "converters": [],
+  "converters": [
+    "com.github.terma.gigaspacesqlconsole.TestConverter"
+  ],
   "gigaspaces": [
     {
       "name": "TEST-GS-1",
@@ -10,8 +12,8 @@
     {
       "name": "TEST-GS-2",
       "url": "/./space2",
-      "user": "user2",
-      "password": "password2"
+      "user": "",
+      "password": ""
     }
   ]
 }
