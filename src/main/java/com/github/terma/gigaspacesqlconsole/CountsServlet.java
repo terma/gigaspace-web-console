@@ -4,7 +4,7 @@ public class CountsServlet extends JsonServlet<CountsRequest> {
 
     @Override
     protected Object doJson(CountsRequest request) throws Exception {
-        return CountGetter.counts(request);
+        return Counts.counts(request);
     }
 
     @Override

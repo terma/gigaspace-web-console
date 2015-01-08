@@ -14,7 +14,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class CountGetter {
+public class Counts {
 
     //    case class CacheItem(admin: Admin, space: Space, var lastUsage: Long)
     private static class CacheItem {
