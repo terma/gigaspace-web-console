@@ -22,11 +22,11 @@
 
     <div id="recent" ng-show="showRecent">
         <div ng-repeat="urlHistory in history.data track by $index">
-            <p>{{ urlHistory.url }}</p>
+            <p class="mono-text">{{ urlHistory.url }}</p>
 
             <ul>
                 <li ng-repeat="sql in urlHistory.items track by $index">
-                    <a ng-click="selectRecent(urlHistory, sql)" href="javascript:void(0);">{{ sql }}</a>
+                    <a ng-click="selectRecent(urlHistory, sql)" href="javascript:void(0);" class="mono-text">{{ sql }}</a>
                 </li>
             </ul>
         </div>
@@ -35,7 +35,7 @@
     <p/>
     <label for="url">Url</label>
     <br>
-    <input id="url" name="url" ng-model="request.url" style="width: 100%"/>
+    <input id="url" name="url" ng-model="request.url" style="width: 100%" class="mono-text"/>
 
     <p/>
     <table border="0" cellspacing="0" cellpadding="0">
@@ -43,13 +43,13 @@
             <td style="padding-right: 10px;">
                 <label for="user">User</label>
                 <br>
-                <input id="user" name="user" ng-model="request.user"/>
+                <input id="user" name="user" ng-model="request.user" class="mono-text"/>
             </td>
 
             <td>
                 <label for="password">Password</label>
                 <br>
-                <input id="password" name="password" type="password" ng-model="request.password"/>
+                <input id="password" name="password" type="password" ng-model="request.password" class="mono-text"/>
             </td>
         </tr>
     </table>
@@ -62,18 +62,18 @@
     <div ng-show="tab == 'types'">
         <p ng-show="counts.status">{{ counts.status }}</p>
 
-        <p ng-show="counts.error"/>
+        <p ng-show="counts.error">
         <a href="javascript:void(0);" ng-click="startCheckTypes()">Try Again</a>
-        <pre style="color: red;">{{ counts.error.exceptionClass }}</pre>
-        <pre style="color: red;">{{ counts.error.message }}</pre>
-        <pre style="color: red;">{{ counts.error.stacktrace }}</pre>
+        <pre style="color: red;" class="mono-text">{{ counts.error.exceptionClass }}</pre>
+        <pre style="color: red;" class="mono-text">{{ counts.error.message }}</pre>
+        <pre style="color: red;" class="mono-text">{{ counts.error.stacktrace }}</pre>
         </p>
 
         <p/>
         <table ng-show="counts.data">
             <tbody>
-            <tr ng-repeat="count in counts.data" class="{{ getCountClass(count) }}">
-                <td>{{ count.name }}</td>
+            <tr ng-repeat="count in counts.data" class="mono-text {{ getCountClass(count) }}">
+                <td><a href="javascript:void(0);" ng-click="openQueryTabWithSelectFor(count.name)">{{ count.name }}</a></td>
                 <td align="right">{{ count.count }}</td>
                 <td>{{ countStatus(count) }}</td>
             </tr>
@@ -84,7 +84,7 @@
     <div ng-show="tab == 'query'">
         <p/>
         <label for="sql">SQL Query</label>
-        <textarea id="sql" name="sql" ng-model="request.sql" style="width: 100%" rows="6"></textarea>
+        <textarea id="sql" name="sql" ng-model="request.sql" class="mono-text" style="width: 100%" rows="6"></textarea>
 
         <p/>
         <a ng-click="executeQuery()" href="javascript:void(0);">Execute</a>
@@ -93,12 +93,12 @@
 
         <div ng-repeat="result in results">
 
-            <h3>Results {{ result.data.data.length }} for {{ result.sql }}</h3>
+            <h4>Results {{ result.data.data.length }} for {{ result.sql }}</h4>
 
             <p ng-show="result.error">
-            <pre style="color: red;">{{ result.error.exceptionClass }}</pre>
-            <pre style="color: red;">{{ result.error.message }}</pre>
-            <pre style="color: red;">{{ result.error.stacktrace }}</pre>
+            <pre style="color: red;" class="mono-text">{{ result.error.exceptionClass }}</pre>
+            <pre style="color: red;" class="mono-text">{{ result.error.message }}</pre>
+            <pre style="color: red;" class="mono-text">{{ result.error.stacktrace }}</pre>
             </p>
 
             <p ng-show="result.status">{{ result.status }}</p>
@@ -111,7 +111,7 @@
                 <thead>
                 <tr>
                     <th ng-repeat="value in result.data.columns track by $index" valign="top" style="border: 1px solid
-                    #C0C0C0; padding: 8px">{{ value }}
+                    #C0C0C0; padding: 8px" class="mono-text">{{ value }}
                     </th>
                 </tr>
                 </thead>
@@ -120,7 +120,7 @@
                     ng-click="selectResultRecord(result.data.data, record)" ng-class="record.selectedClass">
                     <td ng-repeat="value in record track by $index" valign="top"
                         style="border: 1px solid #C0C0C0; padding: 8px">
-                        <pre style="margin: 0; padding: 0;">{{ value | limitTo: textLengthLimit }}</pre>
+                        <pre style="margin: 0; padding: 0;" class="mono-text">{{ value | limitTo: textLengthLimit }}</pre>
                         <span ng-if="value.length > 50" ng-show="!showAllText">...</span>
                     </td>
                 </tr>

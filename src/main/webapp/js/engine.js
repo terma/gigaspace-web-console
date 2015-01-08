@@ -305,6 +305,11 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
         $scope.stopCheckTypes();
     };
 
+    $scope.openQueryTabWithSelectFor = function (typeName) {
+        $scope.openQueryTab();
+        $scope.request.sql += "\nselect * from " + typeName + " where rownum < 50";
+    };
+
     $scope.getCountClass = function (count) {
         if (count.prevCount == undefined) return "";
         else if (count.count == count.prevCount && count.count == 0) return "count_stable_zero";
@@ -362,7 +367,7 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
         }).error(function (res) {
             $scope.counts.check = false;
             $scope.counts.status = undefined;
-            $scope.counts.error = res ? res : 'Unknown error';
+            $scope.counts.error = res;
         });
     };
 

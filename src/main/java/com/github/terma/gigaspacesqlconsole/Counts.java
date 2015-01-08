@@ -9,6 +9,7 @@ import org.openspaces.admin.space.SpaceInstance;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Matcher;
@@ -113,6 +114,10 @@ public class Counts {
     }
 
     public static CountsResponse counts(CountsRequest request) {
+        if (request.url.equals("/./test")) {
+            return createTestResponse();
+        }
+
         final CacheItem adminAndSpace = createOrGetAdmin(request);
 
         SpaceInstance[] spaceInstances = adminAndSpace.space.getInstances();
@@ -136,6 +141,20 @@ public class Counts {
             countResponse.count = count.getValue();
             countsResponse.counts.add(countResponse);
         }
+        return countsResponse;
+    }
+
+    private static CountsResponse createTestResponse() {
+        CountsResponse countsResponse = new CountsResponse();
+        countsResponse.counts = new ArrayList<>();
+        Count count1 = new Count();
+        count1.name = "com.github.terma.gigaspacesqlconsole.TestType";
+        count1.count = new Random().nextInt(10);
+        countsResponse.counts.add(count1);
+        Count count2 = new Count();
+        count2.name = "com.github.terma.gigaspacesqlconsole.Momo";
+        count2.count = 1;
+        countsResponse.counts.add(count2);
         return countsResponse;
     }
 

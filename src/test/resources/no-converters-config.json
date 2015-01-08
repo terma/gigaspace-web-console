@@ -1,0 +1,11 @@
+{
+  "converters": [],
+  "gigaspaces": [
+    {
+      "name": "TEST",
+      "url": "/./test",
+      "user": "",
+      "password": ""
+    }
+  ]
+}

@@ -7,14 +7,14 @@ ul {
     margin-top: 0;
 }
 
-h3, p, a, label, li span {
+body {
     font-family: tahoma, serif;
     font-size: 90%;
 }
 
-input, textarea, pre, th, td span {
+.mono-text {
     font-family: courier, serif;
-    font-size: 80%;
+    font-size: 90%;
 }
 
 input, textarea {
