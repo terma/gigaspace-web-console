@@ -96,7 +96,22 @@
                     </systemProperties>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.1</version>
+                <configuration>
+                    <preparationGoals>clean package</preparationGoals>
+                    <completionGoals>release:clean</completionGoals>
+                    <resume>false</resume>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
+
+    <scm>
+        <developerConnection>https://gitlab.com/terma/gigaspace-sql-console.git</developerConnection>
+    </scm>
 
 </project>
