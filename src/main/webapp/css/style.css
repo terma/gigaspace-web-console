@@ -1,0 +1,64 @@
+body {
+    margin: 0;
+    padding: 1em;
+}
+
+ul {
+    margin-top: 0;
+}
+
+h3, p, a, label, li span {
+    font-family: tahoma, serif;
+    font-size: 90%;
+}
+
+input, textarea, pre, th, td span {
+    font-family: courier, serif;
+    font-size: 80%;
+}
+
+input, textarea {
+    margin: 0;
+    padding: 0;
+}
+
+.count_up {
+    font-weight: bold;
+}
+
+.count_stable_zero {
+    color: grey;
+}
+
+.count_down {
+    font-weight: bold;
+}
+
+#recent {
+    list-style: none;
+    padding: 0;
+}
+
+#recent li {
+    margin: 0;
+    padding: 0;
+}
+
+#gigaspaces {
+    list-style: none;
+    padding: 0;
+}
+
+#gigaspaces li {
+    margin: 0;
+    padding: 0;
+    display: inline;
+}
+
+.result tr:hover {
+    background-color: #E8E8E8;
+}
+
+tr.selected {
+    background-color: #E0E0E0;
+}

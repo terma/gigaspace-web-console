@@ -1,0 +1,17 @@
+{
+  "converters": [],
+  "gigaspaces": [
+    {
+      "name": "TEST-GS-1",
+      "url": "jini://*/*/testSpace?locators=locator1",
+      "user": "user1",
+      "password": "password1"
+    },
+    {
+      "name": "TEST-GS-2",
+      "url": "/./space2",
+      "user": "user2",
+      "password": "password2"
+    }
+  ]
+}
