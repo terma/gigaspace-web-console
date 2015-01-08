@@ -42,14 +42,14 @@
             <groupId>com.gigaspaces</groupId>
             <artifactId>gs-openspaces</artifactId>
             <version>${gsVersion}</version>
-            <!--<scope>provided</scope>-->
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>com.gigaspaces</groupId>
             <artifactId>gs-runtime</artifactId>
             <version>${gsVersion}</version>
-            <!--<scope>provided</scope>-->
+            <scope>provided</scope>
         </dependency>
 
         <!-- test -->
@@ -60,13 +60,6 @@
             <version>9.3.0.M1</version>
             <scope>test</scope>
         </dependency>
-
-        <!--<dependency>-->
-            <!--<groupId>javax.servlet.jsp</groupId>-->
-            <!--<artifactId>jsp-api</artifactId>-->
-            <!--<version>2.2.1-b03</version>-->
-            <!--<scope>test</scope>-->
-        <!--</dependency>-->
 
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
