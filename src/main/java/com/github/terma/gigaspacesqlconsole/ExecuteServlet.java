@@ -1,8 +1,5 @@
 package com.github.terma.gigaspacesqlconsole;
 
-import javax.servlet.annotation.WebServlet;
-
-@WebServlet(urlPatterns = "/execute")
 public class ExecuteServlet extends JsonServlet<ExecuteRequest> {
 
     @Override

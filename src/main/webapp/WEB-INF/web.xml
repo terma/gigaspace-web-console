@@ -1,7 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns="http://java.sun.com/xml/ns/javaee"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
-      version="3.0">
+      xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+      version="2.5">
+
+      <servlet>
+            <servlet-name>ConfigServlet</servlet-name>
+            <servlet-class>com.github.terma.gigaspacesqlconsole.ConfigServlet</servlet-class>
+      </servlet>
+
+      <servlet>
+            <servlet-name>ExecuteServlet</servlet-name>
+            <servlet-class>com.github.terma.gigaspacesqlconsole.ExecuteServlet</servlet-class>
+      </servlet>
+
+      <servlet>
+            <servlet-name>CountsServlet</servlet-name>
+            <servlet-class>com.github.terma.gigaspacesqlconsole.CountsServlet</servlet-class>
+      </servlet>
+
+      <servlet-mapping>
+            <servlet-name>ConfigServlet</servlet-name>
+            <url-pattern>/config</url-pattern>
+      </servlet-mapping>
+
+      <servlet-mapping>
+            <servlet-name>ExecuteServlet</servlet-name>
+            <url-pattern>/execute</url-pattern>
+      </servlet-mapping>
+
+      <servlet-mapping>
+            <servlet-name>CountsServlet</servlet-name>
+            <url-pattern>/counts</url-pattern>
+      </servlet-mapping>
 
 </web-app>

@@ -1,8 +1,5 @@
 package com.github.terma.gigaspacesqlconsole;
 
-import javax.servlet.annotation.WebServlet;
-
-@WebServlet(urlPatterns = "/counts")
 public class CountsServlet extends JsonServlet<CountsRequest> {
 
     @Override
