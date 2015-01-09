@@ -128,7 +128,8 @@ public class Counts {
             if (spaceInstance.getMode() == SpaceMode.PRIMARY) {
                 for (final Map.Entry<String, Integer> countItem : instanceToCounts(spaceInstance).entrySet()) {
                     System.out.println("Space instance " + spaceInstance + " has " + countItem + " types");
-                    int count = counts.getOrDefault(countItem.getKey(), 0);
+                    Integer count = counts.get(countItem.getKey());
+                    if (count == null) count = 0;
                     counts.put(countItem.getKey(), count + countItem.getValue());
                 }
             }
