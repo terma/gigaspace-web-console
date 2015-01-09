@@ -12,8 +12,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Counts {
 
@@ -82,14 +80,14 @@ public class Counts {
         try {
             CacheItem item = cache.get(request);
             if (item == null) {
-                final String locator = parseLocator(request.url);
+                final String locator = GigaSpaceUrl.parseLocator(request.url);
                 System.out.println("Starting to get admin for " + locator + "...");
                 final AdminFactory adminFactory = new AdminFactory();
                 adminFactory.addLocator(locator);
                 adminFactory.credentials(request.user, request.password);
                 final Admin admin = adminFactory.createAdmin();
 
-                final String spaceName = parseSpace(request.url);
+                final String spaceName = GigaSpaceUrl.parseSpace(request.url);
                 System.out.println("Trying connect to space " + spaceName + "...");
                 Space space = admin.getSpaces().waitFor(spaceName, 20, TimeUnit.SECONDS);
                 if (space == null) {
@@ -164,21 +162,6 @@ public class Counts {
         } else {
             return new HashMap<>();
         }
-    }
-
-    private static final Pattern locatorPattern = Pattern.compile("locators=([.:a-zA-Z0-9]+)");
-    private static final Pattern spacePattern = Pattern.compile("/([]a-zA-Z0-9-]+)\\?");
-
-    private static String parseLocator(String url) {
-        final Matcher m = locatorPattern.matcher(url);
-        if (m.find()) return m.group();
-        else throw new IllegalArgumentException("Can't find locator in url: " + url);
-    }
-
-    private static String parseSpace(String url) {
-        final Matcher m = spacePattern.matcher(url);
-        if (m.find()) return m.group();
-        else throw new IllegalArgumentException("Can't find space in url: " + url);
     }
 
 }
