@@ -277,7 +277,8 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
             result.data = res;
         }).error(function (res) {
             result.status = undefined;
-            result.error = res;
+            if (res) result.error = res;
+            else result.error = {"message": "Can't connect to server!"};
         });
     }
 
@@ -367,7 +368,8 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
         }).error(function (res) {
             $scope.counts.check = false;
             $scope.counts.status = undefined;
-            $scope.counts.error = res;
+            if (res) $scope.counts.error = res;
+            else $scope.counts.error = {"message": "Can't connect to server!"};
         });
     };
 

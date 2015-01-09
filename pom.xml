@@ -97,6 +97,23 @@
                         <contextPath>/gs-sql-console</contextPath>
                     </webApp>
                 </configuration>
+
+                <dependencies>
+
+                    <!-- add gigaspace as real to be able start app -->
+
+                    <dependency>
+                        <groupId>com.gigaspaces</groupId>
+                        <artifactId>gs-openspaces</artifactId>
+                        <version>${gsVersion}</version>
+                    </dependency>
+
+                    <dependency>
+                        <groupId>com.gigaspaces</groupId>
+                        <artifactId>gs-runtime</artifactId>
+                        <version>${gsVersion}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
 
             <plugin>
