@@ -99,7 +99,7 @@ public class Counts {
                 item = new CacheItem();
                 item.admin = admin;
                 item.space = space;
-                item.lastUsage = -1;
+                cache.put(request, item);
             }
 
             // update last usage
