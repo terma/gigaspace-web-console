@@ -7,6 +7,15 @@ ul {
     margin-top: 0;
 }
 
+#links {
+    list-style: none;
+    padding: 0;
+}
+
+#links li {
+    display: inline;
+}
+
 body {
     font-family: tahoma, serif;
     font-size: 90%;

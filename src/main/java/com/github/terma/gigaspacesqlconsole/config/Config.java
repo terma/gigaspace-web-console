@@ -37,6 +37,7 @@ public class Config {
         throw new IllegalArgumentException("Unknown config path: " + configPath);
     }
 
+    public List<ConfigLink> links;
     public List<String> converters;
     public List<ConfigGigaSpace> gigaspaces;
 

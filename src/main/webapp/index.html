@@ -7,8 +7,12 @@
     <script type="text/javascript" src="js/engine.js"></script>
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
-<div ng-app="App" ng-controller="GigaSpaceBrowserController" class="container">
+<body ng-app="App" ng-controller="GigaSpaceBrowserController">
+    <ul ng-show="links" id="links">
+        <li ng-repeat="link in links">
+            <a href="{{ link.url }}">{{ link.name }}</a>
+        </li>
+    </ul>
 
     <ul id="gigaspaces">
         <li ng-repeat="gigaspace in gigaspaces">
@@ -130,8 +134,6 @@
             </table>
         </div>
     </div>
-
-</div>
 
 </body>
 </html>

@@ -1,4 +1,14 @@
 {
+  "links": [
+    {
+      "name": "Yandex",
+      "url": "http://www.yandex.ru"
+    },
+    {
+      "name": "Google",
+      "url": "http://www.google.com"
+    }
+  ],
   "converters": [],
   "gigaspaces": [
     {

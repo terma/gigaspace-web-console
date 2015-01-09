@@ -380,6 +380,7 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
             headers: {'Content-Type': "application/json"}
         }).success(function (res) {
             $scope.gigaspaces = res.gigaspaces;
+            $scope.links = res.links;
         }).error(function (res) {
             // todo show error if can't load config
         });

@@ -1,9 +1,23 @@
 package com.github.terma.gigaspacesqlconsole.config;
 
-import junit.framework.Assert;
 import org.junit.Test;
 
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
+
 public class ConfigTest {
+
+    @Test
+    public void shouldReadLinks() {
+        System.setProperty(Config.CONFIG_PATH_SYSTEM_PROPERTY, "classpath:/config.json");
+
+        Config config = Config.read();
+
+        assertNotNull(config);
+        assertEquals(2, config.links.size());
+        assertEquals("Yandex", config.links.get(0).name);
+        assertEquals("http://www.yandex.ru", config.links.get(0).url);
+    }
 
     @Test
     public void shouldReadGigaspaces() {
@@ -11,12 +25,12 @@ public class ConfigTest {
 
         Config config = Config.read();
 
-        Assert.assertNotNull(config);
-        Assert.assertEquals(2, config.gigaspaces.size());
-        Assert.assertEquals("TEST-GS-1", config.gigaspaces.get(0).name);
-        Assert.assertEquals("jini://*/*/testSpace?locators=locator1", config.gigaspaces.get(0).url);
-        Assert.assertEquals("user1", config.gigaspaces.get(0).user);
-        Assert.assertEquals("password1", config.gigaspaces.get(0).password);
+        assertNotNull(config);
+        assertEquals(2, config.gigaspaces.size());
+        assertEquals("TEST-GS-1", config.gigaspaces.get(0).name);
+        assertEquals("jini://*/*/testSpace?locators=locator1", config.gigaspaces.get(0).url);
+        assertEquals("user1", config.gigaspaces.get(0).user);
+        assertEquals("password1", config.gigaspaces.get(0).password);
     }
 
     @Test
@@ -25,8 +39,8 @@ public class ConfigTest {
 
         Config config = Config.read();
 
-        Assert.assertEquals(1, config.converters.size());
-        Assert.assertEquals("com.github.terma.gigaspacesqlconsole.TestConverter", config.converters.get(0));
+        assertEquals(1, config.converters.size());
+        assertEquals("com.github.terma.gigaspacesqlconsole.TestConverter", config.converters.get(0));
     }
 
     @Test
@@ -35,9 +49,9 @@ public class ConfigTest {
 
         Config config = Config.read();
 
-        Assert.assertNotNull(config);
-        Assert.assertEquals(2, config.gigaspaces.size());
-        Assert.assertEquals(1, config.converters.size());
+        assertNotNull(config);
+        assertEquals(2, config.gigaspaces.size());
+        assertEquals(1, config.converters.size());
     }
 
     @Test
@@ -46,9 +60,9 @@ public class ConfigTest {
 
         Config config = Config.read();
 
-        Assert.assertNotNull(config);
-        Assert.assertEquals(2, config.gigaspaces.size());
-        Assert.assertEquals(1, config.converters.size());
+        assertNotNull(config);
+        assertEquals(2, config.gigaspaces.size());
+        assertEquals(1, config.converters.size());
     }
 
     @Test(expected = IllegalArgumentException.class)
