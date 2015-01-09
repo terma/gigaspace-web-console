@@ -100,6 +100,8 @@ public class Counts {
                 item.admin = admin;
                 item.space = space;
                 cache.put(request, item);
+            } else {
+                System.out.println("Use cached admin");
             }
 
             // update last usage
@@ -119,12 +121,13 @@ public class Counts {
         final CacheItem adminAndSpace = createOrGetAdmin(request);
 
         SpaceInstance[] spaceInstances = adminAndSpace.space.getInstances();
+        System.out.println("Admin has " + spaceInstances.length + " space instances");
 
-        Map<String, Integer> counts = new HashMap<>();
-
+        final Map<String, Integer> counts = new HashMap<>();
         for (final SpaceInstance spaceInstance : spaceInstances) {
             if (spaceInstance.getMode() == SpaceMode.PRIMARY) {
                 for (final Map.Entry<String, Integer> countItem : instanceToCounts(spaceInstance).entrySet()) {
+                    System.out.println("Space instance " + spaceInstance + " has " + countItem + " types");
                     int count = counts.getOrDefault(countItem.getKey(), 0);
                     counts.put(countItem.getKey(), count + countItem.getValue());
                 }
@@ -156,7 +159,7 @@ public class Counts {
         return countsResponse;
     }
 
-    private static Map<String, Integer> instanceToCounts(SpaceInstance instance) {
+    private static Map<String, Integer> instanceToCounts(final SpaceInstance instance) {
         if (instance != null) {
             return instance.getRuntimeDetails().getCountPerClassName();
         } else {
