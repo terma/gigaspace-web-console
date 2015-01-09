@@ -43,4 +43,5 @@ public class GigaSpaceUrlTest {
         GigaSpaceUrl.parseSpace("jini:/*/");
     }
 
+
 }
