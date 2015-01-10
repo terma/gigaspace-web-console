@@ -320,21 +320,11 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
     };
 
     $scope.countStatus = function (count) {
-        if (count.prevCount == undefined) return "";
+        if (count == undefined || count.prevCount == undefined) return "";
         else if (count.count == count.prevCount && count.count == 0) return "";
         else if (count.count == count.prevCount) return "";
         else if (count.count > count.prevCount) return "+" + (count.count - count.prevCount);
         else return (count.count - count.prevCount);
-    };
-
-    $scope.countsTotal = function () {
-        var total = 0;
-        if ($scope.counts.data) {
-            for (var n = 0; n < $scope.counts.data.length; n++) {
-                total += $scope.counts.data[n].count;
-            }
-        }
-        return total;
     };
 
     $scope.queryCounts = function () {
@@ -357,6 +347,11 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
             $scope.counts.error = undefined;
             $scope.counts.status = undefined;
 
+            var total = 0;
+            for (var n = 0; n < res.counts.length; n++) {
+                total += res.counts[n].count;
+            }
+
             if ($scope.counts.data) {
                 for (var i = 0; i < res.counts.length; i++) {
                     var count = res.counts[i];
@@ -368,6 +363,14 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
                         }
                     }
                 }
+            }
+
+            $scope.counts.total = {
+                count: total,
+                prevCount: $scope.counts.total ? $scope.counts.total.count : undefined
+            };
+            if ($scope.counts.total.count != $scope.counts.total.prevCount) {
+                $scope.counts.total.lastChanged = new Date();
             }
 
             $scope.counts.data = res.counts;
