@@ -152,6 +152,22 @@
                     <resume>false</resume>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>com.github.searls</groupId>
+                <artifactId>jasmine-maven-plugin</artifactId>
+                <version>1.3.1.5</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <!-- configuration properties will go here -->
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 

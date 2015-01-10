@@ -320,11 +320,18 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
     };
 
     $scope.countStatus = function (count) {
-        if (count == undefined || count.prevCount == undefined) return "";
-        else if (count.count == count.prevCount && count.count == 0) return "";
-        else if (count.count == count.prevCount) return "";
-        else if (count.count > count.prevCount) return "+" + (count.count - count.prevCount);
-        else return (count.count - count.prevCount);
+        if (!count || count.prevCount == undefined) return "";
+
+        if (count.count > count.prevCount) return "+" + (count.count - count.prevCount);
+        return "" + (count.count - count.prevCount);
+    };
+
+    $scope.prevCountUpdateStatus = function (count) {
+        if (count && count.prevCountUpdate) {
+            return "changed " + ((new Date().getTime() - count.prevCountUpdate) / (1000 * 60)).toFixed(0) + " min ago";
+        } else {
+            return "";
+        }
     };
 
     $scope.queryCounts = function () {
@@ -347,33 +354,55 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
             $scope.counts.error = undefined;
             $scope.counts.status = undefined;
 
+            function updateCount(count, newCount) {
+                if (count.count != newCount) {
+                    count.prevCount = count.count;
+                    count.prevCountUpdate = new Date().getTime();
+                }
+                count.count = newCount;
+            }
+
+            function findCount(counts, name) {
+                for (var j = 0; j < counts.length; j++) {
+                    if (counts[j].name == name) {
+                        return counts[j];
+                    }
+                }
+                return undefined;
+            }
+
+            if (!$scope.counts.data) $scope.counts.data = [];
+
+            // update existent counters and remove old
+            for (var i = 0; i < $scope.counts.data.length;) {
+                var count = $scope.counts.data[i];
+                var newCount = findCount(res.counts, count.name);
+                if (newCount) {
+                    // get updates
+                    updateCount(count, newCount.count);
+                    i++;
+                } else {
+                    // old just remove
+                    $scope.counts.data.splice(i, 1);
+                }
+            }
+
+            // add new counters
+            for (var j = 0; j < res.counts.length; j++) {
+                var newCount = res.counts[j];
+                var count = findCount($scope.counts.data, newCount.name);
+                if (!count) {
+                    $scope.counts.data.push(newCount);
+                }
+            }
+
             var total = 0;
             for (var n = 0; n < res.counts.length; n++) {
                 total += res.counts[n].count;
             }
 
-            if ($scope.counts.data) {
-                for (var i = 0; i < res.counts.length; i++) {
-                    var count = res.counts[i];
-
-                    for (var j = 0; j < $scope.counts.data.length; j++) {
-                        if ($scope.counts.data[j].name == count.name) {
-                            count.prevCount = $scope.counts.data[j].count;
-                            break;
-                        }
-                    }
-                }
-            }
-
-            $scope.counts.total = {
-                count: total,
-                prevCount: $scope.counts.total ? $scope.counts.total.count : undefined
-            };
-            if ($scope.counts.total.count != $scope.counts.total.prevCount) {
-                $scope.counts.total.lastChanged = new Date();
-            }
-
-            $scope.counts.data = res.counts;
+            if (!$scope.counts.total) $scope.counts.total = {count: total};
+            updateCount($scope.counts.total, total);
 
             $timeout(function () {
                 $scope.queryCounts();
