@@ -327,6 +327,16 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
         else return (count.count - count.prevCount);
     };
 
+    $scope.countsTotal = function () {
+        var total = 0;
+        if ($scope.counts.data) {
+            for (var n = 0; n < $scope.counts.data.length; n++) {
+                total += $scope.counts.data[n].count;
+            }
+        }
+        return total;
+    };
+
     $scope.queryCounts = function () {
         if (!$scope.counts.check) return; // stopped
 
