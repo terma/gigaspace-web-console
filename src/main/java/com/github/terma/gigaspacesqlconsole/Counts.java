@@ -149,10 +149,22 @@ public class Counts {
     private static CountsResponse createTestResponse() {
         CountsResponse countsResponse = new CountsResponse();
         countsResponse.counts = new ArrayList<>();
+
+        Count count3 = new Count();
+        count3.name = "com.github.terma.gigaspacesqlconsole.ZT";
+        count3.count = new Random().nextInt(100);
+        countsResponse.counts.add(count3);
+
+        Count count4 = new Count();
+        count4.name = "com.github.terma.gigaspacesqlconsole.AT";
+        count4.count = new Random().nextInt(1000);
+        countsResponse.counts.add(count4);
+
         Count count1 = new Count();
         count1.name = "com.github.terma.gigaspacesqlconsole.TestType";
         count1.count = new Random().nextInt(10);
         countsResponse.counts.add(count1);
+
         Count count2 = new Count();
         count2.name = "com.github.terma.gigaspacesqlconsole.Momo";
         count2.count = 1;
