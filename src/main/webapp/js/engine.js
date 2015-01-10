@@ -311,6 +311,16 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
         $scope.request.sql += "\nselect * from " + typeName + " where rownum < 50";
     };
 
+    $scope.openQueryTabWithUpdateFor = function (typeName) {
+        $scope.openQueryTab();
+        $scope.request.sql += "\nupdate " + typeName + " set ? where ?";
+    };
+
+    $scope.openQueryTabWithDeleteFor = function (typeName) {
+        $scope.openQueryTab();
+        $scope.request.sql += "\ndelete from " + typeName + " where ?";
+    };
+
     $scope.getCountClass = function (count) {
         if (count.prevCount == undefined) return "";
         else if (count.count == count.prevCount && count.count == 0) return "count_stable_zero";
@@ -319,19 +329,15 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
         else return "count_down";
     };
 
-    $scope.countStatus = function (count) {
-        if (!count || count.prevCount == undefined) return "";
+    $scope.prevCountStatus = function (count) {
+        if (!count || count.prevCount == undefined || count.prevCountUpdate == undefined) return "no update";
 
-        if (count.count > count.prevCount) return "+" + (count.count - count.prevCount);
-        return "" + (count.count - count.prevCount);
-    };
+        var status = ((new Date().getTime() - count.prevCountUpdate) / (1000 * 60)).toFixed(0) + " min ago";
 
-    $scope.prevCountUpdateStatus = function (count) {
-        if (count && count.prevCountUpdate) {
-            return "changed " + ((new Date().getTime() - count.prevCountUpdate) / (1000 * 60)).toFixed(0) + " min ago";
-        } else {
-            return "";
-        }
+        if (count.count > count.prevCount) status += " +" + (count.count - count.prevCount);
+        else status += " " + (count.count - count.prevCount);
+
+        return status;
     };
 
     $scope.queryCounts = function () {

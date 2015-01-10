@@ -74,20 +74,23 @@
         </p>
 
         <p/>
-        <table ng-show="counts.data">
+        <table ng-show="counts.data" class="result">
             <tbody>
-            <tr ng-repeat="count in counts.data | orderBy:'name'" class="mono-text {{ getCountClass(count) }}">
-                <td><a href="javascript:void(0);" ng-click="openQueryTabWithSelectFor(count.name)">{{ count.name }}</a>
-                </td>
+            <tr ng-repeat="count in counts.data | orderBy:'name'" class="mono-text">
+                <td class="{{ getCountClass(count) }}">{{ count.name }}</td>
                 <td align="right">{{ count.count }}</td>
-                <td align="right">{{ countStatus(count) }}</td>
-                <td>{{ prevCountUpdateStatus(count) }}</td>
+                <td align="right">{{ prevCountStatus(count) }}</td>
+                <td>
+                    <a href="javascript:void(0);" ng-click="openQueryTabWithSelectFor(count.name)">select</a>
+                    <a href="javascript:void(0);" ng-click="openQueryTabWithUpdateFor(count.name)">update</a>
+                    <a href="javascript:void(0);" ng-click="openQueryTabWithDeleteFor(count.name)">delete</a>
+                </td>
             </tr>
             <tr class="mono-text">
                 <td>Total</td>
                 <td align="right">{{ counts.total.count }}</td>
-                <td align="right">{{ countStatus(counts.total) }}</td>
-                <td>{{ prevCountUpdateStatus(counts.total) }}</td>
+                <td align="right">{{ prevCountStatus(counts.total) }}</td>
+                <td>&nbsp;</td>
             </tr>
             </tbody>
         </table>
@@ -119,19 +122,17 @@
 
             <p/>
 
-            <table ng-show="result.data" style="border-collapse: collapse;" class="result">
+            <table ng-show="result.data" class="result">
                 <thead>
                 <tr>
-                    <th ng-repeat="value in result.data.columns track by $index" valign="top" style="border: 1px solid
-                    #C0C0C0; padding: 8px" class="mono-text">{{ value }}
+                    <th ng-repeat="value in result.data.columns track by $index" valign="top" class="mono-text">{{ value }}
                     </th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr ng-repeat="record in result.data.data track by $index"
                     ng-click="selectResultRecord(result.data.data, record)" ng-class="record.selectedClass">
-                    <td ng-repeat="value in record track by $index" valign="top"
-                        style="border: 1px solid #C0C0C0; padding: 8px">
+                    <td ng-repeat="value in record track by $index" valign="top">
                         <pre style="margin: 0; padding: 0;"
                              class="mono-text">{{ value | limitTo: textLengthLimit }}</pre>
                         <span ng-if="value.length > 50" ng-show="!showAllText">...</span>

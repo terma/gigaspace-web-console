@@ -160,6 +160,11 @@ public class Counts {
         count4.count = new Random().nextInt(1000);
         countsResponse.counts.add(count4);
 
+        Count count5 = new Count();
+        count5.name = "com.github.terma.gigaspacesqlconsole.Time";
+        count5.count = (int) (System.currentTimeMillis() / 1000);
+        countsResponse.counts.add(count5);
+
         Count count1 = new Count();
         count1.name = "com.github.terma.gigaspacesqlconsole.TestType";
         count1.count = new Random().nextInt(10);
@@ -169,6 +174,14 @@ public class Counts {
         count2.name = "com.github.terma.gigaspacesqlconsole.Momo";
         count2.count = 1;
         countsResponse.counts.add(count2);
+
+        if (new Random().nextBoolean()) {
+            Count count6 = new Count();
+            count6.name = "com.github.terma.gigaspacesqlconsole.Temp";
+            count6.count = 1;
+            countsResponse.counts.add(count6);
+        }
+
         return countsResponse;
     }
 

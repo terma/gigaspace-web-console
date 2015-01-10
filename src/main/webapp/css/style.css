@@ -64,6 +64,15 @@ input, textarea {
     display: inline;
 }
 
+.result {
+    border-collapse: collapse;
+}
+
+.result td, .result th {
+    border: 1px solid #C0C0C0;
+    padding: 8px;
+}
+
 .result tr:hover {
     background-color: #E8E8E8;
 }
