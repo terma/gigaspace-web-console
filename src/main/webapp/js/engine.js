@@ -136,11 +136,6 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
         resetResult();
     };
 
-    $scope.selectResultRecord = function (data, record) {
-        for (var i = 0; i < data.length; i++) data[i].selectedClass = undefined;
-        record.selectedClass = "selected";
-    };
-
     $('input').keydown(function (e) {
         if (e.keyCode == 13) {
             $scope.executeQuery()

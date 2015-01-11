@@ -88,7 +88,8 @@
                 <td align="right">{{ prevCountStatus(counts.total) }}</td>
                 <td>&nbsp;</td>
             </tr>
-            <tr ng-repeat="count in counts.data | filter : filter | orderBy:'name'" class="mono-text">
+            <tr ng-repeat="count in counts.data | filter : filter | orderBy:'name'" class="mono-text"
+                ng-click="counts.selectedCount = count" ng-class="counts.selectedCount == count ? 'selected' : ''">
                 <td class="{{ getCountClass(count) }}">{{ count.name }}</td>
                 <td align="right">{{ count.count }}</td>
                 <td align="right">{{ prevCountStatus(count) }}</td>
@@ -138,7 +139,7 @@
             </thead>
             <tbody>
             <tr ng-repeat="record in result.data.data track by $index"
-                ng-click="selectResultRecord(result.data.data, record)" ng-class="record.selectedClass">
+                ng-click="result.selectedRecord = record" ng-class="result.selectedRecord == record ? 'selected' : ''">
                 <td ng-repeat="value in record track by $index" valign="top">
                         <pre style="margin: 0; padding: 0;"
                              class="mono-text">{{ value | limitTo: textLengthLimit }}</pre>
