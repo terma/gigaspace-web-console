@@ -26,6 +26,12 @@ body {
     font-size: 90%;
 }
 
+.mono-error {
+    color: red;
+    font-family: courier, serif;
+    font-size: 90%;
+}
+
 input, textarea {
     margin: 0;
     padding: 0;

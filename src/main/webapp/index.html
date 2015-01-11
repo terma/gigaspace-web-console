@@ -68,9 +68,9 @@
 
     <p ng-show="counts.error">
         <a href="javascript:void(0);" ng-click="startCheckTypes()">Try Again</a>
-    <pre style="color: red;" class="mono-text">{{ counts.error.exceptionClass }}</pre>
-    <pre style="color: red;" class="mono-text">{{ counts.error.message }}</pre>
-    <pre style="color: red;" class="mono-text">{{ counts.error.stacktrace }}</pre>
+    <pre class="mono-error">{{ counts.error.exceptionClass }}</pre>
+    <pre class="mono-error">{{ counts.error.message }}</pre>
+    <pre class="mono-error">{{ counts.error.stacktrace }}</pre>
     </p>
 
     <p/>
@@ -118,9 +118,9 @@
         <h4>Results {{ result.data.data.length }} for {{ result.sql }}</h4>
 
         <p ng-show="result.error">
-        <pre style="color: red;" class="mono-text">{{ result.error.exceptionClass }}</pre>
-        <pre style="color: red;" class="mono-text">{{ result.error.message }}</pre>
-        <pre style="color: red;" class="mono-text">{{ result.error.stacktrace }}</pre>
+        <pre class="mono-error">{{ result.error.exceptionClass }}</pre>
+        <pre class="mono-error">{{ result.error.message }}</pre>
+        <pre class="mono-error">{{ result.error.stacktrace }}</pre>
         </p>
 
         <p ng-show="result.status">{{ result.status }}</p>
