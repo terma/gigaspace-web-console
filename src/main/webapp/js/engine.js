@@ -112,11 +112,12 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
 
     $scope.counts = {
         check: false,
-        showZero: false,
+        hideZero: false,
         status: undefined,
         error: undefined,
         prevData: undefined,
-        data: undefined
+        data: undefined,
+        selectedCount: undefined
     };
 
     $scope.gigaspaces = [
@@ -276,6 +277,12 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
             else result.error = {"message": "Can't connect to server!"};
         });
     }
+
+    $scope.filterCounts = function (count) {
+        if ($scope.counts.hideZero && count.count == 0) return false;
+        if ($scope.counts.filter && count.name.indexOf($scope.counts.filter) < 0) return false;
+        return true;
+    };
 
     $scope.startCheckTypes = function () {
         if ($scope.counts.check) return; // already started

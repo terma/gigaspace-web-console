@@ -76,7 +76,9 @@
     <p/>
 
     <div ng-show="counts.data">
-        <input type="text" ng-model="filter" placeholder="Type Filter" class="mono-text">
+        <input type="text" ng-model="counts.filter" placeholder="Type Filter" class="mono-text">
+        <a href="javascript:void(0);" ng-click="counts.hideZero = false" ng-show="counts.hideZero">Show Zero</a>
+        <a href="javascript:void(0);" ng-click="counts.hideZero = true" ng-show="!counts.hideZero">Hide Zero</a>
 
         <p></p>
 
@@ -88,7 +90,7 @@
                 <td align="right">{{ prevCountStatus(counts.total) }}</td>
                 <td>&nbsp;</td>
             </tr>
-            <tr ng-repeat="count in counts.data | filter : filter | orderBy:'name'" class="mono-text"
+            <tr ng-repeat="count in counts.data | filter : filterCounts | orderBy:'name'" class="mono-text"
                 ng-click="counts.selectedCount = count" ng-class="counts.selectedCount == count ? 'selected' : ''">
                 <td class="{{ getCountClass(count) }}">{{ count.name }}</td>
                 <td align="right">{{ count.count }}</td>

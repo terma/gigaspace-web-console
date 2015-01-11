@@ -165,6 +165,11 @@ public class Counts {
         count5.count = (int) (System.currentTimeMillis() / 1000);
         countsResponse.counts.add(count5);
 
+        Count count7 = new Count();
+        count7.name = "com.github.terma.gigaspacesqlconsole.Zero";
+        count7.count = 0;
+        countsResponse.counts.add(count7);
+
         Count count1 = new Count();
         count1.name = "com.github.terma.gigaspacesqlconsole.TestType";
         count1.count = new Random().nextInt(10);
