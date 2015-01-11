@@ -1,11 +1,11 @@
 {
   "links": [
     {
-      "name": "Yandex",
+      "name": "Home",
       "url": "http://www.yandex.ru"
     },
     {
-      "name": "Google",
+      "name": "Status",
       "url": "http://www.google.com"
     }
   ],
@@ -16,6 +16,12 @@
       "url": "/./test",
       "user": "",
       "password": ""
+    },
+    {
+      "name": "BAD-GS",
+      "url": "/./badlink?locators=XXXX",
+      "user": "q",
+      "password": "b"
     }
   ]
 }

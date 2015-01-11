@@ -1,24 +1,12 @@
-body {
-    margin: 0;
-    padding: 1em;
-}
-
 ul {
     margin-top: 0;
-}
-
-#links {
-    list-style: none;
-    padding: 0;
-}
-
-#links li {
-    display: inline;
 }
 
 body {
     font-family: tahoma, serif;
     font-size: 90%;
+    margin: 0;
+    padding: 0;
 }
 
 .mono-text {
@@ -34,7 +22,11 @@ body {
 
 input, textarea {
     margin: 0;
-    padding: 0;
+    background-color: transparent;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    border-width: 1px;
+    border-color: #C0C0C0;
 }
 
 .count_up {

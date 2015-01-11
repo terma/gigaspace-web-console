@@ -8,148 +8,143 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body ng-app="App" ng-controller="GigaSpaceBrowserController">
-<ul ng-show="links" id="links">
-    <li ng-repeat="link in links">
-        <a href="{{ link.url }}">{{ link.name }}</a>
-    </li>
-</ul>
 
-<ul id="gigaspaces">
-    <li ng-repeat="gigaspace in gigaspaces">
-        <a ng-click="selectGigaspace(gigaspace)" href="javascript:void(0);">{{ gigaspace.name }}</a>
-    </li>
-    <li>
-        <a ng-click="toggleRecent()" href="javascript:void(0);">Recent</a>
-    </li>
-</ul>
+<div style="overflow: auto; padding: 1em;">
+    <div ng-repeat="link in links" style="float: left;">
+        <a href="{{ link.url }}">{{ link.name }}</a>&nbsp;
+    </div>
 
-<div id="recent" ng-show="showRecent">
-    <div ng-repeat="urlHistory in history.data track by $index">
-        <p class="mono-text">{{ urlHistory.url }}</p>
-
-        <ul>
-            <li ng-repeat="sql in urlHistory.items track by $index">
-                <a ng-click="selectRecent(urlHistory, sql)" href="javascript:void(0);" class="mono-text">{{ sql
-                    }}</a>
-            </li>
-        </ul>
+    <div style="float: right;">
+        <a target="_blank" href="https://github.com/terma/gigaspaces-sql-console/wiki">Help</a>
     </div>
 </div>
 
-<p/>
-<label for="url">Url</label>
-<br>
-<input id="url" name="url" ng-model="request.url" style="width: 100%" class="mono-text"/>
+<div style="padding: 1em; border-top: 1px solid #cecece; border-bottom: 1px solid #CECECE;">
+    <ul id="gigaspaces">
+        <li ng-repeat="gigaspace in gigaspaces">
+            <a ng-click="selectGigaspace(gigaspace)" href="javascript:void(0);">{{ gigaspace.name }}</a>
+        </li>
+        <li>
+            <a ng-click="toggleRecent()" href="javascript:void(0);">Recent</a>
+        </li>
+    </ul>
 
-<p/>
-<table border="0" cellspacing="0" cellpadding="0">
-    <tr>
-        <td style="padding-right: 10px;">
-            <label for="user">User</label>
-            <br>
-            <input id="user" name="user" ng-model="request.user" class="mono-text"/>
-        </td>
+    <div id="recent" ng-show="showRecent">
+        <div ng-repeat="urlHistory in history.data track by $index">
+            <p class="mono-text">{{ urlHistory.url }}</p>
 
-        <td>
-            <label for="password">Password</label>
-            <br>
-            <input id="password" name="password" type="password" ng-model="request.password" class="mono-text"/>
-        </td>
-    </tr>
-</table>
-
-<p/>
-
-<a href="javascript:void(0);" ng-click="openTypesTab()">Types</a>
-<a href="javascript:void(0);" ng-click="openQueryTab()">Query</a>
-
-<div ng-show="tab == 'types'">
-    <p ng-show="counts.status">{{ counts.status }}</p>
-
-    <p ng-show="counts.error">
-        <a href="javascript:void(0);" ng-click="startCheckTypes()">Try Again</a>
-    <pre class="mono-error">{{ counts.error.exceptionClass }}</pre>
-    <pre class="mono-error">{{ counts.error.message }}</pre>
-    <pre class="mono-error">{{ counts.error.stacktrace }}</pre>
-    </p>
-
-    <p/>
-
-    <div ng-show="counts.data">
-        <input type="text" ng-model="counts.filter" placeholder="Type Filter" class="mono-text">
-        <a href="javascript:void(0);" ng-click="counts.hideZero = false" ng-show="counts.hideZero">Show Zero</a>
-        <a href="javascript:void(0);" ng-click="counts.hideZero = true" ng-show="!counts.hideZero">Hide Zero</a>
-
-        <p></p>
-
-        <table class="result">
-            <tbody>
-            <tr class="mono-text">
-                <td>Total</td>
-                <td align="right">{{ counts.total.count }}</td>
-                <td align="right">{{ prevCountStatus(counts.total) }}</td>
-                <td>&nbsp;</td>
-            </tr>
-            <tr ng-repeat="count in counts.data | filter : filterCounts | orderBy:'name'" class="mono-text"
-                ng-click="counts.selectedCount = count" ng-class="counts.selectedCount == count ? 'selected' : ''">
-                <td class="{{ getCountClass(count) }}">{{ count.name }}</td>
-                <td align="right">{{ count.count }}</td>
-                <td align="right">{{ prevCountStatus(count) }}</td>
-                <td>
-                    <a href="javascript:void(0);" ng-click="openQueryTabWithSelectFor(count.name)">select</a>
-                    <a href="javascript:void(0);" ng-click="openQueryTabWithUpdateFor(count.name)">update</a>
-                    <a href="javascript:void(0);" ng-click="openQueryTabWithDeleteFor(count.name)">delete</a>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+            <ul>
+                <li ng-repeat="sql in urlHistory.items track by $index">
+                    <a ng-click="selectRecent(urlHistory, sql)" href="javascript:void(0);" class="mono-text">{{ sql
+                        }}</a>
+                </li>
+            </ul>
+        </div>
     </div>
+
+    <p></p>
+    <input placeholder="GigaSpace URL" ng-model="request.url" style="width: 100%" class="mono-text"/>
+
+    <p></p>
+    <input ng-model="request.user" class="mono-text" placeholder="User"/>
+    <input type="password" ng-model="request.password" class="mono-text" placeholder="Password"/>
 </div>
 
-<div ng-show="tab == 'query'">
-    <p/>
-    <label for="sql">SQL Query</label>
-    <textarea id="sql" name="sql" ng-model="request.sql" class="mono-text" style="width: 100%" rows="6"></textarea>
+<div style="padding: 1em;">
+    <a href="javascript:void(0);" ng-click="openTypesTab()">Types</a>
+    <a href="javascript:void(0);" ng-click="openQueryTab()">Query</a>
 
-    <p/>
-    <a ng-click="executeQuery()" href="javascript:void(0);">Execute</a>
+    <p></p>
 
-    <p ng-show="status">{{ status }}</p>
+    <div ng-show="tab == 'types'">
+        <p ng-show="counts.status">{{ counts.status }}</p>
 
-    <div ng-repeat="result in results">
-
-        <h4>Results {{ result.data.data.length }} for {{ result.sql }}</h4>
-
-        <p ng-show="result.error">
-        <pre class="mono-error">{{ result.error.exceptionClass }}</pre>
-        <pre class="mono-error">{{ result.error.message }}</pre>
-        <pre class="mono-error">{{ result.error.stacktrace }}</pre>
+        <p ng-show="counts.error">
+            <a href="javascript:void(0);" ng-click="startCheckTypes()">Try Again</a>
+        <pre class="mono-error">{{ counts.error.exceptionClass }}</pre>
+        <pre class="mono-error">{{ counts.error.message }}</pre>
+        <pre class="mono-error">{{ counts.error.stacktrace }}</pre>
         </p>
-
-        <p ng-show="result.status">{{ result.status }}</p>
-
-        <a ng-show="result.data" href="javascript:void(0);" ng-click="toggleShowAllText()">Show/Hide all text</a>
 
         <p/>
 
-        <table ng-show="result.data" class="result">
-            <thead>
-            <tr>
-                <th ng-repeat="value in result.data.columns track by $index" valign="top" class="mono-text">{{ value }}
-                </th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr ng-repeat="record in result.data.data track by $index"
-                ng-click="result.selectedRecord = record" ng-class="result.selectedRecord == record ? 'selected' : ''">
-                <td ng-repeat="value in record track by $index" valign="top">
+        <div ng-show="counts.data">
+            <input type="text" ng-model="counts.filter" placeholder="Type Filter" class="mono-text">
+            <a href="javascript:void(0);" ng-click="counts.hideZero = false" ng-show="counts.hideZero">Show Zero</a>
+            <a href="javascript:void(0);" ng-click="counts.hideZero = true" ng-show="!counts.hideZero">Hide Zero</a>
+
+            <p></p>
+
+            <table class="result">
+                <tbody>
+                <tr class="mono-text">
+                    <td>Total</td>
+                    <td align="right">{{ counts.total.count }}</td>
+                    <td align="right">{{ prevCountStatus(counts.total) }}</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr ng-repeat="count in counts.data | filter : filterCounts | orderBy:'name'" class="mono-text"
+                    ng-click="counts.selectedCount = count" ng-class="counts.selectedCount == count ? 'selected' : ''">
+                    <td class="{{ getCountClass(count) }}">{{ count.name }}</td>
+                    <td align="right">{{ count.count }}</td>
+                    <td align="right">{{ prevCountStatus(count) }}</td>
+                    <td>
+                        <a href="javascript:void(0);" ng-click="openQueryTabWithSelectFor(count.name)">select</a>
+                        <a href="javascript:void(0);" ng-click="openQueryTabWithUpdateFor(count.name)">update</a>
+                        <a href="javascript:void(0);" ng-click="openQueryTabWithDeleteFor(count.name)">delete</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div ng-show="tab == 'query'">
+        <textarea placeholder="SQL, could be list, use # for comments" ng-model="request.sql" class="mono-text"
+                  style="width: 100%" rows="6"></textarea>
+
+        <p/>
+        <a ng-click="executeQuery()" href="javascript:void(0);">Execute</a>
+
+        <p ng-show="status">{{ status }}</p>
+
+        <div ng-repeat="result in results">
+
+            <h4>Results {{ result.data.data.length }} for {{ result.sql }}</h4>
+
+            <p ng-show="result.error">
+            <pre class="mono-error">{{ result.error.exceptionClass }}</pre>
+            <pre class="mono-error">{{ result.error.message }}</pre>
+            <pre class="mono-error">{{ result.error.stacktrace }}</pre>
+            </p>
+
+            <p ng-show="result.status">{{ result.status }}</p>
+
+            <a ng-show="result.data" href="javascript:void(0);" ng-click="toggleShowAllText()">Show/Hide all text</a>
+
+            <p/>
+
+            <table ng-show="result.data" class="result">
+                <thead>
+                <tr>
+                    <th ng-repeat="value in result.data.columns track by $index" valign="top" class="mono-text">{{ value
+                        }}
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="record in result.data.data track by $index"
+                    ng-click="result.selectedRecord = record"
+                    ng-class="result.selectedRecord == record ? 'selected' : ''">
+                    <td ng-repeat="value in record track by $index" valign="top">
                         <pre style="margin: 0; padding: 0;"
                              class="mono-text">{{ value | limitTo: textLengthLimit }}</pre>
-                    <span ng-if="value.length > 50" ng-show="!showAllText">...</span>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+                        <span ng-if="value.length > 50" ng-show="!showAllText">...</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
