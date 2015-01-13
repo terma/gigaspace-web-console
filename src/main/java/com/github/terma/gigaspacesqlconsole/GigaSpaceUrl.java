@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 public class GigaSpaceUrl {
 
-    private static final Pattern locatorPattern = Pattern.compile("locators=([.:a-zA-Z0-9]+)");
+    private static final Pattern locatorPattern = Pattern.compile("locators=([.:a-zA-Z0-9,]+)");
     private static final Pattern spacePattern = Pattern.compile("/([]a-zA-Z0-9-]+)\\?");
 
     public static String parseLocator(final String url) {

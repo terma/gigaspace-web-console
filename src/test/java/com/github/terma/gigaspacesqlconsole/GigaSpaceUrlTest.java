@@ -20,8 +20,12 @@ public class GigaSpaceUrlTest {
     }
 
     @Test
-    public void shouldReturnFirstLocatorFromUrlIfThemMoreOne() {
-        assertEquals("yy.com.ab:1200", GigaSpaceUrl.parseLocator("jini:/*/x?locators=yy.com.ab:1200,locator.eq:1"));
+    public void shouldReturnAllLocators() {
+        assertEquals("yy.com.ab:1200,locator.eq:1", GigaSpaceUrl.parseLocator("jini:/*/x?locators=yy.com.ab:1200,locator.eq:1"));
+        assertEquals("loc.col.com:1200,loc.com:1200", GigaSpaceUrl.parseLocator("jini:/*/x?locators=loc.col.com:1200,loc.com:1200&group=1"));
+        assertEquals("loc.col.com:1200", GigaSpaceUrl.parseLocator("jini:/*/x?locators=loc.col.com:1200"));
+        assertEquals("loc.col.com", GigaSpaceUrl.parseLocator("jini:/*/x?locators=loc.col.com"));
+        assertEquals("loc.col.com", GigaSpaceUrl.parseLocator("jini:/*/x?groups=mega&locators=loc.col.com"));
     }
 
     @Test(expected = IllegalArgumentException.class)
