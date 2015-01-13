@@ -42,7 +42,7 @@ public class Counts {
     });
 
     static {
-        cleaner.setName("GS-COUNTS-CLEANER");
+        cleaner.setName("COUNTS-ADMIN-CLEANER");
         cleaner.setDaemon(true);
         cleaner.start();
     }
