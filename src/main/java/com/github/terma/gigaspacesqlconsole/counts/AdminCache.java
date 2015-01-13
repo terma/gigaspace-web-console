@@ -37,7 +37,7 @@ class AdminCache {
             final AdminFactory adminFactory = new AdminFactory();
             adminFactory.useDaemonThreads(true);
             // reduce amount of info which admin collects
-            adminFactory.setDiscoveryServices(Space.class);
+//            adminFactory.setDiscoveryServices(Space.class);
 
             if (GigaSpaceUrl.isLocal(request.url)) {
                 adminFactory.discoverUnmanagedSpaces();
