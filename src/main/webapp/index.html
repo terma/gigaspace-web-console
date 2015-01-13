@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>GigaSpace SQL Console ${project.version}</title>
+    <title>GigaSpace SQL Console {{ config.internal.applicationVersion }}</title>
     <script type="text/javascript" src="js/angular.min.js"></script>
     <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
     <script type="text/javascript" src="js/engine.js"></script>
@@ -10,7 +10,7 @@
 <body ng-app="App" ng-controller="GigaSpaceBrowserController">
 
 <div style="overflow: auto; padding: 1em;">
-    <div ng-repeat="link in links" style="float: left;">
+    <div ng-repeat="link in config.user.links" style="float: left;">
         <a href="{{ link.url }}">{{ link.name }}</a>&nbsp;
     </div>
 
@@ -21,7 +21,7 @@
 
 <div style="padding: 1em; border-top: 1px solid #cecece; border-bottom: 1px solid #CECECE;">
     <ul id="gigaspaces">
-        <li ng-repeat="gigaspace in gigaspaces">
+        <li ng-repeat="gigaspace in config.user.gigaspaces">
             <a ng-click="selectGigaspace(gigaspace)" href="javascript:void(0);">{{ gigaspace.name }}</a>
         </li>
         <li>

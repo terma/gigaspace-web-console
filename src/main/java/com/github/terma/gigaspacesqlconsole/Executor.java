@@ -27,7 +27,7 @@ public class Executor {
     static {
         final Config config = Config.read();
 
-        for (final String converterClassName : config.converters) {
+        for (final String converterClassName : config.user.converters) {
             final Class converterClass;
             try {
                 converterClass = Class.forName(converterClassName);

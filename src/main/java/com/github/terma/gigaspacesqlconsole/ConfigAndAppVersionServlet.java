@@ -2,7 +2,7 @@ package com.github.terma.gigaspacesqlconsole;
 
 import com.github.terma.gigaspacesqlconsole.config.Config;
 
-public class ConfigServlet extends JsonServlet<Object> {
+public class ConfigAndAppVersionServlet extends JsonServlet<Object> {
 
     @Override
     protected Object doJson(Object request) throws Exception {
