@@ -3,12 +3,20 @@ package com.github.terma.gigaspacesqlconsole;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertTrue;
 
 public class GigaSpaceUrlTest {
 
     @Test
     public void shouldGetLocatorFromUrl() {
         assertEquals("yy.com.ab:1200", GigaSpaceUrl.parseLocator("jini:/*/x?locators=yy.com.ab:1200"));
+    }
+
+    @Test
+    public void shouldTestIfLocalSpace() {
+        assertTrue(GigaSpaceUrl.isLocal("/./fff"));
+        assertFalse(GigaSpaceUrl.isLocal("jini:/*/fff?"));
     }
 
     @Test

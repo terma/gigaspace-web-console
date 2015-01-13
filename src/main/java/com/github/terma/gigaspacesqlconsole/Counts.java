@@ -80,11 +80,20 @@ public class Counts {
         try {
             CacheItem item = cache.get(request);
             if (item == null) {
-                final String locator = GigaSpaceUrl.parseLocator(request.url);
-                System.out.println("Starting to get admin for " + locator + "...");
                 final AdminFactory adminFactory = new AdminFactory();
-                adminFactory.addLocator(locator);
-                adminFactory.credentials(request.user, request.password);
+                adminFactory.useDaemonThreads(true);
+                // reduce amount of info which admin collects
+                adminFactory.setDiscoveryServices(Space.class);
+
+                if (GigaSpaceUrl.isLocal(request.url)) {
+                    adminFactory.discoverUnmanagedSpaces();
+                } else {
+                    adminFactory.credentials(request.user, request.password);
+                    final String locator = GigaSpaceUrl.parseLocator(request.url);
+                    System.out.println("Starting to get admin for " + locator + "...");
+                    adminFactory.addLocator(locator);
+                }
+
                 final Admin admin = adminFactory.createAdmin();
 
                 final String spaceName = GigaSpaceUrl.parseSpace(request.url);
@@ -94,7 +103,6 @@ public class Counts {
                     admin.close();
                     throw new IllegalArgumentException("Can't find space with url: " + request.url);
                 }
-
                 System.out.println("connected to space!");
                 item = new CacheItem();
                 item.admin = admin;
@@ -125,7 +133,7 @@ public class Counts {
 
         final Map<String, Integer> counts = new HashMap<>();
         for (final SpaceInstance spaceInstance : spaceInstances) {
-            if (spaceInstance.getMode() == SpaceMode.PRIMARY) {
+            if (spaceInstance.getMode() != SpaceMode.BACKUP) {
                 for (final Map.Entry<String, Integer> countItem : instanceToCounts(spaceInstance).entrySet()) {
                     System.out.println("Space instance " + spaceInstance + " has " + countItem + " types");
                     Integer count = counts.get(countItem.getKey());

@@ -20,4 +20,8 @@ public class GigaSpaceUrl {
         else throw new IllegalArgumentException("Can't find space in url: " + url);
     }
 
+    public static boolean isLocal(String url) {
+        return url.startsWith("/./");
+    }
+
 }

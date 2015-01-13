@@ -3,8 +3,6 @@ package com.github.terma.gigaspacesqlconsole;
 import com.gigaspaces.client.ChangeResult;
 import com.gigaspaces.client.ChangeSet;
 import com.gigaspaces.document.SpaceDocument;
-import com.gigaspaces.metadata.SpaceTypeDescriptor;
-import com.gigaspaces.metadata.SpaceTypeDescriptorBuilder;
 import com.github.terma.gigaspacesqlconsole.config.Config;
 import com.j_spaces.core.client.SQLQuery;
 import org.openspaces.core.GigaSpace;
@@ -66,16 +64,10 @@ public class Executor {
         final GigaSpace gigaSpace = Executor.gigaSpaceConnection(request);
 
         // register test type
-        SpaceTypeDescriptor typeDescriptor = new SpaceTypeDescriptorBuilder("mumba")
-                .idProperty("A").create();
-        gigaSpace.getTypeManager().registerTypeDescriptor(typeDescriptor);
+        GigaSpaceUtils.registerType(gigaSpace, "mumba");
 
         // create mock data
-        final SpaceDocument spaceDocument = new SpaceDocument("mumba");
-        spaceDocument.setProperty("A", 1);
-        spaceDocument.setProperty("B", false);
-        spaceDocument.setProperty("C", "ok");
-        gigaSpace.write(spaceDocument);
+        GigaSpaceUtils.createDocument(gigaSpace, "mumba");
 
         ExecuteResponse executeResponse = new ExecuteResponse();
         executeResponse.columns = new ArrayList<>();
