@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class Counts {
 
@@ -24,24 +23,13 @@ public class Counts {
 
     }
 
-    private static final ReentrantLock lock = new ReentrantLock();
     private static final Map<CountsRequest, CacheItem> cache = new HashMap<>();
 
     private static final Thread cleaner = new Thread(new Runnable() {
         @Override
         public void run() {
             while (true) {
-                lock.lock();
-                try {
-                    for (final Map.Entry<CountsRequest, CacheItem> cacheItem : cache.entrySet()) {
-                        if (System.currentTimeMillis() - cacheItem.getValue().lastUsage > TimeUnit.MINUTES.toMillis(10)) {
-                            cache.remove(cacheItem.getKey());
-                            cacheItem.getValue().admin.close();
-                        }
-                    }
-                } finally {
-                    lock.unlock();
-                }
+                clearExpired();
 
                 try {
                     Thread.sleep(TimeUnit.MINUTES.toMillis(5));
@@ -59,66 +47,63 @@ public class Counts {
         cleaner.start();
     }
 
-    public static void clear() {
-        lock.lock();
-        try {
-            System.out.println("Start clear...");
-
-            for (final Map.Entry<CountsRequest, CacheItem> item : cache.entrySet()) {
-                System.out.println("Start clear...");
-                item.getValue().admin.close();
+    private synchronized static void clearExpired() {
+        for (final Map.Entry<CountsRequest, CacheItem> cacheItem : cache.entrySet()) {
+            if (System.currentTimeMillis() - cacheItem.getValue().lastUsage > TimeUnit.MINUTES.toMillis(10)) {
+                cache.remove(cacheItem.getKey());
+                cacheItem.getValue().admin.close();
             }
-        } finally {
-            lock.unlock();
         }
     }
 
-    private static CacheItem createOrGetAdmin(CountsRequest request) {
-        System.out.println("Waiting lock for " + request.hashCode());
-        lock.lock();
-        System.out.println("Get lock for " + request.hashCode());
-        try {
-            CacheItem item = cache.get(request);
-            if (item == null) {
-                final AdminFactory adminFactory = new AdminFactory();
-                adminFactory.useDaemonThreads(true);
-                // reduce amount of info which admin collects
-                adminFactory.setDiscoveryServices(Space.class);
+    public synchronized static void clear() {
+        System.out.println("Start clear...");
 
-                if (GigaSpaceUrl.isLocal(request.url)) {
-                    adminFactory.discoverUnmanagedSpaces();
-                } else {
-                    adminFactory.credentials(request.user, request.password);
-                    final String locator = GigaSpaceUrl.parseLocator(request.url);
-                    System.out.println("Starting to get admin for " + locator + "...");
-                    adminFactory.addLocator(locator);
-                }
+        for (final Map.Entry<CountsRequest, CacheItem> item : cache.entrySet()) {
+            System.out.println("Start clear...");
+            item.getValue().admin.close();
+        }
+    }
 
-                final Admin admin = adminFactory.createAdmin();
+    private synchronized static CacheItem createOrGetAdmin(CountsRequest request) {
+        CacheItem item = cache.get(request);
+        if (item == null) {
+            final AdminFactory adminFactory = new AdminFactory();
+            adminFactory.useDaemonThreads(true);
+            // reduce amount of info which admin collects
+            adminFactory.setDiscoveryServices(Space.class);
 
-                final String spaceName = GigaSpaceUrl.parseSpace(request.url);
-                System.out.println("Trying connect to space " + spaceName + "...");
-                Space space = admin.getSpaces().waitFor(spaceName, 20, TimeUnit.SECONDS);
-                if (space == null) {
-                    admin.close();
-                    throw new IllegalArgumentException("Can't find space with url: " + request.url);
-                }
-                System.out.println("connected to space!");
-                item = new CacheItem();
-                item.admin = admin;
-                item.space = space;
-                cache.put(request, item);
+            if (GigaSpaceUrl.isLocal(request.url)) {
+                adminFactory.discoverUnmanagedSpaces();
             } else {
-                System.out.println("Use cached admin");
+                adminFactory.credentials(request.user, request.password);
+                final String locator = GigaSpaceUrl.parseLocator(request.url);
+                System.out.println("Starting to get admin for " + locator + "...");
+                adminFactory.addLocator(locator);
             }
 
-            // update last usage
-            item.lastUsage = System.currentTimeMillis();
+            final Admin admin = adminFactory.createAdmin();
 
-            return item;
-        } finally {
-            lock.unlock();
+            final String spaceName = GigaSpaceUrl.parseSpace(request.url);
+            System.out.println("Trying connect to space " + spaceName + "...");
+            Space space = admin.getSpaces().waitFor(spaceName, 20, TimeUnit.SECONDS);
+            if (space == null) {
+                admin.close();
+                throw new IllegalArgumentException("Can't find space with url: " + request.url);
+            }
+            System.out.println("connected to space!");
+            item = new CacheItem();
+            item.admin = admin;
+            item.space = space;
+            cache.put(request, item);
+        } else {
+            System.out.println("Use cached admin for " + request.url);
         }
+
+        // update last usage
+        item.lastUsage = System.currentTimeMillis();
+
+        return item;
     }
 
     public static CountsResponse counts(CountsRequest request) {
