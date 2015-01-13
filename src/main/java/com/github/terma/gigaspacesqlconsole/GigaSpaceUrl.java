@@ -8,7 +8,7 @@ public class GigaSpaceUrl {
     private static final Pattern locatorPattern = Pattern.compile("locators=([.:a-zA-Z0-9,]+)");
     private static final Pattern spacePattern = Pattern.compile("/([]a-zA-Z0-9-]+)\\?");
 
-    public static String parseLocator(final String url) {
+    public static String parseLocators(final String url) {
         final Matcher m = locatorPattern.matcher(url);
         if (m.find()) return m.group(1);
         else throw new IllegalArgumentException("Can't find locator in url: " + url);

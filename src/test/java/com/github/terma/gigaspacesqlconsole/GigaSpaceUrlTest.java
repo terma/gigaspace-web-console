@@ -10,7 +10,7 @@ public class GigaSpaceUrlTest {
 
     @Test
     public void shouldGetLocatorFromUrl() {
-        assertEquals("yy.com.ab:1200", GigaSpaceUrl.parseLocator("jini:/*/x?locators=yy.com.ab:1200"));
+        assertEquals("yy.com.ab:1200", GigaSpaceUrl.parseLocators("jini:/*/x?locators=yy.com.ab:1200"));
     }
 
     @Test
@@ -21,21 +21,21 @@ public class GigaSpaceUrlTest {
 
     @Test
     public void shouldReturnAllLocators() {
-        assertEquals("yy.com.ab:1200,locator.eq:1", GigaSpaceUrl.parseLocator("jini:/*/x?locators=yy.com.ab:1200,locator.eq:1"));
-        assertEquals("loc.col.com:1200,loc.com:1200", GigaSpaceUrl.parseLocator("jini:/*/x?locators=loc.col.com:1200,loc.com:1200&group=1"));
-        assertEquals("loc.col.com:1200", GigaSpaceUrl.parseLocator("jini:/*/x?locators=loc.col.com:1200"));
-        assertEquals("loc.col.com", GigaSpaceUrl.parseLocator("jini:/*/x?locators=loc.col.com"));
-        assertEquals("loc.col.com", GigaSpaceUrl.parseLocator("jini:/*/x?groups=mega&locators=loc.col.com"));
+        assertEquals("yy.com.ab:1200,locator.eq:1", GigaSpaceUrl.parseLocators("jini:/*/x?locators=yy.com.ab:1200,locator.eq:1"));
+        assertEquals("loc.col.com:1200,loc.com:1200", GigaSpaceUrl.parseLocators("jini:/*/x?locators=loc.col.com:1200,loc.com:1200&group=1"));
+        assertEquals("loc.col.com:1200", GigaSpaceUrl.parseLocators("jini:/*/x?locators=loc.col.com:1200"));
+        assertEquals("loc.col.com", GigaSpaceUrl.parseLocators("jini:/*/x?locators=loc.col.com"));
+        assertEquals("loc.col.com", GigaSpaceUrl.parseLocators("jini:/*/x?groups=mega&locators=loc.col.com"));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowExceptionIfEmptyLocator() {
-        assertEquals("yy.com.ab:1200", GigaSpaceUrl.parseLocator("jini:/*/x?locators="));
+        assertEquals("yy.com.ab:1200", GigaSpaceUrl.parseLocators("jini:/*/x?locators="));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowExceptionIfCantFindLocator() {
-        GigaSpaceUrl.parseLocator("jini:/*/x?");
+        GigaSpaceUrl.parseLocators("jini:/*/x?");
     }
 
     @Test

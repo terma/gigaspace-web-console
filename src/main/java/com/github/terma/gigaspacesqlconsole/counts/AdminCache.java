@@ -43,9 +43,9 @@ class AdminCache {
                 adminFactory.discoverUnmanagedSpaces();
             } else {
                 adminFactory.credentials(request.user, request.password);
-                final String locator = GigaSpaceUrl.parseLocator(request.url);
-                System.out.println("Starting to get admin for " + locator + "...");
-                adminFactory.addLocator(locator);
+                final String locators = GigaSpaceUrl.parseLocators(request.url);
+                System.out.println("Starting to get admin for " + locators + "...");
+                adminFactory.addLocators(locators);
             }
 
             final Admin admin = adminFactory.createAdmin();
