@@ -6,7 +6,7 @@
 
       <servlet>
             <servlet-name>ConfigServlet</servlet-name>
-            <servlet-class>com.github.terma.gigaspacesqlconsole.ConfigServlet</servlet-class>
+            <servlet-class>com.github.terma.gigaspacesqlconsole.ConfigAndAppVersionServlet</servlet-class>
       </servlet>
 
       <servlet>

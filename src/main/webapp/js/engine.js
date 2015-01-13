@@ -120,15 +120,6 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
         selectedCount: undefined
     };
 
-    $scope.gigaspaces = [
-        {
-            name: "Z",
-            url: "jini://*/*/x?locators=X:1",
-            user: "",
-            password: ""
-        }
-    ];
-
     $scope.selectGigaspace = function (gigaspace) {
         $scope.request.url = gigaspace.url;
         $scope.request.user = gigaspace.user;
@@ -251,7 +242,8 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
             url: $scope.request.url,
             user: $scope.request.user,
             password: $scope.request.password,
-            sql: result.sql
+            sql: result.sql,
+            appVersion: $scope.config.internal.appVersion
         };
 
         $scope.history.add(request);
@@ -348,7 +340,8 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
         var request = {
             url: $scope.request.url,
             user: $scope.request.user,
-            password: $scope.request.password
+            password: $scope.request.password,
+            appVersion: $scope.config.internal.appVersion
         };
 
         $http({
@@ -429,8 +422,7 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
             method: "POST",
             headers: {'Content-Type': "application/json"}
         }).success(function (res) {
-            $scope.gigaspaces = res.gigaspaces;
-            $scope.links = res.links;
+            $scope.config = res;
         }).error(function (res) {
             // todo show error if can't load config
         });

@@ -1,0 +1,3 @@
+{
+  "appVersion": "${project.version}"
+}
