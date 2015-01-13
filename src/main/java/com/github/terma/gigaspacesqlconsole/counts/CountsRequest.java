@@ -1,4 +1,4 @@
-package com.github.terma.gigaspacesqlconsole;
+package com.github.terma.gigaspacesqlconsole.counts;
 
 public class CountsRequest {
 

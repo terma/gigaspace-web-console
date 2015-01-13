@@ -1,4 +1,6 @@
-package com.github.terma.gigaspacesqlconsole;
+package com.github.terma.gigaspacesqlconsole.counts;
+
+import com.github.terma.gigaspacesqlconsole.JsonServlet;
 
 public class CountsServlet extends JsonServlet<CountsRequest> {
 

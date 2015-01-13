@@ -1,5 +1,6 @@
-package com.github.terma.gigaspacesqlconsole;
+package com.github.terma.gigaspacesqlconsole.counts;
 
+import com.github.terma.gigaspacesqlconsole.GigaSpaceUtils;
 import junit.framework.Assert;
 import org.junit.Test;
 import org.openspaces.core.GigaSpace;
