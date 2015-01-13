@@ -1,6 +1,6 @@
 package com.github.terma.gigaspacesqlconsole;
 
-public class ExecuteRequest {
+public class ExecuteRequest extends AppVersionRequest {
 
     public String user;
     public String password;

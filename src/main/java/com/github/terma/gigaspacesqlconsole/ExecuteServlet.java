@@ -1,9 +1,9 @@
 package com.github.terma.gigaspacesqlconsole;
 
-public class ExecuteServlet extends JsonServlet<ExecuteRequest> {
+public class ExecuteServlet extends JsonWithCorrectAppVersionServlet<ExecuteRequest> {
 
     @Override
-    protected Object doJson(ExecuteRequest request) throws Exception {
+    protected Object doJsonWithCorrectAppVersion(ExecuteRequest request) throws Exception {
         return Executor.query(request);
     }
 

@@ -242,7 +242,8 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
             url: $scope.request.url,
             user: $scope.request.user,
             password: $scope.request.password,
-            sql: result.sql
+            sql: result.sql,
+            appVersion: $scope.config.internal.appVersion
         };
 
         $scope.history.add(request);
@@ -339,7 +340,8 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
         var request = {
             url: $scope.request.url,
             user: $scope.request.user,
-            password: $scope.request.password
+            password: $scope.request.password,
+            appVersion: $scope.config.internal.appVersion
         };
 
         $http({

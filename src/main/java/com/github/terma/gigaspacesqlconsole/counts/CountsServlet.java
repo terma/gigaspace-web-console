@@ -1,11 +1,11 @@
 package com.github.terma.gigaspacesqlconsole.counts;
 
-import com.github.terma.gigaspacesqlconsole.JsonServlet;
+import com.github.terma.gigaspacesqlconsole.JsonWithCorrectAppVersionServlet;
 
-public class CountsServlet extends JsonServlet<CountsRequest> {
+public class CountsServlet extends JsonWithCorrectAppVersionServlet<CountsRequest> {
 
     @Override
-    protected Object doJson(CountsRequest request) throws Exception {
+    protected Object doJsonWithCorrectAppVersion(CountsRequest request) throws Exception {
         return Counts.counts(request);
     }
 

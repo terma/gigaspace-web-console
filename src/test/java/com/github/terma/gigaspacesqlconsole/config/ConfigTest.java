@@ -10,7 +10,7 @@ public class ConfigTest {
 
     @Test
     public void shouldReadInternalConfig() {
-        Assert.assertNotNull(Config.readInternal().applicationVersion);
+        Assert.assertNotNull(Config.readInternal().appVersion);
     }
 
     @Test
