@@ -5,6 +5,9 @@ import junit.framework.Assert;
 import org.junit.Test;
 import org.openspaces.core.GigaSpace;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class CountsTest {
 
     @Test
@@ -35,8 +38,13 @@ public class CountsTest {
 
         // then
         Assert.assertEquals(2, countsResponse.counts.size());
-        Assert.assertEquals("com.a", countsResponse.counts.get(1).name);
-        Assert.assertEquals(3, countsResponse.counts.get(1).count);
+        Map<String, Integer> counts = new HashMap<>();
+        counts.put(countsResponse.counts.get(0).name, countsResponse.counts.get(0).count);
+        counts.put(countsResponse.counts.get(1).name, countsResponse.counts.get(1).count);
+        Assert.assertEquals(new HashMap<String, Integer>() {{
+            put("com.a", 3);
+            put("java.lang.Object", 0);
+        }}, counts);
     }
 
 }
