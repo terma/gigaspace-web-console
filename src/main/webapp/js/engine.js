@@ -451,6 +451,7 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
         },
         onLoad: function (cm) {
             $scope.codeMirrorEditor = cm;
+            $scope.codeMirrorEditor.setSize(null, 95);
         }
     };
 
