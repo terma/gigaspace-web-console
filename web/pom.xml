@@ -107,7 +107,7 @@
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>com.github.terma</groupId>
-                                    <artifactId>gs-10</artifactId>
+                                    <artifactId>gigaspace-sql-console-provider</artifactId>
                                     <version>${project.version}</version>
                                     <outputDirectory>${project.build.directory}/${project.artifactId}-${project.version}/WEB-INF/providers</outputDirectory>
                                 </artifactItem>
@@ -150,17 +150,23 @@
                 <dependencies>
                     <!-- add gigaspace as real to be able start app -->
 
-                    <dependency>
-                        <groupId>com.gigaspaces</groupId>
-                        <artifactId>gs-openspaces</artifactId>
-                        <version>${gsVersion}</version>
-                    </dependency>
+                    <!--<dependency>-->
+                        <!--<groupId>com.gigaspaces</groupId>-->
+                        <!--<artifactId>gs-openspaces</artifactId>-->
+                        <!--<version>${gsVersion}</version>-->
+                        <!--<exclusions>-->
+                            <!--<exclusion>-->
+                                <!--<groupId>*</groupId>-->
+                                <!--<artifactId>*</artifactId>-->
+                            <!--</exclusion>-->
+                        <!--</exclusions>-->
+                    <!--</dependency>-->
 
-                    <dependency>
-                        <groupId>com.gigaspaces</groupId>
-                        <artifactId>gs-runtime</artifactId>
-                        <version>${gsVersion}</version>
-                    </dependency>
+                    <!--<dependency>-->
+                        <!--<groupId>com.gigaspaces</groupId>-->
+                        <!--<artifactId>gs-runtime</artifactId>-->
+                        <!--<version>${gsVersion}</version>-->
+                    <!--</dependency>-->
                 </dependencies>
             </plugin>
 

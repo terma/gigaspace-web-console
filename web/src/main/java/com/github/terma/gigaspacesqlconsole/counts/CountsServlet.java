@@ -1,6 +1,7 @@
 package com.github.terma.gigaspacesqlconsole.counts;
 
 import com.github.terma.gigaspacesqlconsole.JsonWithCorrectAppVersionServlet;
+import com.github.terma.gigaspacesqlconsole.core.CountsRequest;
 
 public class CountsServlet extends JsonWithCorrectAppVersionServlet<CountsRequest> {
 

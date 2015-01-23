@@ -10,7 +10,7 @@
 
     <modules>
         <module>core</module>
-        <module>gs-10</module>
+        <module>provider</module>
         <module>web</module>
     </modules>
 

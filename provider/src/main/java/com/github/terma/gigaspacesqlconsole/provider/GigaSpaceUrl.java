@@ -1,4 +1,4 @@
-package com.github.terma.gigaspacesqlconsole;
+package com.github.terma.gigaspacesqlconsole.provider;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

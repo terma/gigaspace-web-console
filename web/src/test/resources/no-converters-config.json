@@ -1,4 +1,13 @@
 {
+  "gs": [
+    {
+      "name": "10",
+      "libs": [
+        "/Users/terma/.m2/repository/com/gigaspaces/gs-runtime/10.0.1-11800-RELEASE/gs-runtime-10.0.1-11800-RELEASE.jar",
+//        "/Users/terma/.m2/repository/com/gigaspaces/gs-openspaces/10.0.1-11800-RELEASE/gs-openspaces-10.0.1-11800-RELEASE.jar"
+      ]
+    }
+  ],
   "links": [
     {
       "name": "Home",

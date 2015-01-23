@@ -1,6 +1,7 @@
-package com.github.terma.gigaspacesqlconsole.counts;
+package com.github.terma.gigaspacesqlconsole.provider;
 
-import com.github.terma.gigaspacesqlconsole.GigaSpaceUtils;
+import com.github.terma.gigaspacesqlconsole.core.CountsRequest;
+import com.github.terma.gigaspacesqlconsole.core.CountsResponse;
 import junit.framework.Assert;
 import org.junit.Test;
 import org.openspaces.core.GigaSpace;
@@ -16,7 +17,7 @@ public class CountsTest {
 
         CountsRequest countsRequest = new CountsRequest();
         countsRequest.url = "/./ff?";
-        final CountsResponse countsResponse = Counts.counts(countsRequest);
+        final CountsResponse countsResponse = new CountsProviderImpl().counts(countsRequest);
 
         // then only Object default
         Assert.assertEquals(1, countsResponse.counts.size());
@@ -34,7 +35,7 @@ public class CountsTest {
 
         CountsRequest countsRequest = new CountsRequest();
         countsRequest.url = url;
-        final CountsResponse countsResponse = Counts.counts(countsRequest);
+        final CountsResponse countsResponse = new CountsProviderImpl().counts(countsRequest);
 
         // then
         Assert.assertEquals(2, countsResponse.counts.size());

@@ -8,5 +8,6 @@ public class UserConfig {
     public List<ConfigLink> links;
     public List<String> converters;
     public List<ConfigGigaSpace> gigaspaces;
+    public List<ConfigGs> gs;
 
 }

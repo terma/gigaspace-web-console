@@ -1,4 +1,4 @@
-package com.github.terma.gigaspacesqlconsole.gs10;
+package com.github.terma.gigaspacesqlconsole.provider;
 
 import com.github.terma.gigaspacesqlconsole.core.ExecuteRequest;
 import junit.framework.Assert;

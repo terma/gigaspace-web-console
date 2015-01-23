@@ -1,4 +1,4 @@
-package com.github.terma.gigaspacesqlconsole.counts;
+package com.github.terma.gigaspacesqlconsole.core;
 
 public class Count {
 

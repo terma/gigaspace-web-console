@@ -1,6 +1,4 @@
-package com.github.terma.gigaspacesqlconsole.counts;
-
-import com.github.terma.gigaspacesqlconsole.core.AppVersionRequest;
+package com.github.terma.gigaspacesqlconsole.core;
 
 public class CountsRequest extends AppVersionRequest {
 

@@ -1,71 +1,23 @@
 package com.github.terma.gigaspacesqlconsole.counts;
 
-import com.gigaspaces.cluster.activeelection.SpaceMode;
-import org.openspaces.admin.space.SpaceInstance;
+import com.github.terma.gigaspacesqlconsole.core.Count;
+import com.github.terma.gigaspacesqlconsole.core.CountsProvider;
+import com.github.terma.gigaspacesqlconsole.core.CountsRequest;
+import com.github.terma.gigaspacesqlconsole.core.CountsResponse;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 public class Counts {
 
-    private static final AdminCache adminCache = new AdminCache();
-
-    private static final Thread cleaner = new Thread(new Runnable() {
-        @Override
-        public void run() {
-            while (true) {
-                adminCache.clearExpired();
-
-                try {
-                    Thread.sleep(TimeUnit.MINUTES.toMillis(5));
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
-            }
-        }
-
-    });
-
-    static {
-        cleaner.setName("COUNTS-ADMIN-CLEANER");
-        cleaner.setDaemon(true);
-        cleaner.start();
-    }
+    private static final CountsProvider COUNTS_PROVIDER = null; // todo provide =)
 
     public static CountsResponse counts(CountsRequest request) {
         if (request.url.equals("/./test")) {
             return createTestResponse();
         }
 
-        final AdminAndSpaceCacheItem adminAndSpace = adminCache.createOrGet(request);
-
-        SpaceInstance[] spaceInstances = adminAndSpace.space.getInstances();
-        System.out.println("Admin has " + spaceInstances.length + " space instances");
-
-        final Map<String, Integer> counts = new HashMap<>();
-        for (final SpaceInstance spaceInstance : spaceInstances) {
-            if (spaceInstance.getMode() != SpaceMode.BACKUP) {
-                for (final Map.Entry<String, Integer> countItem : instanceToCounts(spaceInstance).entrySet()) {
-                    System.out.println("Space instance " + spaceInstance + " has " + countItem + " types");
-                    Integer count = counts.get(countItem.getKey());
-                    if (count == null) count = 0;
-                    counts.put(countItem.getKey(), count + countItem.getValue());
-                }
-            }
-        }
-
-        final CountsResponse countsResponse = new CountsResponse();
-        countsResponse.counts = new ArrayList<>();
-        for (final Map.Entry<String, Integer> count : counts.entrySet()) {
-            final Count countResponse = new Count();
-            countResponse.name = count.getKey();
-            countResponse.count = count.getValue();
-            countsResponse.counts.add(countResponse);
-        }
-        return countsResponse;
+        return COUNTS_PROVIDER.counts(request);
     }
 
     private static CountsResponse createTestResponse() {
@@ -110,14 +62,6 @@ public class Counts {
         }
 
         return countsResponse;
-    }
-
-    private static Map<String, Integer> instanceToCounts(final SpaceInstance instance) {
-        if (instance != null) {
-            return instance.getRuntimeDetails().getCountPerClassName();
-        } else {
-            return new HashMap<>();
-        }
     }
 
 }

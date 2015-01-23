@@ -1,4 +1,13 @@
 {
+  "gs": [
+    {
+      "name": "test",
+      "libs": [
+        "/gs-runtime-X.jar",
+        "/gs-openspaces-Y.jar"
+      ]
+    }
+  ],
   "links": [
     {
       "name": "Yandex",

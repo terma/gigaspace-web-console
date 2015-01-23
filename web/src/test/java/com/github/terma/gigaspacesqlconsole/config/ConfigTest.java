@@ -24,6 +24,17 @@ public class ConfigTest {
         assertEquals("Yandex", userConfig.links.get(0).name);
         assertEquals("http://www.yandex.ru", userConfig.links.get(0).url);
     }
+    @Test
+    public void shouldReadGs() {
+        System.setProperty(Config.CONFIG_PATH_SYSTEM_PROPERTY, "classpath:/config.json");
+
+        UserConfig userConfig = Config.readUser();
+
+        assertNotNull(userConfig);
+        assertEquals(1, userConfig.gs.size());
+        assertEquals("test", userConfig.gs.get(0).name);
+        assertEquals(2, userConfig.gs.get(0).libs.size());
+    }
 
     @Test
     public void shouldReadGigaspaces() {

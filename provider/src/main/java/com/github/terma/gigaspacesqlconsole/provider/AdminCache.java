@@ -1,6 +1,6 @@
-package com.github.terma.gigaspacesqlconsole.counts;
+package com.github.terma.gigaspacesqlconsole.provider;
 
-import com.github.terma.gigaspacesqlconsole.GigaSpaceUrl;
+import com.github.terma.gigaspacesqlconsole.core.CountsRequest;
 import org.openspaces.admin.Admin;
 import org.openspaces.admin.AdminFactory;
 import org.openspaces.admin.space.Space;
