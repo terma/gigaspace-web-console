@@ -71,8 +71,8 @@ CodeMirror.defineMode("sql", function(config, parserConfig) {
       // 1-line comment
       stream.skipToEnd();
       return "comment";
-    } else if ((support.commentHash && ch == "#")
-        || (ch == "-" && stream.eat("-") && (!support.commentSpaceRequired || stream.eat(" ")))) {
+    } else if ((ch == "#") || (ch == "/" && stream.eat("/")) || (ch == "-" && stream.eat("-"))) {
+      // changed to support # or // too
       // 1-line comments
       // ref: https://kb.askmonty.org/en/comment-syntax/
       stream.skipToEnd();

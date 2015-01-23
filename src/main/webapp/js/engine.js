@@ -438,15 +438,14 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
         indentWithTabs: true,
         smartIndent: true,
         lineWrapping: true,
-        lineNumbers: true,
+        lineNumbers: false,
         matchBrackets: true,
         autofocus: true,
         extraKeys: {"Ctrl-Space": "autocomplete"},
+        placeholder: "SQL to execute, support lists, use #, // or -- for comment",
         hint: CodeMirror.hint.sql,
         hintOptions: {
             tables: {//todo load automatically based on real GigaSpaces; Issue #23
-                "table1": ["col_A", "col_B", "col_C"],
-                "table2": ["other_columns1", "other_columns2"]
             }
         },
         onLoad: function (cm) {

@@ -11,6 +11,7 @@
     <script type="text/javascript" src="js/codemirror/mode/sql.js"></script>
     <script type="text/javascript" src="js/codemirror/addon/hint/show-hint.js"></script>
     <script type="text/javascript" src="js/codemirror/addon/hint/sql-hint.js"></script>
+    <script type="text/javascript" src="js/codemirror/addon/placeholder.js"></script>
 
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/codemirror.css">
@@ -109,7 +110,9 @@
     </div>
 
     <div ng-show="tab == 'query'">
-        <ui-codemirror ui-codemirror-opts="editorOptions" ng-model="request.sql" class="mono-text" style="width: 100%;font-size: 125%"></ui-codemirror>
+        <ui-codemirror ui-codemirror-opts="editorOptions" ng-model="request.sql" class="mono-text"></ui-codemirror>
+
+        <p/>
 
         <a ng-click="executeQuery()" href="javascript:void(0);">Execute</a>
 

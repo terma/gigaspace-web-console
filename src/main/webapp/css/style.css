@@ -10,13 +10,14 @@ body {
 }
 
 .mono-text {
-    font-family: courier, serif;
+    font-family: courier, monospace;
     font-size: 90%;
 }
 
 .mono-error {
     color: red;
-    font-family: courier, serif;
+    font-family: courier, monospace;
+    /* Menlo, Monaco, Consolas, 'Lucida Console', courier, monospace */
     font-size: 90%;
 }
 
@@ -25,8 +26,7 @@ input, textarea {
     background-color: transparent;
     -webkit-appearance: none;
     -moz-appearance: none;
-    border-width: 1px;
-    border-color: #C0C0C0;
+    border: 1px solid #C0C0C0;
 }
 
 .count_up {
