@@ -1,7 +1,7 @@
 // todo skip empty line when send to execute
 // todo add support column name with "-"
 
-var App = angular.module('App', []);
+var App = angular.module('App', ['ui.codemirror']);
 
 App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout', function ($scope, $http, $q, $timeout) {
     $scope.request = {};
@@ -134,7 +134,7 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
         }
     });
 
-    $('textarea').keydown(function (e) {
+    $('ui-codemirror').keydown(function (e) {
         if (e.ctrlKey && e.keyCode == 13) {
             $scope.executeQuery()
         }
@@ -209,14 +209,16 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
 
         $scope.results = [];
 
+        var content = $scope.codeMirrorEditor.getSelection() || $scope.request.sql;
+
         $scope.history.setEditor({
             url: $scope.request.url,
             user: $scope.request.user,
             password: $scope.request.password,
-            editor: $scope.request.sql
+            editor: content
         });
 
-        var sqlList = filterCommentedAndEmpty(getLines($scope.request.sql));
+        var sqlList = filterCommentedAndEmpty(getLines(content));
         for (var j = 0; j < sqlList.length; j++) {
             var sql = sqlList[j];
             console.log("start sql: " + sql);
@@ -424,8 +426,32 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
         }).success(function (res) {
             $scope.config = res;
         }).error(function (res) {
-            // todo show error if can't load config
+            // todo show error if can't load config, as temporary solution
+            console.log(res);
+            alert("Oops... \n" + res);
         });
+    };
+
+    $scope.editorOptions = {
+        mode: 'text/x-sql',
+        content: 'SQL, could be list, use # for comments',
+        indentWithTabs: true,
+        smartIndent: true,
+        lineWrapping: true,
+        lineNumbers: false,
+        matchBrackets: true,
+        autofocus: true,
+        extraKeys: {"Ctrl-Space": "autocomplete"},
+        placeholder: "SQL to execute, support lists, use #, // or -- for comment",
+        hint: CodeMirror.hint.sql,
+        hintOptions: {
+            tables: {//todo load automatically based on real GigaSpaces; Issue #23
+            }
+        },
+        onLoad: function (cm) {
+            $scope.codeMirrorEditor = cm;
+            $scope.codeMirrorEditor.setSize(null, 95);
+        }
     };
 
     $scope.loadConfig();

@@ -5,7 +5,17 @@
     <script type="text/javascript" src="js/angular.min.js"></script>
     <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
     <script type="text/javascript" src="js/engine.js"></script>
+
+    <script type="text/javascript" src="js/codemirror.js"></script>
+    <script type="text/javascript" src="js/ui-codemirror.min.js"></script>
+    <script type="text/javascript" src="js/codemirror/mode/sql.js"></script>
+    <script type="text/javascript" src="js/codemirror/addon/hint/show-hint.js"></script>
+    <script type="text/javascript" src="js/codemirror/addon/hint/sql-hint.js"></script>
+    <script type="text/javascript" src="js/codemirror/addon/placeholder.js"></script>
+
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/codemirror.css">
+    <link rel="stylesheet" href="js/codemirror/addon/hint/show-hint.css">
 </head>
 <body ng-app="App" ng-controller="GigaSpaceBrowserController">
 
@@ -100,10 +110,10 @@
     </div>
 
     <div ng-show="tab == 'query'">
-        <textarea placeholder="SQL, could be list, use # for comments" ng-model="request.sql" class="mono-text"
-                  style="width: 100%" rows="6"></textarea>
+        <ui-codemirror ui-codemirror-opts="editorOptions" ng-model="request.sql" class="mono-text"></ui-codemirror>
 
         <p/>
+
         <a ng-click="executeQuery()" href="javascript:void(0);">Execute</a>
 
         <p ng-show="status">{{ status }}</p>
@@ -120,14 +130,16 @@
 
             <p ng-show="result.status">{{ result.status }}</p>
 
-            <a ng-show="result.data" href="javascript:void(0);" ng-click="toggleShowAllText()">Show/Hide all text</a>
+            <a ng-show="result.data" href="javascript:void(0);" ng-click="toggleShowAllText()">Show/Hide all
+                text</a>
 
             <p/>
 
             <table ng-show="result.data" class="result">
                 <thead>
                 <tr>
-                    <th ng-repeat="value in result.data.columns track by $index" valign="top" class="mono-text">{{ value
+                    <th ng-repeat="value in result.data.columns track by $index" valign="top" class="mono-text">
+                        {{ value
                         }}
                     </th>
                 </tr>
