@@ -1,6 +1,7 @@
 package com.github.terma.gigaspacesqlconsole;
 
 import com.github.terma.gigaspacesqlconsole.config.Config;
+import com.github.terma.gigaspacesqlconsole.core.AppVersionRequest;
 
 import javax.servlet.ServletException;
 

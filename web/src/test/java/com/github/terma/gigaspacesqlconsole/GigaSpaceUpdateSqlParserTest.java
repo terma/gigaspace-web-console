@@ -1,5 +1,6 @@
 package com.github.terma.gigaspacesqlconsole;
 
+import com.github.terma.gigaspacesqlconsole.core.GigaSpaceUpdateSql;
 import org.junit.Assert;
 import org.junit.Test;
 

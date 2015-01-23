@@ -3,10 +3,10 @@ package com.github.terma.gigaspacesqlconsole.gs10;
 import com.gigaspaces.client.ChangeResult;
 import com.gigaspaces.client.ChangeSet;
 import com.gigaspaces.document.SpaceDocument;
-import com.github.terma.gigaspacesqlconsole.ExecuteRequest;
-import com.github.terma.gigaspacesqlconsole.ExecuteResponse;
-import com.github.terma.gigaspacesqlconsole.ExecutorProvider;
-import com.github.terma.gigaspacesqlconsole.GigaSpaceUpdateSql;
+import com.github.terma.gigaspacesqlconsole.core.ExecuteRequest;
+import com.github.terma.gigaspacesqlconsole.core.ExecuteResponse;
+import com.github.terma.gigaspacesqlconsole.core.ExecutorProvider;
+import com.github.terma.gigaspacesqlconsole.core.GigaSpaceUpdateSql;
 import com.j_spaces.core.client.SQLQuery;
 import org.openspaces.core.GigaSpace;
 import org.openspaces.core.GigaSpaceConfigurer;
@@ -19,7 +19,7 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Map;
 
-public class GigaSpace10ExecutorProvider implements ExecutorProvider {
+public class ExecutorProviderImpl implements ExecutorProvider {
 
     public Connection getConnection(final ExecuteRequest request) throws SQLException, ClassNotFoundException {
         Class.forName("com.j_spaces.jdbc.driver.GDriver");

@@ -2,6 +2,11 @@ package com.github.terma.gigaspacesqlconsole;
 
 import com.github.terma.gigaspacesqlconsole.config.Config;
 
+import com.github.terma.gigaspacesqlconsole.core.ExecuteRequest;
+import com.github.terma.gigaspacesqlconsole.core.ExecuteResponse;
+import com.github.terma.gigaspacesqlconsole.core.ExecutorProvider;
+import com.github.terma.gigaspacesqlconsole.core.GigaSpaceUpdateSql;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.Connection;
@@ -18,7 +23,7 @@ public class Executor {
 
     private static final List<Method> converterMethods = new ArrayList<>();
 
-    private static final ExecutorProvider EXECUTOR_PROVIDER = null;
+    private static final ExecutorProvider EXECUTOR_PROVIDER = ExecutorProviderResolver.get();
 
     static {
         final Config config = Config.read();

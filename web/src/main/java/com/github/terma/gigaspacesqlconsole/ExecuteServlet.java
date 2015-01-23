@@ -1,5 +1,7 @@
 package com.github.terma.gigaspacesqlconsole;
 
+import com.github.terma.gigaspacesqlconsole.core.ExecuteRequest;
+
 public class ExecuteServlet extends JsonWithCorrectAppVersionServlet<ExecuteRequest> {
 
     @Override
