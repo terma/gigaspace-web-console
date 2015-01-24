@@ -40,22 +40,6 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- gigaspace -->
-
-        <dependency>
-            <groupId>com.gigaspaces</groupId>
-            <artifactId>gs-openspaces</artifactId>
-            <version>${gsVersion}</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.gigaspaces</groupId>
-            <artifactId>gs-runtime</artifactId>
-            <version>${gsVersion}</version>
-            <scope>provided</scope>
-        </dependency>
-
         <!-- test -->
 
         <dependency>
@@ -80,8 +64,6 @@
         <encoding>UTF-8</encoding>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.7</java.version>
-        <!--<gsVersion>9.7.0-10496-RELEASE</gsVersion>-->
-        <gsVersion>10.0.1-11800-RELEASE</gsVersion>
     </properties>
 
     <build>
@@ -109,7 +91,9 @@
                                     <groupId>com.github.terma</groupId>
                                     <artifactId>gigaspace-sql-console-provider</artifactId>
                                     <version>${project.version}</version>
+                                    <overWrite>true</overWrite>
                                     <outputDirectory>${project.build.directory}/${project.artifactId}-${project.version}/WEB-INF/providers</outputDirectory>
+                                    <destFileName>provider-9.X.jar</destFileName>
                                 </artifactItem>
                             </artifactItems>
                             <!-- other configurations here -->
@@ -146,28 +130,6 @@
                         <contextPath>/gs-sql-console</contextPath>
                     </webApp>
                 </configuration>
-
-                <dependencies>
-                    <!-- add gigaspace as real to be able start app -->
-
-                    <!--<dependency>-->
-                        <!--<groupId>com.gigaspaces</groupId>-->
-                        <!--<artifactId>gs-openspaces</artifactId>-->
-                        <!--<version>${gsVersion}</version>-->
-                        <!--<exclusions>-->
-                            <!--<exclusion>-->
-                                <!--<groupId>*</groupId>-->
-                                <!--<artifactId>*</artifactId>-->
-                            <!--</exclusion>-->
-                        <!--</exclusions>-->
-                    <!--</dependency>-->
-
-                    <!--<dependency>-->
-                        <!--<groupId>com.gigaspaces</groupId>-->
-                        <!--<artifactId>gs-runtime</artifactId>-->
-                        <!--<version>${gsVersion}</version>-->
-                    <!--</dependency>-->
-                </dependencies>
             </plugin>
 
             <plugin>

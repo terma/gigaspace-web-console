@@ -244,6 +244,7 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
             url: $scope.request.url,
             user: $scope.request.user,
             password: $scope.request.password,
+            gsVersion: $scope.request.gs,
             sql: result.sql,
             appVersion: $scope.config.internal.appVersion
         };

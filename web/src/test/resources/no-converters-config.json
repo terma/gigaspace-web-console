@@ -4,7 +4,19 @@
       "name": "10",
       "libs": [
         "/Users/terma/.m2/repository/com/gigaspaces/gs-runtime/10.0.1-11800-RELEASE/gs-runtime-10.0.1-11800-RELEASE.jar",
-//        "/Users/terma/.m2/repository/com/gigaspaces/gs-openspaces/10.0.1-11800-RELEASE/gs-openspaces-10.0.1-11800-RELEASE.jar"
+        //        "/Users/terma/.m2/repository/com/gigaspaces/gs-openspaces/10.0.1-11800-RELEASE/gs-openspaces-10.0.1-11800-RELEASE.jar"
+      ]
+    },
+    {
+      "name": "9.5",
+      "libs": [
+        "/Users/terma/.m2/repository/com/gigaspaces/gs-runtime/9.5.0-M7/gs-runtime-9.5.0-M7.jar"
+      ]
+    },
+    {
+      "name": "9.7",
+      "libs": [
+        "/Users/terma/.m2/repository/com/gigaspaces/gs-runtime/9.7.0-10491-M6/gs-runtime-9.7.0-10491-M6.jar"
       ]
     }
   ],
@@ -24,7 +36,8 @@
       "name": "TEST",
       "url": "/./test",
       "user": "",
-      "password": ""
+      "password": "",
+      "gs": "10"
     },
     {
       "name": "BAD-GS",

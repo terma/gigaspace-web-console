@@ -58,6 +58,10 @@
     <p></p>
     <input ng-model="request.user" class="mono-text" placeholder="User"/>
     <input type="password" ng-model="request.password" class="mono-text" placeholder="Password"/>
+
+    <select class="mono-text" ng-model="request.gs">
+        <option ng-repeat="gs in config.user.gs" value="{{ gs.name }}">{{ gs.name }}</option>
+    </select>
 </div>
 
 <div style="padding: 1em;">

@@ -1,10 +1,8 @@
 package com.github.terma.gigaspacesqlconsole;
 
 import com.github.terma.gigaspacesqlconsole.config.Config;
-
 import com.github.terma.gigaspacesqlconsole.core.ExecuteRequest;
 import com.github.terma.gigaspacesqlconsole.core.ExecuteResponse;
-import com.github.terma.gigaspacesqlconsole.core.ExecutorProvider;
 import com.github.terma.gigaspacesqlconsole.core.GigaSpaceUpdateSql;
 
 import java.lang.reflect.InvocationTargetException;
@@ -22,8 +20,6 @@ public class Executor {
     private static final String CONVERTER_METHOD = "convert";
 
     private static final List<Method> converterMethods = new ArrayList<>();
-
-    private static final ExecutorProvider EXECUTOR_PROVIDER = ExecutorProviderResolver.get();
 
     static {
         final Config config = Config.read();
@@ -55,11 +51,11 @@ public class Executor {
     }
 
     private static ExecuteResponse handleUpdate(ExecuteRequest request, GigaSpaceUpdateSql updateSql) {
-        return EXECUTOR_PROVIDER.handleUpdate(request, updateSql);
+        return ProviderResolver.getExecutor(request.gsVersion).handleUpdate(request, updateSql);
     }
 
     private static ExecuteResponse handleOther(ExecuteRequest request) throws Exception {
-        Connection connection = EXECUTOR_PROVIDER.getConnection(request);
+        Connection connection = ProviderResolver.getExecutor(request.gsVersion).getConnection(request);
         try {
             return safeHandleOther(request, connection);
         } finally {

@@ -1,5 +1,6 @@
 package com.github.terma.gigaspacesqlconsole.counts;
 
+import com.github.terma.gigaspacesqlconsole.ProviderResolver;
 import com.github.terma.gigaspacesqlconsole.core.Count;
 import com.github.terma.gigaspacesqlconsole.core.CountsProvider;
 import com.github.terma.gigaspacesqlconsole.core.CountsRequest;
@@ -10,7 +11,7 @@ import java.util.Random;
 
 public class Counts {
 
-    private static final CountsProvider COUNTS_PROVIDER = null; // todo provide =)
+    private static final CountsProvider COUNTS_PROVIDER = ProviderResolver.getCounts();
 
     public static CountsResponse counts(CountsRequest request) {
         if (request.url.equals("/./test")) {
