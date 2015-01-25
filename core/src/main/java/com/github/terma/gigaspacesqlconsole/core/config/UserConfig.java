@@ -1,4 +1,4 @@
-package com.github.terma.gigaspacesqlconsole.config;
+package com.github.terma.gigaspacesqlconsole.core.config;
 
 import java.util.List;
 

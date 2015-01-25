@@ -1,6 +1,6 @@
 package com.github.terma.gigaspacesqlconsole;
 
-import com.github.terma.gigaspacesqlconsole.config.Config;
+import com.github.terma.gigaspacesqlconsole.core.config.Config;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
 

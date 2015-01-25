@@ -1,7 +1,7 @@
 package com.github.terma.gigaspacesqlconsole;
 
-import com.github.terma.gigaspacesqlconsole.config.Config;
-import com.github.terma.gigaspacesqlconsole.config.ConfigGs;
+import com.github.terma.gigaspacesqlconsole.core.config.Config;
+import com.github.terma.gigaspacesqlconsole.core.config.ConfigGs;
 import com.github.terma.gigaspacesqlconsole.core.Provider;
 
 import java.net.MalformedURLException;

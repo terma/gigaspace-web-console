@@ -1,4 +1,4 @@
-package com.github.terma.gigaspacesqlconsole;
+package com.github.terma.gigaspacesqlconsole.provider;
 
 import com.github.terma.gigaspacesqlconsole.core.GigaSpaceUpdateSql;
 import java_cup.runtime.Symbol;

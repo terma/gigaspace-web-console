@@ -1,10 +1,18 @@
-package com.github.terma.gigaspacesqlconsole;
+package com.github.terma.gigaspacesqlconsole.provider;
 
-import com.github.terma.gigaspacesqlconsole.config.Config;
+import com.gigaspaces.client.ChangeResult;
+import com.gigaspaces.client.ChangeSet;
 import com.github.terma.gigaspacesqlconsole.core.ExecuteRequest;
 import com.github.terma.gigaspacesqlconsole.core.ExecuteResponse;
 import com.github.terma.gigaspacesqlconsole.core.GigaSpaceUpdateSql;
+import com.github.terma.gigaspacesqlconsole.core.config.Config;
+import com.j_spaces.core.client.SQLQuery;
+import com.j_spaces.jdbc.driver.GConnection;
+import org.openspaces.core.GigaSpace;
+import org.openspaces.core.GigaSpaceConfigurer;
+import org.openspaces.core.space.UrlSpaceConfigurer;
 
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.Connection;
@@ -14,6 +22,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class Executor {
 
@@ -50,12 +59,43 @@ public class Executor {
         else return handleOther(request);
     }
 
+    public static Connection getConnection(final ExecuteRequest request) throws SQLException, ClassNotFoundException {
+        java.util.Properties info = new java.util.Properties();
+
+        if (request.user != null) {
+            info.put("user", request.user);
+        }
+        if (request.password != null) {
+            info.put("password", request.password);
+        }
+
+        return new GConnection(GConnection.JDBC_GIGASPACES_URL + request.url, info);
+    }
+
+    @SuppressWarnings("deprecation")
+    private static GigaSpace gigaSpaceConnection(ExecuteRequest request) {
+        UrlSpaceConfigurer urlSpaceConfigurer = new UrlSpaceConfigurer(request.url);
+        urlSpaceConfigurer.userDetails(request.user, request.password);
+        return new GigaSpaceConfigurer(urlSpaceConfigurer.create()).create();
+    }
+
     private static ExecuteResponse handleUpdate(ExecuteRequest request, GigaSpaceUpdateSql updateSql) {
-        return CachedProviderResolver.getProvider(request.gsVersion).handleUpdate(request, updateSql);
+        SQLQuery query = new SQLQuery<>(updateSql.typeName, updateSql.conditions);
+        ChangeSet changeSet = new ChangeSet();
+
+        for (Map.Entry<String, Object> field : updateSql.setFields.entrySet()) {
+            changeSet.set(field.getKey(), (Serializable) field.getValue());
+        }
+
+        ChangeResult changeResult = gigaSpaceConnection(request).change(query, changeSet);
+        ExecuteResponse executeResponse = new ExecuteResponse();
+        executeResponse.columns = Arrays.asList("affected_rows");
+        executeResponse.data = Arrays.asList(Arrays.asList(Integer.toString(changeResult.getNumberOfChangedEntries())));
+        return executeResponse;
     }
 
     private static ExecuteResponse handleOther(ExecuteRequest request) throws Exception {
-        Connection connection = CachedProviderResolver.getProvider(request.gsVersion).getConnection(request);
+        Connection connection = getConnection(request);
         try {
             return safeHandleOther(request, connection);
         } finally {

@@ -1,6 +1,6 @@
 package com.github.terma.gigaspacesqlconsole;
 
-import com.github.terma.gigaspacesqlconsole.config.UserConfig;
+import com.github.terma.gigaspacesqlconsole.core.config.UserConfig;
 
 public class ConfigAndVersion {
 

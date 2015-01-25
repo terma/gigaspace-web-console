@@ -1,10 +1,7 @@
-package com.github.terma.gigaspacesqlconsole.config;
+package com.github.terma.gigaspacesqlconsole.core.config;
 
 import junit.framework.Assert;
 import org.junit.Test;
-
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
 
 public class ConfigTest {
 
@@ -19,21 +16,22 @@ public class ConfigTest {
 
         UserConfig userConfig = Config.readUser();
 
-        assertNotNull(userConfig);
-        assertEquals(2, userConfig.links.size());
-        assertEquals("Yandex", userConfig.links.get(0).name);
-        assertEquals("http://www.yandex.ru", userConfig.links.get(0).url);
+        Assert.assertNotNull(userConfig);
+        Assert.assertEquals(2, userConfig.links.size());
+        Assert.assertEquals("Yandex", userConfig.links.get(0).name);
+        Assert.assertEquals("http://www.yandex.ru", userConfig.links.get(0).url);
     }
+
     @Test
     public void shouldReadGs() {
         System.setProperty(Config.CONFIG_PATH_SYSTEM_PROPERTY, "classpath:/config.json");
 
         UserConfig userConfig = Config.readUser();
 
-        assertNotNull(userConfig);
-        assertEquals(1, userConfig.gs.size());
-        assertEquals("test", userConfig.gs.get(0).name);
-        assertEquals(2, userConfig.gs.get(0).libs.size());
+        Assert.assertNotNull(userConfig);
+        Assert.assertEquals(1, userConfig.gs.size());
+        Assert.assertEquals("test", userConfig.gs.get(0).name);
+        Assert.assertEquals(2, userConfig.gs.get(0).libs.size());
     }
 
     @Test
@@ -42,12 +40,12 @@ public class ConfigTest {
 
         UserConfig userConfig = Config.readUser();
 
-        assertNotNull(userConfig);
-        assertEquals(2, userConfig.gigaspaces.size());
-        assertEquals("TEST-GS-1", userConfig.gigaspaces.get(0).name);
-        assertEquals("jini://*/*/testSpace?locators=locator1", userConfig.gigaspaces.get(0).url);
-        assertEquals("user1", userConfig.gigaspaces.get(0).user);
-        assertEquals("password1", userConfig.gigaspaces.get(0).password);
+        Assert.assertNotNull(userConfig);
+        Assert.assertEquals(2, userConfig.gigaspaces.size());
+        Assert.assertEquals("TEST-GS-1", userConfig.gigaspaces.get(0).name);
+        Assert.assertEquals("jini://*/*/testSpace?locators=locator1", userConfig.gigaspaces.get(0).url);
+        Assert.assertEquals("user1", userConfig.gigaspaces.get(0).user);
+        Assert.assertEquals("password1", userConfig.gigaspaces.get(0).password);
     }
 
     @Test
@@ -56,8 +54,8 @@ public class ConfigTest {
 
         UserConfig userConfig = Config.readUser();
 
-        assertEquals(1, userConfig.converters.size());
-        assertEquals("com.github.terma.gigaspacesqlconsole.TestConverter", userConfig.converters.get(0));
+        Assert.assertEquals(1, userConfig.converters.size());
+        Assert.assertEquals("com.github.terma.gigaspacesqlconsole.TestConverter", userConfig.converters.get(0));
     }
 
     @Test
@@ -66,9 +64,9 @@ public class ConfigTest {
 
         UserConfig userConfig = Config.readUser();
 
-        assertNotNull(userConfig);
-        assertEquals(2, userConfig.gigaspaces.size());
-        assertEquals(1, userConfig.converters.size());
+        Assert.assertNotNull(userConfig);
+        Assert.assertEquals(2, userConfig.gigaspaces.size());
+        Assert.assertEquals(1, userConfig.converters.size());
     }
 
     @Test
@@ -77,9 +75,9 @@ public class ConfigTest {
 
         UserConfig userConfig = Config.readUser();
 
-        assertNotNull(userConfig);
-        assertEquals(2, userConfig.gigaspaces.size());
-        assertEquals(1, userConfig.converters.size());
+        Assert.assertNotNull(userConfig);
+        Assert.assertEquals(2, userConfig.gigaspaces.size());
+        Assert.assertEquals(1, userConfig.converters.size());
     }
 
     @Test(expected = IllegalArgumentException.class)

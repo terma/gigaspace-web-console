@@ -27,6 +27,12 @@
             <version>${project.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>net.sf.squirrel-sql.thirdparty.non-maven</groupId>
+            <artifactId>java-cup</artifactId>
+            <version>11a</version>
+        </dependency>
+
         <!-- gigaspace -->
 
         <dependency>
@@ -52,5 +58,22 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>de.jflex</groupId>
+                <artifactId>maven-jflex-plugin</artifactId>
+                <version>1.4.3-r1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
