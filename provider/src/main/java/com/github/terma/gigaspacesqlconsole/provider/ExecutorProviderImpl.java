@@ -4,7 +4,6 @@ import com.gigaspaces.client.ChangeResult;
 import com.gigaspaces.client.ChangeSet;
 import com.github.terma.gigaspacesqlconsole.core.ExecuteRequest;
 import com.github.terma.gigaspacesqlconsole.core.ExecuteResponse;
-import com.github.terma.gigaspacesqlconsole.core.ExecutorProvider;
 import com.github.terma.gigaspacesqlconsole.core.GigaSpaceUpdateSql;
 import com.j_spaces.core.client.SQLQuery;
 import com.j_spaces.jdbc.driver.GConnection;
@@ -18,7 +17,7 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Map;
 
-public class ExecutorProviderImpl implements ExecutorProvider {
+public class ExecutorProviderImpl {
 
     public Connection getConnection(final ExecuteRequest request) throws SQLException, ClassNotFoundException {
         Thread.currentThread().setContextClassLoader(ExecutorProviderImpl.class.getClassLoader());
@@ -42,7 +41,6 @@ public class ExecutorProviderImpl implements ExecutorProvider {
         return new GigaSpaceConfigurer(urlSpaceConfigurer.create()).create();
     }
 
-    @Override
     public ExecuteResponse handleUpdate(ExecuteRequest request, GigaSpaceUpdateSql updateSql) {
         SQLQuery query = new SQLQuery<>(updateSql.typeName, updateSql.conditions);
         ChangeSet changeSet = new ChangeSet();

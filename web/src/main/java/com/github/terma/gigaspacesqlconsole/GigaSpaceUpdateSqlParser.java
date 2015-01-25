@@ -1,11 +1,7 @@
 package com.github.terma.gigaspacesqlconsole;
 
-import java_cup.runtime.Symbol;
-
-import com.github.terma.gigaspacesqlconsole.core.ExecuteRequest;
-import com.github.terma.gigaspacesqlconsole.core.ExecuteResponse;
-import com.github.terma.gigaspacesqlconsole.core.ExecutorProvider;
 import com.github.terma.gigaspacesqlconsole.core.GigaSpaceUpdateSql;
+import java_cup.runtime.Symbol;
 
 import java.io.IOException;
 import java.io.StringReader;

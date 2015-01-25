@@ -5,6 +5,7 @@ public class CountsRequest extends AppVersionRequest {
     public String url;
     public String user;
     public String password;
+    public String gs;
 
     @Override
     public boolean equals(Object o) {
@@ -30,7 +31,12 @@ public class CountsRequest extends AppVersionRequest {
 
     @Override
     public String toString() {
-        return "CountsRequest {" + "url=: " + url + ", user: " + user + ", password: " + password + "}";
+        return "CountsRequest{" +
+                "url='" + url + '\'' +
+                ", user='" + user + '\'' +
+                ", password='" + password + '\'' +
+                ", gs='" + gs + '\'' +
+                '}';
     }
 
 }

@@ -2,8 +2,7 @@ package com.github.terma.gigaspacesqlconsole;
 
 import com.github.terma.gigaspacesqlconsole.config.Config;
 import com.github.terma.gigaspacesqlconsole.config.ConfigGs;
-import com.github.terma.gigaspacesqlconsole.core.CountsProvider;
-import com.github.terma.gigaspacesqlconsole.core.ExecutorProvider;
+import com.github.terma.gigaspacesqlconsole.core.Provider;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -13,11 +12,8 @@ import java.util.List;
 
 public class ProviderResolver {
 
-    private static final String EXECUTOR_PROVIDER_IMPL =
-            "com.github.terma.gigaspacesqlconsole.provider.ExecutorProviderImpl";
-
-    private static final String COUNTS_PROVIDER_IMPL =
-            "com.github.terma.gigaspacesqlconsole.provider.CountsProviderImpl";
+    private static final String PROVIDER_IMPL_CLASS_NAME =
+            "com.github.terma.gigaspacesqlconsole.provider.ProviderImpl";
 
     @SuppressWarnings("unchecked")
     private static <T> T getClassInstance(final ClassLoader classLoader, final String className) {
@@ -38,9 +34,9 @@ public class ProviderResolver {
         }
     }
 
-    public static ExecutorProvider getExecutor(final String gsVersion) {
-        final ConfigGs configGs = gsConfigByNameOrFirst(gsVersion);
-        return getClassInstance(createClassLoader(configGs), EXECUTOR_PROVIDER_IMPL);
+    public static Provider getProvider(final String gs) {
+        final ConfigGs configGs = gsConfigByNameOrFirst(gs);
+        return getClassInstance(createClassLoader(configGs), PROVIDER_IMPL_CLASS_NAME);
     }
 
     private static ConfigGs gsConfigByNameOrFirst(String gsVersion) {
@@ -50,11 +46,6 @@ public class ProviderResolver {
             }
         }
         return Config.read().user.gs.get(0);
-    }
-
-    public static CountsProvider getCounts() {
-        final ConfigGs configGs = Config.read().user.gs.get(0);
-        return getClassInstance(createClassLoader(configGs), COUNTS_PROVIDER_IMPL);
     }
 
     private static URLClassLoader createClassLoader(ConfigGs configGs) {

@@ -3,9 +3,7 @@ package com.github.terma.gigaspacesqlconsole;
 /* --------------------------Usercode Section------------------------ */
 
 
-import com.github.terma.gigaspacesqlconsole.core.ExecuteRequest;
 import com.github.terma.gigaspacesqlconsole.core.ExecuteResponse;
-import com.github.terma.gigaspacesqlconsole.core.ExecutorProvider;
 import com.github.terma.gigaspacesqlconsole.core.GigaSpaceUpdateSql;
 import java_cup.sym;
 //import java_cup.runtime.*;

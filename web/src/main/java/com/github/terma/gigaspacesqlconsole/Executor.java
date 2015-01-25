@@ -51,11 +51,11 @@ public class Executor {
     }
 
     private static ExecuteResponse handleUpdate(ExecuteRequest request, GigaSpaceUpdateSql updateSql) {
-        return ProviderResolver.getExecutor(request.gsVersion).handleUpdate(request, updateSql);
+        return CachedProviderResolver.getProvider(request.gsVersion).handleUpdate(request, updateSql);
     }
 
     private static ExecuteResponse handleOther(ExecuteRequest request) throws Exception {
-        Connection connection = ProviderResolver.getExecutor(request.gsVersion).getConnection(request);
+        Connection connection = CachedProviderResolver.getProvider(request.gsVersion).getConnection(request);
         try {
             return safeHandleOther(request, connection);
         } finally {

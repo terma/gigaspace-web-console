@@ -2,7 +2,6 @@ package com.github.terma.gigaspacesqlconsole.provider;
 
 import com.gigaspaces.cluster.activeelection.SpaceMode;
 import com.github.terma.gigaspacesqlconsole.core.Count;
-import com.github.terma.gigaspacesqlconsole.core.CountsProvider;
 import com.github.terma.gigaspacesqlconsole.core.CountsRequest;
 import com.github.terma.gigaspacesqlconsole.core.CountsResponse;
 import org.openspaces.admin.space.SpaceInstance;
@@ -13,7 +12,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-public class CountsProviderImpl implements CountsProvider {
+public class CountsProviderImpl {
 
     private static final AdminCache adminCache = new AdminCache();
 
