@@ -1,56 +1,45 @@
 package com.github.terma.gigaspacesqlconsole;
 
+import com.github.terma.gigaspacesqlconsole.core.CountsRequest;
 import com.github.terma.gigaspacesqlconsole.core.ExecuteRequest;
-import junit.framework.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
 /**
- * This test show that we work with different version of GS in same JVM
+ * Checking that we can work with different versions of GS in
+ * same JVM in one thread
  */
 @Ignore
 public class MultiVersionsInOneJvmTest {
 
+    private static final int NATURAL_DELAY = 50;
+
     @Test
-    public void shouldExecuteWithoutErrors() throws InterruptedException {
-        MyRunnable thread2 = new MyRunnable("GS-9.5");
-        MyRunnable thread1 = new MyRunnable("GS-10");
+    public void shouldExecuteWithoutErrors() throws Exception {
+        ExecuteRequest request1 = new ExecuteRequest();
+        request1.url = "/./gs95-" + System.currentTimeMillis();
+        request1.sql = "create table gs95 (id int)";
 
-        thread1.start();
-        thread2.start();
-        thread1.join();
-        thread2.join();
+        CountsRequest countsRequest1 = new CountsRequest();
+        countsRequest1.url = request1.url + "?";
 
-        Assert.assertEquals(null, thread1.exception);
-        Assert.assertEquals(null, thread2.exception);
+        ExecuteRequest request2 = new ExecuteRequest();
+        request2.url = "/./gs10-" + System.currentTimeMillis();
+        request2.sql = "create table gs10 (id int)";
+
+        CountsRequest countsRequest2 = new CountsRequest();
+        countsRequest2.url = request2.url + "?";
+
+        for (int i = 0; i < 15; i++) {
+            CachedProviderResolver.getProvider("GS-9.5").query(request1);
+            Thread.sleep(NATURAL_DELAY);
+            CachedProviderResolver.getProvider("GS-9.5").counts(countsRequest1);
+            Thread.sleep(NATURAL_DELAY);
+            CachedProviderResolver.getProvider("GS-10").query(request2);
+            Thread.sleep(NATURAL_DELAY);
+            CachedProviderResolver.getProvider("GS-10").counts(countsRequest2);
+            Thread.sleep(NATURAL_DELAY);
+        }
     }
 
-    private static class MyRunnable extends Thread {
-
-        private final String gs;
-
-        public volatile Exception exception;
-
-        public MyRunnable(String gs) {
-            this.gs = gs;
-            exception = null;
-        }
-
-        @Override
-        public void run() {
-            ExecuteRequest request = new ExecuteRequest();
-            request.url = "/./test" + System.currentTimeMillis();
-            request.sql = "create table TEST (ID int)";
-            for (int i = 0; i < 15; i++) {
-                try {
-                    CachedProviderResolver.getProvider(gs).query(request);
-                    Thread.sleep(100);
-                } catch (Exception e) {
-                    exception = e;
-//                    e.printStackTrace();
-                }
-            }
-        }
-
-    }
 }
