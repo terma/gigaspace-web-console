@@ -1,20 +1,20 @@
 {
   "gs": [
     {
-      "name": "10",
+      "name": "GS-10",
       "libs": [
         "/Users/terma/.m2/repository/com/gigaspaces/gs-runtime/10.0.1-11800-RELEASE/gs-runtime-10.0.1-11800-RELEASE.jar",
         //        "/Users/terma/.m2/repository/com/gigaspaces/gs-openspaces/10.0.1-11800-RELEASE/gs-openspaces-10.0.1-11800-RELEASE.jar"
       ]
     },
     {
-      "name": "9.5",
+      "name": "GS-9.5",
       "libs": [
         "/Users/terma/.m2/repository/com/gigaspaces/gs-runtime/9.5.0-M7/gs-runtime-9.5.0-M7.jar"
       ]
     },
     {
-      "name": "9.7",
+      "name": "GS-9.7",
       "libs": [
         "/Users/terma/.m2/repository/com/gigaspaces/gs-runtime/9.7.0-10491-M6/gs-runtime-9.7.0-10491-M6.jar"
       ]
@@ -33,17 +33,31 @@
   "converters": [],
   "gigaspaces": [
     {
-      "name": "TEST",
-      "url": "/./test",
+      "name": "LOCAL",
+      "url": "/./local",
       "user": "",
       "password": "",
-      "gs": "10"
+      "gs": "GS-10"
     },
     {
-      "name": "BAD-GS",
-      "url": "/./badlink?locators=XXXX",
-      "user": "q",
-      "password": "b"
+      "name": "GS-10",
+      "url": "jini:/*/*/gs10?locators=localhost:4700",
+      "user": "",
+      "password": ""
+    },
+    {
+      "name": "GS-9.5",
+      "url": "jini:/*/*/gs95?locators=localhost:4300",
+      "user": "",
+      "password": "",
+      "gs": "GS-9.5"
+    },
+    {
+      "name": "GS-9.7",
+      "url": "jini:/*/*/gs97?locators=localhost:4500",
+      "user": "",
+      "password": "",
+      "gs": "GS-9.7"
     }
   ]
 }

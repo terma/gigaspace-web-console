@@ -124,6 +124,8 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
         $scope.request.url = gigaspace.url;
         $scope.request.user = gigaspace.user;
         $scope.request.password = gigaspace.password;
+        $scope.request.gs = gigaspace.gs;
+        console.log(gigaspace.gs);
         $scope.request.sql = $scope.history.editorByUrl($scope.request.url);
         resetResult();
     };

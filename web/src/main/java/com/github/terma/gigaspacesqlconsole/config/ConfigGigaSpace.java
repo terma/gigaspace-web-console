@@ -6,5 +6,6 @@ public class ConfigGigaSpace {
     public String url;
     public String user;
     public String password;
+    public String gs;
 
 }
