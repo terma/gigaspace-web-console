@@ -58,11 +58,7 @@ public class ProviderResolver {
 
     private static URLClassLoader createClassLoader(ConfigGs configGs) {
         final List<URL> urls = new ArrayList<>();
-        try {
-            urls.add(new URL("file:/Users/terma/Projects/gigaspace-sql-console/web/target/gigaspace-sql-console-web-0.0.11-SNAPSHOT/WEB-INF/providers/provider-9.X.jar"));
-        } catch (MalformedURLException e) {
-            throw new IllegalArgumentException("// todo", e);
-        }
+        urls.add(ProviderResolver.class.getResource("/provider-9.X.zip"));
 
         for (final String lib : configGs.libs) {
             try {
