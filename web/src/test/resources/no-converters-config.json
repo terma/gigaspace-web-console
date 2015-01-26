@@ -1,0 +1,77 @@
+{
+  "gs": [
+    {
+      "name": "GS-10",
+      "libs": [
+        "/Users/terma/.m2/repository/com/gigaspaces/gs-runtime/10.0.1-11800-RELEASE/gs-runtime-10.0.1-11800-RELEASE.jar",
+        "/Users/terma/.m2/repository/com/gigaspaces/gs-openspaces/10.0.1-11800-RELEASE/gs-openspaces-10.0.1-11800-RELEASE.jar",
+        "/Users/terma/.m2/repository/org/springframework/spring-beans/3.2.4.RELEASE/spring-beans-3.2.4.RELEASE.jar",
+        "/Users/terma/.m2/repository/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar",
+        // todo only for embedded spaces
+        "/Users/terma/.m2/repository/org/springframework/spring-core/3.2.4.RELEASE/spring-core-3.2.4.RELEASE.jar",
+        "/Users/terma/.m2/repository/org/springframework/spring-tx/3.2.4.RELEASE/spring-tx-3.2.4.RELEASE.jar"
+      ]
+    },
+    {
+      "name": "GS-9.5",
+      "libs": [
+        "/Users/terma/.m2/repository/com/gigaspaces/gs-runtime/9.5.0-M7/gs-runtime-9.5.0-M7.jar",
+        "/Users/terma/.m2/repository/com/gigaspaces/gs-openspaces/9.5.0-M7/gs-openspaces-9.5.0-M7.jar",
+        "/Users/terma/.m2/repository/org/springframework/spring-beans/3.2.4.RELEASE/spring-beans-3.2.4.RELEASE.jar",
+        "/Users/terma/.m2/repository/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar",
+        // todo only for embedded spaces
+        "/Users/terma/.m2/repository/org/springframework/spring-core/3.2.4.RELEASE/spring-core-3.2.4.RELEASE.jar",
+        "/Users/terma/.m2/repository/org/springframework/spring-tx/3.2.4.RELEASE/spring-tx-3.2.4.RELEASE.jar"
+      ]
+    },
+    {
+      "name": "GS-9.7",
+      "libs": [
+        "/Users/terma/.m2/repository/com/gigaspaces/gs-runtime/9.7.0-10491-M6/gs-runtime-9.7.0-10491-M6.jar",
+        "/Users/terma/.m2/repository/com/gigaspaces/gs-openspaces/9.7.0-10491-M6/gs-openspaces-9.7.0-10491-M6.jar",
+        "/Users/terma/.m2/repository/org/springframework/spring-beans/3.2.4.RELEASE/spring-beans-3.2.4.RELEASE.jar",
+        "/Users/terma/.m2/repository/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar"
+      ]
+    }
+  ],
+  "links": [
+    {
+      "name": "Home",
+      "url": "http://www.yandex.ru"
+    },
+    {
+      "name": "Status",
+      "url": "http://www.google.com"
+    }
+  ],
+  "converters": [],
+  "gigaspaces": [
+    {
+      "name": "LOCAL",
+      "url": "/./local",
+      "user": "",
+      "password": "",
+      "gs": "GS-10"
+    },
+    {
+      "name": "GS-10",
+      "url": "jini:/*/*/gs10?locators=localhost:4700",
+      "user": "",
+      "password": ""
+    },
+    {
+      "name": "GS-9.5",
+      "url": "jini:/*/*/gs95?locators=localhost:4300",
+      "user": "",
+      "password": "",
+      "gs": "GS-9.5"
+    },
+    {
+      "name": "GS-9.7",
+      "url": "jini:/*/*/gs97?locators=localhost:4500",
+      "user": "",
+      "password": "",
+      "gs": "GS-9.7"
+    }
+  ]
+}

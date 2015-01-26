@@ -1,0 +1,43 @@
+package com.github.terma.gigaspacesqlconsole;
+
+import com.github.terma.gigaspacesqlconsole.core.CountsRequest;
+import com.github.terma.gigaspacesqlconsole.core.ExecuteRequest;
+import org.junit.Test;
+
+/**
+ * Checking that we can work with different versions of GS in
+ * same JVM in one thread
+ */
+public class MultiVersionsInOneJvmTest {
+
+    private static final int NATURAL_DELAY = 50;
+
+    @Test
+    public void shouldExecuteWithoutErrors() throws Exception {
+        ExecuteRequest request1 = new ExecuteRequest();
+        request1.url = "/./gs95-" + System.currentTimeMillis();
+        request1.sql = "create table gs95 (id int)";
+
+        CountsRequest countsRequest1 = new CountsRequest();
+        countsRequest1.url = request1.url + "?";
+
+        ExecuteRequest request2 = new ExecuteRequest();
+        request2.url = "/./gs10-" + System.currentTimeMillis();
+        request2.sql = "create table gs10 (id int)";
+
+        CountsRequest countsRequest2 = new CountsRequest();
+        countsRequest2.url = request2.url + "?";
+
+        for (int i = 0; i < 15; i++) {
+            CachedProviderResolver.getProvider("GS-9.5").query(request1);
+            Thread.sleep(NATURAL_DELAY);
+            CachedProviderResolver.getProvider("GS-9.5").counts(countsRequest1);
+            Thread.sleep(NATURAL_DELAY);
+            CachedProviderResolver.getProvider("GS-10").query(request2);
+            Thread.sleep(NATURAL_DELAY);
+            CachedProviderResolver.getProvider("GS-10").counts(countsRequest2);
+            Thread.sleep(NATURAL_DELAY);
+        }
+    }
+
+}

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.github.terma</groupId>
+        <artifactId>gigaspace-sql-console</artifactId>
+        <version>0.0.12-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>gigaspace-sql-console-provider</artifactId>
+    <packaging>jar</packaging>
+
+
+    <properties>
+        <gsVersion>10.0.1-11800-RELEASE</gsVersion>
+        <!--<gsVersion>9.7.0-10491-M6</gsVersion>-->
+        <!--<gsVersion>9.5.0-M7</gsVersion>-->
+    </properties>
+
+    <dependencies>
+        <!-- main -->
+
+        <dependency>
+            <groupId>com.github.terma</groupId>
+            <artifactId>gigaspace-sql-console-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.sf.squirrel-sql.thirdparty.non-maven</groupId>
+            <artifactId>java-cup</artifactId>
+            <version>11a</version>
+        </dependency>
+
+        <!-- gigaspace -->
+
+        <dependency>
+            <groupId>com.gigaspaces</groupId>
+            <artifactId>gs-openspaces</artifactId>
+            <version>${gsVersion}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.gigaspaces</groupId>
+            <artifactId>gs-runtime</artifactId>
+            <version>${gsVersion}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- tests -->
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.10</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>de.jflex</groupId>
+                <artifactId>maven-jflex-plugin</artifactId>
+                <version>1.4.3-r1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
