@@ -6,7 +6,7 @@ public class ExecuteServlet extends JsonWithCorrectAppVersionServlet<ExecuteRequ
 
     @Override
     protected Object doJsonWithCorrectAppVersion(ExecuteRequest request) throws Exception {
-        return CachedProviderResolver.getProvider(request.gsVersion).query(request);
+        return CachedProviderResolver.getProvider(request.gs).query(request);
     }
 
     @Override

@@ -45,23 +45,28 @@
 
             <ul>
                 <li ng-repeat="sql in urlHistory.items track by $index">
-                    <a ng-click="selectRecent(urlHistory, sql)" href="javascript:void(0);" class="mono-text">{{ sql
-                        }}</a>
+                    <a ng-click="selectRecent(urlHistory, sql)" href="javascript:void(0);" class="mono-text">
+                        {{ sql }}</a>
                 </li>
             </ul>
         </div>
     </div>
 
     <p></p>
-    <input placeholder="GigaSpace URL" ng-model="request.url" style="width: 100%" class="mono-text"/>
+
+    <input placeholder="GigaSpace URL" ng-model="request.url" style="width: 100%;" class="mono-text"/>
+
+    <p></p>
+    <select class="mono-text" ng-model="request.gs">
+        <option ng-repeat="gs in config.user.gs" value="{{ gs.name }}" ng-selected="request.gs == gs.name">
+            {{ gs.name }}
+        </option>
+    </select>
 
     <p></p>
     <input ng-model="request.user" class="mono-text" placeholder="User"/>
     <input type="password" ng-model="request.password" class="mono-text" placeholder="Password"/>
 
-    <select class="mono-text" ng-model="request.gs">
-        <option ng-repeat="gs in config.user.gs" value="{{ gs.name }}">{{ gs.name }}</option>
-    </select>
 </div>
 
 <div style="padding: 1em;">

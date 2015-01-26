@@ -42,7 +42,7 @@ class AdminCache {
             if (GigaSpaceUrl.isLocal(request.url)) {
                 adminFactory.discoverUnmanagedSpaces();
             } else {
-                adminFactory.credentials(request.user, request.password);
+                adminFactory.userDetails(request.user, request.password);
                 final String locators = GigaSpaceUrl.parseLocators(request.url);
                 System.out.println("Starting to get admin for " + locators + "...");
                 adminFactory.addLocators(locators);

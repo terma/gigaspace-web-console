@@ -55,6 +55,7 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
                     url: request.url,
                     user: request.user,
                     password: request.password,
+                    gs: request.gs,
                     editor: undefined,
                     items: []
                 };
@@ -100,6 +101,7 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
                 url: latest.url,
                 user: latest.user,
                 password: latest.password,
+                gs: latest.gs,
                 editor: latest.editor
             };
         }
@@ -125,18 +127,23 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
         $scope.request.user = gigaspace.user;
         $scope.request.password = gigaspace.password;
         $scope.request.gs = gigaspace.gs;
-        console.log(gigaspace.gs);
         $scope.request.sql = $scope.history.editorByUrl($scope.request.url);
         resetResult();
     };
 
-    $('input').keydown(function (e) {
+    $("input").keydown(function (e) {
         if (e.keyCode == 13) {
             $scope.executeQuery()
         }
     });
 
-    $('ui-codemirror').keydown(function (e) {
+    $("select").keydown(function (e) {
+        if (e.keyCode == 13) {
+            $scope.executeQuery()
+        }
+    });
+
+    $("ui-codemirror").keydown(function (e) {
         if (e.ctrlKey && e.keyCode == 13) {
             $scope.executeQuery()
         }
@@ -145,16 +152,6 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
     function resetResult() {
         $scope.results = [];
     }
-
-    resetResult();
-
-    var latest = $scope.history.getLatestEditor();
-    $scope.request = {
-        url: latest.url,
-        user: latest.user,
-        password: latest.password,
-        sql: latest.editor
-    };
 
     $scope.textLengthLimit = 50;
 
@@ -168,6 +165,7 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
         $scope.request.url = recentItem.url;
         $scope.request.user = recentItem.user;
         $scope.request.password = recentItem.password;
+        $scope.request.gs = recentItem.gs;
 
         var editor = $scope.history.editorByUrl(recentItem.url);
         $scope.request.sql = (editor.length > 0 ? editor + "\n" : "") + sql;
@@ -217,6 +215,7 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
             url: $scope.request.url,
             user: $scope.request.user,
             password: $scope.request.password,
+            gs: $scope.request.gs,
             editor: content
         });
 
@@ -346,6 +345,7 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
             url: $scope.request.url,
             user: $scope.request.user,
             password: $scope.request.password,
+            gs: $scope.request.gs,
             appVersion: $scope.config.internal.appVersion
         };
 
@@ -353,7 +353,7 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
             url: "counts",
             method: "POST",
             data: request,
-            headers: {'Content-Type': "application/json"}
+            headers: {"Content-Type": "application/json"}
         }).success(function (res) {
             if (!$scope.counts.check) return; // stopped
 
@@ -428,6 +428,17 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
             headers: {'Content-Type': "application/json"}
         }).success(function (res) {
             $scope.config = res;
+
+            resetResult();
+
+            var latest = $scope.history.getLatestEditor();
+            $scope.request = {
+                url: latest.url,
+                user: latest.user,
+                password: latest.password,
+                gs: latest.gs,
+                sql: latest.editor
+            };
         }).error(function (res) {
             // todo show error if can't load config, as temporary solution
             console.log(res);

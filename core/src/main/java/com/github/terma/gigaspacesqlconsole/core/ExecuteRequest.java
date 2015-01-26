@@ -4,7 +4,7 @@ public class ExecuteRequest extends AppVersionRequest {
 
     public String user;
     public String password;
-    public String gsVersion;
+    public String gs;
     public String url;
     public String sql;
 
