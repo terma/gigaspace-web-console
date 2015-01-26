@@ -9,12 +9,12 @@ class ExecuteException {
     public final String message;
     public final String stacktrace;
 
-    public ExecuteException(final Exception e) {
+    public ExecuteException(final Throwable e) {
         exceptionClass = e.getClass().getCanonicalName();
         message = e.getMessage();
 
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        PrintStream ps = new PrintStream(out);
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+        final PrintStream ps = new PrintStream(out);
         e.printStackTrace(ps);
         stacktrace = out.toString();
     }

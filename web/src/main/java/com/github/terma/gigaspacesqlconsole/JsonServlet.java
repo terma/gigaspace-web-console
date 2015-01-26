@@ -10,17 +10,20 @@ import java.io.IOException;
 
 public abstract class JsonServlet<T> extends HttpServlet {
 
+    private static final String JSON_CONTENT_TYPE = "application/json";
+
     private final Gson gson = new Gson();
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        final T executeRequest = gson.fromJson(getRequestBody(req), getRequestClass());
-        resp.setContentType("application/json");
+    protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
+            throws ServletException, IOException {
+        final T executeRequest = gson.fromJson(getRequestBody(request), getRequestClass());
+        response.setContentType(JSON_CONTENT_TYPE);
         try {
-            resp.getWriter().append(gson.toJson(doJson(executeRequest)));
-        } catch (Exception e) {
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            resp.getWriter().append(gson.toJson(new ExecuteException(e)));
+            response.getWriter().append(gson.toJson(doJson(executeRequest)));
+        } catch (final Throwable exception) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().append(gson.toJson(new ExecuteException(exception)));
         }
     }
 
