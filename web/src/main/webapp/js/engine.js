@@ -4,156 +4,171 @@
 var App = angular.module('App', ['ui.codemirror']);
 
 App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout', function ($scope, $http, $q, $timeout) {
-    $scope.request = {};
-    $scope.results = [];
 
-    $scope.history = {
+    /*
+     How many symbols we need to show in result for long text fields without checking showAllText?
+     */
+    $scope.textLengthLimit = 50;
 
-        HISTORY_SIZE: 20,
-        URL_HISTORY_SIZE: 20,
-        LOCAL_STORAGE_KEY: "history",
+    /*
+     Object to get user settings for everything
+     */
+    // todo implement storing part of that object to localStorage and restore from it
+    $scope.context = {
 
-        data: [],
+        selectedGigaspace: undefined,
 
-        init: function () {
-            this.restore();
-        },
+        gigaspaces: [
+            {
+                name: "GS-9.5",
+                custom: undefined, // for future usage
 
-        restore: function () {
-            this.data = angular.fromJson(window.localStorage.getItem(this.LOCAL_STORAGE_KEY));
-            if (!this.data) this.data = [];
-        },
+                url: "URL",
+                gs: "GS-9.5",
+                user: "USER",
+                password: "XXX", // transient
 
-        store: function () {
-            window.localStorage.setItem(this.LOCAL_STORAGE_KEY, angular.toJson(this.data));
-        },
+                selectedTab: "query",
 
-        editorByUrl: function (url) {
-            var urlHistory = this.findUrlHistory(url);
-            return (urlHistory && urlHistory.editor) ? urlHistory.editor : "";
-        },
+                typesTab: {
+                    hideZero: undefined,
+                    filter: undefined,
 
-        setEditor: function (request) {
-            var urlHistory = this.findUrlHistoryOrCreate(request);
-            urlHistory.editor = request.editor;
-            this.store();
-            console.log("set editor for url: " + request.url + " to: " + request.editor);
-        },
+                    result: { // transient
+                        status: undefined,
 
-        findUrlHistory: function (url) {
-            for (var i = 0; i < this.data.length; i++) {
-                var item = this.data[i];
-                if (item.url == url) return item;
-            }
-            return undefined;
-        },
+                        error: undefined,
 
-        findUrlHistoryOrCreate: function (request) {
-            var urlHistory = this.findUrlHistory(request.url);
-            if (urlHistory == undefined) {
-                urlHistory = {
-                    url: request.url,
-                    user: request.user,
-                    password: request.password,
-                    gs: request.gs,
-                    editor: undefined,
-                    items: []
-                };
+                        // or
 
-                this.data.push(urlHistory);
-                console.log("add new url history: " + urlHistory);
-            }
-            return urlHistory;
-        },
-
-        add: function (request) {
-            var urlHistory = this.findUrlHistoryOrCreate(request);
-
-            // add only if last not same
-            if (urlHistory.items.length == 0 || urlHistory.items[urlHistory.items.length - 1] != request.sql) {
-                console.log("add new sql: " + request.sql);
-                urlHistory.items.push(request.sql);
-            }
-
-            urlHistory.updated = new Date().getTime();
-
-            this.store();
-        },
-
-        getLatestEditor: function () {
-            var data = this.data;
-
-            function findLatest() {
-                var latest = undefined;
-                for (var i = 0; i < data.length; i++) {
-                    var item = data[i];
-                    if (latest == undefined || latest.updated < item.updated) {
-                        latest = item;
+                        data: {
+                            prev: undefined,
+                            current: undefined,
+                            selectedCount: undefined
+                        }
                     }
+                },
+
+                queryTab: {
+                    selectedEditor: undefined,
+
+                    editors: [
+                        {
+                            name: undefined, // default
+                            content: "SQLs",
+
+                            result: { // transient
+                                status: undefined,
+
+                                queries: [
+                                    {
+                                        status: undefined,
+
+                                        error: {
+                                            exceptionClass: undefined,
+                                            message: undefined,
+                                            stacktrace: undefined
+                                        },
+
+                                        // or
+
+                                        data: [
+                                            {
+                                                showAllText: false,
+                                                query: "SQL",
+                                                records: []
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            name: "Custom1",
+                            content: "SQLs"
+                        }
+                    ]
                 }
-                return latest;
             }
+        ],
 
-            var latest = findLatest();
+        LOCAL_STORAGE_KEY: "settings",
+        LOCAL_STORAGE_OLD_KEY: "history",
 
-            if (latest == undefined) return {};
-            else return {
-                url: latest.url,
-                user: latest.user,
-                password: latest.password,
-                gs: latest.gs,
-                editor: latest.editor
+        //init: function () {
+        //    this.restore();
+        //    // old version so just free storage
+        //    window.localStorage.setItem(this.LOCAL_STORAGE_OLD_KEY, null);
+        //},
+
+        //restore: function () {
+        //    this.temporary = [];
+        //    this.permanent = angular.fromJson(window.localStorage.getItem(this.LOCAL_STORAGE_KEY));
+        //    if (!this.permanent) this.permanent = [];
+        //},
+
+        //store: function () {
+        //    window.localStorage.setItem(this.LOCAL_STORAGE_KEY, angular.toJson(this.permanent));
+        //}
+
+    };
+
+    function findGigaspace(name) {
+        for (var i = 0; i < $scope.context.gigaspaces.length; i++) {
+            if ($scope.context.gigaspaces[i].name === name) {
+                return $scope.context.gigaspaces[i];
+            }
+        }
+        return undefined;
+    }
+
+    $scope.selectGigaspace = function (predefinedGigaspace) {
+        // todo stop work with current selected gigaspace if needed
+
+        var gigaspace = findGigaspace(predefinedGigaspace.name);
+        if (!gigaspace) {
+            gigaspace = {
+                name: predefinedGigaspace.name,
+                selectedTab: "query",
+                queryTab: {
+                    editors: []
+                }
             };
+            console.log("Add new gigaspace:");
+            console.log(gigaspace);
+            $scope.context.gigaspaces.push(gigaspace);
         }
 
-    };
-
-    $scope.history.init();
-
-    $scope.tab = "query";
-
-    $scope.counts = {
-        check: false,
-        hideZero: false,
-        status: undefined,
-        error: undefined,
-        prevData: undefined,
-        data: undefined,
-        selectedCount: undefined
-    };
-
-    $scope.selectGigaspace = function (gigaspace) {
-        $scope.request.url = gigaspace.url;
-        $scope.request.user = gigaspace.user;
-        $scope.request.password = gigaspace.password;
-        $scope.request.gs = gigaspace.gs;
-        $scope.request.sql = $scope.history.editorByUrl($scope.request.url);
-        resetResult();
-    };
-
-    $("input").keydown(function (e) {
-        if (e.keyCode == 13) {
-            $scope.executeQuery()
+        if (!gigaspace.queryTab.selectedEditor) {
+            if (gigaspace.queryTab.editors.length > 0) gigaspace.queryTab.selectedEditor = gigaspace.queryTab.editors[0];
+            else {
+                var editor = {};
+                gigaspace.queryTab.editors.push(editor);
+                gigaspace.queryTab.selectedEditor = editor;
+            }
         }
-    });
 
-    $("select").keydown(function (e) {
-        if (e.keyCode == 13) {
-            $scope.executeQuery()
-        }
+        gigaspace.url = predefinedGigaspace.url;
+        gigaspace.user = predefinedGigaspace.user;
+        gigaspace.gs = predefinedGigaspace.gs;
+        gigaspace.password = predefinedGigaspace.password;
+
+        console.log("select gigaspace:");
+        console.log(gigaspace);
+        $scope.context.selectedGigaspace = gigaspace;
+    };
+
+    $("input,select").keydown(function (e) {
+        if (e.keyCode == 13) $scope.executeQuery();
     });
 
     $("ui-codemirror").keydown(function (e) {
-        if (e.ctrlKey && e.keyCode == 13) {
-            $scope.executeQuery()
-        }
+        if (e.ctrlKey && e.keyCode == 13) $scope.executeQuery();
     });
 
     function resetResult() {
-        $scope.results = [];
+        $scope.queries = [];
     }
-
-    $scope.textLengthLimit = 50;
 
     $scope.toggleShowAllText = function () {
         $scope.showAllText = !$scope.showAllText;
@@ -207,30 +222,26 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
     $scope.executeQuery = function () {
         stopExecuteSqls();
 
-        $scope.results = [];
+        $scope.context.selectedGigaspace.queryTab.selectedEditor.result = {
+            queries: []
+        };
 
-        var content = $scope.codeMirrorEditor.getSelection() || $scope.request.sql;
-
-        $scope.history.setEditor({
-            url: $scope.request.url,
-            user: $scope.request.user,
-            password: $scope.request.password,
-            gs: $scope.request.gs,
-            editor: content
-        });
+        var content = $scope.codeMirrorEditor.getSelection()
+            || $scope.context.selectedGigaspace.queryTab.selectedEditor.content;
+        console.log("content to execute:");
+        console.log(content);
 
         var sqlList = filterCommentedAndEmpty(getLines(content));
         for (var j = 0; j < sqlList.length; j++) {
             var sql = sqlList[j];
-            console.log("start sql: " + sql);
+            console.log("start execute sql:");
+            console.log(sql);
             executeOneQuery({sql: sql});
         }
 
         if (sqlList.length == 0) {
             console.log("nothing to execute");
-            $scope.status = "Nothing to execute";
-        } else {
-            $scope.status = undefined;
+            $scope.context.selectedGigaspace.queryTab.selectedEditor.result.status = "Nothing to execute";
         }
     };
 
@@ -243,30 +254,24 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
         else return response;
     }
 
-    function executeOneQuery(result) {
-        result.status = "Executing...";
-        $scope.results.push(result);
+    function executeOneQuery(query) {
+        $scope.context.selectedGigaspace.queryTab.selectedEditor.result.queries.push(query);
+
+        query.status = "Executing...";
 
         var executionCanceller = $q.defer();
         executionCancellerList.push(executionCanceller);
 
         var request = {
-            url: $scope.request.url,
-            user: $scope.request.user,
-            password: $scope.request.password,
-            gsVersion: $scope.request.gs,
-            sql: result.sql,
+            url: $scope.context.selectedGigaspace.url,
+            user: $scope.context.selectedGigaspace.user,
+            password: $scope.context.selectedGigaspace.password,
+            gsVersion: $scope.context.selectedGigaspace.gs,
+            sql: query.sql,
             appVersion: $scope.config.internal.appVersion
         };
 
-        $scope.history.add(request);
-
-        $scope.maxCellLength = 100;
-
-        $scope.error = undefined;
-        $scope.result = undefined;
-        $scope.status = "Executing...";
-
+        query.status = "Executing...";
         $http({
             url: "execute",
             method: "POST",
@@ -274,11 +279,11 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
             timeout: executionCanceller.promise,
             headers: {'Content-Type': "application/json"}
         }).success(function (res) {
-            result.status = undefined;
-            result.data = res;
+            query.status = undefined;
+            query.data = res;
         }).error(function (res) {
-            result.status = undefined;
-            result.error = responseToError(res);
+            query.status = undefined;
+            query.error = responseToError(res);
         });
     }
 
@@ -436,16 +441,7 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
         }).success(function (res) {
             $scope.config = res;
 
-            resetResult();
 
-            var latest = $scope.history.getLatestEditor();
-            $scope.request = {
-                url: latest.url,
-                user: latest.user,
-                password: latest.password,
-                gs: latest.gs,
-                sql: latest.editor
-            };
         }).error(function (res) {
             // todo show error if can't load config, as temporary solution
             console.log(res);
@@ -454,8 +450,7 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
     };
 
     $scope.editorOptions = {
-        mode: 'text/x-sql',
-        content: 'SQL, could be list, use # for comments',
+        mode: "text/x-sql",
         indentWithTabs: true,
         smartIndent: true,
         lineWrapping: true,
@@ -476,6 +471,7 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
     };
 
     $scope.loadConfig();
-}]);
+}])
+;
 
 

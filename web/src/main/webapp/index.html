@@ -34,38 +34,22 @@
         <li ng-repeat="gigaspace in config.user.gigaspaces">
             <a ng-click="selectGigaspace(gigaspace)" href="javascript:void(0);">{{ gigaspace.name }}</a>
         </li>
-        <li>
-            <a ng-click="toggleRecent()" href="javascript:void(0);">Recent</a>
-        </li>
     </ul>
-
-    <div id="recent" ng-show="showRecent">
-        <div ng-repeat="urlHistory in history.data track by $index">
-            <p class="mono-text">{{ urlHistory.url }}</p>
-
-            <ul>
-                <li ng-repeat="sql in urlHistory.items track by $index">
-                    <a ng-click="selectRecent(urlHistory, sql)" href="javascript:void(0);" class="mono-text">
-                        {{ sql }}</a>
-                </li>
-            </ul>
-        </div>
-    </div>
 
     <p></p>
 
-    <input placeholder="GigaSpace URL" ng-model="request.url" style="width: 100%;" class="mono-text"/>
+    <input placeholder="GigaSpace URL" ng-model="context.selectedGigaspace.url" style="width: 100%;" class="mono-text"/>
 
     <p></p>
     <select class="mono-text" ng-model="request.gs">
-        <option ng-repeat="gs in config.user.gs" value="{{ gs.name }}" ng-selected="request.gs == gs.name">
+        <option ng-repeat="gs in config.user.gs" value="{{ gs.name }}" ng-selected="context.selectedGigaspace.gs == gs.name">
             {{ gs.name }}
         </option>
     </select>
 
     <p></p>
-    <input ng-model="request.user" class="mono-text" placeholder="User"/>
-    <input type="password" ng-model="request.password" class="mono-text" placeholder="Password"/>
+    <input ng-model="context.selectedGigaspace.user" class="mono-text" placeholder="User"/>
+    <input type="password" ng-model="context.selectedGigaspace.password" class="mono-text" placeholder="Password"/>
 
 </div>
 
@@ -75,7 +59,7 @@
 
     <p></p>
 
-    <div ng-show="tab == 'types'">
+    <div ng-show="context.selectedGigaspace.selectedTab == 'types'">
         <p ng-show="counts.status">{{ counts.status }}</p>
 
         <p ng-show="counts.error">
@@ -118,16 +102,18 @@
         </div>
     </div>
 
-    <div ng-show="tab == 'query'">
-        <ui-codemirror ui-codemirror-opts="editorOptions" ng-model="request.sql" class="mono-text"></ui-codemirror>
+    <div ng-show="context.selectedGigaspace.selectedTab == 'query'">
+        <ui-codemirror ui-codemirror-opts="editorOptions" ng-model="context.selectedGigaspace.queryTab.selectedEditor.content" class="mono-text"></ui-codemirror>
 
         <p/>
 
         <a ng-click="executeQuery()" href="javascript:void(0);">Execute</a>
 
-        <p ng-show="status">{{ status }}</p>
+        <p ng-show="context.selectedGigaspace.queryTab.selectedEditor.result.status">
+            {{ context.selectedGigaspace.queryTab.selectedEditor.result.status }}
+        </p>
 
-        <div ng-repeat="result in results">
+        <div ng-repeat="result in context.selectedGigaspace.queryTab.selectedEditor.result.queries">
 
             <h4>Results {{ result.data.data.length }} for {{ result.sql }}</h4>
 

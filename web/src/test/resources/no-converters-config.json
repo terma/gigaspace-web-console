@@ -62,8 +62,8 @@
     {
       "name": "GS-9.5",
       "url": "jini:/*/*/gs95?locators=localhost:4300",
-      "user": "",
-      "password": "",
+      "user": "admin",
+      "password": "admin",
       "gs": "GS-9.5"
     },
     {
