@@ -234,6 +234,15 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
         }
     };
 
+    function responseToError(response) {
+        if (!response) return {"message": "Can't connect to server!"};
+        else if (typeof response == "string") return {
+            "exceptionClass": "Unknown Error! Please, please ping us with that!",
+            "message": response
+        };
+        else return response;
+    }
+
     function executeOneQuery(result) {
         result.status = "Executing...";
         $scope.results.push(result);
@@ -269,8 +278,7 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
             result.data = res;
         }).error(function (res) {
             result.status = undefined;
-            if (res) result.error = res;
-            else result.error = {"message": "Can't connect to server!"};
+            result.error = responseToError(res);
         });
     }
 
@@ -416,8 +424,7 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
         }).error(function (res) {
             $scope.counts.check = false;
             $scope.counts.status = undefined;
-            if (res) $scope.counts.error = res;
-            else $scope.counts.error = {"message": "Can't connect to server!"};
+            $scope.counts.error = responseToError(res);
         });
     };
 
