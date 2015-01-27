@@ -57,29 +57,29 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
                             content: "SQLs",
 
                             result: { // transient
-                                status: undefined,
+                                status: undefined
 
-                                queries: [
-                                    {
-                                        query: "SQL",
+                                //queries: [
+                                //    {
+                                        //query: "SQL",
 
-                                        status: undefined,
+                                        //status: undefined,
 
-                                        error: {
-                                            exceptionClass: undefined,
-                                            message: undefined,
-                                            stacktrace: undefined
-                                        },
+                                        //error: {
+                                        //    exceptionClass: undefined,
+                                        //    message: undefined,
+                                        //    stacktrace: undefined
+                                        //}
 
                                         // or
 
-                                        data: {
-                                            showAllText: false,
-                                            selectedRecord: undefined,
-                                            textLengthLimit: $scope.textLengthLimit
-                                        }
-                                    }
-                                ]
+                                        //data: {
+                                        //    showAllText: false,
+                                        //    selectedRecord: undefined,
+                                        //    textLengthLimit: $scope.textLengthLimit
+                                        //}
+                                    //}
+                                //]
                             }
                         },
                         {
@@ -92,7 +92,7 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
         ],
 
         LOCAL_STORAGE_KEY: "settings",
-        LOCAL_STORAGE_OLD_KEY: "history",
+        LOCAL_STORAGE_OLD_KEY: "history"
 
         //init: function () {
         //    this.restore();
@@ -151,10 +151,15 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
         }
 
         gigaspace.url = predefinedGigaspace.url;
-        gigaspace.user = predefinedGigaspace.user;
         gigaspace.gs = predefinedGigaspace.gs;
-        gigaspace.password = predefinedGigaspace.password;
+        if (predefinedGigaspace.user) gigaspace.user = predefinedGigaspace.user;
+        if (predefinedGigaspace.password) gigaspace.password = predefinedGigaspace.password;
 
+        // stop checking types for current selected
+        if ($scope.context.selectedGigaspace)
+            $scope.context.selectedGigaspace.typesTab.result.checking = false;
+
+        // select gigaspace
         console.log("select gigaspace:");
         console.log(gigaspace);
         $scope.context.selectedGigaspace = gigaspace;
@@ -286,7 +291,8 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
             return;
         }
 
-        $scope.context.selectedGigaspace.typesTab.result = {status: "Loading...", checking: true};
+        $scope.context.selectedGigaspace.typesTab.result.status = "Loading...";
+        $scope.context.selectedGigaspace.typesTab.result.checking = true;
         $scope.queryCounts();
     };
 
@@ -429,8 +435,7 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
             headers: {"Content-Type": "application/json"}
         }).success(function (res) {
             $scope.config = res;
-
-
+            // todo select gigaspace
         }).error(function (res) {
             // todo show error if can't load config, as temporary solution
             console.log(res);
