@@ -72,7 +72,7 @@
         <p/>
 
         <div ng-show="context.selectedGigaspace.typesTab.result.data">
-            <input type="text" ng-model="counts.filter" placeholder="Type Filter" class="mono-text">
+            <input type="text" ng-model="context.selectedGigaspace.typesTab.filter" placeholder="Type Filter" class="mono-text">
             <a href="javascript:void(0);" ng-click="context.selectedGigaspace.typesTab.hideZero = false" ng-show="context.selectedGigaspace.typesTab.hideZero">Show Zero</a>
             <a href="javascript:void(0);" ng-click="context.selectedGigaspace.typesTab.hideZero = true" ng-show="!context.selectedGigaspace.typesTab.hideZero">Hide Zero</a>
 
@@ -86,8 +86,8 @@
                     <td align="right">{{ prevCountStatus(counts.total) }}</td>
                     <td>&nbsp;</td>
                 </tr>
-                <tr ng-repeat="count in counts.data | filter : filterCounts | orderBy:'name'" class="mono-text"
-                    ng-click="counts.selectedCount = count" ng-class="counts.selectedCount == count ? 'selected' : ''">
+                <tr ng-repeat="count in context.selectedGigaspace.typesTab.result.data | filter : filterCounts | orderBy:'name'" class="mono-text"
+                    ng-click="context.selectedGigaspace.typesTab.selectedCount = count" ng-class="context.selectedGigaspace.typesTab.selectedCount == count ? 'selected' : ''">
                     <td class="{{ getCountClass(count) }}">{{ count.name }}</td>
                     <td align="right">{{ count.count }}</td>
                     <td align="right">{{ prevCountStatus(count) }}</td>

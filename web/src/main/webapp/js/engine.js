@@ -270,8 +270,8 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
     }
 
     $scope.filterCounts = function (count) {
-        if ($scope.counts.hideZero && count.count == 0) return false;
-        if ($scope.counts.filter && count.name.indexOf($scope.counts.filter) < 0) return false;
+        if ($scope.context.selectedGigaspace.typesTab.hideZero && count.count == 0) return false;
+        if ($scope.context.selectedGigaspace.typesTab.filter && count.name.indexOf($scope.context.selectedGigaspace.typesTab.filter) < 0) return false;
         return true;
     };
 
@@ -382,8 +382,8 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
             if (!result.data) result.data = [];
 
             // update existent counters and remove old
-            for (var i = 0; i < result.current.length;) {
-                var count = result.data.current[i];
+            for (var i = 0; i < result.data.length;) {
+                var count = result.data[i];
                 var newCount = findCount(res.counts, count.name);
                 if (newCount) {
                     // get updates
@@ -391,16 +391,16 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
                     i++;
                 } else {
                     // old just remove
-                    result.data.current.splice(i, 1);
+                    result.data.splice(i, 1);
                 }
             }
 
             // add new counters
             for (var j = 0; j < res.counts.length; j++) {
                 var newCount = res.counts[j];
-                var count = findCount($scope.counts.data, newCount.name);
+                var count = findCount(result.data, newCount.name);
                 if (!count) {
-                    result.data.current.push(newCount);
+                    result.data.push(newCount);
                 }
             }
 
