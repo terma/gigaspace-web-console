@@ -33,19 +33,18 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
                 typesTab: {
                     hideZero: undefined,
                     filter: undefined,
+                    selectedCount: undefined,
 
                     result: { // transient
+                        checking: false,
+
                         status: undefined,
 
                         error: undefined,
 
                         // or
 
-                        data: {
-                            prev: undefined,
-                            current: undefined,
-                            selectedCount: undefined
-                        }
+                        data: undefined
                     }
                 },
 
@@ -62,6 +61,8 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
 
                                 queries: [
                                     {
+                                        query: "SQL",
+
                                         status: undefined,
 
                                         error: {
@@ -72,13 +73,11 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
 
                                         // or
 
-                                        data: [
-                                            {
-                                                showAllText: false,
-                                                query: "SQL",
-                                                records: []
-                                            }
-                                        ]
+                                        data: {
+                                            showAllText: false,
+                                            selectedRecord: undefined,
+                                            textLengthLimit: $scope.textLengthLimit
+                                        }
                                     }
                                 ]
                             }
@@ -130,6 +129,9 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
             gigaspace = {
                 name: predefinedGigaspace.name,
                 selectedTab: "query",
+                typesTab: {
+                    result: {}
+                },
                 queryTab: {
                     editors: []
                 }
@@ -166,30 +168,9 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
         if (e.ctrlKey && e.keyCode == 13) $scope.executeQuery();
     });
 
-    function resetResult() {
-        $scope.queries = [];
-    }
-
-    $scope.toggleShowAllText = function () {
-        $scope.showAllText = !$scope.showAllText;
-        $scope.textLengthLimit = $scope.showAllText ? 100000 : 50;
-    };
-
-    $scope.selectRecent = function (recentItem, sql) {
-        $scope.showRecent = false;
-        $scope.request.url = recentItem.url;
-        $scope.request.user = recentItem.user;
-        $scope.request.password = recentItem.password;
-        $scope.request.gs = recentItem.gs;
-
-        var editor = $scope.history.editorByUrl(recentItem.url);
-        $scope.request.sql = (editor.length > 0 ? editor + "\n" : "") + sql;
-        resetResult();
-    };
-
-    $scope.showRecent = false;
-    $scope.toggleRecent = function () {
-        $scope.showRecent = !$scope.showRecent;
+    $scope.toggleShowAllText = function (query) {
+        query.data.showAllText = !query.data.showAllText;
+        query.data.textLengthLimit = query.data.showAllText ? 100000 : 50;
     };
 
     function getLines(text) {
@@ -266,7 +247,7 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
             url: $scope.context.selectedGigaspace.url,
             user: $scope.context.selectedGigaspace.user,
             password: $scope.context.selectedGigaspace.password,
-            gsVersion: $scope.context.selectedGigaspace.gs,
+            gs: $scope.context.selectedGigaspace.gs,
             sql: query.sql,
             appVersion: $scope.config.internal.appVersion
         };
@@ -281,6 +262,7 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
         }).success(function (res) {
             query.status = undefined;
             query.data = res;
+            query.data.textLengthLimit = $scope.textLengthLimit;
         }).error(function (res) {
             query.status = undefined;
             query.error = responseToError(res);
@@ -294,26 +276,31 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
     };
 
     $scope.startCheckTypes = function () {
-        if ($scope.counts.check) return; // already started
+        if ($scope.context.selectedGigaspace.typesTab.result.checking) {
+            console.log("already started");
+            return;
+        }
 
-        $scope.counts.status = "Loading...";
-        $scope.counts.error = undefined;
-        $scope.counts.data = undefined;
-        $scope.counts.check = true;
+        if ($scope.context.selectedGigaspace.typesTab.result.error) {
+            console.log("we have errors no start");
+            return;
+        }
+
+        $scope.context.selectedGigaspace.typesTab.result = {status: "Loading...", checking: true};
         $scope.queryCounts();
     };
 
     $scope.stopCheckTypes = function () {
-        $scope.counts.check = false;
+        $scope.context.selectedGigaspace.typesTab.result.checking = false;
     };
 
     $scope.openTypesTab = function () {
-        $scope.tab = "types";
+        $scope.context.selectedGigaspace.selectedTab = "types";
         $scope.startCheckTypes();
     };
 
     $scope.openQueryTab = function () {
-        $scope.tab = "query";
+        $scope.context.selectedGigaspace.selectedTab = "query";
         $scope.stopCheckTypes();
     };
 
@@ -352,13 +339,13 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
     };
 
     $scope.queryCounts = function () {
-        if (!$scope.counts.check) return; // stopped
+        if (!$scope.context.selectedGigaspace.typesTab.result.checking) return; // stopped
 
         var request = {
-            url: $scope.request.url,
-            user: $scope.request.user,
-            password: $scope.request.password,
-            gs: $scope.request.gs,
+            url: $scope.context.selectedGigaspace.url,
+            user: $scope.context.selectedGigaspace.user,
+            password: $scope.context.selectedGigaspace.password,
+            gs: $scope.context.selectedGigaspace.gs,
             appVersion: $scope.config.internal.appVersion
         };
 
@@ -368,10 +355,10 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
             data: request,
             headers: {"Content-Type": "application/json"}
         }).success(function (res) {
-            if (!$scope.counts.check) return; // stopped
+            var typesTab = $scope.context.selectedGigaspace.typesTab;
+            var result = typesTab.result;
 
-            $scope.counts.error = undefined;
-            $scope.counts.status = undefined;
+            if (!result.checking) return; // stopped
 
             function updateCount(count, newCount) {
                 if (count.count != newCount) {
@@ -390,11 +377,13 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
                 return undefined;
             }
 
-            if (!$scope.counts.data) $scope.counts.data = [];
+            result.error = undefined;
+            result.status = undefined;
+            if (!result.data) result.data = [];
 
             // update existent counters and remove old
-            for (var i = 0; i < $scope.counts.data.length;) {
-                var count = $scope.counts.data[i];
+            for (var i = 0; i < result.current.length;) {
+                var count = result.data.current[i];
                 var newCount = findCount(res.counts, count.name);
                 if (newCount) {
                     // get updates
@@ -402,7 +391,7 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
                     i++;
                 } else {
                     // old just remove
-                    $scope.counts.data.splice(i, 1);
+                    result.data.current.splice(i, 1);
                 }
             }
 
@@ -411,7 +400,7 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
                 var newCount = res.counts[j];
                 var count = findCount($scope.counts.data, newCount.name);
                 if (!count) {
-                    $scope.counts.data.push(newCount);
+                    result.data.current.push(newCount);
                 }
             }
 
@@ -420,16 +409,16 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
                 total += res.counts[n].count;
             }
 
-            if (!$scope.counts.total) $scope.counts.total = {count: total};
-            updateCount($scope.counts.total, total);
+            if (!result.total) result.total = {count: total};
+            updateCount(result.total, total);
 
             $timeout(function () {
                 $scope.queryCounts();
             }, 5000);
         }).error(function (res) {
-            $scope.counts.check = false;
-            $scope.counts.status = undefined;
-            $scope.counts.error = responseToError(res);
+            $scope.context.selectedGigaspace.typesTab.result.checking = false;
+            $scope.context.selectedGigaspace.typesTab.result.status = undefined;
+            $scope.context.selectedGigaspace.typesTab.result.error = responseToError(res);
         });
     };
 
@@ -437,7 +426,7 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
         $http({
             url: "config",
             method: "POST",
-            headers: {'Content-Type': "application/json"}
+            headers: {"Content-Type": "application/json"}
         }).success(function (res) {
             $scope.config = res;
 
