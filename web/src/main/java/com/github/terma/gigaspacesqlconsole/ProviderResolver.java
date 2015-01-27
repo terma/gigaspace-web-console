@@ -16,6 +16,7 @@ public class ProviderResolver {
 
     private static final Logger LOGGER = Logger.getLogger(ProviderResolver.class.getSimpleName());
 
+    private static final String PROVIDER_LIB_RESOURCE_PATH = "/provider-9.X.zip";
     private static final String PROVIDER_IMPL_CLASS_NAME =
             "com.github.terma.gigaspacesqlconsole.provider.ProviderImpl";
 
@@ -34,23 +35,26 @@ public class ProviderResolver {
                 return configGs;
             }
         }
+
         return Config.read().user.gs.get(0);
     }
 
     @SuppressWarnings("unchecked")
     private static <T> T getClassInstance(final ClassLoader classLoader, final String className) {
         Thread.currentThread().setContextClassLoader(classLoader);
+
         Class cls;
         try {
             cls = classLoader.loadClass(className);
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            throw new IllegalArgumentException("Can't load class: " + className, e);
         }
 
         try {
             return (T) cls.newInstance();
         } catch (InstantiationException e) {
-            throw new RuntimeException(e);
+            throw new IllegalArgumentException(
+                    "Can't instance by constructor without argument for class: " + cls, e);
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
@@ -58,7 +62,11 @@ public class ProviderResolver {
 
     private static URLClassLoader createClassLoader(ConfigGs configGs) {
         final List<URL> urls = new ArrayList<>();
-        urls.add(ProviderResolver.class.getResource("/provider-9.X.zip"));
+
+        final URL providerLibUrl = ProviderResolver.class.getResource(PROVIDER_LIB_RESOURCE_PATH);
+        if (providerLibUrl == null) throw new UnsupportedOperationException(
+                "Can't find provider lib in classpath by path: " + PROVIDER_LIB_RESOURCE_PATH);
+        urls.add(providerLibUrl);
 
         for (final String lib : configGs.libs) {
             try {
