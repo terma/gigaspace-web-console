@@ -95,11 +95,13 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
         //},
 
         restore: function () {
+            console.log("start restoring context...");
             this.gigaspaces = [];
 
             var fromStore = angular.fromJson(window.localStorage.getItem(this.LOCAL_STORAGE_KEY));
 
             if (fromStore) {
+                console.log("stored context found, restoring...");
                 for (var i = 0; i < fromStore.gigaspaces.length; i++) {
                     var fromStoreGigaspace = fromStore.gigaspaces[i];
 
@@ -116,6 +118,26 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
                     }
                 }
             }
+
+            var oldFromStore = angular.fromJson(window.localStorage.getItem(this.LOCAL_STORAGE_OLD_KEY));
+            if (oldFromStore) {
+                console.log("old context found, migrating...");
+                for (var i = 0; i < oldFromStore.length; i++) {
+                    var url = oldFromStore[i].url;
+                    var oldEditor = oldFromStore[i].editor;
+
+                    var gigaspace = findGigaspaceByUrl(url);
+                    if (gigaspace) {
+                        gigaspace.selectedTab = "query";
+                        var editor = {content: oldEditor};
+                        gigaspace.queryTab.editors = [editor];
+                        gigaspace.queryTab.selectedEditor = editor;
+                    }
+                }
+                window.localStorage.removeItem(this.LOCAL_STORAGE_OLD_KEY);
+            }
+
+            console.log("context restored");
         },
 
         store: function () {
@@ -172,6 +194,15 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
     function findPredefinedGigaspace(name) {
         for (var m = 0; m < $scope.config.user.gigaspaces.length; m++) {
             if ($scope.config.user.gigaspaces[m].name == name) return $scope.config.user.gigaspaces[m];
+        }
+        return undefined;
+    }
+
+    function findGigaspaceByUrl(url) {
+        for (var i = 0; i < $scope.context.gigaspaces.length; i++) {
+            if ($scope.context.gigaspaces[i].url === url) {
+                return $scope.context.gigaspaces[i];
+            }
         }
         return undefined;
     }
