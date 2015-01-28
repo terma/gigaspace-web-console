@@ -1,9 +1,9 @@
 // todo skip empty line when send to execute
 // todo add support column name with "-"
 
-var App = angular.module('App', ['ui.codemirror']);
+var App = angular.module("App", ["ui.codemirror"]);
 
-App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout', function ($scope, $http, $q, $timeout) {
+App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout", function ($scope, $http, $q, $timeout) {
 
     /*
      How many symbols we need to show in result for long text fields without checking showAllText?
@@ -19,80 +19,74 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
         selectedGigaspace: undefined,
 
         gigaspaces: [
-            {
-                name: "GS-9.5",
-                custom: undefined, // for future usage
-
-                url: "URL",
-                gs: "GS-9.5",
-                user: "USER",
-                password: "XXX", // transient
-
-                selectedTab: "query",
-
-                typesTab: {
-                    hideZero: undefined,
-                    filter: undefined,
-                    selectedCount: undefined,
-
-                    result: { // transient
-                        checking: false,
-
-                        status: undefined,
-
-                        error: undefined,
-
-                        // or
-
-                        data: undefined
-                    }
-                },
-
-                queryTab: {
-                    selectedEditor: undefined,
-
-                    editors: [
-                        {
-                            name: undefined, // default
-                            content: "SQLs",
-
-                            result: { // transient
-                                status: undefined
-
-                                //queries: [
-                                //    {
-                                //query: "SQL",
-
-                                //status: undefined,
-
-                                //error: {
-                                //    exceptionClass: undefined,
-                                //    message: undefined,
-                                //    stacktrace: undefined
-                                //}
-
-                                // or
-
-                                //data: {
-                                //    showAllText: false,
-                                //    selectedRecord: undefined,
-                                //    textLengthLimit: $scope.textLengthLimit
-                                //}
-                                //}
-                                //]
-                            }
-                        },
-                        {
-                            name: "Custom1",
-                            content: "SQLs"
-                        }
-                    ]
-                }
-            }
+            //{
+            //    name: "GS-9.5",
+            //    custom: undefined, // for future usage
+            //
+            //    url: "URL",
+            //    gs: "GS-9.5",
+            //    user: "USER",
+            //    password: "XXX", // transient
+            //
+            //    selectedTab: "query",
+            //
+            //    typesTab: {
+            //        hideZero: undefined,
+            //        filter: undefined,
+            //        selectedCount: undefined,
+            //
+            //        // transient
+            //        checking: false,
+            //        status: undefined,
+            //        error: undefined,
+            //        // or
+            //        data: undefined
+            //    },
+            //
+            //    queryTab: {
+            //        selectedEditor: undefined,
+            //
+            //        editors: [
+            //            {
+            //                name: undefined, // default
+            //                content: "SQLs",
+            //
+            //                // transient
+            //                status: undefined
+            //
+            //                queries: [
+            //                    //    {
+            //                    //query: "SQL",
+            //
+            //                    //status: undefined,
+            //
+            //                    //error: {
+            //                    //    exceptionClass: undefined,
+            //                    //    message: undefined,
+            //                    //    stacktrace: undefined
+            //                    //}
+            //
+            //                    // or
+            //
+            //                    //data: {
+            //                    //    showAllText: false,
+            //                    //    selectedRecord: undefined,
+            //                    //    textLengthLimit: $scope.textLengthLimit
+            //                    //}
+            //                    //}
+            //                ]
+            //            },
+            //            {
+            //                name: "Custom1",
+            //                content: "SQLs"
+            //            }
+            //        ]
+            //    }
+            //}
         ],
 
         LOCAL_STORAGE_KEY: "settings",
-        LOCAL_STORAGE_OLD_KEY: "history"
+        LOCAL_STORAGE_OLD_KEY: "history",
 
         //init: function () {
         //    this.restore();
@@ -100,17 +94,87 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
         //    window.localStorage.setItem(this.LOCAL_STORAGE_OLD_KEY, null);
         //},
 
-        //restore: function () {
-        //    this.temporary = [];
-        //    this.permanent = angular.fromJson(window.localStorage.getItem(this.LOCAL_STORAGE_KEY));
-        //    if (!this.permanent) this.permanent = [];
-        //},
+        restore: function () {
+            this.gigaspaces = [];
 
-        //store: function () {
-        //    window.localStorage.setItem(this.LOCAL_STORAGE_KEY, angular.toJson(this.permanent));
-        //}
+            var fromStore = angular.fromJson(window.localStorage.getItem(this.LOCAL_STORAGE_KEY));
+
+            if (fromStore) {
+                for (var i = 0; i < fromStore.gigaspaces.length; i++) {
+                    var fromStoreGigaspace = fromStore.gigaspaces[i];
+
+                    // check if restored gigaspace present in config other skip restore
+                    if (findPredefinedGigaspace(fromStoreGigaspace.name)) {
+                        this.gigaspaces.push(fromStoreGigaspace);
+
+                        // restore link on selected gigaspace
+                        if (fromStore.selectedGigaspace == i) this.selectedGigaspace = fromStoreGigaspace;
+
+                        // restore link on selected editor
+                        this.gigaspaces[i].queryTab.selectedEditor =
+                            fromStore.gigaspaces[i].queryTab.editors[fromStore.gigaspaces[i].queryTab.selectedEditor];
+                    }
+                }
+            }
+        },
+
+        store: function () {
+            console.log("starting store context");
+
+            var toStore = {
+                gigaspaces: []
+            };
+
+            for (var i = 0; i < this.gigaspaces.length; i++) {
+                var toStoreGigaspace = {
+                    name: this.gigaspaces[i].name,
+                    user: this.gigaspaces[i].user,
+                    url: this.gigaspaces[i].url,
+                    gs: this.gigaspaces[i].gs,
+                    selectedTab: this.gigaspaces[i].selectedTab,
+
+                    typesTab: {
+                        hideZero: this.gigaspaces[i].typesTab.hideZero,
+                        filter: this.gigaspaces[i].typesTab.filter,
+                        selectedCount: this.gigaspaces[i].typesTab.selectedCount
+                    },
+
+                    queryTab: {
+                        editors: []
+                    }
+                };
+                toStore.gigaspaces.push(toStoreGigaspace);
+
+                // if selected store index
+                if (this.selectedGigaspace == this.gigaspaces[i]) toStore.selectedGigaspace = i;
+
+                // copy editors
+                for (var j = 0; j < this.gigaspaces[i].queryTab.editors.length; j++) {
+                    // if selected store index
+                    if (this.gigaspaces[i].queryTab.selectedEditor == this.gigaspaces[i].queryTab.editors[j])
+                        toStoreGigaspace.queryTab.selectedEditor = j;
+
+                    var toStoreEditor = {
+                        name: this.gigaspaces[i].queryTab.editors[j].name,
+                        content: this.gigaspaces[i].queryTab.editors[j].content
+                    };
+
+                    toStoreGigaspace.queryTab.editors.push(toStoreEditor);
+                }
+            }
+
+            window.localStorage.setItem(this.LOCAL_STORAGE_KEY, angular.toJson(toStore));
+            console.log("context was stored");
+        }
 
     };
+
+    function findPredefinedGigaspace(name) {
+        for (var m = 0; m < $scope.config.user.gigaspaces.length; m++) {
+            if ($scope.config.user.gigaspaces[m].name == name) return $scope.config.user.gigaspaces[m];
+        }
+        return undefined;
+    }
 
     function findGigaspace(name) {
         for (var i = 0; i < $scope.context.gigaspaces.length; i++) {
@@ -127,9 +191,7 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
             gigaspace = {
                 name: predefinedGigaspace.name,
                 selectedTab: "query",
-                typesTab: {
-                    result: {}
-                },
+                typesTab: {},
                 queryTab: {
                     editors: []
                 }
@@ -155,7 +217,7 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
 
         // stop checking types for current selected
         if ($scope.context.selectedGigaspace)
-            $scope.context.selectedGigaspace.typesTab.result.checking = false;
+            $scope.context.selectedGigaspace.typesTab.checking = false;
 
         // select gigaspace
         console.log("select gigaspace:");
@@ -206,9 +268,8 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
     $scope.executeQuery = function () {
         stopExecuteSqls();
 
-        $scope.context.selectedGigaspace.queryTab.selectedEditor.result = {
-            queries: []
-        };
+        $scope.context.selectedGigaspace.queryTab.selectedEditor.status = undefined;
+        $scope.context.selectedGigaspace.queryTab.selectedEditor.queries = [];
 
         var content = $scope.codeMirrorEditor.getSelection()
             || $scope.context.selectedGigaspace.queryTab.selectedEditor.content;
@@ -225,7 +286,7 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
 
         if (sqlList.length == 0) {
             console.log("nothing to execute");
-            $scope.context.selectedGigaspace.queryTab.selectedEditor.result.status = "Nothing to execute";
+            $scope.context.selectedGigaspace.queryTab.selectedEditor.status = "Nothing to execute";
         }
     };
 
@@ -239,7 +300,7 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
     }
 
     function executeOneQuery(query) {
-        $scope.context.selectedGigaspace.queryTab.selectedEditor.result.queries.push(query);
+        $scope.context.selectedGigaspace.queryTab.selectedEditor.queries.push(query);
 
         query.status = "Executing...";
 
@@ -279,23 +340,24 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
     };
 
     $scope.startCheckTypes = function () {
-        if ($scope.context.selectedGigaspace.typesTab.result.checking) {
+        if ($scope.context.selectedGigaspace.typesTab.checking) {
             console.log("already started");
             return;
         }
 
-        if ($scope.context.selectedGigaspace.typesTab.result.error) {
+        if ($scope.context.selectedGigaspace.typesTab.error) {
             console.log("we have errors no start");
             return;
         }
 
-        $scope.context.selectedGigaspace.typesTab.result.status = "Loading...";
-        $scope.context.selectedGigaspace.typesTab.result.checking = true;
+        $scope.context.selectedGigaspace.typesTab.error = undefined;
+        $scope.context.selectedGigaspace.typesTab.status = "Loading...";
+        $scope.context.selectedGigaspace.typesTab.checking = true;
         $scope.queryCounts();
     };
 
     $scope.stopCheckTypes = function () {
-        $scope.context.selectedGigaspace.typesTab.result.checking = false;
+        $scope.context.selectedGigaspace.typesTab.checking = false;
     };
 
     $scope.openTypesTab = function () {
@@ -343,7 +405,7 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
     };
 
     $scope.queryCounts = function () {
-        if (!$scope.context.selectedGigaspace.typesTab.result.checking) return; // stopped
+        if (!$scope.context.selectedGigaspace.typesTab.checking) return; // stopped
 
         var request = {
             url: $scope.context.selectedGigaspace.url,
@@ -360,9 +422,8 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
             headers: {"Content-Type": "application/json"}
         }).success(function (res) {
             var typesTab = $scope.context.selectedGigaspace.typesTab;
-            var result = typesTab.result;
 
-            if (!result.checking) return; // stopped
+            if (!typesTab.checking) return; // stopped
 
             function updateCount(count, newCount) {
                 if (count.count != newCount) {
@@ -381,13 +442,13 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
                 return undefined;
             }
 
-            result.error = undefined;
-            result.status = undefined;
-            if (!result.data) result.data = [];
+            typesTab.error = undefined;
+            typesTab.status = undefined;
+            if (!typesTab.data) typesTab.data = [];
 
             // update existent counters and remove old
-            for (var i = 0; i < result.data.length;) {
-                var count = result.data[i];
+            for (var i = 0; i < typesTab.data.length;) {
+                var count = typesTab.data[i];
                 var newCount = findCount(res.counts, count.name);
                 if (newCount) {
                     // get updates
@@ -395,16 +456,16 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
                     i++;
                 } else {
                     // old just remove
-                    result.data.splice(i, 1);
+                    typesTab.data.splice(i, 1);
                 }
             }
 
             // add new counters
             for (var j = 0; j < res.counts.length; j++) {
                 var newCount = res.counts[j];
-                var count = findCount(result.data, newCount.name);
+                var count = findCount(typesTab.data, newCount.name);
                 if (!count) {
-                    result.data.push(newCount);
+                    typesTab.data.push(newCount);
                 }
             }
 
@@ -413,16 +474,16 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
                 total += res.counts[n].count;
             }
 
-            if (!result.total) result.total = {count: total};
-            updateCount(result.total, total);
+            if (!typesTab.total) typesTab.total = {count: total};
+            updateCount(typesTab.total, total);
 
             $timeout(function () {
                 $scope.queryCounts();
             }, 5000);
         }).error(function (res) {
-            $scope.context.selectedGigaspace.typesTab.result.checking = false;
-            $scope.context.selectedGigaspace.typesTab.result.status = undefined;
-            $scope.context.selectedGigaspace.typesTab.result.error = responseToError(res);
+            $scope.context.selectedGigaspace.typesTab.checking = false;
+            $scope.context.selectedGigaspace.typesTab.status = undefined;
+            $scope.context.selectedGigaspace.typesTab.error = responseToError(res);
         });
     };
 
@@ -434,9 +495,14 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
         }).success(function (res) {
             $scope.config = res;
 
-            // todo restore context
+            $scope.context.restore();
 
+            // register event to store context before unload
+            window.addEventListener("beforeunload", function () {
+                $scope.context.store();
+            });
 
+            // restore selected gigaspace, first or default
             if (!$scope.context.selectedGigaspace) {
                 if ($scope.config.user.gigaspaces.length > 0) $scope.selectGigaspace($scope.config.user.gigaspaces[0]);
                 else $scope.selectGigaspace({name: "New"});

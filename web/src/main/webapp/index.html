@@ -60,18 +60,18 @@
     <p></p>
 
     <div ng-show="context.selectedGigaspace.selectedTab == 'types'">
-        <p ng-show="context.selectedGigaspace.typesTab.result.status">{{ context.selectedGigaspace.typesTab.result.status }}</p>
+        <p ng-show="context.selectedGigaspace.typesTab.status">{{ context.selectedGigaspace.typesTab.status }}</p>
 
-        <p ng-show="context.selectedGigaspace.typesTab.result.error">
+        <p ng-show="context.selectedGigaspace.typesTab.error">
             <a href="javascript:void(0);" ng-click="startCheckTypes()">Try Again</a>
-        <pre class="mono-error">{{ context.selectedGigaspace.typesTab.result.error.exceptionClass }}</pre>
-        <pre class="mono-error">{{ context.selectedGigaspace.typesTab.result.error.message }}</pre>
-        <pre class="mono-error">{{ context.selectedGigaspace.typesTab.result.error.stacktrace }}</pre>
+        <pre class="mono-error">{{ context.selectedGigaspace.typesTab.error.exceptionClass }}</pre>
+        <pre class="mono-error">{{ context.selectedGigaspace.typesTab.error.message }}</pre>
+        <pre class="mono-error">{{ context.selectedGigaspace.typesTab.error.stacktrace }}</pre>
         </p>
 
         <p/>
 
-        <div ng-show="context.selectedGigaspace.typesTab.result.data">
+        <div ng-show="context.selectedGigaspace.typesTab.data">
             <input type="text" ng-model="context.selectedGigaspace.typesTab.filter" placeholder="Type Filter" class="mono-text">
             <a href="javascript:void(0);" ng-click="context.selectedGigaspace.typesTab.hideZero = false" ng-show="context.selectedGigaspace.typesTab.hideZero">Show Zero</a>
             <a href="javascript:void(0);" ng-click="context.selectedGigaspace.typesTab.hideZero = true" ng-show="!context.selectedGigaspace.typesTab.hideZero">Hide Zero</a>
@@ -86,7 +86,7 @@
                     <td align="right">{{ prevCountStatus(counts.total) }}</td>
                     <td>&nbsp;</td>
                 </tr>
-                <tr ng-repeat="count in context.selectedGigaspace.typesTab.result.data | filter : filterCounts | orderBy:'name'" class="mono-text"
+                <tr ng-repeat="count in context.selectedGigaspace.typesTab.data | filter : filterCounts | orderBy:'name'" class="mono-text"
                     ng-click="context.selectedGigaspace.typesTab.selectedCount = count" ng-class="context.selectedGigaspace.typesTab.selectedCount == count ? 'selected' : ''">
                     <td class="{{ getCountClass(count) }}">{{ count.name }}</td>
                     <td align="right">{{ count.count }}</td>
@@ -102,18 +102,18 @@
         </div>
     </div>
 
-    <div ng-show="context.selectedGigaspace.selectedTab == 'query'">
+    <div ng-show="context.selectedGigaspace.selectedTab != 'types'">
         <ui-codemirror ui-codemirror-opts="editorOptions" ng-model="context.selectedGigaspace.queryTab.selectedEditor.content" class="mono-text"></ui-codemirror>
 
         <p/>
 
         <a ng-click="executeQuery()" href="javascript:void(0);">Execute</a>
 
-        <p ng-show="context.selectedGigaspace.queryTab.selectedEditor.result.status">
-            {{ context.selectedGigaspace.queryTab.selectedEditor.result.status }}
+        <p ng-show="context.selectedGigaspace.queryTab.selectedEditor.status">
+            {{ context.selectedGigaspace.queryTab.selectedEditor.status }}
         </p>
 
-        <div ng-repeat="query in context.selectedGigaspace.queryTab.selectedEditor.result.queries">
+        <div ng-repeat="query in context.selectedGigaspace.queryTab.selectedEditor.queries">
 
             <h4>Results {{ query.data.data.length }} for {{ query.sql }}</h4>
 
