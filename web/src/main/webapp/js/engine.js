@@ -61,24 +61,24 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
 
                                 //queries: [
                                 //    {
-                                        //query: "SQL",
+                                //query: "SQL",
 
-                                        //status: undefined,
+                                //status: undefined,
 
-                                        //error: {
-                                        //    exceptionClass: undefined,
-                                        //    message: undefined,
-                                        //    stacktrace: undefined
-                                        //}
+                                //error: {
+                                //    exceptionClass: undefined,
+                                //    message: undefined,
+                                //    stacktrace: undefined
+                                //}
 
-                                        // or
+                                // or
 
-                                        //data: {
-                                        //    showAllText: false,
-                                        //    selectedRecord: undefined,
-                                        //    textLengthLimit: $scope.textLengthLimit
-                                        //}
-                                    //}
+                                //data: {
+                                //    showAllText: false,
+                                //    selectedRecord: undefined,
+                                //    textLengthLimit: $scope.textLengthLimit
+                                //}
+                                //}
                                 //]
                             }
                         },
@@ -122,8 +122,6 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
     }
 
     $scope.selectGigaspace = function (predefinedGigaspace) {
-        // todo stop work with current selected gigaspace if needed
-
         var gigaspace = findGigaspace(predefinedGigaspace.name);
         if (!gigaspace) {
             gigaspace = {
@@ -435,7 +433,14 @@ App.controller('GigaSpaceBrowserController', ['$scope', '$http', '$q', '$timeout
             headers: {"Content-Type": "application/json"}
         }).success(function (res) {
             $scope.config = res;
-            // todo select gigaspace
+
+            // todo restore context
+
+
+            if (!$scope.context.selectedGigaspace) {
+                if ($scope.config.user.gigaspaces.length > 0) $scope.selectGigaspace($scope.config.user.gigaspaces[0]);
+                else $scope.selectGigaspace({name: "New"});
+            }
         }).error(function (res) {
             // todo show error if can't load config, as temporary solution
             console.log(res);
