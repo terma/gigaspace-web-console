@@ -71,6 +71,10 @@
 
         <p/>
 
+        <a href="javascript:void(0);"
+           ng-show="!context.selectedGigaspace.typesTab.checking && !context.selectedGigaspace.typesTab.error"
+           ng-click="startCheckTypes()">Monitor</a>
+
         <div ng-show="context.selectedGigaspace.typesTab.data">
             <input type="text" ng-model="context.selectedGigaspace.typesTab.filter" placeholder="Type Filter" class="mono-text">
             <a href="javascript:void(0);" ng-click="context.selectedGigaspace.typesTab.hideZero = false" ng-show="context.selectedGigaspace.typesTab.hideZero">Show Zero</a>

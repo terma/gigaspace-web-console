@@ -384,7 +384,7 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
         $scope.context.selectedGigaspace.typesTab.error = undefined;
         $scope.context.selectedGigaspace.typesTab.status = "Loading...";
         $scope.context.selectedGigaspace.typesTab.checking = true;
-        $scope.queryCounts();
+        $scope.queryCounts($scope.context.selectedGigaspace);
     };
 
     $scope.stopCheckTypes = function () {
@@ -435,14 +435,14 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
         return status;
     };
 
-    $scope.queryCounts = function () {
-        if (!$scope.context.selectedGigaspace.typesTab.checking) return; // stopped
+    $scope.queryCounts = function (gigaspace) {
+        if (!gigaspace.typesTab.checking) return; // stopped
 
         var request = {
-            url: $scope.context.selectedGigaspace.url,
-            user: $scope.context.selectedGigaspace.user,
-            password: $scope.context.selectedGigaspace.password,
-            gs: $scope.context.selectedGigaspace.gs,
+            url: gigaspace.url,
+            user: gigaspace.user,
+            password: gigaspace.password,
+            gs: gigaspace.gs,
             appVersion: $scope.config.internal.appVersion
         };
 
@@ -452,7 +452,7 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
             data: request,
             headers: {"Content-Type": "application/json"}
         }).success(function (res) {
-            var typesTab = $scope.context.selectedGigaspace.typesTab;
+            var typesTab = gigaspace.typesTab;
 
             if (!typesTab.checking) return; // stopped
 
@@ -509,12 +509,12 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
             updateCount(typesTab.total, total);
 
             $timeout(function () {
-                $scope.queryCounts();
+                $scope.queryCounts(gigaspace);
             }, 5000);
         }).error(function (res) {
-            $scope.context.selectedGigaspace.typesTab.checking = false;
-            $scope.context.selectedGigaspace.typesTab.status = undefined;
-            $scope.context.selectedGigaspace.typesTab.error = responseToError(res);
+            gigaspace.typesTab.checking = false;
+            gigaspace.typesTab.status = undefined;
+            gigaspace.typesTab.error = responseToError(res);
         });
     };
 
