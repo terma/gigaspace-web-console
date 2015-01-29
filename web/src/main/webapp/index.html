@@ -34,38 +34,22 @@
         <li ng-repeat="gigaspace in config.user.gigaspaces">
             <a ng-click="selectGigaspace(gigaspace)" href="javascript:void(0);">{{ gigaspace.name }}</a>
         </li>
-        <li>
-            <a ng-click="toggleRecent()" href="javascript:void(0);">Recent</a>
-        </li>
     </ul>
-
-    <div id="recent" ng-show="showRecent">
-        <div ng-repeat="urlHistory in history.data track by $index">
-            <p class="mono-text">{{ urlHistory.url }}</p>
-
-            <ul>
-                <li ng-repeat="sql in urlHistory.items track by $index">
-                    <a ng-click="selectRecent(urlHistory, sql)" href="javascript:void(0);" class="mono-text">
-                        {{ sql }}</a>
-                </li>
-            </ul>
-        </div>
-    </div>
 
     <p></p>
 
-    <input placeholder="GigaSpace URL" ng-model="request.url" style="width: 100%;" class="mono-text"/>
+    <input placeholder="GigaSpace URL" ng-model="context.selectedGigaspace.url" style="width: 100%;" class="mono-text"/>
 
     <p></p>
     <select class="mono-text" ng-model="request.gs">
-        <option ng-repeat="gs in config.user.gs" value="{{ gs.name }}" ng-selected="request.gs == gs.name">
+        <option ng-repeat="gs in config.user.gs" value="{{ gs.name }}" ng-selected="context.selectedGigaspace.gs == gs.name">
             {{ gs.name }}
         </option>
     </select>
 
     <p></p>
-    <input ng-model="request.user" class="mono-text" placeholder="User"/>
-    <input type="password" ng-model="request.password" class="mono-text" placeholder="Password"/>
+    <input ng-model="context.selectedGigaspace.user" class="mono-text" placeholder="User"/>
+    <input type="password" ng-model="context.selectedGigaspace.password" class="mono-text" placeholder="Password"/>
 
 </div>
 
@@ -75,22 +59,26 @@
 
     <p></p>
 
-    <div ng-show="tab == 'types'">
-        <p ng-show="counts.status">{{ counts.status }}</p>
+    <div ng-show="context.selectedGigaspace.selectedTab == 'types'">
+        <p ng-show="context.selectedGigaspace.typesTab.status">{{ context.selectedGigaspace.typesTab.status }}</p>
 
-        <p ng-show="counts.error">
+        <p ng-show="context.selectedGigaspace.typesTab.error">
             <a href="javascript:void(0);" ng-click="startCheckTypes()">Try Again</a>
-        <pre class="mono-error">{{ counts.error.exceptionClass }}</pre>
-        <pre class="mono-error">{{ counts.error.message }}</pre>
-        <pre class="mono-error">{{ counts.error.stacktrace }}</pre>
+        <pre class="mono-error">{{ context.selectedGigaspace.typesTab.error.exceptionClass }}</pre>
+        <pre class="mono-error">{{ context.selectedGigaspace.typesTab.error.message }}</pre>
+        <pre class="mono-error">{{ context.selectedGigaspace.typesTab.error.stacktrace }}</pre>
         </p>
 
         <p/>
 
-        <div ng-show="counts.data">
-            <input type="text" ng-model="counts.filter" placeholder="Type Filter" class="mono-text">
-            <a href="javascript:void(0);" ng-click="counts.hideZero = false" ng-show="counts.hideZero">Show Zero</a>
-            <a href="javascript:void(0);" ng-click="counts.hideZero = true" ng-show="!counts.hideZero">Hide Zero</a>
+        <p ng-show="!context.selectedGigaspace.typesTab.checking && !context.selectedGigaspace.typesTab.error">
+            Monitoring stopped <a href="javascript:void(0);" ng-click="startCheckTypes()">Start Again</a>
+        </p>
+
+        <div ng-show="context.selectedGigaspace.typesTab.data">
+            <input type="text" ng-model="context.selectedGigaspace.typesTab.filter" placeholder="Type Filter" class="mono-text">
+            <a href="javascript:void(0);" ng-click="context.selectedGigaspace.typesTab.hideZero = false" ng-show="context.selectedGigaspace.typesTab.hideZero">Show Zero</a>
+            <a href="javascript:void(0);" ng-click="context.selectedGigaspace.typesTab.hideZero = true" ng-show="!context.selectedGigaspace.typesTab.hideZero">Hide Zero</a>
 
             <p></p>
 
@@ -102,8 +90,8 @@
                     <td align="right">{{ prevCountStatus(counts.total) }}</td>
                     <td>&nbsp;</td>
                 </tr>
-                <tr ng-repeat="count in counts.data | filter : filterCounts | orderBy:'name'" class="mono-text"
-                    ng-click="counts.selectedCount = count" ng-class="counts.selectedCount == count ? 'selected' : ''">
+                <tr ng-repeat="count in context.selectedGigaspace.typesTab.data | filter : filterCounts | orderBy:'name'" class="mono-text"
+                    ng-click="context.selectedGigaspace.typesTab.selectedCount = count" ng-class="context.selectedGigaspace.typesTab.selectedCount == count ? 'selected' : ''">
                     <td class="{{ getCountClass(count) }}">{{ count.name }}</td>
                     <td align="right">{{ count.count }}</td>
                     <td align="right">{{ prevCountStatus(count) }}</td>
@@ -118,49 +106,50 @@
         </div>
     </div>
 
-    <div ng-show="tab == 'query'">
-        <ui-codemirror ui-codemirror-opts="editorOptions" ng-model="request.sql" class="mono-text"></ui-codemirror>
+    <div ng-show="context.selectedGigaspace.selectedTab != 'types'">
+        <ui-codemirror ui-codemirror-opts="editorOptions" ng-model="context.selectedGigaspace.queryTab.selectedEditor.content" class="mono-text"></ui-codemirror>
 
         <p/>
 
         <a ng-click="executeQuery()" href="javascript:void(0);">Execute</a>
 
-        <p ng-show="status">{{ status }}</p>
+        <p ng-show="context.selectedGigaspace.queryTab.selectedEditor.status">
+            {{ context.selectedGigaspace.queryTab.selectedEditor.status }}
+        </p>
 
-        <div ng-repeat="result in results">
+        <div ng-repeat="query in context.selectedGigaspace.queryTab.selectedEditor.queries">
 
-            <h4>Results {{ result.data.data.length }} for {{ result.sql }}</h4>
+            <h4>Results {{ query.data.data.length }} for {{ query.sql }}</h4>
 
-            <p ng-show="result.error">
-            <pre class="mono-error">{{ result.error.exceptionClass }}</pre>
-            <pre class="mono-error">{{ result.error.message }}</pre>
-            <pre class="mono-error">{{ result.error.stacktrace }}</pre>
+            <p ng-show="query.error">
+            <pre class="mono-error">{{ query.error.exceptionClass }}</pre>
+            <pre class="mono-error">{{ query.error.message }}</pre>
+            <pre class="mono-error">{{ query.error.stacktrace }}</pre>
             </p>
 
-            <p ng-show="result.status">{{ result.status }}</p>
+            <p ng-show="query.status">{{ query.status }}</p>
 
-            <a ng-show="result.data" href="javascript:void(0);" ng-click="toggleShowAllText()">Show/Hide all
+            <a ng-show="query.data" href="javascript:void(0);" ng-click="toggleShowAllText(query)">Show/Hide all
                 text</a>
 
             <p/>
 
-            <table ng-show="result.data" class="result">
+            <table ng-show="query.data" class="result">
                 <thead>
                 <tr>
-                    <th ng-repeat="value in result.data.columns track by $index" valign="top" class="mono-text">
-                        {{ value
-                        }}
+                    <th ng-repeat="value in query.data.columns track by $index" valign="top" class="mono-text">
+                        {{ value }}
                     </th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="record in result.data.data track by $index"
-                    ng-click="result.selectedRecord = record"
-                    ng-class="result.selectedRecord == record ? 'selected' : ''">
+                <tr ng-repeat="record in query.data.data track by $index"
+                    ng-click="query.data.selectedRecord = record"
+                    ng-class="query.data.selectedRecord == record ? 'selected' : ''">
                     <td ng-repeat="value in record track by $index" valign="top">
                         <pre style="margin: 0; padding: 0;"
-                             class="mono-text">{{ value | limitTo: textLengthLimit }}</pre>
-                        <span ng-if="value.length > 50" ng-show="!showAllText">...</span>
+                             class="mono-text">{{ value | limitTo: query.data.textLengthLimit }}</pre>
+                        <span ng-if="value.length > 50" ng-show="!query.data.showAllText">...</span>
                     </td>
                 </tr>
                 </tbody>
