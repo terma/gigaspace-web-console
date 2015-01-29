@@ -401,19 +401,22 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
         $scope.stopCheckTypes();
     };
 
-    $scope.openQueryTabWithSelectFor = function (typeName) {
+    function openQueryTabWith(sql) {
         $scope.openQueryTab();
-        $scope.request.sql += "\nselect * from " + typeName + " where rownum < 50";
+        $scope.context.selectedGigaspace.queryTab.selectedEditor.content += "\n" + sql;
+        // todo add scroll down editor
+    }
+
+    $scope.openQueryTabWithSelectFor = function (typeName) {
+        openQueryTabWith("select * from " + typeName + " where rownum < 50");
     };
 
     $scope.openQueryTabWithUpdateFor = function (typeName) {
-        $scope.openQueryTab();
-        $scope.request.sql += "\nupdate " + typeName + " set ? where ?";
+        openQueryTabWith("update " + typeName + " set ? where ?");
     };
 
     $scope.openQueryTabWithDeleteFor = function (typeName) {
-        $scope.openQueryTab();
-        $scope.request.sql += "\ndelete from " + typeName + " where ?";
+        openQueryTabWith("delete from " + typeName + " where ?");
     };
 
     $scope.getCountClass = function (count) {
