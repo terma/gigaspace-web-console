@@ -1,4 +1,3 @@
-// todo skip empty line when send to execute
 // todo add support column name with "-"
 
 var App = angular.module("App", ["ui.codemirror"]);
@@ -13,7 +12,6 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
     /*
      Object to get user settings for everything
      */
-    // todo implement storing part of that object to localStorage and restore from it
     $scope.context = {
 
         selectedGigaspace: undefined,
@@ -50,6 +48,7 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
             //            {
             //                name: undefined, // default
             //                content: "SQLs",
+            //                cursor: 1, // line number
             //
             //                // transient
             //                status: undefined
@@ -138,10 +137,13 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
             }
 
             console.log("context restored");
+            console.log(this.gigaspaces);
         },
 
         store: function () {
             console.log("starting store context");
+
+            keepSelectedEditorCursor(); // as no direct update to model we should do this manually
 
             var toStore = {
                 gigaspaces: []
@@ -178,7 +180,8 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
 
                     var toStoreEditor = {
                         name: this.gigaspaces[i].queryTab.editors[j].name,
-                        content: this.gigaspaces[i].queryTab.editors[j].content
+                        content: this.gigaspaces[i].queryTab.editors[j].content,
+                        cursor: this.gigaspaces[i].queryTab.editors[j].cursor
                     };
 
                     toStoreGigaspace.queryTab.editors.push(toStoreEditor);
@@ -216,6 +219,12 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
         return undefined;
     }
 
+    function keepSelectedEditorCursor() {
+        // todo keep not only line but selection as well
+        $scope.context.selectedGigaspace.queryTab.selectedEditor.cursor = $scope.codeMirrorEditor.getCursor().line;
+        console.log("store cursor in " + $scope.context.selectedGigaspace.queryTab.cursor);
+    }
+
     $scope.selectGigaspace = function (predefinedGigaspace) {
         var gigaspace = findGigaspace(predefinedGigaspace.name);
         if (!gigaspace) {
@@ -246,14 +255,20 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
         if (predefinedGigaspace.user) gigaspace.user = predefinedGigaspace.user;
         if (predefinedGigaspace.password) gigaspace.password = predefinedGigaspace.password;
 
-        // stop checking types for current selected
-        if ($scope.context.selectedGigaspace)
+        // finish work with current gigaspace
+        if ($scope.context.selectedGigaspace) {
+            // stop checking types for current selected
             $scope.context.selectedGigaspace.typesTab.checking = false;
+            keepSelectedEditorCursor();
+        }
 
         // select gigaspace
         console.log("select gigaspace:");
         console.log(gigaspace);
         $scope.context.selectedGigaspace = gigaspace;
+
+        // restore cursor position
+        asyncGoToAndFocus($scope.context.selectedGigaspace.queryTab.selectedEditor.cursor);
     };
 
     $("input,select").keydown(function (e) {
@@ -404,12 +419,35 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
     $scope.openQueryTab = function () {
         $scope.context.selectedGigaspace.selectedTab = "query";
         $scope.stopCheckTypes();
+        asyncFocus();
     };
 
     function openQueryTabWith(sql) {
         $scope.openQueryTab();
-        $scope.context.selectedGigaspace.queryTab.selectedEditor.content += "\n" + sql;
-        // todo add scroll down editor
+        var updatedContent = $scope.context.selectedGigaspace.queryTab.selectedEditor.content + "\n" + sql;
+        asyncUpdateAndGoToEndAndFocus(updatedContent);
+    }
+
+    function asyncUpdateAndGoToEndAndFocus(content) {
+        // timeout here is fix of issues that codemirror doesn't reflect new value when hidden
+        $timeout(function () {
+            $scope.codeMirrorEditor.setValue(content);
+            $scope.codeMirrorEditor.setCursor($scope.codeMirrorEditor.lineCount(), 0);
+            $scope.codeMirrorEditor.focus();
+        });
+    }
+
+    function asyncGoToAndFocus(line) {
+        $timeout(function () {
+            $scope.codeMirrorEditor.setCursor(line ? line : $scope.codeMirrorEditor.lineCount(), 0);
+            $scope.codeMirrorEditor.focus();
+        });
+    }
+
+    function asyncFocus() {
+        $timeout(function () {
+            $scope.codeMirrorEditor.focus();
+        });
     }
 
     $scope.openQueryTabWithSelectFor = function (typeName) {
