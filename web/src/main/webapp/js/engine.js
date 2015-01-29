@@ -258,7 +258,7 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
         // finish work with current gigaspace
         if ($scope.context.selectedGigaspace) {
             // stop checking types for current selected
-            $scope.context.selectedGigaspace.typesTab.checking = false;
+            $scope.stopCheckTypes();
             keepSelectedEditorCursor();
         }
 
@@ -406,6 +406,7 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
 
     $scope.stopCheckTypes = function () {
         if ($scope.context.selectedGigaspace.typesTab.checking) {
+            $scope.context.selectedGigaspace.typesTab.status = undefined;
             $scope.context.selectedGigaspace.typesTab.checking = false;
             console.log("checking stopped");
         }

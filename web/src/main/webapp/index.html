@@ -19,7 +19,7 @@
 </head>
 <body ng-app="App" ng-controller="GigaSpaceBrowserController">
 
-<div style="overflow: auto; padding: 1em;">
+<div style="overflow: auto; padding: 1em 1em 0.5em;">
     <div ng-repeat="link in config.user.links" style="float: left;">
         <a href="{{ link.url }}">{{ link.name }}</a>&nbsp;
     </div>
@@ -29,14 +29,10 @@
     </div>
 </div>
 
-<div style="padding: 1em; border-top: 1px solid #cecece; border-bottom: 1px solid #CECECE;">
-    <ul id="gigaspaces">
-        <li ng-repeat="gigaspace in config.user.gigaspaces">
-            <a ng-click="selectGigaspace(gigaspace)" href="javascript:void(0);">{{ gigaspace.name }}</a>
-        </li>
-    </ul>
-
-    <p></p>
+<div style="padding: 0.5em 1em;">
+    <div class="button-dock">
+        <a ng-repeat="gigaspace in config.user.gigaspaces" ng-class="context.selectedGigaspace.name == gigaspace.name ? 'selected-button' : 'button'" ng-click="selectGigaspace(gigaspace)" href="javascript:void(0);">{{ gigaspace.name }}</a>
+    </div>
 
     <input placeholder="GigaSpace URL" ng-model="context.selectedGigaspace.url" style="width: 100%;" class="mono-text"/>
 
@@ -53,11 +49,13 @@
 
 </div>
 
-<div style="padding: 1em;">
-    <a href="javascript:void(0);" ng-click="openTypesTab()">Types</a>
-    <a href="javascript:void(0);" ng-click="openQueryTab()">Query</a>
+<div style="padding: 0.5em 1em 1em;">
+    <div class="button-dock">
+        <a href="javascript:void(0);" ng-click="openTypesTab()" ng-class="context.selectedGigaspace.selectedTab == 'types' ? 'selected-button' : 'button'">Types</a>
+        <a href="javascript:void(0);" ng-click="openQueryTab()" ng-class="context.selectedGigaspace.selectedTab == 'query' ? 'selected-button' : 'button'">Query</a>
+    </div>
 
-    <p></p>
+    <!--<p></p>-->
 
     <div ng-show="context.selectedGigaspace.selectedTab == 'types'">
         <p ng-show="context.selectedGigaspace.typesTab.status">{{ context.selectedGigaspace.typesTab.status }}</p>
