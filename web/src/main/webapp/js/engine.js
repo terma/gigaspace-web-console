@@ -258,10 +258,12 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
 
     $("input,select").keydown(function (e) {
         if (e.keyCode == 13) $scope.executeQuery();
+        else $scope.stopCheckTypes();
     });
 
     $("ui-codemirror").keydown(function (e) {
         if (e.ctrlKey && e.keyCode == 13) $scope.executeQuery();
+        else $scope.stopCheckTypes();
     });
 
     $scope.toggleShowAllText = function (query) {
@@ -388,7 +390,10 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
     };
 
     $scope.stopCheckTypes = function () {
-        $scope.context.selectedGigaspace.typesTab.checking = false;
+        if ($scope.context.selectedGigaspace.typesTab.checking) {
+            $scope.context.selectedGigaspace.typesTab.checking = false;
+            console.log("checking stopped");
+        }
     };
 
     $scope.openTypesTab = function () {
