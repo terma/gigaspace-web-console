@@ -4,7 +4,7 @@ import com.github.terma.gigaspacesqlconsole.core.*;
 
 public class ProviderImpl implements Provider {
 
-    private CountsProviderImpl countsProvider = new CountsProviderImpl();
+    private Counts countsProvider = new Counts();
 
     @Override
     public CountsResponse counts(CountsRequest request) {

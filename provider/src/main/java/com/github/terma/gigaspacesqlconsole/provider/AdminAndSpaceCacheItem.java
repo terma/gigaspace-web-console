@@ -6,7 +6,6 @@ import org.openspaces.admin.space.Space;
 class AdminAndSpaceCacheItem {
 
     public Admin admin;
-    public Space space;
     public long lastUsage;
 
 }

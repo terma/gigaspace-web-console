@@ -4,6 +4,7 @@ import com.gigaspaces.cluster.activeelection.SpaceMode;
 import com.github.terma.gigaspacesqlconsole.core.Count;
 import com.github.terma.gigaspacesqlconsole.core.CountsRequest;
 import com.github.terma.gigaspacesqlconsole.core.CountsResponse;
+import org.openspaces.admin.space.Space;
 import org.openspaces.admin.space.SpaceInstance;
 
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-public class CountsProviderImpl {
+public class Counts {
 
     private static final AdminCache adminCache = new AdminCache();
 
@@ -43,31 +44,36 @@ public class CountsProviderImpl {
             return createTestResponse();
         }
 
+        final CountsResponse countsResponse = new CountsResponse();
+        countsResponse.counts = new ArrayList<>();
+
         final AdminAndSpaceCacheItem adminAndSpace = adminCache.createOrGet(request);
 
-        SpaceInstance[] spaceInstances = adminAndSpace.space.getInstances();
-        System.out.println("Admin has " + spaceInstances.length + " space instances");
+        Space space = adminAndSpace.admin.getSpaces().waitFor(GigaSpaceUrl.parseSpace(request.url), 10, TimeUnit.SECONDS);
+        if (space != null) {
+            SpaceInstance[] spaceInstances = space.getInstances();
+            System.out.println("Admin has " + spaceInstances.length + " space instances");
 
-        final Map<String, Integer> counts = new HashMap<>();
-        for (final SpaceInstance spaceInstance : spaceInstances) {
-            if (spaceInstance.getMode() != SpaceMode.BACKUP) {
-                for (final Map.Entry<String, Integer> countItem : instanceToCounts(spaceInstance).entrySet()) {
-                    System.out.println("Space instance " + spaceInstance + " has " + countItem + " types");
-                    Integer count = counts.get(countItem.getKey());
-                    if (count == null) count = 0;
-                    counts.put(countItem.getKey(), count + countItem.getValue());
+            final Map<String, Integer> counts = new HashMap<>();
+            for (final SpaceInstance spaceInstance : spaceInstances) {
+                if (spaceInstance.getMode() != SpaceMode.BACKUP) {
+                    for (final Map.Entry<String, Integer> countItem : instanceToCounts(spaceInstance).entrySet()) {
+                        System.out.println("Space instance " + spaceInstance + " has " + countItem + " types");
+                        Integer count = counts.get(countItem.getKey());
+                        if (count == null) count = 0;
+                        counts.put(countItem.getKey(), count + countItem.getValue());
+                    }
                 }
+            }
+
+            for (final Map.Entry<String, Integer> count : counts.entrySet()) {
+                final Count countResponse = new Count();
+                countResponse.name = count.getKey();
+                countResponse.count = count.getValue();
+                countsResponse.counts.add(countResponse);
             }
         }
 
-        final CountsResponse countsResponse = new CountsResponse();
-        countsResponse.counts = new ArrayList<>();
-        for (final Map.Entry<String, Integer> count : counts.entrySet()) {
-            final Count countResponse = new Count();
-            countResponse.name = count.getKey();
-            countResponse.count = count.getValue();
-            countsResponse.counts.add(countResponse);
-        }
         return countsResponse;
     }
 

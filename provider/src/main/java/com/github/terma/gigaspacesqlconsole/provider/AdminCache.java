@@ -52,15 +52,15 @@ class AdminCache {
 
             final String spaceName = GigaSpaceUrl.parseSpace(request.url);
             System.out.println("Trying connect to space " + spaceName + "...");
-            Space space = admin.getSpaces().waitFor(spaceName, 20, TimeUnit.SECONDS);
-            if (space == null) {
-                admin.close();
-                throw new IllegalArgumentException("Can't find space with url: " + request.url);
-            }
+//            Space space = admin.getSpaces().waitFor(spaceName, 20, TimeUnit.SECONDS);
+//            if (space == null) {
+//                admin.close();
+//                throw new IllegalArgumentException("Can't find space with url: " + request.url);
+//            }
             System.out.println("connected to space!");
             item = new AdminAndSpaceCacheItem();
             item.admin = admin;
-            item.space = space;
+//            item.space = space;
             cache.put(request, item);
         } else {
             System.out.println("Use cached admin for " + request.url);

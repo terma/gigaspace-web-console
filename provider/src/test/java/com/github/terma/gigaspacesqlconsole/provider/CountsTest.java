@@ -17,7 +17,7 @@ public class CountsTest {
 
         CountsRequest countsRequest = new CountsRequest();
         countsRequest.url = "/./ff?";
-        final CountsResponse countsResponse = new CountsProviderImpl().counts(countsRequest);
+        final CountsResponse countsResponse = new Counts().counts(countsRequest);
 
         // then only Object default
         Assert.assertEquals(1, countsResponse.counts.size());
@@ -35,7 +35,7 @@ public class CountsTest {
 
         CountsRequest countsRequest = new CountsRequest();
         countsRequest.url = url;
-        final CountsResponse countsResponse = new CountsProviderImpl().counts(countsRequest);
+        final CountsResponse countsResponse = new Counts().counts(countsRequest);
 
         // then
         Assert.assertEquals(2, countsResponse.counts.size());
