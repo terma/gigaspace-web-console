@@ -31,28 +31,35 @@
 
 <div style="padding: 0.5em 1em;">
     <div class="button-dock">
-        <a ng-repeat="gigaspace in config.user.gigaspaces" ng-class="context.selectedGigaspace.name == gigaspace.name ? 'selected-button' : 'button'" ng-click="selectGigaspace(gigaspace)" href="javascript:void(0);">{{ gigaspace.name }}</a>
+        <a ng-repeat="gigaspace in config.user.gigaspaces"
+           ng-class="context.selectedGigaspace.name == gigaspace.name ? 'selected-button' : 'button'"
+           ng-click="selectGigaspace(gigaspace)" href="javascript:void(0);">{{ gigaspace.name }}</a>
     </div>
 
-    <input placeholder="GigaSpace URL" ng-model="context.selectedGigaspace.url" style="width: 100%;" class="mono-text"/>
+    <input placeholder="GigaSpace URL" ng-model="context.selectedGigaspace.url" style="width: 100%;"
+           class="mono-text connection"/>
 
     <p></p>
-    <select class="mono-text" ng-model="request.gs">
-        <option ng-repeat="gs in config.user.gs" value="{{ gs.name }}" ng-selected="context.selectedGigaspace.gs == gs.name">
+    <select class="mono-text connection" ng-model="request.gs">
+        <option ng-repeat="gs in config.user.gs" value="{{ gs.name }}"
+                ng-selected="context.selectedGigaspace.gs == gs.name">
             {{ gs.name }}
         </option>
     </select>
 
     <p></p>
-    <input ng-model="context.selectedGigaspace.user" class="mono-text" placeholder="User"/>
-    <input type="password" ng-model="context.selectedGigaspace.password" class="mono-text" placeholder="Password"/>
+    <input ng-model="context.selectedGigaspace.user" class="mono-text connection" placeholder="User"/>
+    <input type="password" ng-model="context.selectedGigaspace.password" class="mono-text connection"
+           placeholder="Password"/>
 
 </div>
 
 <div style="padding: 0.5em 1em 1em;">
     <div class="button-dock">
-        <a href="javascript:void(0);" ng-click="openTypesTab()" ng-class="context.selectedGigaspace.selectedTab == 'types' ? 'selected-button' : 'button'">Types</a>
-        <a href="javascript:void(0);" ng-click="openQueryTab()" ng-class="context.selectedGigaspace.selectedTab == 'query' ? 'selected-button' : 'button'">Query</a>
+        <a href="javascript:void(0);" ng-click="openTypesTab()"
+           ng-class="context.selectedGigaspace.selectedTab == 'types' ? 'selected-button' : 'button'">Types</a>
+        <a href="javascript:void(0);" ng-click="openQueryTab()"
+           ng-class="context.selectedGigaspace.selectedTab == 'query' ? 'selected-button' : 'button'">Query</a>
     </div>
 
     <!--<p></p>-->
@@ -60,12 +67,13 @@
     <div ng-show="context.selectedGigaspace.selectedTab == 'types'">
         <p ng-show="context.selectedGigaspace.typesTab.status">{{ context.selectedGigaspace.typesTab.status }}</p>
 
-        <p ng-show="context.selectedGigaspace.typesTab.error">
+        <div ng-show="context.selectedGigaspace.typesTab.error">
+            <p/>
             <a href="javascript:void(0);" ng-click="forceStartCheckTypes()">Try Again</a>
-        <pre class="mono-error">{{ context.selectedGigaspace.typesTab.error.exceptionClass }}</pre>
-        <pre class="mono-error">{{ context.selectedGigaspace.typesTab.error.message }}</pre>
-        <pre class="mono-error">{{ context.selectedGigaspace.typesTab.error.stacktrace }}</pre>
-        </p>
+            <pre class="mono-error">{{ context.selectedGigaspace.typesTab.error.exceptionClass }}</pre>
+            <pre class="mono-error">{{ context.selectedGigaspace.typesTab.error.message }}</pre>
+            <pre class="mono-error">{{ context.selectedGigaspace.typesTab.error.stacktrace }}</pre>
+        </div>
 
         <p/>
 
@@ -74,9 +82,12 @@
         </p>
 
         <div ng-show="context.selectedGigaspace.typesTab.data">
-            <input type="text" ng-model="context.selectedGigaspace.typesTab.filter" placeholder="Type Filter" class="mono-text">
-            <a href="javascript:void(0);" ng-click="context.selectedGigaspace.typesTab.hideZero = false" ng-show="context.selectedGigaspace.typesTab.hideZero">Show Zero</a>
-            <a href="javascript:void(0);" ng-click="context.selectedGigaspace.typesTab.hideZero = true" ng-show="!context.selectedGigaspace.typesTab.hideZero">Hide Zero</a>
+            <input type="text" ng-model="context.selectedGigaspace.typesTab.filter" placeholder="Type Filter"
+                   class="mono-text">
+            <a href="javascript:void(0);" ng-click="context.selectedGigaspace.typesTab.hideZero = false"
+               ng-show="context.selectedGigaspace.typesTab.hideZero">Show Zero</a>
+            <a href="javascript:void(0);" ng-click="context.selectedGigaspace.typesTab.hideZero = true"
+               ng-show="!context.selectedGigaspace.typesTab.hideZero">Hide Zero</a>
 
             <p></p>
 
@@ -88,8 +99,10 @@
                     <td align="right">{{ prevCountStatus(counts.total) }}</td>
                     <td>&nbsp;</td>
                 </tr>
-                <tr ng-repeat="count in context.selectedGigaspace.typesTab.data | filter : filterCounts | orderBy:'name'" class="mono-text"
-                    ng-click="context.selectedGigaspace.typesTab.selectedCount = count" ng-class="context.selectedGigaspace.typesTab.selectedCount == count ? 'selected' : ''">
+                <tr ng-repeat="count in context.selectedGigaspace.typesTab.data | filter : filterCounts | orderBy:'name'"
+                    class="mono-text"
+                    ng-click="context.selectedGigaspace.typesTab.selectedCount = count"
+                    ng-class="context.selectedGigaspace.typesTab.selectedCount == count ? 'selected' : ''">
                     <td class="{{ getCountClass(count) }}">{{ count.name }}</td>
                     <td align="right">{{ count.count }}</td>
                     <td align="right">{{ prevCountStatus(count) }}</td>
@@ -105,7 +118,9 @@
     </div>
 
     <div ng-show="context.selectedGigaspace.selectedTab != 'types'">
-        <ui-codemirror ui-codemirror-opts="editorOptions" ng-model="context.selectedGigaspace.queryTab.selectedEditor.content" class="mono-text"></ui-codemirror>
+        <ui-codemirror ui-codemirror-opts="editorOptions"
+                       ng-model="context.selectedGigaspace.queryTab.selectedEditor.content"
+                       class="mono-text"></ui-codemirror>
 
         <p/>
 
@@ -119,11 +134,12 @@
 
             <h4>Results {{ query.data.data.length }} for {{ query.sql }}</h4>
 
-            <p ng-show="query.error">
-            <pre class="mono-error">{{ query.error.exceptionClass }}</pre>
-            <pre class="mono-error">{{ query.error.message }}</pre>
-            <pre class="mono-error">{{ query.error.stacktrace }}</pre>
-            </p>
+            <div ng-show="query.error">
+                <p>
+                <pre class="mono-error">{{ query.error.exceptionClass }}</pre>
+                <pre class="mono-error">{{ query.error.message }}</pre>
+                <pre class="mono-error">{{ query.error.stacktrace }}</pre>
+            </div>
 
             <p ng-show="query.status">{{ query.status }}</p>
 

@@ -286,9 +286,13 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
         asyncGoToAndFocus($scope.context.selectedGigaspace.queryTab.selectedEditor.cursor);
     };
 
-    $("input,select").keydown(function (e) {
+    $("input.connection").keydown(function (e) {
         if (e.keyCode == 13) $scope.executeQuery();
         else $scope.stopCheckTypes();
+    });
+
+    $("select").change(function (e) {
+        $scope.stopCheckTypes();
     });
 
     $("ui-codemirror").keydown(function (e) {
