@@ -27,6 +27,7 @@ public class Counts {
                     Thread.sleep(TimeUnit.MINUTES.toMillis(5));
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
+                    return;
                 }
             }
         }
@@ -47,9 +48,10 @@ public class Counts {
         final CountsResponse countsResponse = new CountsResponse();
         countsResponse.counts = new ArrayList<>();
 
-        final AdminAndSpaceCacheItem adminAndSpace = adminCache.createOrGet(request);
+        final AdminCacheItem adminAndSpace = adminCache.createOrGet(request);
 
-        Space space = adminAndSpace.admin.getSpaces().waitFor(GigaSpaceUrl.parseSpace(request.url), 10, TimeUnit.SECONDS);
+        Space space = adminAndSpace.admin.getSpaces()
+                .waitFor(GigaSpaceUrl.parseSpace(request.url), 10, TimeUnit.SECONDS);
         if (space != null) {
             SpaceInstance[] spaceInstances = space.getInstances();
             System.out.println("Admin has " + spaceInstances.length + " space instances");
