@@ -1,17 +1,17 @@
 # GigaSpaces SQL Console
 
-Free lightweight java web application. Powerful alternative for GigaSpace Management Console when you have a lot of work with spaces data.
+Free lightweight java web application. Powerful alternative for GigaSpace Management Console when you have a lot of work with spaces data, especially for Quality Assurance Team.
 
 ## Key Features 
 
-_All of them you will not find in default GigaSpace Management Console_
+_All of them you don't find in GigaSpace Management Console_
 
-* Support all versions of GigaSpace starts from 9.X (never tested with previous) from one page
-* One click switch between different instances
-* Support custom render for user types in spaces, so no more ```my.package.Object@12223``` in results
+* Supports all versions of GigaSpace starts from 9.X (never tested with previous) from one page
+* One click switch between different instances, versions and spaces
+* Supports custom render for user types in spaces, so no more ```my.package.Object@12223``` in results
 * Super view for types counts with filtering by name, non zero and date and count of last update
-* Support multiqueries and comments for simplify when you have complex work with data
-* All settings store cross session, so you don't need to retype all queries again
+* Supports multiqueries and comments when you have complex work with data
+* All settings store cross session, so you don't need to retype your queries again
 
 ## How to use
 
