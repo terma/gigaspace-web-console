@@ -44,7 +44,9 @@
       "url": "http://www.google.com"
     }
   ],
-  "converters": [],
+  "converters": [
+//    "com.github.terma.gigaspacesqlconsole.TestConverter"
+  ],
   "gigaspaces": [
     {
       "name": "LOCAL",

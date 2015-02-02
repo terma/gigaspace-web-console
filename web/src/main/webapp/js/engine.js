@@ -104,11 +104,11 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
                 for (var i = 0; i < fromStore.gigaspaces.length; i++) {
                     var fromStoreGigaspace = fromStore.gigaspaces[i];
 
-                    // check if restored gigaspace present in config other skip restore
+                    // check if restored predefinedGigaspace present in config other skip restore
                     if (findPredefinedGigaspace(fromStoreGigaspace.name)) {
                         this.gigaspaces.push(fromStoreGigaspace);
 
-                        // restore link on selected gigaspace
+                        // restore link on selected predefinedGigaspace
                         if (fromStore.selectedGigaspace == i) this.selectedGigaspace = fromStoreGigaspace;
 
                         // restore link on selected editor
@@ -125,12 +125,27 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
                     var url = oldFromStore[i].url;
                     var oldEditor = oldFromStore[i].editor;
 
-                    var gigaspace = findGigaspaceByUrl(url);
-                    if (gigaspace) {
-                        gigaspace.selectedTab = "query";
-                        var editor = {content: oldEditor};
-                        gigaspace.queryTab.editors = [editor];
-                        gigaspace.queryTab.selectedEditor = editor;
+                    var predefinedGigaspace = findPredefinedGigaspaceByUrl(url);
+                    if (predefinedGigaspace) {
+                        var gigaspace = {
+                            name: predefinedGigaspace.name,
+                            url: predefinedGigaspace.url,
+                            user: predefinedGigaspace.user,
+                            password: predefinedGigaspace.password,
+                            selectedTab: "query",
+                            typesTab: {},
+                            queryTab: {
+                                editors: [
+                                    {
+                                        name: undefined,
+                                        content: oldEditor
+                                    }
+                                ]
+                            }
+                        };
+
+                        gigaspace.queryTab.selectedEditor = gigaspace.queryTab.editors[0];
+                        this.gigaspaces.push(gigaspace);
                     }
                 }
                 window.localStorage.removeItem(this.LOCAL_STORAGE_OLD_KEY);
@@ -201,9 +216,9 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
         return undefined;
     }
 
-    function findGigaspaceByUrl(url) {
+    function findPredefinedGigaspaceByUrl(url) {
         for (var i = 0; i < $scope.context.gigaspaces.length; i++) {
-            if ($scope.context.gigaspaces[i].url === url) {
+            if ($scope.config.user.gigaspaces[i].url === url) {
                 return $scope.context.gigaspaces[i];
             }
         }
@@ -387,6 +402,11 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
         return true;
     };
 
+    $scope.forceStartCheckTypes = function () {
+        $scope.context.selectedGigaspace.typesTab.error = undefined;
+        $scope.startCheckTypes();
+    };
+
     $scope.startCheckTypes = function () {
         if ($scope.context.selectedGigaspace.typesTab.checking) {
             console.log("already started");
@@ -425,7 +445,8 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
 
     function openQueryTabWith(sql) {
         $scope.openQueryTab();
-        var updatedContent = $scope.context.selectedGigaspace.queryTab.selectedEditor.content + "\n" + sql;
+        var content = $scope.context.selectedGigaspace.queryTab.selectedEditor.content;
+        var updatedContent = content ? content + "\n" + sql : sql;
         asyncUpdateAndGoToEndAndFocus(updatedContent);
     }
 

@@ -22,21 +22,30 @@ public class ProviderResolver {
 
     public static Provider getProvider(final String gs) {
         LOGGER.info("Start getting provider for " + gs + "...");
-        final ConfigGs configGs = gsConfigByNameOrFirst(gs);
-        LOGGER.info("Find config " + configGs + " for " + gs);
+        final ConfigGs configGs = gsConfigByNameOrFirstOrNull(gs);
         final URLClassLoader classLoader = createClassLoader(configGs);
         LOGGER.info("Create for " + gs + " classloader " + Arrays.asList(classLoader.getURLs()));
         return getClassInstance(classLoader, PROVIDER_IMPL_CLASS_NAME);
     }
 
-    private static ConfigGs gsConfigByNameOrFirst(final String gsVersion) {
-        for (final ConfigGs configGs : Config.read().user.gs) {
-            if (configGs.name.equals(gsVersion)) {
+    private static ConfigGs gsConfigByNameOrFirstOrNull(final String gs) {
+        final Config config = Config.read();
+
+        if (config.user.gs.isEmpty()) {
+            LOGGER.info("No gs configured try to take from classpath");
+            return null;
+        }
+
+        for (final ConfigGs configGs : config.user.gs) {
+            if (configGs.name.equals(gs)) {
+                LOGGER.info("Find config " + configGs + " for " + configGs);
                 return configGs;
             }
         }
 
-        return Config.read().user.gs.get(0);
+        final ConfigGs configGs = config.user.gs.get(0);
+        LOGGER.info("Can't find config for name: " + gs + ", use first: " + configGs);
+        return configGs;
     }
 
     @SuppressWarnings("unchecked")
@@ -60,7 +69,7 @@ public class ProviderResolver {
         }
     }
 
-    private static URLClassLoader createClassLoader(ConfigGs configGs) {
+    private static URLClassLoader createClassLoader(final ConfigGs configGs) {
         final List<URL> urls = new ArrayList<>();
 
         final URL providerLibUrl = ProviderResolver.class.getResource(PROVIDER_LIB_RESOURCE_PATH);
@@ -68,11 +77,13 @@ public class ProviderResolver {
                 "Can't find provider lib in classpath by path: " + PROVIDER_LIB_RESOURCE_PATH);
         urls.add(providerLibUrl);
 
-        for (final String lib : configGs.libs) {
-            try {
-                urls.add(new URL("file:" + lib));
-            } catch (MalformedURLException e) {
-                throw new IllegalArgumentException("Incorrect file path to lib: " + lib, e);
+        if (configGs != null) {
+            for (final String lib : configGs.libs) {
+                try {
+                    urls.add(new URL("file:" + lib));
+                } catch (MalformedURLException e) {
+                    throw new IllegalArgumentException("Incorrect file path to lib: " + lib, e);
+                }
             }
         }
 

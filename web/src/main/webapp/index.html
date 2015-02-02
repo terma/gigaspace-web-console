@@ -61,7 +61,7 @@
         <p ng-show="context.selectedGigaspace.typesTab.status">{{ context.selectedGigaspace.typesTab.status }}</p>
 
         <p ng-show="context.selectedGigaspace.typesTab.error">
-            <a href="javascript:void(0);" ng-click="startCheckTypes()">Try Again</a>
+            <a href="javascript:void(0);" ng-click="forceStartCheckTypes()">Try Again</a>
         <pre class="mono-error">{{ context.selectedGigaspace.typesTab.error.exceptionClass }}</pre>
         <pre class="mono-error">{{ context.selectedGigaspace.typesTab.error.message }}</pre>
         <pre class="mono-error">{{ context.selectedGigaspace.typesTab.error.stacktrace }}</pre>
