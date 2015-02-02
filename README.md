@@ -13,7 +13,7 @@ _All of them you don't find in GigaSpace Management Console_
 * Supports multiqueries and comments when you have complex work with data
 * All settings store cross session, so you don't need to retype your queries again
 
-## How to use
+## How install
 
 1. Download (WAR file) latest release [from](https://github.com/terma/gigaspaces-sql-console/releases)
 1. Prepare config file (JSON format) 
@@ -59,3 +59,10 @@ _All of them you don't find in GigaSpace Management Console_
 ```
 1. Pass JVM option ```-DgigaspaceSqlConsoleConfig=<classpath:X> or <file:X>``` to your Web Container
 1. Start within any Web Container like Jetty, Tomcat etc.
+1. Open web app in browser
+
+## How to use
+
+```
+// todo
+```
