@@ -217,9 +217,9 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
     }
 
     function findPredefinedGigaspaceByUrl(url) {
-        for (var i = 0; i < $scope.context.gigaspaces.length; i++) {
+        for (var i = 0; i < $scope.config.user.gigaspaces.length; i++) {
             if ($scope.config.user.gigaspaces[i].url === url) {
-                return $scope.context.gigaspaces[i];
+                return $scope.config.user.gigaspaces[i];
             }
         }
         return undefined;
