@@ -178,6 +178,12 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
                         selectedCount: this.gigaspaces[i].typesTab.selectedCount
                     },
 
+                    copyTab: {
+                        targetUrl: this.gigaspaces[i].copyTab.targetUrl,
+                        targetUser: this.gigaspaces[i].copyTab.targetUser,
+                        content: this.gigaspaces[i].copyTab.content
+                    },
+
                     queryTab: {
                         editors: []
                     }
@@ -254,6 +260,10 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
             console.log("Add new gigaspace:");
             console.log(gigaspace);
             $scope.context.gigaspaces.push(gigaspace);
+        }
+
+        if (!gigaspace.copyTab) {
+            gigaspace.copyTab = {};
         }
 
         if (!gigaspace.queryTab.selectedEditor) {
@@ -603,9 +613,6 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
     $scope.executeCopy = function () {
         cancelDefers(copyingDefers);
 
-        if (!$scope.context.selectedGigaspace.copyTab)
-            $scope.context.selectedGigaspace.copyTab = {};
-
         $scope.context.selectedGigaspace.copyTab.status = undefined;
         $scope.context.selectedGigaspace.copyTab.queries = [];
 
@@ -640,9 +647,9 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
             user: $scope.context.selectedGigaspace.user,
             password: $scope.context.selectedGigaspace.password,
             gs: $scope.context.selectedGigaspace.gs,
-            targetUrl: $scope.context.selectedGigaspace.targetUrl,
-            targetUser: $scope.context.selectedGigaspace.targetUser,
-            targetPassword: $scope.context.selectedGigaspace.targetPassword,
+            targetUrl: $scope.context.selectedGigaspace.copyTab.targetUrl,
+            targetUser: $scope.context.selectedGigaspace.copyTab.targetUser,
+            targetPassword: $scope.context.selectedGigaspace.copyTab.targetPassword,
             query: query.sql,
             appVersion: $scope.config.internal.appVersion
         };
@@ -682,6 +689,9 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
             if (!$scope.context.selectedGigaspace) {
                 if ($scope.config.user.gigaspaces.length > 0) $scope.selectGigaspace($scope.config.user.gigaspaces[0]);
                 else $scope.selectGigaspace({name: "New"});
+            } else {
+                var predefinedGigaspace = findPredefinedGigaspace($scope.context.selectedGigaspace.name);
+                if (predefinedGigaspace) $scope.selectGigaspace(predefinedGigaspace);
             }
         }).error(function (res) {
             // todo show error if can't load config, as temporary solution
