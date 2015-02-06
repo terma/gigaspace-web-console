@@ -634,6 +634,12 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
         }
     };
 
+    $scope.selectTargetGigaspace = function (gigaspace) {
+        $scope.context.selectedGigaspace.copyTab.targetUrl = gigaspace.url;
+        $scope.context.selectedGigaspace.copyTab.targetUser = gigaspace.user;
+        $scope.context.selectedGigaspace.copyTab.targetPassword = gigaspace.password;
+    };
+
     function copyOne(query) {
         $scope.context.selectedGigaspace.copyTab.queries.push(query);
 
