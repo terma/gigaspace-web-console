@@ -6,4 +6,6 @@ public interface Provider {
 
     ExecuteResponse query(ExecuteRequest request) throws Exception;
 
+    CopyResponse copy(CopyRequest request) throws Exception;
+
 }

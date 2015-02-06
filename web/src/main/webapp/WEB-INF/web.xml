@@ -19,6 +19,11 @@
             <servlet-class>com.github.terma.gigaspacesqlconsole.counts.CountsServlet</servlet-class>
       </servlet>
 
+      <servlet>
+            <servlet-name>CopyServlet</servlet-name>
+            <servlet-class>com.github.terma.gigaspacesqlconsole.CopyServlet</servlet-class>
+      </servlet>
+
       <servlet-mapping>
             <servlet-name>ConfigServlet</servlet-name>
             <url-pattern>/config</url-pattern>
@@ -32,6 +37,11 @@
       <servlet-mapping>
             <servlet-name>CountsServlet</servlet-name>
             <url-pattern>/counts</url-pattern>
+      </servlet-mapping>
+
+      <servlet-mapping>
+            <servlet-name>CopyServlet</servlet-name>
+            <url-pattern>/copy</url-pattern>
       </servlet-mapping>
 
 </web-app>

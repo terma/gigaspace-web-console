@@ -314,12 +314,13 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
     }
 
     var executionCancellerList = [];
+    var copyingDefers = [];
 
-    function stopExecuteSqls() {
-        for (var i = 0; i < executionCancellerList.length; i++) {
-            executionCancellerList[i].resolve("cancelled by user!");
+    function cancelDefers(defers) {
+        for (var i = 0; i < defers.length; i++) {
+            defers[i].resolve("cancelled by user!");
         }
-        executionCancellerList = [];
+        defers.length = 0;
     }
 
     function filterCommentedAndEmpty(lines) {
@@ -333,7 +334,7 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
     }
 
     $scope.executeQuery = function () {
-        stopExecuteSqls();
+        cancelDefers(executionCancellerList);
 
         $scope.context.selectedGigaspace.queryTab.selectedEditor.status = undefined;
         $scope.context.selectedGigaspace.queryTab.selectedEditor.queries = [];
@@ -436,15 +437,24 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
         }
     };
 
+    $scope.closeTabs = function () {
+        $scope.stopCheckTypes();
+    };
+
     $scope.openTypesTab = function () {
+        $scope.closeTabs();
         $scope.context.selectedGigaspace.selectedTab = "types";
-        $scope.startCheckTypes();
     };
 
     $scope.openQueryTab = function () {
+        $scope.closeTabs();
         $scope.context.selectedGigaspace.selectedTab = "query";
-        $scope.stopCheckTypes();
         asyncFocus();
+    };
+
+    $scope.openCopyTab = function () {
+        $scope.closeTabs();
+        $scope.context.selectedGigaspace.selectedTab = "copy";
     };
 
     function openQueryTabWith(sql) {
@@ -589,6 +599,69 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
             gigaspace.typesTab.error = responseToError(res);
         });
     };
+
+    $scope.executeCopy = function () {
+        cancelDefers(copyingDefers);
+
+        if (!$scope.context.selectedGigaspace.copyTab)
+            $scope.context.selectedGigaspace.copyTab = {};
+
+        $scope.context.selectedGigaspace.copyTab.status = undefined;
+        $scope.context.selectedGigaspace.copyTab.queries = [];
+
+        var content = $scope.context.selectedGigaspace.copyTab.content;
+        console.log("content to copy:");
+        console.log(content);
+
+        var sqlList = filterCommentedAndEmpty(getLines(content));
+        for (var j = 0; j < sqlList.length; j++) {
+            var sql = sqlList[j];
+            console.log("start copy for sql:");
+            console.log(sql);
+            copyOne({sql: sql});
+        }
+
+        if (sqlList.length == 0) {
+            console.log("nothing to copy");
+            $scope.context.selectedGigaspace.copyTab.status = "Nothing to copy";
+        }
+    };
+
+    function copyOne(query) {
+        $scope.context.selectedGigaspace.copyTab.queries.push(query);
+
+        query.status = "Copying...";
+
+        var copyDefer = $q.defer();
+        copyingDefers.push(copyDefer);
+
+        var request = {
+            url: $scope.context.selectedGigaspace.url,
+            user: $scope.context.selectedGigaspace.user,
+            password: $scope.context.selectedGigaspace.password,
+            gs: $scope.context.selectedGigaspace.gs,
+            targetUrl: $scope.context.selectedGigaspace.targetUrl,
+            targetUser: $scope.context.selectedGigaspace.targetUser,
+            targetPassword: $scope.context.selectedGigaspace.targetPassword,
+            query: query.sql,
+            appVersion: $scope.config.internal.appVersion
+        };
+
+        $http({
+            url: "copy",
+            method: "POST",
+            data: request,
+            timeout: copyDefer.promise,
+            headers: {'Content-Type': "application/json"}
+        }).success(function (res) {
+            query.status = undefined;
+            query.count = res.count;
+            console.log(query);
+        }).error(function (res) {
+            query.status = undefined;
+            query.error = responseToError(res);
+        });
+    }
 
     $scope.loadConfig = function () {
         $http({
