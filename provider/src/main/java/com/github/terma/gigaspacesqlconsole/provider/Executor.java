@@ -4,7 +4,6 @@ import com.gigaspaces.client.ChangeResult;
 import com.gigaspaces.client.ChangeSet;
 import com.github.terma.gigaspacesqlconsole.core.ExecuteRequest;
 import com.github.terma.gigaspacesqlconsole.core.ExecuteResponse;
-import com.github.terma.gigaspacesqlconsole.core.GigaSpaceUpdateSql;
 import com.github.terma.gigaspacesqlconsole.core.config.Config;
 import com.j_spaces.core.client.SQLQuery;
 import com.j_spaces.jdbc.driver.GConnection;

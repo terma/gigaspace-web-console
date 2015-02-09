@@ -1,4 +1,4 @@
-package com.github.terma.gigaspacesqlconsole.core;
+package com.github.terma.gigaspacesqlconsole.provider;
 
 import java.util.Map;
 

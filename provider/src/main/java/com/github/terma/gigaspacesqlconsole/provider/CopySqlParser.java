@@ -5,27 +5,22 @@ import java_cup.runtime.Symbol;
 import java.io.IOException;
 import java.io.StringReader;
 
-public class GigaSpaceUpdateSqlParser {
+public class CopySqlParser {
 
-    public static GigaSpaceUpdateSql parse(String data) throws IOException {
-        final Lexer lexer = new Lexer(new StringReader(data));
+    public static CopySql parse(String sql) throws IOException {
+        final CopySqlLexer lexer = new CopySqlLexer(new StringReader(sql));
         while (true) {
 
             try {
                 Symbol token = lexer.next_token();
 
                 if (token.left == token.right || token.sym == -1) {
-                    final GigaSpaceUpdateSql sql = lexer.getSql();
+                    final CopySql copySql = lexer.getSql();
 
-                    if (sql.typeName.isEmpty()) {
+                    if (copySql.typeName.isEmpty()) {
                         throw new IOException("Expected SQL: update <typeName>, but typeName not specified!");
                     }
-
-                    if (sql.setFields.isEmpty()) {
-                        throw new IOException("Expected SQL: update <typeName> set <setFields>, but setFields not specified!");
-                    }
-
-                    return sql;
+                    return copySql;
                 }
             } catch (UnsupportedOperationException e) {
                 return null;
