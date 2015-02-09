@@ -3,6 +3,8 @@ package com.github.terma.gigaspacesqlconsole.provider;
 import com.gigaspaces.client.iterator.IteratorScope;
 import com.gigaspaces.document.SpaceDocument;
 import com.github.terma.gigaspacesqlconsole.core.CopyRequest;
+import com.github.terma.gigaspacesqlconsole.core.CopyResponse;
+import com.j_spaces.core.client.ExternalEntry;
 import com.j_spaces.core.client.GSIterator;
 import com.j_spaces.core.client.SQLQuery;
 import org.openspaces.core.GigaSpace;
@@ -10,7 +12,6 @@ import org.openspaces.core.GigaSpaceConfigurer;
 import org.openspaces.core.IteratorBuilder;
 import org.openspaces.core.space.UrlSpaceConfigurer;
 
-import java.net.CacheResponse;
 import java.util.logging.Logger;
 
 public class Copier {
@@ -19,7 +20,7 @@ public class Copier {
 
     private static final int BATCH = 1000;
 
-    public static CacheResponse copy(final CopyRequest request) throws Exception {
+    public static CopyResponse copy(final CopyRequest request) throws Exception {
         LOGGER.info("start copy: " + request.sql);
 
         final CopySql copySql = CopySqlParser.parse(request.sql);
@@ -45,6 +46,11 @@ public class Copier {
                         for (final String resetField : copySql.reset) {
                             ((SpaceDocument) object).removeProperty(resetField);
                         }
+                    } else if (object instanceof ExternalEntry) {
+                        final ExternalEntry externalEntry = (ExternalEntry) object;
+                        for (final String resetField : copySql.reset) {
+                            externalEntry.setFieldValue(resetField, null);
+                        }
                     }
                 }
             }
@@ -54,7 +60,10 @@ public class Copier {
         }
 
         LOGGER.info("Copied " + total + " for " + request.sql);
-        return null;
+
+        final CopyResponse response = new CopyResponse();
+        response.count = total;
+        return response;
     }
 
     @SuppressWarnings("deprecation")

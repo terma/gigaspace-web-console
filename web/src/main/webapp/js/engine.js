@@ -656,7 +656,7 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
             targetUrl: $scope.context.selectedGigaspace.copyTab.targetUrl,
             targetUser: $scope.context.selectedGigaspace.copyTab.targetUser,
             targetPassword: $scope.context.selectedGigaspace.copyTab.targetPassword,
-            query: query.sql,
+            sql: query.sql,
             appVersion: $scope.config.internal.appVersion
         };
 
