@@ -4,32 +4,56 @@ import com.gigaspaces.client.iterator.IteratorScope;
 import com.gigaspaces.document.SpaceDocument;
 import com.github.terma.gigaspacesqlconsole.core.CopyRequest;
 import com.j_spaces.core.client.GSIterator;
+import com.j_spaces.core.client.SQLQuery;
 import org.openspaces.core.GigaSpace;
 import org.openspaces.core.GigaSpaceConfigurer;
 import org.openspaces.core.IteratorBuilder;
 import org.openspaces.core.space.UrlSpaceConfigurer;
 
 import java.net.CacheResponse;
+import java.util.logging.Logger;
 
 public class Copier {
+
+    private static final Logger LOGGER = Logger.getLogger(Copier.class.getSimpleName());
 
     private static final int BATCH = 1000;
 
     public static CacheResponse copy(final CopyRequest request) throws Exception {
+        LOGGER.info("start copy: " + request.sql);
+
+        final CopySql copySql = CopySqlParser.parse(request.sql);
+
         final GigaSpace sourceGigaspace = gigaSpaceConnection(request);
 
         final UrlSpaceConfigurer urlSpaceConfigurer = new UrlSpaceConfigurer(request.targetUrl);
         urlSpaceConfigurer.userDetails(request.targetUser, request.targetPassword);
         final GigaSpace targetGigaspace = new GigaSpaceConfigurer(urlSpaceConfigurer.create()).create();
 
-        final GSIterator iterator = new IteratorBuilder(sourceGigaspace)
-                .addTemplate(new SpaceDocument("ObjectA")).iteratorScope(IteratorScope.CURRENT).create();
+        final SQLQuery sqlQuery = new SQLQuery(copySql.typeName, copySql.where);
 
+        final GSIterator iterator = new IteratorBuilder(sourceGigaspace)
+                .addTemplate(sqlQuery).iteratorScope(IteratorScope.CURRENT).create();
+
+        int total = 0;
         while (iterator.hasNext()) {
             Object[] objects = iterator.nextBatch(BATCH);
+
+            if (!copySql.reset.isEmpty()) {
+                for (final Object object : objects) {
+                    if (object instanceof SpaceDocument) {
+                        for (final String resetField : copySql.reset) {
+                            ((SpaceDocument) object).removeProperty(resetField);
+                        }
+                    }
+                }
+            }
+
+            total += objects.length;
             targetGigaspace.writeMultiple(objects);
         }
 
+        LOGGER.info("Copied " + total + " for " + request.sql);
         return null;
     }
 

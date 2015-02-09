@@ -42,6 +42,7 @@ public class CopierStabilityTest {
 
         // when
         CopyRequest request = new CopyRequest();
+        request.sql = "copy ObjectA";
         request.url = "/./" + sourceGigaSpace.getName();
         request.targetUrl = "/./" + targetGigaSpace.getName();
 
