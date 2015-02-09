@@ -16,4 +16,9 @@ public class ProviderImpl implements Provider {
         return Executor.query(request);
     }
 
+    @Override
+    public CopyResponse copy(final CopyRequest request) throws Exception {
+        return Copier.copy(request);
+    }
+
 }

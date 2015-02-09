@@ -21,6 +21,7 @@
         "/Users/terma/.m2/repository/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar",
         // todo only for embedded spaces
         "/Users/terma/.m2/repository/org/springframework/spring-core/3.2.4.RELEASE/spring-core-3.2.4.RELEASE.jar",
+        "/Users/terma/.m2/repository/org/springframework/spring-context/3.2.4.RELEASE/spring-context-3.2.4.RELEASE.jar",
         "/Users/terma/.m2/repository/org/springframework/spring-tx/3.2.4.RELEASE/spring-tx-3.2.4.RELEASE.jar"
       ]
     },

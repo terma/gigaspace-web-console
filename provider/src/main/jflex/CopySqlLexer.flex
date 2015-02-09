@@ -1,12 +1,19 @@
 package com.github.terma.gigaspacesqlconsole.provider;
-   
+
+/*
+Main construction is:
+copy SpaceDocumentType
+copy SpaceDocumentType where conditions
+copy SpaceDocumentType reset fieldName1, fieldName2 where conditions
+    */
+
 /* --------------------------Usercode Section------------------------ */
 
 
 import java_cup.sym;
 //import java_cup.runtime.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Set;
+import java.util.HashSet;
 import java.io.IOException;
 
 %%
@@ -17,7 +24,7 @@ import java.io.IOException;
    The name of the class JFlex will create will be Lexer.
    Will write the code to the file Lexer.java. 
 */
-%class Lexer
+%class CopySqlLexer
 
 /*
   The current line number can be accessed with the variable yyline
@@ -42,16 +49,13 @@ import java.io.IOException;
 */
 %{
 
-    private boolean updateStatement = false;
+    private boolean copyStatement = false;
 
     private String typeName = "";
+    private String where = "";
+    private Set<String> reset = new HashSet<>();
 
-    private String tempSetFieldName;
-    private Map<String, Object> setFields = new HashMap<String, Object>();
-
-    private String conditions = "";
-
-    public GigaSpaceUpdateSql getSql() { return new GigaSpaceUpdateSql(typeName, setFields, conditions); }
+    public CopySql getSql() { return new CopySql(typeName, reset, where); }
 
 %}
    
@@ -70,32 +74,25 @@ LineTerminator = \r|\n|\r\n
 /* White space is a line terminator, space, tab, or line feed. */
 WhiteSpace = {LineTerminator} | [ \t\f]
 
-updateKeyword = update
+copyKeyword = copy
 typeName = [A-Za-z_][A-Za-z_0-9]*
-setKeyword = set
 
+resetKeyword = reset
 fieldName = [A-Za-z_][A-Za-z_0-9]*
-assinmentOperation = =
-nextSetField = ,
-fieldValueString = '[^\']*'
-fieldValueBoolean = true | false | TRUE | FALSE
-fieldValueNumber = -?[0-9]+
+nextResetField = ,
 
-conditions = [^]+
-conditionsKeyword = where
+whereKeyword = where
+where = [^]+
 
 %state TYPE_NAME
 
-%state SET_KEYWORD
+%state COPY_KEYWORD
 
-%state SET_FIELD_NAME
-%state SET_FIELD_ASSIGNMENT
-%state SET_FIELD_VALUE_START
-%state SET_FIELD_VALUE
-%state SET_FIELD_VALUE_END
-%state SET_FIELD_MORE
+%state RESET_KEYWORD
+%state RESET_FIELD
+%state AFTER_RESET_FIELD
 
-%state CONDITIONS
+%state WHERE
 
 %%
 /* ------------------------Lexical Rules Section---------------------- */
@@ -110,51 +107,41 @@ conditionsKeyword = where
    the start state YYINITIAL. */
    
 <YYINITIAL> {
-    {updateKeyword} { updateStatement = true; yybegin(TYPE_NAME); }
+    {copyKeyword} { copyStatement = true; yybegin(TYPE_NAME); }
     {WhiteSpace} { /* just skip what was found, do nothing */ }
 }
 
 <TYPE_NAME> {
-    {typeName} { typeName = yytext(); yybegin(SET_KEYWORD); }
+    {typeName} { typeName = yytext(); yybegin(RESET_KEYWORD); }
     {WhiteSpace} { /* just skip what was found, do nothing */ }
 }
 
-<SET_KEYWORD> {
-    {setKeyword} { yybegin(SET_FIELD_NAME); }
+<RESET_KEYWORD> {
+    {resetKeyword} { yybegin(RESET_FIELD); }
+    {whereKeyword} { yybegin(WHERE); }
     {WhiteSpace} { /* just skip what was found, do nothing */ }
 }
 
-<SET_FIELD_NAME> {
-    {fieldName} { tempSetFieldName = yytext(); yybegin(SET_FIELD_ASSIGNMENT); }
+<RESET_FIELD> {
+    {fieldName} { reset.add(yytext()); yybegin(AFTER_RESET_FIELD); }
+    {nextResetField} { yybegin(RESET_FIELD); }
     {WhiteSpace} { /* just skip what was found, do nothing */ }
 }
 
-<SET_FIELD_ASSIGNMENT> {
-    {assinmentOperation} { yybegin(SET_FIELD_VALUE); }
-    {WhiteSpace} { /* just skip what was found, do nothing */ }
+<AFTER_RESET_FIELD> {
+    {nextResetField} { yybegin(RESET_FIELD); }
+    {whereKeyword} { yybegin(WHERE); }
+    {WhiteSpace} { /* do nothing */ }
 }
 
-<SET_FIELD_VALUE> {
-    {fieldValueBoolean} { setFields.put(tempSetFieldName, Boolean.parseBoolean(yytext().toLowerCase())); yybegin(SET_FIELD_MORE); }
-    {fieldValueNumber} { setFields.put(tempSetFieldName, Long.parseLong(yytext())); yybegin(SET_FIELD_MORE); }
-    {fieldValueString} { setFields.put(tempSetFieldName, yytext().substring(1, yytext().length() - 1)); yybegin(SET_FIELD_MORE); }
-    {WhiteSpace} { /* just skip what was found, do nothing */ }
-}
-
-<SET_FIELD_MORE> {
-    {nextSetField} { yybegin(SET_FIELD_NAME); }
-    {conditionsKeyword} { yybegin(CONDITIONS); }
-    {WhiteSpace} { /* just skip what was found, do nothing */ }
-}
-
-<CONDITIONS> {
-    {conditions} { conditions = yytext(); }
+<WHERE> {
+    {where} { where = yytext(); }
 }
 
 
 /* No token was found for the input so through an error.  Print out an
    Illegal character message with the illegal character that was found. */
 [^] {
-    if (updateStatement) throw new IOException("Illegal character <"+yytext()+">");
+    if (copyStatement) throw new IOException("Illegal character <"+yytext()+">");
     else throw new UnsupportedOperationException();
 }

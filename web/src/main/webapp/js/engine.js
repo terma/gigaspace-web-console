@@ -178,6 +178,12 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
                         selectedCount: this.gigaspaces[i].typesTab.selectedCount
                     },
 
+                    copyTab: {
+                        targetUrl: this.gigaspaces[i].copyTab.targetUrl,
+                        targetUser: this.gigaspaces[i].copyTab.targetUser,
+                        content: this.gigaspaces[i].copyTab.content
+                    },
+
                     queryTab: {
                         editors: []
                     }
@@ -256,6 +262,10 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
             $scope.context.gigaspaces.push(gigaspace);
         }
 
+        if (!gigaspace.copyTab) {
+            gigaspace.copyTab = {};
+        }
+
         if (!gigaspace.queryTab.selectedEditor) {
             if (gigaspace.queryTab.editors.length > 0) gigaspace.queryTab.selectedEditor = gigaspace.queryTab.editors[0];
             else {
@@ -314,12 +324,13 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
     }
 
     var executionCancellerList = [];
+    var copyingDefers = [];
 
-    function stopExecuteSqls() {
-        for (var i = 0; i < executionCancellerList.length; i++) {
-            executionCancellerList[i].resolve("cancelled by user!");
+    function cancelDefers(defers) {
+        for (var i = 0; i < defers.length; i++) {
+            defers[i].resolve("cancelled by user!");
         }
-        executionCancellerList = [];
+        defers.length = 0;
     }
 
     function filterCommentedAndEmpty(lines) {
@@ -333,7 +344,7 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
     }
 
     $scope.executeQuery = function () {
-        stopExecuteSqls();
+        cancelDefers(executionCancellerList);
 
         $scope.context.selectedGigaspace.queryTab.selectedEditor.status = undefined;
         $scope.context.selectedGigaspace.queryTab.selectedEditor.queries = [];
@@ -436,15 +447,24 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
         }
     };
 
+    $scope.closeTabs = function () {
+        $scope.stopCheckTypes();
+    };
+
     $scope.openTypesTab = function () {
+        $scope.closeTabs();
         $scope.context.selectedGigaspace.selectedTab = "types";
-        $scope.startCheckTypes();
     };
 
     $scope.openQueryTab = function () {
+        $scope.closeTabs();
         $scope.context.selectedGigaspace.selectedTab = "query";
-        $scope.stopCheckTypes();
         asyncFocus();
+    };
+
+    $scope.openCopyTab = function () {
+        $scope.closeTabs();
+        $scope.context.selectedGigaspace.selectedTab = "copy";
     };
 
     function openQueryTabWith(sql) {
@@ -590,6 +610,72 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
         });
     };
 
+    $scope.executeCopy = function () {
+        cancelDefers(copyingDefers);
+
+        $scope.context.selectedGigaspace.copyTab.status = undefined;
+        $scope.context.selectedGigaspace.copyTab.queries = [];
+
+        var content = $scope.context.selectedGigaspace.copyTab.content;
+        console.log("content to copy:");
+        console.log(content);
+
+        var sqlList = filterCommentedAndEmpty(getLines(content));
+        for (var j = 0; j < sqlList.length; j++) {
+            var sql = sqlList[j];
+            console.log("start copy for sql:");
+            console.log(sql);
+            copyOne({sql: sql});
+        }
+
+        if (sqlList.length == 0) {
+            console.log("nothing to copy");
+            $scope.context.selectedGigaspace.copyTab.status = "Nothing to copy";
+        }
+    };
+
+    $scope.selectTargetGigaspace = function (gigaspace) {
+        $scope.context.selectedGigaspace.copyTab.targetUrl = gigaspace.url;
+        $scope.context.selectedGigaspace.copyTab.targetUser = gigaspace.user;
+        $scope.context.selectedGigaspace.copyTab.targetPassword = gigaspace.password;
+    };
+
+    function copyOne(query) {
+        $scope.context.selectedGigaspace.copyTab.queries.push(query);
+
+        query.status = "Copying...";
+
+        var copyDefer = $q.defer();
+        copyingDefers.push(copyDefer);
+
+        var request = {
+            url: $scope.context.selectedGigaspace.url,
+            user: $scope.context.selectedGigaspace.user,
+            password: $scope.context.selectedGigaspace.password,
+            gs: $scope.context.selectedGigaspace.gs,
+            targetUrl: $scope.context.selectedGigaspace.copyTab.targetUrl,
+            targetUser: $scope.context.selectedGigaspace.copyTab.targetUser,
+            targetPassword: $scope.context.selectedGigaspace.copyTab.targetPassword,
+            sql: query.sql,
+            appVersion: $scope.config.internal.appVersion
+        };
+
+        $http({
+            url: "copy",
+            method: "POST",
+            data: request,
+            timeout: copyDefer.promise,
+            headers: {'Content-Type': "application/json"}
+        }).success(function (res) {
+            query.status = undefined;
+            query.count = res.count;
+            console.log(query);
+        }).error(function (res) {
+            query.status = undefined;
+            query.error = responseToError(res);
+        });
+    }
+
     $scope.loadConfig = function () {
         $http({
             url: "config",
@@ -609,6 +695,9 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
             if (!$scope.context.selectedGigaspace) {
                 if ($scope.config.user.gigaspaces.length > 0) $scope.selectGigaspace($scope.config.user.gigaspaces[0]);
                 else $scope.selectGigaspace({name: "New"});
+            } else {
+                var predefinedGigaspace = findPredefinedGigaspace($scope.context.selectedGigaspace.name);
+                if (predefinedGigaspace) $scope.selectGigaspace(predefinedGigaspace);
             }
         }).error(function (res) {
             // todo show error if can't load config, as temporary solution
