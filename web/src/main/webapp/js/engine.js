@@ -116,39 +116,39 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
                             fromStore.gigaspaces[i].queryTab.editors[fromStore.gigaspaces[i].queryTab.selectedEditor];
                     }
                 }
-            }
+            } else {
+                var oldFromStore = angular.fromJson(window.localStorage.getItem(this.LOCAL_STORAGE_OLD_KEY));
+                if (oldFromStore) {
+                    console.log("old context found, migrating...");
+                    for (var i = 0; i < oldFromStore.length; i++) {
+                        var url = oldFromStore[i].url;
+                        var oldEditor = oldFromStore[i].editor;
 
-            var oldFromStore = angular.fromJson(window.localStorage.getItem(this.LOCAL_STORAGE_OLD_KEY));
-            if (oldFromStore) {
-                console.log("old context found, migrating...");
-                for (var i = 0; i < oldFromStore.length; i++) {
-                    var url = oldFromStore[i].url;
-                    var oldEditor = oldFromStore[i].editor;
+                        var predefinedGigaspace = findPredefinedGigaspaceByUrl(url);
+                        if (predefinedGigaspace) {
+                            var gigaspace = {
+                                name: predefinedGigaspace.name,
+                                url: predefinedGigaspace.url,
+                                user: predefinedGigaspace.user,
+                                password: predefinedGigaspace.password,
+                                selectedTab: "query",
+                                typesTab: {},
+                                queryTab: {
+                                    editors: [
+                                        {
+                                            name: undefined,
+                                            content: oldEditor
+                                        }
+                                    ]
+                                }
+                            };
 
-                    var predefinedGigaspace = findPredefinedGigaspaceByUrl(url);
-                    if (predefinedGigaspace) {
-                        var gigaspace = {
-                            name: predefinedGigaspace.name,
-                            url: predefinedGigaspace.url,
-                            user: predefinedGigaspace.user,
-                            password: predefinedGigaspace.password,
-                            selectedTab: "query",
-                            typesTab: {},
-                            queryTab: {
-                                editors: [
-                                    {
-                                        name: undefined,
-                                        content: oldEditor
-                                    }
-                                ]
-                            }
-                        };
-
-                        gigaspace.queryTab.selectedEditor = gigaspace.queryTab.editors[0];
-                        this.gigaspaces.push(gigaspace);
+                            gigaspace.queryTab.selectedEditor = gigaspace.queryTab.editors[0];
+                            this.gigaspaces.push(gigaspace);
+                        }
                     }
+                    //window.localStorage.removeItem(this.LOCAL_STORAGE_OLD_KEY);
                 }
-                window.localStorage.removeItem(this.LOCAL_STORAGE_OLD_KEY);
             }
 
             console.log("context restored");
@@ -343,7 +343,28 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
         return filtered;
     }
 
+    $scope.executeToCsv = function () {
+        executeQueryToSmt(function (query) {
+            var request = {
+                url: $scope.context.selectedGigaspace.url,
+                user: $scope.context.selectedGigaspace.user,
+                password: $scope.context.selectedGigaspace.password,
+                gs: $scope.context.selectedGigaspace.gs,
+                sql: query.sql,
+                appVersion: $scope.config.internal.appVersion
+            };
+
+            var form = $("<form></form>").attr("action", "execute-to-csv").attr("method", "post");
+            form.append($("<input></input>").attr("type", "hidden").attr("name", "json").attr("value", angular.toJson(request)));
+            form.appendTo("body").submit().remove();
+        });
+    };
+
     $scope.executeQuery = function () {
+        executeQueryToSmt(executeOneQuery);
+    };
+
+    function executeQueryToSmt(executeOneQuery) {
         cancelDefers(executionCancellerList);
 
         $scope.context.selectedGigaspace.queryTab.selectedEditor.status = undefined;
@@ -366,7 +387,7 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
             console.log("nothing to execute");
             $scope.context.selectedGigaspace.queryTab.selectedEditor.status = "Nothing to execute";
         }
-    };
+    }
 
     function responseToError(response) {
         if (!response) return {"message": "Can't connect to server!"};

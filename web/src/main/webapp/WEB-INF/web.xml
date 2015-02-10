@@ -15,6 +15,11 @@
       </servlet>
 
       <servlet>
+            <servlet-name>ExecuteToCsvServlet</servlet-name>
+            <servlet-class>com.github.terma.gigaspacesqlconsole.ExecuteToCsvServlet</servlet-class>
+      </servlet>
+
+      <servlet>
             <servlet-name>CountsServlet</servlet-name>
             <servlet-class>com.github.terma.gigaspacesqlconsole.counts.CountsServlet</servlet-class>
       </servlet>
@@ -32,6 +37,11 @@
       <servlet-mapping>
             <servlet-name>ExecuteServlet</servlet-name>
             <url-pattern>/execute</url-pattern>
+      </servlet-mapping>
+
+      <servlet-mapping>
+            <servlet-name>ExecuteToCsvServlet</servlet-name>
+            <url-pattern>/execute-to-csv</url-pattern>
       </servlet-mapping>
 
       <servlet-mapping>
