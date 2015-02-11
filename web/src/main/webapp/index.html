@@ -39,13 +39,15 @@
     <input placeholder="GigaSpace URL" ng-model="context.selectedGigaspace.url" style="width: 100%;"
            class="mono-text connection"/>
 
-    <p></p>
-    <select class="mono-text connection" ng-model="request.gs">
-        <option ng-repeat="gs in config.user.gs" value="{{ gs.name }}"
-                ng-selected="context.selectedGigaspace.gs == gs.name">
-            {{ gs.name }}
-        </option>
-    </select>
+    <div ng-show="config.user.gs.length > 1">
+        <p></p>
+        <select class="mono-text connection" ng-model="request.gs">
+            <option ng-repeat="gs in config.user.gs" value="{{ gs.name }}"
+                    ng-selected="context.selectedGigaspace.gs == gs.name">
+                {{ gs.name }}
+            </option>
+        </select>
+    </div>
 
     <p></p>
     <input ng-model="context.selectedGigaspace.user" class="mono-text connection" placeholder="User"/>
