@@ -12,6 +12,8 @@ _All of them you don't find in GigaSpace Management Console_
 * Super view for types counts with filtering by name, non zero and date and count of last update
 * Supports multiqueries and comments when you have complex work with data
 * All settings store cross session, so you don't need to retype your queries again
+* Copy data between spaces
+* Export query result to CSV
 
 ## How install
 
