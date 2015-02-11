@@ -348,8 +348,8 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
             var sqlToExecute = sqlList[sqlList.length - 1];
 
             if (sqlList.length > 0) {
-                console.log("more than one sql last will be executed");
-                console.log(sqlToExecute);
+                $scope.context.selectedGigaspace.queryTab.selectedEditor.status =
+                    "Only last SQL will be exported to CSV " + sqlToExecute;
             }
 
             var request = {
@@ -390,7 +390,7 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
         console.log(content);
 
         var sqlList = filterCommentedAndEmpty(getLines(content));
-        executeQueries(sqlList);
+        if (sqlList.length > 0) executeQueries(sqlList);
 
         if (sqlList.length == 0) {
             console.log("nothing to execute");
