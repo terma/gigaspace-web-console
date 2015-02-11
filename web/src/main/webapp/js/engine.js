@@ -179,9 +179,9 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
                     },
 
                     copyTab: {
-                        targetUrl: this.gigaspaces[i].copyTab.targetUrl,
-                        targetUser: this.gigaspaces[i].copyTab.targetUser,
-                        content: this.gigaspaces[i].copyTab.content
+                        targetUrl: this.gigaspaces[i].copyTab ? this.gigaspaces[i].copyTab.targetUrl : undefined,
+                        targetUser: this.gigaspaces[i].copyTab ? this.gigaspaces[i].copyTab.targetUser : undefined,
+                        content: this.gigaspaces[i].copyTab ? this.gigaspaces[i].copyTab.content : undefined
                     },
 
                     queryTab: {
@@ -344,13 +344,20 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
     }
 
     $scope.executeToCsv = function () {
-        executeQueryToSmt(function (query) {
+        executeQueryToSmt(function (sqlList) {
+            var sqlToExecute = sqlList[sqlList.length - 1];
+
+            if (sqlList.length > 0) {
+                console.log("more than one sql last will be executed");
+                console.log(sqlToExecute);
+            }
+
             var request = {
                 url: $scope.context.selectedGigaspace.url,
                 user: $scope.context.selectedGigaspace.user,
                 password: $scope.context.selectedGigaspace.password,
                 gs: $scope.context.selectedGigaspace.gs,
-                sql: query.sql,
+                sql: sqlToExecute,
                 appVersion: $scope.config.internal.appVersion
             };
 
@@ -361,10 +368,17 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
     };
 
     $scope.executeQuery = function () {
-        executeQueryToSmt(executeOneQuery);
+        executeQueryToSmt(function (sqlList) {
+            for (var j = 0; j < sqlList.length; j++) {
+                var sql = sqlList[j];
+                console.log("start execute sql:");
+                console.log(sql);
+                executeOneQuery({sql: sql});
+            }
+        });
     };
 
-    function executeQueryToSmt(executeOneQuery) {
+    function executeQueryToSmt(executeQueries) {
         cancelDefers(executionCancellerList);
 
         $scope.context.selectedGigaspace.queryTab.selectedEditor.status = undefined;
@@ -376,12 +390,7 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
         console.log(content);
 
         var sqlList = filterCommentedAndEmpty(getLines(content));
-        for (var j = 0; j < sqlList.length; j++) {
-            var sql = sqlList[j];
-            console.log("start execute sql:");
-            console.log(sql);
-            executeOneQuery({sql: sql});
-        }
+        executeQueries(sqlList);
 
         if (sqlList.length == 0) {
             console.log("nothing to execute");
@@ -656,6 +665,8 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
     };
 
     $scope.selectTargetGigaspace = function (gigaspace) {
+        console.log("select target g");
+        console.log($scope.context.selectedGigaspace.copyTab);
         $scope.context.selectedGigaspace.copyTab.targetUrl = gigaspace.url;
         $scope.context.selectedGigaspace.copyTab.targetUser = gigaspace.user;
         $scope.context.selectedGigaspace.copyTab.targetPassword = gigaspace.password;
