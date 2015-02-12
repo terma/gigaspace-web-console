@@ -760,7 +760,25 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
     };
 
     $scope.loadConfig();
-}])
-;
+}]);
 
+/**
+ * We have that function outside AngularJS as no reason to use true data model for
+ * that UI staff as people will use that really not often
+ * @param valueDom
+ */
+function toggleQueryValueOptions(valueDom) {
+    var valueDomQ = $(valueDom);
+    var html = valueDomQ.html();
+
+    var original = valueDomQ.data("original");
+    if (original) {
+        valueDomQ.data("original", null);
+        valueDomQ.html(original);
+    } else if (/^\d{6,}$/.test(html)) {
+        console.log("to timestamp");
+        valueDomQ.data("original", html);
+        valueDomQ.html("" + new Date(parseInt(html)).toUTCString());
+    }
+}
 

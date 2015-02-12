@@ -231,7 +231,7 @@
                     ng-click="query.data.selectedRecord = record"
                     ng-class="query.data.selectedRecord == record ? 'selected' : ''">
                     <td ng-repeat="value in record track by $index" valign="top">
-                        <pre style="margin: 0; padding: 0;"
+                        <pre style="margin: 0; padding: 0;" ondblclick="toggleQueryValueOptions(this)"
                              class="mono-text">{{ value | limitTo: query.data.textLengthLimit }}</pre>
                         <span ng-if="value.length > 50" ng-show="!query.data.showAllText">...</span>
                     </td>
