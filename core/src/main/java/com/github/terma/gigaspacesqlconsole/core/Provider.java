@@ -4,7 +4,7 @@ public interface Provider {
 
     CountsResponse counts(CountsRequest request);
 
-    ExecuteResponse query(ExecuteRequest request) throws Exception;
+    void query(ExecuteRequest request, ExecuteResponseStream responseStream) throws Exception;
 
     CopyResponse copy(CopyRequest request) throws Exception;
 

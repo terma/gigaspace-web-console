@@ -1,12 +1,15 @@
 package com.github.terma.gigaspacesqlconsole;
 
 import com.github.terma.gigaspacesqlconsole.core.ExecuteRequest;
+import com.github.terma.gigaspacesqlconsole.core.ObjectExecuteResponseStream;
 
 public class ExecuteServlet extends JsonWithCorrectAppVersionServlet<ExecuteRequest> {
 
     @Override
     protected Object doJsonWithCorrectAppVersion(ExecuteRequest request) throws Exception {
-        return CachedProviderResolver.getProvider(request.gs).query(request);
+        final ObjectExecuteResponseStream responseStream = new ObjectExecuteResponseStream();
+        CachedProviderResolver.getProvider(request.gs).query(request, responseStream);
+        return responseStream;
     }
 
     @Override

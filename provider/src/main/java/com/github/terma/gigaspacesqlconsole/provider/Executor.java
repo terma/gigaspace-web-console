@@ -4,6 +4,7 @@ import com.gigaspaces.client.ChangeResult;
 import com.gigaspaces.client.ChangeSet;
 import com.github.terma.gigaspacesqlconsole.core.ExecuteRequest;
 import com.github.terma.gigaspacesqlconsole.core.ExecuteResponse;
+import com.github.terma.gigaspacesqlconsole.core.ExecuteResponseStream;
 import com.github.terma.gigaspacesqlconsole.core.config.Config;
 import com.j_spaces.core.client.SQLQuery;
 import com.j_spaces.jdbc.driver.GConnection;
@@ -11,6 +12,7 @@ import org.openspaces.core.GigaSpace;
 import org.openspaces.core.GigaSpaceConfigurer;
 import org.openspaces.core.space.UrlSpaceConfigurer;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -22,6 +24,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
+import static java.util.Arrays.*;
 
 public class Executor {
 
@@ -52,10 +56,10 @@ public class Executor {
         }
     }
 
-    public static ExecuteResponse query(ExecuteRequest request) throws Exception {
+    public static void query(final ExecuteRequest request, final ExecuteResponseStream responseStream) throws Exception {
         final GigaSpaceUpdateSql updateSql = GigaSpaceUpdateSqlParser.parse(request.sql);
-        if (updateSql != null) return handleUpdate(request, updateSql);
-        else return handleOther(request);
+        if (updateSql != null) handleUpdate(request, updateSql, responseStream);
+        else handleOther(request, responseStream);
     }
 
     public static Connection getConnection(final ExecuteRequest request) throws SQLException, ClassNotFoundException {
@@ -78,7 +82,7 @@ public class Executor {
         return new GigaSpaceConfigurer(urlSpaceConfigurer.create()).create();
     }
 
-    private static ExecuteResponse handleUpdate(ExecuteRequest request, GigaSpaceUpdateSql updateSql) {
+    private static ExecuteResponse handleUpdate(ExecuteRequest request, GigaSpaceUpdateSql updateSql, ExecuteResponseStream responseStream) {
         SQLQuery query = new SQLQuery<>(updateSql.typeName, updateSql.conditions);
         ChangeSet changeSet = new ChangeSet();
 
@@ -88,15 +92,16 @@ public class Executor {
 
         ChangeResult changeResult = gigaSpaceConnection(request).change(query, changeSet);
         ExecuteResponse executeResponse = new ExecuteResponse();
-        executeResponse.columns = Arrays.asList("affected_rows");
-        executeResponse.data = Arrays.asList(Arrays.asList(Integer.toString(changeResult.getNumberOfChangedEntries())));
+        executeResponse.columns = asList("affected_rows");
+        executeResponse.data = asList(asList(Integer.toString(changeResult.getNumberOfChangedEntries())));
         return executeResponse;
     }
 
-    private static ExecuteResponse handleOther(ExecuteRequest request) throws Exception {
+    private static void handleOther(
+            final ExecuteRequest request, final ExecuteResponseStream responseStream) throws Exception {
         Connection connection = getConnection(request);
         try {
-            return safeHandleOther(request, connection);
+            safeHandleOther(request, connection, responseStream);
         } finally {
             try {
                 connection.close();
@@ -106,77 +111,71 @@ public class Executor {
         }
     }
 
-    private static ExecuteResponse safeHandleOther(ExecuteRequest request, Connection connection) throws SQLException {
-        Statement statement = connection.createStatement();
-        try {
-            return safeHandleStatement(request, statement);
-        } finally {
-            statement.close();
+    private static void safeHandleOther(
+            final ExecuteRequest request, final Connection connection,
+            final ExecuteResponseStream responseStream) throws SQLException, IOException {
+        try (Statement statement = connection.createStatement()) {
+            safeHandleStatement(request, statement, responseStream);
         }
     }
 
-    private static ExecuteResponse safeHandleStatement(ExecuteRequest request, Statement statement) throws SQLException {
+    private static void safeHandleStatement(
+            final ExecuteRequest request, final Statement statement,
+            final ExecuteResponseStream responseStream) throws SQLException, IOException {
         if (statement.execute(request.sql)) {
-            return getResultSet(statement);
+            getResultSet(statement, responseStream);
         } else {
-            return updateOrDeleteResult(statement);
+            updateOrDeleteResult(statement, responseStream);
         }
     }
 
-    private static ExecuteResponse updateOrDeleteResult(Statement statement) throws SQLException {
-        ExecuteResponse executeResponse = new ExecuteResponse();
-        executeResponse.columns = Arrays.asList("affected_rows");
-        executeResponse.data = Arrays.asList(Arrays.asList(Integer.toString(statement.getUpdateCount())));
-        return executeResponse;
+    private static void updateOrDeleteResult(
+            final Statement statement, final ExecuteResponseStream responseStream) throws SQLException, IOException {
+        responseStream.writeHeader(asList("affected_rows"));
+        responseStream.writeRow(asList(Integer.toString(statement.getUpdateCount())));
+        responseStream.close();
     }
 
-    private static ExecuteResponse getResultSet(Statement statement) throws SQLException {
-        ResultSet resultSet = statement.getResultSet();
-        try {
-            return safeGetResultSet(resultSet);
-        } finally {
-            resultSet.close();
+    private static void getResultSet(
+            final Statement statement, final ExecuteResponseStream responseStream) throws SQLException, IOException {
+        try (ResultSet resultSet = statement.getResultSet()) {
+            safeGetResultSet(resultSet, responseStream);
         }
     }
 
-    private static ExecuteResponse safeGetResultSet(ResultSet resultSet) throws SQLException {
+    private static void safeGetResultSet(
+            final ResultSet resultSet, final ExecuteResponseStream responseStream) throws SQLException, IOException {
         List<String> columns = new ArrayList<>();
         for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
             columns.add(resultSet.getMetaData().getColumnName(i));
         }
+        responseStream.writeHeader(columns);
 
-        ExecuteResponse executeResponse = new ExecuteResponse();
-        executeResponse.columns = columns;
-
-        List<List<String>> data = new ArrayList<>();
         while (resultSet.next()) {
             List<String> row = new ArrayList<>();
             for (final String column : columns) {
-                final Object rawValue = resultSet.getObject(column);
-                String value = null;
-
-                for (final Method convertMethod : converterMethods) {
-                    try {
-                        value = (String) convertMethod.invoke(null, rawValue);
-                    } catch (IllegalAccessException e) {
-                        throw new IllegalArgumentException("Can't convert!", e);
-                    } catch (InvocationTargetException e) {
-                        throw new IllegalArgumentException("Can't convert!", e);
-                    }
-
-                    if (value != null) break;
-                }
-
-                if (value == null) value = resultSet.getString(column);
+                String value = getFormattedValue(resultSet, column);
 
                 row.add(value);
             }
-            data.add(row);
+            responseStream.writeRow(row);
         }
 
-        executeResponse.data = data;
-        return executeResponse;
+        responseStream.close();
     }
 
+    private static String getFormattedValue(final ResultSet resultSet, final String column) throws SQLException {
+        final Object rawValue = resultSet.getObject(column);
+
+        for (final Method convertMethod : converterMethods) {
+            try {
+                return (String) convertMethod.invoke(null, rawValue);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                throw new IllegalArgumentException("Can't convert!", e);
+            }
+        }
+
+        return resultSet.getString(column);
+    }
 
 }

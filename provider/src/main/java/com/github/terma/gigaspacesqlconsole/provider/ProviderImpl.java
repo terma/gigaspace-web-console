@@ -12,8 +12,8 @@ public class ProviderImpl implements Provider {
     }
 
     @Override
-    public ExecuteResponse query(ExecuteRequest request) throws Exception {
-        return Executor.query(request);
+    public void query(ExecuteRequest request, ExecuteResponseStream responseStream) throws Exception {
+        Executor.query(request, responseStream);
     }
 
     @Override

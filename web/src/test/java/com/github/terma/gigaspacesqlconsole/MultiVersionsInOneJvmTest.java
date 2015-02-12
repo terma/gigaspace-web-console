@@ -2,6 +2,7 @@ package com.github.terma.gigaspacesqlconsole;
 
 import com.github.terma.gigaspacesqlconsole.core.CountsRequest;
 import com.github.terma.gigaspacesqlconsole.core.ExecuteRequest;
+import com.github.terma.gigaspacesqlconsole.core.ObjectExecuteResponseStream;
 import org.junit.Test;
 
 /**
@@ -29,11 +30,11 @@ public class MultiVersionsInOneJvmTest {
         countsRequest2.url = request2.url + "?";
 
         for (int i = 0; i < 15; i++) {
-            CachedProviderResolver.getProvider("GS-9.5").query(request1);
+            CachedProviderResolver.getProvider("GS-9.5").query(request1, new ObjectExecuteResponseStream());
             Thread.sleep(NATURAL_DELAY);
             CachedProviderResolver.getProvider("GS-9.5").counts(countsRequest1);
             Thread.sleep(NATURAL_DELAY);
-            CachedProviderResolver.getProvider("GS-10").query(request2);
+            CachedProviderResolver.getProvider("GS-10").query(request2, new ObjectExecuteResponseStream());
             Thread.sleep(NATURAL_DELAY);
             CachedProviderResolver.getProvider("GS-10").counts(countsRequest2);
             Thread.sleep(NATURAL_DELAY);

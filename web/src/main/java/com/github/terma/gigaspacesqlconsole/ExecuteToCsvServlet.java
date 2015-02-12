@@ -1,7 +1,7 @@
 package com.github.terma.gigaspacesqlconsole;
 
 import com.github.terma.gigaspacesqlconsole.core.ExecuteRequest;
-import com.github.terma.gigaspacesqlconsole.core.ExecuteResponse;
+import com.github.terma.gigaspacesqlconsole.core.ExecuteResponseStream;
 import com.google.gson.Gson;
 
 import javax.servlet.ServletException;
@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 
 public class ExecuteToCsvServlet extends HttpServlet {
 
@@ -29,14 +28,10 @@ public class ExecuteToCsvServlet extends HttpServlet {
         response.addHeader("Content-Disposition", "attachment; filename=\"" + StringUtils.safeCsvFileName(req.sql) + "\"");
 
         final PrintWriter writer = response.getWriter();
+        final ExecuteResponseStream responseStream = new CsvExecuteResponseStream(writer);
+
         try {
-            ExecuteResponse res = CachedProviderResolver.getProvider(req.gs).query(req);
-
-            writer.append(StringUtils.toCsvRow(res.columns)).append('\n');
-            for (final List<String> row : res.data) {
-                writer.append(StringUtils.toCsvRow(row)).append('\n');
-            }
-
+            CachedProviderResolver.getProvider(req.gs).query(req, responseStream);
         } catch (final Throwable exception) {
 //            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             writer.append(exception.getClass().getName()).append('\n');
