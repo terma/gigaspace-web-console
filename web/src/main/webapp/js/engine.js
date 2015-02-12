@@ -664,6 +664,18 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
         }
     };
 
+    $scope.queryColumnIsTimestamp = function (data, columnIndex) {
+        var firstValue = data.data[0][columnIndex];
+        return /^\d{9,}$/.test(firstValue);
+    };
+
+    $scope.queryColumnToTimestamp = function (data, columnIndex) {
+        for (var i = 0; i < data.data.length; i++) {
+            var value = data.data[i][columnIndex];
+            data.data[i][columnIndex] = value + " > " + new Date(parseInt(value)).toUTCString();
+        }
+    };
+
     $scope.selectTargetGigaspace = function (gigaspace) {
         console.log("select target g");
         console.log($scope.context.selectedGigaspace.copyTab);
@@ -761,24 +773,4 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
 
     $scope.loadConfig();
 }]);
-
-/**
- * We have that function outside AngularJS as no reason to use true data model for
- * that UI staff as people will use that really not often
- * @param valueDom
- */
-function toggleQueryValueOptions(valueDom) {
-    var valueDomQ = $(valueDom);
-    var html = valueDomQ.html();
-
-    var original = valueDomQ.data("original");
-    if (original) {
-        valueDomQ.data("original", null);
-        valueDomQ.html(original);
-    } else if (/^\d{6,}$/.test(html)) {
-        console.log("to timestamp");
-        valueDomQ.data("original", html);
-        valueDomQ.html("" + new Date(parseInt(html)).toUTCString());
-    }
-}
 
