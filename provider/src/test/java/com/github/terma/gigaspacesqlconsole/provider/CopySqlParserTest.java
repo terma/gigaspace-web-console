@@ -32,6 +32,24 @@ public class CopySqlParserTest {
     }
 
     @Test
+    public void shouldAcceptCopyWithDotInTypeName() throws IOException {
+        final CopySql copySql = CopySqlParser.parse("copy com.ObjectA");
+
+        assertEquals("com.ObjectA", copySql.typeName);
+        assertTrue(copySql.reset.isEmpty());
+        assertEquals("", copySql.where);
+    }
+
+    @Test
+    public void shouldAcceptCopyWithUndescoreInTypeName() throws IOException {
+        final CopySql copySql = CopySqlParser.parse("copy com_ObjectA");
+
+        assertEquals("com_ObjectA", copySql.typeName);
+        assertTrue(copySql.reset.isEmpty());
+        assertEquals("", copySql.where);
+    }
+
+    @Test
     public void shouldAcceptCopyWithWhere() throws IOException {
         final CopySql copySql = CopySqlParser.parse("copy ObjectA where fieldName = 'ffwer' and fieldN=true");
 

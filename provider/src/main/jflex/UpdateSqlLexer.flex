@@ -71,7 +71,7 @@ LineTerminator = \r|\n|\r\n
 WhiteSpace = {LineTerminator} | [ \t\f]
 
 updateKeyword = update
-typeName = [A-Za-z_][A-Za-z_0-9]*
+typeName = [A-Za-z_][.A-Za-z_0-9]*
 setKeyword = set
 
 fieldName = [A-Za-z_][A-Za-z_0-9]*

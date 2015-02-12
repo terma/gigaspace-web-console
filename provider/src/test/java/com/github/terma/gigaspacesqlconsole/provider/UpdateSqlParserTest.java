@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-public class GigaSpaceUpdateSqlParserTest {
+public class UpdateSqlParserTest {
 
     @Test
     public void parseUpdateWithoutConditions() throws IOException {
@@ -14,6 +14,22 @@ public class GigaSpaceUpdateSqlParserTest {
         Assert.assertEquals("ControlData", sql.typeName);
         Assert.assertEquals(1, sql.setFields.size());
         Assert.assertEquals("1", sql.setFields.get("A"));
+    }
+
+    @Test
+    public void parseUpdateWithDotInTypeName() throws IOException {
+        GigaSpaceUpdateSql sql = GigaSpaceUpdateSqlParser.parse("update com.ControlData set A = '1'");
+
+        Assert.assertEquals("com.ControlData", sql.typeName);
+        Assert.assertEquals(1, sql.setFields.size());
+    }
+
+    @Test
+    public void parseUpdateWithUndescoreInTypeName() throws IOException {
+        GigaSpaceUpdateSql sql = GigaSpaceUpdateSqlParser.parse("update com_ControlData set A = '1'");
+
+        Assert.assertEquals("com_ControlData", sql.typeName);
+        Assert.assertEquals(1, sql.setFields.size());
     }
 
     @Test
