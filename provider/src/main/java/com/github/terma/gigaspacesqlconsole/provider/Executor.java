@@ -3,7 +3,6 @@ package com.github.terma.gigaspacesqlconsole.provider;
 import com.gigaspaces.client.ChangeResult;
 import com.gigaspaces.client.ChangeSet;
 import com.github.terma.gigaspacesqlconsole.core.ExecuteRequest;
-import com.github.terma.gigaspacesqlconsole.core.ExecuteResponse;
 import com.github.terma.gigaspacesqlconsole.core.ExecuteResponseStream;
 import com.github.terma.gigaspacesqlconsole.core.config.Config;
 import com.j_spaces.core.client.SQLQuery;
@@ -21,11 +20,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import static java.util.Arrays.*;
+import static java.util.Arrays.asList;
 
 public class Executor {
 
@@ -82,7 +80,9 @@ public class Executor {
         return new GigaSpaceConfigurer(urlSpaceConfigurer.create()).create();
     }
 
-    private static ExecuteResponse handleUpdate(ExecuteRequest request, GigaSpaceUpdateSql updateSql, ExecuteResponseStream responseStream) {
+    private static void handleUpdate(
+            final ExecuteRequest request, GigaSpaceUpdateSql updateSql,
+            final ExecuteResponseStream responseStream) throws IOException {
         SQLQuery query = new SQLQuery<>(updateSql.typeName, updateSql.conditions);
         ChangeSet changeSet = new ChangeSet();
 
@@ -91,10 +91,9 @@ public class Executor {
         }
 
         ChangeResult changeResult = gigaSpaceConnection(request).change(query, changeSet);
-        ExecuteResponse executeResponse = new ExecuteResponse();
-        executeResponse.columns = asList("affected_rows");
-        executeResponse.data = asList(asList(Integer.toString(changeResult.getNumberOfChangedEntries())));
-        return executeResponse;
+        responseStream.writeHeader(asList("affected_rows"));
+        responseStream.writeRow(asList(Integer.toString(changeResult.getNumberOfChangedEntries())));
+        responseStream.close();
     }
 
     private static void handleOther(
@@ -169,7 +168,8 @@ public class Executor {
 
         for (final Method convertMethod : converterMethods) {
             try {
-                return (String) convertMethod.invoke(null, rawValue);
+                final String value = (String) convertMethod.invoke(null, rawValue);
+                if (value != null) return value;
             } catch (IllegalAccessException | InvocationTargetException e) {
                 throw new IllegalArgumentException("Can't convert!", e);
             }
