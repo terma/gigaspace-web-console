@@ -33,6 +33,14 @@ public class UpdateSqlParserTest {
     }
 
     @Test
+    public void parseUpdateWithDashInTypeName() throws IOException {
+        GigaSpaceUpdateSql sql = GigaSpaceUpdateSqlParser.parse("update com-ControlData set A = '1'");
+
+        Assert.assertEquals("com-ControlData", sql.typeName);
+        Assert.assertEquals(1, sql.setFields.size());
+    }
+
+    @Test
     public void parseUpdateWithDashInFieldName() throws IOException {
         GigaSpaceUpdateSql sql = GigaSpaceUpdateSqlParser.parse("update ControlData set A-B = '1'");
 
@@ -44,6 +52,13 @@ public class UpdateSqlParserTest {
         GigaSpaceUpdateSql sql = GigaSpaceUpdateSqlParser.parse("update ControlData set A_B = '1'");
 
         Assert.assertEquals("1", sql.setFields.get("A_B"));
+    }
+
+    @Test
+    public void parseUpdateWithDotInFieldName() throws IOException {
+        GigaSpaceUpdateSql sql = GigaSpaceUpdateSqlParser.parse("update ControlData set A.B = '1'");
+
+        Assert.assertEquals("1", sql.setFields.get("A.B"));
     }
 
     @Test

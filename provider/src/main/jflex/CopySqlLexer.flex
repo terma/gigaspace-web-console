@@ -75,10 +75,10 @@ LineTerminator = \r|\n|\r\n
 WhiteSpace = {LineTerminator} | [ \t\f]
 
 copyKeyword = copy
-typeName = [A-Za-z_][.A-Za-z_0-9]*
+typeName = [A-Za-z_][-.A-Za-z_0-9]*
 
 resetKeyword = reset
-fieldName = [A-Za-z_][-A-Za-z_0-9]*
+fieldName = [A-Za-z_][-.A-Za-z_0-9]*
 nextResetField = ,
 
 whereKeyword = where

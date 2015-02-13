@@ -50,6 +50,15 @@ public class CopySqlParserTest {
     }
 
     @Test
+    public void shouldAcceptCopyWithDashInTypeName() throws IOException {
+        final CopySql copySql = CopySqlParser.parse("copy com-ObjectA");
+
+        assertEquals("com-ObjectA", copySql.typeName);
+        assertTrue(copySql.reset.isEmpty());
+        assertEquals("", copySql.where);
+    }
+
+    @Test
     public void shouldAcceptCopyWithWhere() throws IOException {
         final CopySql copySql = CopySqlParser.parse("copy ObjectA where fieldName = 'ffwer' and fieldN=true");
 
@@ -72,6 +81,13 @@ public class CopySqlParserTest {
         final CopySql copySql = CopySqlParser.parse("copy ObjectA reset field-B");
 
         assertEquals(new HashSet<>(Arrays.asList("field-B")), copySql.reset);
+    }
+
+    @Test
+    public void shouldAcceptCopyWithDotInResetField() throws IOException {
+        final CopySql copySql = CopySqlParser.parse("copy ObjectA reset field.B");
+
+        assertEquals(new HashSet<>(Arrays.asList("field.B")), copySql.reset);
     }
 
     @Test
