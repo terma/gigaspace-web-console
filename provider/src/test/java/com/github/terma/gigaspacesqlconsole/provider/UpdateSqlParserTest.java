@@ -33,6 +33,20 @@ public class UpdateSqlParserTest {
     }
 
     @Test
+    public void parseUpdateWithDashInFieldName() throws IOException {
+        GigaSpaceUpdateSql sql = GigaSpaceUpdateSqlParser.parse("update ControlData set A-B = '1'");
+
+        Assert.assertEquals("1", sql.setFields.get("A-B"));
+    }
+
+    @Test
+    public void parseUpdateWithUndescoreInFieldName() throws IOException {
+        GigaSpaceUpdateSql sql = GigaSpaceUpdateSqlParser.parse("update ControlData set A_B = '1'");
+
+        Assert.assertEquals("1", sql.setFields.get("A_B"));
+    }
+
+    @Test
     public void parseAcceptRedundantSpaces() throws IOException {
         GigaSpaceUpdateSql sql = GigaSpaceUpdateSqlParser.parse("   update    ControlData    set   A    = '1'");
 

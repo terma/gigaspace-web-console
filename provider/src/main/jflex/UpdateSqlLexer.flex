@@ -74,7 +74,7 @@ updateKeyword = update
 typeName = [A-Za-z_][.A-Za-z_0-9]*
 setKeyword = set
 
-fieldName = [A-Za-z_][A-Za-z_0-9]*
+fieldName = [A-Za-z_][-A-Za-z_0-9]*
 assinmentOperation = =
 nextSetField = ,
 fieldValueString = '[^\']*'

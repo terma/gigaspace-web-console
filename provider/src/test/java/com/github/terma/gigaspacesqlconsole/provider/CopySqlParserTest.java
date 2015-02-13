@@ -68,6 +68,20 @@ public class CopySqlParserTest {
     }
 
     @Test
+    public void shouldAcceptCopyWithDashInResetField() throws IOException {
+        final CopySql copySql = CopySqlParser.parse("copy ObjectA reset field-B");
+
+        assertEquals(new HashSet<>(Arrays.asList("field-B")), copySql.reset);
+    }
+
+    @Test
+    public void shouldAcceptCopyWithUndescoreInResetField() throws IOException {
+        final CopySql copySql = CopySqlParser.parse("copy ObjectA reset field_B");
+
+        assertEquals(new HashSet<>(Arrays.asList("field_B")), copySql.reset);
+    }
+
+    @Test
     public void shouldAcceptCopyWithManyReset() throws IOException {
         final CopySql copySql = CopySqlParser.parse("copy ObjectA reset fieldB, fieldA ,   fieldC");
 
