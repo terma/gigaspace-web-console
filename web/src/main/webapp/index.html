@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="App" ng-controller="GigaSpaceBrowserController">
 <head>
     <title>GigaSpace SQL Console {{ config.internal.appVersion }}</title>
     <script type="text/javascript" src="js/angular.min.js"></script>
@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="css/codemirror.css">
     <link rel="stylesheet" href="js/codemirror/addon/hint/show-hint.css">
 </head>
-<body ng-app="App" ng-controller="GigaSpaceBrowserController">
+<body>
 
 <div style="overflow: auto; padding: 1em 1em 0.5em;">
     <div ng-repeat="link in config.user.links" style="float: left;">
