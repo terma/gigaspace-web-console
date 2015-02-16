@@ -69,4 +69,12 @@ When you start your console first time after configuration you will see:
 
 ![Start](https://raw.githubusercontent.com/terma/gigaspace-sql-console/master/img/start.png)
 
+### Execute SQL queries
 
+### Registered types and counts
+
+![Types](https://raw.githubusercontent.com/terma/gigaspace-sql-console/master/img/types.png)
+
+### Copy data between spaces
+
+![Copy](https://raw.githubusercontent.com/terma/gigaspace-sql-console/master/img/copy.png)
