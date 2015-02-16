@@ -55,7 +55,7 @@ public class Executor {
     }
 
     public static void query(final ExecuteRequest request, final ExecuteResponseStream responseStream) throws Exception {
-        final GigaSpaceUpdateSql updateSql = GigaSpaceUpdateSqlParser.parse(request.sql);
+        final UpdateSql updateSql = UpdateSqlParser.parse(request.sql);
         if (updateSql != null) handleUpdate(request, updateSql, responseStream);
         else handleOther(request, responseStream);
     }
@@ -81,7 +81,7 @@ public class Executor {
     }
 
     private static void handleUpdate(
-            final ExecuteRequest request, GigaSpaceUpdateSql updateSql,
+            final ExecuteRequest request, UpdateSql updateSql,
             final ExecuteResponseStream responseStream) throws IOException {
         SQLQuery query = new SQLQuery<>(updateSql.typeName, updateSql.conditions);
         ChangeSet changeSet = new ChangeSet();

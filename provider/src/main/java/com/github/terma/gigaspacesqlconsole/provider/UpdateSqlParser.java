@@ -5,17 +5,17 @@ import java_cup.runtime.Symbol;
 import java.io.IOException;
 import java.io.StringReader;
 
-public class GigaSpaceUpdateSqlParser {
+class UpdateSqlParser {
 
-    public static GigaSpaceUpdateSql parse(String data) throws IOException {
-        final Lexer lexer = new Lexer(new StringReader(data));
+    public static UpdateSql parse(String data) throws IOException {
+        final UpdateSqlLexer lexer = new UpdateSqlLexer(new StringReader(data));
         while (true) {
 
             try {
                 Symbol token = lexer.next_token();
 
                 if (token.left == token.right || token.sym == -1) {
-                    final GigaSpaceUpdateSql sql = lexer.getSql();
+                    final UpdateSql sql = lexer.getSql();
 
                     if (sql.typeName.isEmpty()) {
                         throw new IOException("Expected SQL: update <typeName>, but typeName not specified!");

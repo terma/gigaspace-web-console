@@ -17,7 +17,7 @@ import java.io.IOException;
    The name of the class JFlex will create will be Lexer.
    Will write the code to the file Lexer.java. 
 */
-%class Lexer
+%class UpdateSqlLexer
 
 /*
   The current line number can be accessed with the variable yyline
@@ -51,7 +51,7 @@ import java.io.IOException;
 
     private String conditions = "";
 
-    public GigaSpaceUpdateSql getSql() { return new GigaSpaceUpdateSql(typeName, setFields, conditions); }
+    public UpdateSql getSql() { return new UpdateSql(typeName, setFields, conditions); }
 
 %}
    

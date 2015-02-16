@@ -1,19 +1,16 @@
 package com.github.terma.gigaspacesqlconsole.provider;
-
-/*
-Main construction is:
-generate count of spaceDocumentType
-generate count of spaceDocumentType with fieldName = fieldValue
-generate count of spaceDocumentType with fieldName = fieldValue and fieldName1 = fieldValue1
-*/
-
+   
 /* --------------------------Usercode Section------------------------ */
 
+/*
+generate 12 of Customer with name = 'Misha', id = random
+generate count of typeName with fieldName = fieldValue, fieldName1 = fieldValue2
+*/
 
 import java_cup.sym;
 //import java_cup.runtime.*;
-import java.util.Set;
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
 import java.io.IOException;
 
 %%
@@ -24,7 +21,7 @@ import java.io.IOException;
    The name of the class JFlex will create will be Lexer.
    Will write the code to the file Lexer.java. 
 */
-%class CopySqlLexer
+%class GenerateSqlLexer
 
 /*
   The current line number can be accessed with the variable yyline
@@ -39,31 +36,24 @@ import java.io.IOException;
 */
 %cup
    
-/*
-  Declarations
-   
-  Code between %{ and %}, both of which must be at the beginning of a
-  line, will be copied letter to letter into the lexer class source.
-  Here you declare member variables and functions that are used inside
-  scanner actions.  
-*/
+/*Declarations */
 %{
 
-    private boolean copyStatement = false;
+
+    private String tempFieldName;
+
+    private boolean generateStatement = false;
 
     private String typeName = "";
+    private int count = 1;
+    private Map<String, Object> fields = new HashMap<String, Object>();
 
-    public CopySql getSql() { return new CopySql(typeName, reset, where); }
+    public GenerateSql getSql() { return new GenerateSql(typeName, count, fields); }
 
 %}
    
 
-/*
-  Macro Declarations
-  
-  These declarations are regular expressions that will be used latter
-  in the Lexical Rules Section.  
-*/
+/*Macro Declarations */
    
 /* A line terminator is a \r (carriage return), \n (line feed), or
    \r\n. */
@@ -72,74 +62,84 @@ LineTerminator = \r|\n|\r\n
 /* White space is a line terminator, space, tab, or line feed. */
 WhiteSpace = {LineTerminator} | [ \t\f]
 
-copyKeyword = copy
+generateKeyword = generate
+count = [0-9]+
+
+ofKeyword = of
 typeName = [A-Za-z_][-.A-Za-z_0-9]*
 
-resetKeyword = reset
+withKeyword = with
 fieldName = [A-Za-z_][-.A-Za-z_0-9]*
-nextResetField = ,
+assinmentOperation = =
+nextField = ,
+fieldValueString = '[^\']*'
+fieldValueBoolean = true | false | TRUE | FALSE
+fieldValueNumber = -?[0-9]+
 
-whereKeyword = where
-where = [^]+
-
+%state COUNT
+%state OF
 %state TYPE_NAME
-
-%state COPY_KEYWORD
-
-%state RESET_KEYWORD
-%state RESET_FIELD
-%state AFTER_RESET_FIELD
-
-%state WHERE
+%state WITH_KEYWORD
+%state FIELD_NAME
+%state FIELD_ASSIGNMENT
+%state FIELD_VALUE_START
+%state FIELD_VALUE
+%state FIELD_VALUE_END
+%state FIELD_MORE
 
 %%
 /* ------------------------Lexical Rules Section---------------------- */
-   
-/*
-   This section contains regular expressions and actions, i.e. Java
-   code, that will be executed when the scanner matches the associated
-   regular expression. */
-   
-   /* YYINITIAL is the state at which the lexer begins scanning.  So
-   these regular expressions will only be matched if the scanner is in
-   the start state YYINITIAL. */
-   
+
 <YYINITIAL> {
-    {copyKeyword} { copyStatement = true; yybegin(TYPE_NAME); }
+    {generateKeyword} { generateStatement = true; yybegin(COUNT); }
+    {WhiteSpace} { /* just skip what was found, do nothing */ }
+}
+
+<COUNT> {
+    {count} { count = Integer.parseInt(yytext()); yybegin(OF); }
+    {WhiteSpace} { /* just skip what was found, do nothing */ }
+}
+
+<OF> {
+    {ofKeyword} { yybegin(TYPE_NAME); }
     {WhiteSpace} { /* just skip what was found, do nothing */ }
 }
 
 <TYPE_NAME> {
-    {typeName} { typeName = yytext(); yybegin(RESET_KEYWORD); }
+    {typeName} { typeName = yytext(); yybegin(WITH_KEYWORD); }
     {WhiteSpace} { /* just skip what was found, do nothing */ }
 }
 
-<RESET_KEYWORD> {
-    {resetKeyword} { yybegin(RESET_FIELD); }
-    {whereKeyword} { yybegin(WHERE); }
+<WITH_KEYWORD> {
+    {withKeyword} { yybegin(FIELD_NAME); }
     {WhiteSpace} { /* just skip what was found, do nothing */ }
 }
 
-<RESET_FIELD> {
-    {fieldName} { reset.add(yytext()); yybegin(AFTER_RESET_FIELD); }
-    {nextResetField} { yybegin(RESET_FIELD); }
+<FIELD_NAME> {
+    {fieldName} { tempFieldName = yytext(); yybegin(FIELD_ASSIGNMENT); }
     {WhiteSpace} { /* just skip what was found, do nothing */ }
 }
 
-<AFTER_RESET_FIELD> {
-    {nextResetField} { yybegin(RESET_FIELD); }
-    {whereKeyword} { yybegin(WHERE); }
-    {WhiteSpace} { /* do nothing */ }
+<FIELD_ASSIGNMENT> {
+    {assinmentOperation} { yybegin(FIELD_VALUE); }
+    {WhiteSpace} { /* just skip what was found, do nothing */ }
 }
 
-<WHERE> {
-    {where} { where = yytext(); }
+<FIELD_VALUE> {
+    {fieldValueBoolean} { fields.put(tempFieldName, Boolean.parseBoolean(yytext().toLowerCase())); yybegin(FIELD_MORE); }
+    {fieldValueNumber} { fields.put(tempFieldName, Long.parseLong(yytext())); yybegin(FIELD_MORE); }
+    {fieldValueString} { fields.put(tempFieldName, yytext().substring(1, yytext().length() - 1)); yybegin(FIELD_MORE); }
+    {WhiteSpace} { /* just skip what was found, do nothing */ }
 }
 
+<FIELD_MORE> {
+    {nextField} { yybegin(FIELD_NAME); }
+    {WhiteSpace} { /* just skip what was found, do nothing */ }
+}
 
 /* No token was found for the input so through an error.  Print out an
    Illegal character message with the illegal character that was found. */
 [^] {
-    if (copyStatement) throw new IOException("Illegal character <"+yytext()+">");
+    if (generateStatement) throw new IOException("Illegal character <"+yytext()+">");
     else throw new UnsupportedOperationException();
 }

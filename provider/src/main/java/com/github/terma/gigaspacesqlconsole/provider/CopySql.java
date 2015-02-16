@@ -2,7 +2,7 @@ package com.github.terma.gigaspacesqlconsole.provider;
 
 import java.util.Set;
 
-public class CopySql {
+class CopySql {
 
     public final String typeName;
     public final Set<String> reset;

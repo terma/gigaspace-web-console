@@ -5,7 +5,7 @@ import java_cup.runtime.Symbol;
 import java.io.IOException;
 import java.io.StringReader;
 
-public class CopySqlParser {
+class CopySqlParser {
 
     public static CopySql parse(String sql) throws IOException {
         final CopySqlLexer lexer = new CopySqlLexer(new StringReader(sql));
