@@ -2,7 +2,7 @@ package com.github.terma.gigaspacesqlconsole.provider;
 
 import java.util.Map;
 
-public class UpdateSql {
+class UpdateSql {
 
     public final String typeName;
     public final Map<String, Object> setFields;
