@@ -2,6 +2,13 @@
 
 Free lightweight java web application. Powerful alternative for GigaSpace Management Console when you have a lot of work with spaces data, especially for Quality Assurance Team.
 
+* [Features](#key-features)
+* [How to install](#how-to-install)
+* [How to use](#how-to-use)
+ * [Execute SQL Queries](#execute-sql-queries)
+ * [Registered Types and Counts](#registered-types-and-counts)
+ * [Copy data between spaces](#copy-data-between-spaces)
+
 ## Key Features 
 
 _All of them you don't find in GigaSpace Management Console_
