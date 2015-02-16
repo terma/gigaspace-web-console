@@ -65,10 +65,8 @@ _All of them you don't find in GigaSpace Management Console_
 
 ## How to use
 
-Start page
+When you start your console first time after configuration you will see:
+
+![Start](https://raw.githubusercontent.com/terma/gigaspace-sql-console/master/img/start.png)
 
 
-
-```
-// todo
-```
