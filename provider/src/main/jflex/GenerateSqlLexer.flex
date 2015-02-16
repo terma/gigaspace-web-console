@@ -3,8 +3,15 @@ package com.github.terma.gigaspacesqlconsole.provider;
 /* --------------------------Usercode Section------------------------ */
 
 /*
+
+randomString(maxLength, value)
+
 generate 12 of Customer with name = 'Misha', id = random
 generate count of typeName with fieldName = fieldValue, fieldName1 = fieldValue2
+generate 90 of Customer with fieldName = randomString('My name is ${random}')
+generate 90 of Customer with fieldName = randomDouble()
+generate 90 of Customer with fieldName = randomLong()
+generate 90 of Customer with fieldName = randomInt()
 */
 
 import java_cup.sym;
