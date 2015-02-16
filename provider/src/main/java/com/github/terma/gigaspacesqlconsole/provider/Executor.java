@@ -1,18 +1,11 @@
 package com.github.terma.gigaspacesqlconsole.provider;
 
-import com.gigaspaces.client.ChangeResult;
-import com.gigaspaces.client.ChangeSet;
 import com.github.terma.gigaspacesqlconsole.core.ExecuteRequest;
 import com.github.terma.gigaspacesqlconsole.core.ExecuteResponseStream;
 import com.github.terma.gigaspacesqlconsole.core.config.Config;
-import com.j_spaces.core.client.SQLQuery;
 import com.j_spaces.jdbc.driver.GConnection;
-import org.openspaces.core.GigaSpace;
-import org.openspaces.core.GigaSpaceConfigurer;
-import org.openspaces.core.space.UrlSpaceConfigurer;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.Connection;
@@ -20,12 +13,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import static java.util.Arrays.asList;
 
 public class Executor {
+
+    private static final List<ExecutorPlugin> PLUGINS = Arrays.asList(
+            new ExecutorPluginUpdate(),
+            new ExecutorPluginGenerate()
+    );
 
     private static final String CONVERTER_METHOD = "convert";
 
@@ -55,9 +53,10 @@ public class Executor {
     }
 
     public static void query(final ExecuteRequest request, final ExecuteResponseStream responseStream) throws Exception {
-        final UpdateSql updateSql = UpdateSqlParser.parse(request.sql);
-        if (updateSql != null) handleUpdate(request, updateSql, responseStream);
-        else handleOther(request, responseStream);
+        for (final ExecutorPlugin plugin : PLUGINS) {
+            if (plugin.execute(request, responseStream)) return;
+        }
+        handleOther(request, responseStream);
     }
 
     public static Connection getConnection(final ExecuteRequest request) throws SQLException, ClassNotFoundException {
@@ -71,29 +70,6 @@ public class Executor {
         }
 
         return new GConnection(GConnection.JDBC_GIGASPACES_URL + request.url, info);
-    }
-
-    @SuppressWarnings("deprecation")
-    private static GigaSpace gigaSpaceConnection(ExecuteRequest request) {
-        UrlSpaceConfigurer urlSpaceConfigurer = new UrlSpaceConfigurer(request.url);
-        urlSpaceConfigurer.userDetails(request.user, request.password);
-        return new GigaSpaceConfigurer(urlSpaceConfigurer.create()).create();
-    }
-
-    private static void handleUpdate(
-            final ExecuteRequest request, UpdateSql updateSql,
-            final ExecuteResponseStream responseStream) throws IOException {
-        SQLQuery query = new SQLQuery<>(updateSql.typeName, updateSql.conditions);
-        ChangeSet changeSet = new ChangeSet();
-
-        for (Map.Entry<String, Object> field : updateSql.setFields.entrySet()) {
-            changeSet.set(field.getKey(), (Serializable) field.getValue());
-        }
-
-        ChangeResult changeResult = gigaSpaceConnection(request).change(query, changeSet);
-        responseStream.writeHeader(asList("affected_rows"));
-        responseStream.writeRow(asList(Integer.toString(changeResult.getNumberOfChangedEntries())));
-        responseStream.close();
     }
 
     private static void handleOther(

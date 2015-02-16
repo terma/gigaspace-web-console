@@ -3,6 +3,7 @@ package com.github.terma.gigaspacesqlconsole.provider;
 import com.gigaspaces.document.SpaceDocument;
 import com.gigaspaces.metadata.SpaceTypeDescriptor;
 import com.gigaspaces.metadata.SpaceTypeDescriptorBuilder;
+import com.github.terma.gigaspacesqlconsole.core.ExecuteRequest;
 import org.openspaces.core.GigaSpace;
 import org.openspaces.core.GigaSpaceConfigurer;
 import org.openspaces.core.space.UrlSpaceConfigurer;
@@ -31,4 +32,11 @@ public class GigaSpaceUtils {
         UrlSpaceConfigurer urlSpaceConfigurer = new UrlSpaceConfigurer(url);
         return new GigaSpaceConfigurer(urlSpaceConfigurer.create()).create();
     }
+
+    public static GigaSpace getGigaSpace(ExecuteRequest request) {
+        UrlSpaceConfigurer urlSpaceConfigurer = new UrlSpaceConfigurer(request.url);
+        urlSpaceConfigurer.userDetails(request.user, request.password);
+        return new GigaSpaceConfigurer(urlSpaceConfigurer.create()).create();
+    }
+
 }
