@@ -200,7 +200,7 @@
             {{ context.selectedGigaspace.queryTab.selectedEditor.status }}
         </p>
 
-        <div ng-repeat="query in context.selectedGigaspace.queryTab.selectedEditor.queries">
+        <div class="query" ng-repeat="query in context.selectedGigaspace.queryTab.selectedEditor.queries">
 
             <h4>Results {{ query.data.data.length }} for {{ query.sql }}</h4>
 
