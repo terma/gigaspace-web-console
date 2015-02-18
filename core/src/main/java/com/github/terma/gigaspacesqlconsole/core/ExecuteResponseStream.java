@@ -9,6 +9,6 @@ public interface ExecuteResponseStream {
 
     void writeRow(List<String> values) throws IOException;
 
-    void close();
+    void close() throws IOException;
 
 }

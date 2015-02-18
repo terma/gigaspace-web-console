@@ -407,6 +407,21 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
         else return response;
     }
 
+    function transformResponse(data, headers, status) {
+        if (status == 200)  return angular.fromJson(data);
+        else {
+            var errorPrefix = "/* --- JSON STREAM --- ERROR DELIMITER --- */";
+            var errorBegin = data.indexOf(errorPrefix);
+            if (errorBegin < 0) return data; // as is
+
+            try {
+                return angular.fromJson(data.substring(errorBegin + errorPrefix.length));
+            } catch (e) {
+                return data; // as is
+            }
+        }
+    }
+
     function executeOneQuery(query) {
         $scope.context.selectedGigaspace.queryTab.selectedEditor.queries.push(query);
 
@@ -430,12 +445,14 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
             method: "POST",
             data: request,
             timeout: executionCanceller.promise,
-            headers: {'Content-Type': "application/json"}
+            headers: {'Content-Type': "application/json"},
+            transformResponse: transformResponse
         }).success(function (res) {
             query.status = undefined;
             query.data = res;
             query.data.textLengthLimit = $scope.textLengthLimit;
         }).error(function (res) {
+            console.log(res);
             query.status = undefined;
             query.error = responseToError(res);
         });
@@ -572,7 +589,8 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
             url: "counts",
             method: "POST",
             data: request,
-            headers: {"Content-Type": "application/json"}
+            headers: {"Content-Type": "application/json"},
+            transformResponse: transformResponse
         }).success(function (res) {
             var typesTab = gigaspace.typesTab;
 
@@ -709,7 +727,8 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
             method: "POST",
             data: request,
             timeout: copyDefer.promise,
-            headers: {'Content-Type': "application/json"}
+            headers: {'Content-Type': "application/json"},
+            transformResponse: transformResponse
         }).success(function (res) {
             query.status = undefined;
             query.count = res.count;
@@ -724,7 +743,8 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
         $http({
             url: "config",
             method: "POST",
-            headers: {"Content-Type": "application/json"}
+            headers: {"Content-Type": "application/json"},
+            transformResponse: transformResponse
         }).success(function (res) {
             $scope.config = res;
 
