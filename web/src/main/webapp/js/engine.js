@@ -460,7 +460,8 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
 
     $scope.filterCounts = function (count) {
         if ($scope.context.selectedGigaspace.typesTab.hideZero && count.count == 0) return false;
-        if ($scope.context.selectedGigaspace.typesTab.filter && count.name.indexOf($scope.context.selectedGigaspace.typesTab.filter) < 0) return false;
+        if ($scope.context.selectedGigaspace.typesTab.filter &&
+            count.name.toLowerCase().indexOf($scope.context.selectedGigaspace.typesTab.filter.toLowerCase()) < 0) return false;
         return true;
     };
 
