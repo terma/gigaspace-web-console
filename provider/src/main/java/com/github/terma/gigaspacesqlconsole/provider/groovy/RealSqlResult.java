@@ -13,8 +13,10 @@ public class RealSqlResult implements SqlResult {
 
     private final ResultSet resultSet;
     private final List<String> columns;
+    private final String sql;
 
-    public RealSqlResult(final Statement statement) throws SQLException {
+    public RealSqlResult(final Statement statement, final String sql) throws SQLException {
+        this.sql = sql;
         this.resultSet = statement.getResultSet();
 
         columns = new ArrayList<>();
@@ -50,6 +52,11 @@ public class RealSqlResult implements SqlResult {
         resultSet.close();
         statement.close();
         connection.close();
+    }
+
+    @Override
+    public String getSql() {
+        return sql;
     }
 
 }

@@ -10,10 +10,12 @@ public class UpdateSqlResult implements SqlResult {
 
     private final Statement statement;
     private final int affectedRow;
+    private final String sql;
     private boolean next = true;
 
-    public UpdateSqlResult(final Statement statement) throws SQLException {
+    public UpdateSqlResult(final Statement statement, final String sql) throws SQLException {
         this.statement = statement;
+        this.sql = sql;
         this.affectedRow = statement.getUpdateCount();
     }
 
@@ -36,6 +38,11 @@ public class UpdateSqlResult implements SqlResult {
 
         statement.close();
         connection.close();
+    }
+
+    @Override
+    public String getSql() {
+        return sql;
     }
 
 }

@@ -367,13 +367,56 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
         });
     };
 
+    function groovyScript(lines) {
+        return lines.length > 0 && lines[0] == "groovy";
+    }
+
     $scope.executeQuery = function () {
-        executeQueryToSmt(function (sqlList) {
-            for (var j = 0; j < sqlList.length; j++) {
-                var sql = sqlList[j];
-                console.log("start execute sql:");
-                console.log(sql);
-                executeOneQuery({sql: sql});
+        executeQueryToSmt(function (lines) {
+            if (groovyScript(lines)) { // groovy script
+                lines.splice(0, 1); // remove groovy line
+
+                var editor = $scope.context.selectedGigaspace.queryTab.selectedEditor;
+                editor.status = "Executing...";
+
+                var request = {
+                    url: $scope.context.selectedGigaspace.url,
+                    user: $scope.context.selectedGigaspace.user,
+                    password: $scope.context.selectedGigaspace.password,
+                    gs: $scope.context.selectedGigaspace.gs,
+                    sql: lines.mkString("\n"),
+                    appVersion: $scope.config.internal.appVersion
+                };
+
+                $http({
+                    url: "groovy-execute",
+                    method: "POST",
+                    data: request,
+                    headers: {'Content-Type': "application/json"},
+                    transformResponse: transformResponse
+                }).success(function (res) { // array of result
+                    for (var i = 0; i < res.length; i++) {
+                        var query = {
+                            sql: res[i].header,
+                            data: res[i]
+                        };
+                        query.data.textLengthLimit = 50;
+                        editor.queries.push(query);
+                    }
+                    editor.status = undefined;
+                }).error(function (res) {
+                    console.log(res);
+                    editor.status = undefined;
+                    var errorQuery = {error: responseToError(res)};
+                    editor.queries.push(errorQuery);
+                });
+            } else { // real SQL lines
+                for (var j = 0; j < lines.length; j++) {
+                    var sql = lines[j];
+                    console.log("start execute sql:");
+                    console.log(sql);
+                    executeOneQuery({sql: sql});
+                }
             }
         });
     };
@@ -795,3 +838,11 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
     $scope.loadConfig();
 }]);
 
+Array.prototype.mkString = function (delimiter) {
+    var result = "";
+    for (var i = 0; i < this.length; i++) {
+        if (i > 0) result += delimiter;
+        result += this[i];
+    }
+    return result;
+};

@@ -13,4 +13,6 @@ public interface SqlResult extends AutoCloseable {
 
     void close() throws SQLException;
 
+    String getSql();
+
 }

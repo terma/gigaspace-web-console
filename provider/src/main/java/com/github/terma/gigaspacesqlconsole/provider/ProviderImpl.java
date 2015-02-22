@@ -21,4 +21,9 @@ public class ProviderImpl implements Provider {
         return Copier.copy(request);
     }
 
+    @Override
+    public void execute(ExecuteRequest request, GroovyExecuteResponseStream responseStream) throws Exception {
+        GroovyExecutor.execute(request, responseStream);
+    }
+
 }

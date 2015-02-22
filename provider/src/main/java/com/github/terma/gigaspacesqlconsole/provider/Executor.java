@@ -25,7 +25,7 @@ public class Executor {
             if (plugin.execute(request, responseStream)) return;
         }
 
-        try (final SqlResult sqlResult = handleOther(request)) {
+        try (final SqlResult sqlResult = execute(request)) {
             sqlResultToResponseStream(sqlResult, responseStream);
         }
     }
@@ -34,19 +34,9 @@ public class Executor {
         final Connection connection = GigaSpaceUtils.createJdbcConnection(request);
         final Statement statement = connection.createStatement();
         if (statement.execute(request.sql)) {
-            return new RealSqlResult(statement);
+            return new RealSqlResult(statement, request.sql);
         } else {
-            return new UpdateSqlResult(statement);
-        }
-    }
-
-    private static SqlResult handleOther(final ExecuteRequest request) throws Exception {
-        Connection connection = GigaSpaceUtils.createJdbcConnection(request);
-        final Statement statement = connection.createStatement();
-        if (statement.execute(request.sql)) {
-            return new RealSqlResult(statement);
-        } else {
-            return new UpdateSqlResult(statement);
+            return new UpdateSqlResult(statement, request.sql);
         }
     }
 
