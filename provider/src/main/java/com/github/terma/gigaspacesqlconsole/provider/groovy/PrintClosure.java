@@ -1,5 +1,6 @@
 package com.github.terma.gigaspacesqlconsole.provider.groovy;
 
+import com.github.terma.gigaspacesqlconsole.core.GroovyExecuteResponseStream;
 import groovy.lang.Closure;
 
 import java.util.Arrays;

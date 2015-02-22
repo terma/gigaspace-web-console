@@ -1,7 +1,7 @@
 package com.github.terma.gigaspacesqlconsole.provider;
 
 import com.github.terma.gigaspacesqlconsole.core.ExecuteRequest;
-import com.github.terma.gigaspacesqlconsole.provider.groovy.GroovyExecuteResponseStream;
+import com.github.terma.gigaspacesqlconsole.core.GroovyExecuteResponseStream;
 import com.github.terma.gigaspacesqlconsole.provider.groovy.ObjectGroovyExecuteResponseStream;
 import com.github.terma.gigaspacesqlconsole.provider.groovy.PrintClosure;
 import com.github.terma.gigaspacesqlconsole.provider.groovy.SqlClosure;

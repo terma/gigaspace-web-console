@@ -8,4 +8,6 @@ public interface Provider {
 
     CopyResponse copy(CopyRequest request) throws Exception;
 
+    void execute(ExecuteRequest request, GroovyExecuteResponseStream responseStream) throws Exception;
+
 }
