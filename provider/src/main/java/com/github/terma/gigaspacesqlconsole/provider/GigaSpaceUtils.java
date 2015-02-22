@@ -4,10 +4,14 @@ import com.gigaspaces.document.SpaceDocument;
 import com.gigaspaces.metadata.SpaceTypeDescriptor;
 import com.gigaspaces.metadata.SpaceTypeDescriptorBuilder;
 import com.github.terma.gigaspacesqlconsole.core.ExecuteRequest;
+import com.j_spaces.jdbc.driver.GConnection;
 import org.openspaces.core.GigaSpace;
 import org.openspaces.core.GigaSpaceConfigurer;
 import org.openspaces.core.space.UrlSpaceConfigurer;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class GigaSpaceUtils {
@@ -37,6 +41,20 @@ public class GigaSpaceUtils {
         UrlSpaceConfigurer urlSpaceConfigurer = new UrlSpaceConfigurer(request.url);
         urlSpaceConfigurer.userDetails(request.user, request.password);
         return new GigaSpaceConfigurer(urlSpaceConfigurer.create()).create();
+    }
+
+    public static Connection createJdbcConnection(final ExecuteRequest request)
+            throws SQLException, ClassNotFoundException {
+        Properties info = new Properties();
+
+        if (request.user != null) {
+            info.put("user", request.user);
+        }
+        if (request.password != null) {
+            info.put("password", request.password);
+        }
+
+        return new GConnection(GConnection.JDBC_GIGASPACES_URL + request.url, info);
     }
 
 }
