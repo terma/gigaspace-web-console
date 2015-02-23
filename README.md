@@ -109,3 +109,8 @@ Second, create simple [Groovy](http://groovy.codehaus.org/) script and run it in
 
 ![Execute Groovy Script](https://raw.githubusercontent.com/terma/gigaspace-sql-console/master/img/groovy.png)
 
+A few additional words about Groovy in console. Withing your script you can use all groovy features plus a few additional: 
+
+* sql(string) - function which can execute any SQL in GigaSpace and return result
+* out(string) - print any result to console output
+* gs - ref on GigaSpace instance
