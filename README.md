@@ -8,6 +8,7 @@ Free lightweight java web application. Powerful alternative for GigaSpace Manage
  * [Execute SQL Queries](#execute-sql-queries)
  * [Registered Types and Counts](#registered-types-and-counts)
  * [Copy data between spaces](#copy-data-between-spaces)
+ * [Execute Groovy](#work-with-groovy)
 
 ## Key Features 
 
@@ -98,3 +99,13 @@ To execute SQL queries in selected space you just need to select -Query- and SQL
 ### Copy data between spaces
 
 ![Copy data between spaces](https://raw.githubusercontent.com/terma/gigaspace-sql-console/master/img/copy.png)
+
+### Work with Groovy
+
+Sometimes you have complex queries which depends on each other or you need to have spacial calculation on data in space. For example I want to collect all values from select to one string. how I can do that?
+
+First of all enable groovy by adding ```groovy``` word in first line of editor.
+Second, create simple [Groovy](http://groovy.codehaus.org/) script and run it in console!
+
+![Execute Groovy Script](https://raw.githubusercontent.com/terma/gigaspace-sql-console/master/img/groovy.png)
+
