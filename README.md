@@ -2,6 +2,13 @@
 
 Free lightweight java web application. Powerful alternative for GigaSpace Management Console when you have a lot of work with spaces data, especially for Quality Assurance Team.
 
+* [Features](#key-features)
+* [How to install](#how-to-install)
+* [How to use](#how-to-use)
+ * [Execute SQL Queries](#execute-sql-queries)
+ * [Registered Types and Counts](#registered-types-and-counts)
+ * [Copy data between spaces](#copy-data-between-spaces)
+
 ## Key Features 
 
 _All of them you don't find in GigaSpace Management Console_
@@ -14,6 +21,7 @@ _All of them you don't find in GigaSpace Management Console_
 * All settings store cross session, so you don't need to retype your queries again
 * Copy data between spaces
 * Export query result to CSV
+* Support Groovy language in console
 
 ## How install
 
@@ -65,10 +73,28 @@ _All of them you don't find in GigaSpace Management Console_
 
 ## How to use
 
-Start page
+When you start your console first time after configuration you will see:
 
+![Start](https://raw.githubusercontent.com/terma/gigaspace-sql-console/master/img/start.png)
 
+### Execute SQL queries
 
-```
-// todo
-```
+![Execute SQL Queries](https://raw.githubusercontent.com/terma/gigaspace-sql-console/master/img/execute.png)
+
+To execute SQL queries in selected space you just need to select -Query- and SQL query
+
+* You can enter more than one query when you run them they will be execute in independenly so you will get all results as on example below
+* To disable execution of some query without remove just comment it by ```#``` or ```//``` or ```--```
+* Supports ```select```, ```update```, ```delete```
+* For ```delete``` and ```update``` result will be count of modified records
+* For ```select``` you will get result table and count of records
+* When value size for one cell more ```50``` result will be truncated, so ```result``` plus ```...``` to show full result just click on ```Show/Hide all text``` under each result table
+* For columns which looks like timestamp you can click on ```T?``` after column name so console shows result in date format for example ```1424054208000``` will be show as ```1424054208000 = Mon, 16 Feb 2015 02:36:48 GMT```
+
+### Registered types and counts
+
+![Registered Types and Counts](https://raw.githubusercontent.com/terma/gigaspace-sql-console/master/img/types.png)
+
+### Copy data between spaces
+
+![Copy data between spaces](https://raw.githubusercontent.com/terma/gigaspace-sql-console/master/img/copy.png)
