@@ -37,8 +37,8 @@ public class PrintClosure extends Closure {
                 while (sqlResult.next()) responseStream.writeRow(sqlResult.getRow());
                 responseStream.closeResult();
             } else {
-                responseStream.startResult("result");
-                responseStream.writeColumns(Arrays.asList(""));
+                responseStream.startResult("");
+                responseStream.writeColumns(Arrays.asList("result"));
                 responseStream.writeRow(Arrays.asList(value.toString()));
                 responseStream.closeResult();
             }

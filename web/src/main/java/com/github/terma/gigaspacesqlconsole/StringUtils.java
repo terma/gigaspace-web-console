@@ -1,7 +1,5 @@
 package com.github.terma.gigaspacesqlconsole;
 
-import java.util.List;
-
 public class StringUtils {
 
     private static final int MAX_FILE_NAME_LENGTH = 50;
@@ -14,17 +12,4 @@ public class StringUtils {
         return sql + ".csv";
     }
 
-    static String toCsvRow(List<String> row) {
-        final StringBuilder sb = new StringBuilder();
-
-        boolean first = true;
-        for (String value : row) {
-            if (first) first = false;
-            else sb.append(',');
-
-            sb.append(value);
-        }
-
-        return sb.toString();
-    }
 }
