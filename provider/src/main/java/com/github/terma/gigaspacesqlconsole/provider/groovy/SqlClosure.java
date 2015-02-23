@@ -4,9 +4,14 @@ import com.github.terma.gigaspacesqlconsole.core.ExecuteRequest;
 import com.github.terma.gigaspacesqlconsole.provider.Executor;
 import groovy.lang.Closure;
 
+import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
+
 public class SqlClosure extends Closure {
 
     private final ExecuteRequest request;
+    private final List<SqlResult> sqlResults = new LinkedList<>();
 
     public SqlClosure(final ExecuteRequest request) {
         super(null);
@@ -26,9 +31,21 @@ public class SqlClosure extends Closure {
         concreteRequest.sql = arguments.toString();
 
         try {
-            return Executor.execute(concreteRequest);
+            final SqlResult sqlResult = Executor.execute(concreteRequest);
+            sqlResults.add(sqlResult);
+            return sqlResult;
         } catch (Exception exception) {
             throw new RuntimeException("Can't sql!", exception);
+        }
+    }
+
+    public void close() {
+        for (final SqlResult sqlResult : sqlResults) {
+            try {
+                sqlResult.close();
+            } catch (SQLException exception) {
+                // skip result
+            }
         }
     }
 

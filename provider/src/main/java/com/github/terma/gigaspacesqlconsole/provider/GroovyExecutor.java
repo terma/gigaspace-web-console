@@ -9,21 +9,26 @@ import groovy.lang.GroovyShell;
 
 public class GroovyExecutor {
 
-    public static void execute(ExecuteRequest request, GroovyExecuteResponseStream responseStream) throws Exception {
-        final Binding binding = new Binding();
+    public static void execute
+            (final ExecuteRequest request, final GroovyExecuteResponseStream responseStream) throws Exception {
+        final SqlClosure sqlClosure = new SqlClosure(request);
 
-        binding.setVariable("gs", GigaSpaceUtils.getGigaSpace(request));
+        try {
+            final Binding binding = new Binding();
+            binding.setVariable("gs", GigaSpaceUtils.getGigaSpace(request));
+            binding.setVariable("sql", sqlClosure);
+            final PrintClosure printClosure = new PrintClosure(responseStream);
+            binding.setVariable("out", printClosure);
 
-        binding.setVariable("sql", new SqlClosure(request));
+            final GroovyShell shell = new GroovyShell(binding);
 
-        final PrintClosure printClosure = new PrintClosure(responseStream);
-        binding.setVariable("out", printClosure);
+            final Object value = shell.evaluate(request.sql);
+            if (value != null) printClosure.call(value);
 
-        final GroovyShell shell = new GroovyShell(binding);
-
-        final Object value = shell.evaluate(request.sql);
-        if (value != null) printClosure.call(value);
-        responseStream.close();
+            responseStream.close();
+        } finally {
+            sqlClosure.close();
+        }
     }
 
 }
