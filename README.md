@@ -21,6 +21,7 @@ _All of them you don't find in GigaSpace Management Console_
 * All settings store cross session, so you don't need to retype your queries again
 * Copy data between spaces
 * Export query result to CSV
+* Support Groovy language in console
 
 ## How install
 
