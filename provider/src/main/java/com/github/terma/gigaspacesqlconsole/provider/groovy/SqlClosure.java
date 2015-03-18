@@ -40,7 +40,10 @@ public class SqlClosure extends Closure {
     }
 
     public void close() {
-        for (final SqlResult sqlResult : sqlResults) {
+        final List<SqlResult> sqlResultsForClose = sqlResults;
+        sqlResults.clear();
+
+        for (final SqlResult sqlResult : sqlResultsForClose) {
             try {
                 sqlResult.close();
             } catch (SQLException exception) {
