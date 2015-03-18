@@ -4,7 +4,6 @@ package com.github.terma.gigaspacesqlconsole.provider;
 
 
 import java_cup.sym;
-//import java_cup.runtime.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.io.IOException;
@@ -79,6 +78,7 @@ assinmentOperation = =
 nextSetField = ,
 fieldValueString = '[^\']*'
 fieldValueBoolean = true | false | TRUE | FALSE
+fieldValueNull = null
 fieldValueNumber = -?[0-9]+
 
 conditions = [^]+
@@ -135,6 +135,7 @@ conditionsKeyword = where
 }
 
 <SET_FIELD_VALUE> {
+    {fieldValueNull} { setFields.put(tempSetFieldName, null); yybegin(SET_FIELD_MORE); }
     {fieldValueBoolean} { setFields.put(tempSetFieldName, Boolean.parseBoolean(yytext().toLowerCase())); yybegin(SET_FIELD_MORE); }
     {fieldValueNumber} { setFields.put(tempSetFieldName, Long.parseLong(yytext())); yybegin(SET_FIELD_MORE); }
     {fieldValueString} { setFields.put(tempSetFieldName, yytext().substring(1, yytext().length() - 1)); yybegin(SET_FIELD_MORE); }

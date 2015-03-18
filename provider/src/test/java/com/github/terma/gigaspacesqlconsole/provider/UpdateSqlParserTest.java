@@ -62,6 +62,13 @@ public class UpdateSqlParserTest {
     }
 
     @Test
+    public void parseUpdateWithSetToNull() throws IOException {
+        UpdateSql sql = UpdateSqlParser.parse("update ControlData set A = null");
+
+        Assert.assertEquals(null, sql.setFields.get("A"));
+    }
+
+    @Test
     public void parseAcceptRedundantSpaces() throws IOException {
         UpdateSql sql = UpdateSqlParser.parse("   update    ControlData    set   A    = '1'");
 

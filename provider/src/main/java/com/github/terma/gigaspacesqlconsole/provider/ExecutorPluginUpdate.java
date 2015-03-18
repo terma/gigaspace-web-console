@@ -2,6 +2,7 @@ package com.github.terma.gigaspacesqlconsole.provider;
 
 import com.gigaspaces.client.ChangeResult;
 import com.gigaspaces.client.ChangeSet;
+import com.gigaspaces.query.ISpaceQuery;
 import com.github.terma.gigaspacesqlconsole.core.ExecuteRequest;
 import com.github.terma.gigaspacesqlconsole.core.ExecuteResponseStream;
 import com.j_spaces.core.client.SQLQuery;
@@ -30,7 +31,11 @@ class ExecutorPluginUpdate implements ExecutorPlugin {
         ChangeSet changeSet = new ChangeSet();
 
         for (Map.Entry<String, Object> field : updateSql.setFields.entrySet()) {
-            changeSet.set(field.getKey(), (Serializable) field.getValue());
+            if (field.getValue() == null) {
+                changeSet.unset(field.getKey());
+            } else {
+                changeSet.set(field.getKey(), (Serializable) field.getValue());
+            }
         }
 
         ChangeResult changeResult = GigaSpaceUtils.getGigaSpace(request).change(query, changeSet);
