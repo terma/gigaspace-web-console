@@ -558,10 +558,10 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
         $scope.context.selectedGigaspace.selectedTab = "copy";
     };
 
-    function openQueryTabWith(sql) {
+    function openQueryTabWith(sql, replaceContent) {
         $scope.openQueryTab();
         var content = $scope.context.selectedGigaspace.queryTab.selectedEditor.content;
-        var updatedContent = content ? content + "\n" + sql : sql;
+        var updatedContent = (!replaceContent && content) ? content + "\n" + sql : sql;
         asyncUpdateAndGoToEndAndFocus(updatedContent);
     }
 
@@ -597,6 +597,10 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
 
     $scope.openQueryTabWithDeleteFor = function (typeName) {
         openQueryTabWith("delete from " + typeName + " where ?");
+    };
+
+    $scope.openQueryTabWithTypeFor = function (typeName) {
+        openQueryTabWith("groovy\nout gs.typeManager.getTypeDescriptor('" + typeName + "')", true);
     };
 
     $scope.getCountClass = function (count) {
