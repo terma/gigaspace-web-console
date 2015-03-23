@@ -15,6 +15,11 @@
       </servlet>
 
       <servlet>
+            <servlet-name>ImportServlet</servlet-name>
+            <servlet-class>com.github.terma.gigaspacesqlconsole.ImportServlet</servlet-class>
+      </servlet>
+
+      <servlet>
             <servlet-name>GroovyExecuteServlet</servlet-name>
             <servlet-class>com.github.terma.gigaspacesqlconsole.GroovyExecuteServlet</servlet-class>
       </servlet>
@@ -62,6 +67,11 @@
       <servlet-mapping>
             <servlet-name>CopyServlet</servlet-name>
             <url-pattern>/copy</url-pattern>
+      </servlet-mapping>
+
+      <servlet-mapping>
+            <servlet-name>ImportServlet</servlet-name>
+            <url-pattern>/import</url-pattern>
       </servlet-mapping>
 
 </web-app>
