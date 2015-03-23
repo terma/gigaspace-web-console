@@ -23,6 +23,8 @@ public class ImportServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             safeDoPost(request);
+
+            response.sendRedirect(request.getContextPath());
         } catch (IOException exception) {
             throw exception;
         } catch (Exception exception) {
@@ -43,8 +45,9 @@ public class ImportServlet extends HttpServlet {
             final InputStream stream = item.openStream();
 
             if (item.isFormField()) {
-                if (!"json".equals(name)) throw new IOException("Expect only 'json' parameter and files!");
-                importRequest = gson.fromJson(Streams.asString(stream), ImportRequest.class);
+                if ("json".equals(name)) {
+                    importRequest = gson.fromJson(Streams.asString(stream), ImportRequest.class);
+                }
             } else {
                 inputStream = stream;
             }

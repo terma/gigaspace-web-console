@@ -558,6 +558,22 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
         $scope.context.selectedGigaspace.selectedTab = "copy";
     };
 
+    $scope.openImportTab = function () {
+        $scope.closeTabs();
+        $scope.context.selectedGigaspace.selectedTab = "import";
+    };
+
+    $scope.startImport = function () {
+        console.log("enrich import form with json");
+        $("#import-json").val(angular.toJson({
+            url: $scope.context.selectedGigaspace.url,
+            user: $scope.context.selectedGigaspace.user,
+            password: $scope.context.selectedGigaspace.password,
+            gs: $scope.context.selectedGigaspace.gs,
+            appVersion: $scope.config.internal.appVersion
+        }));
+    };
+
     function openQueryTabWith(sql, replaceContent) {
         $scope.openQueryTab();
         var content = $scope.context.selectedGigaspace.queryTab.selectedEditor.content;

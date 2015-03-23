@@ -58,12 +58,27 @@
 
 <div style="padding: 0.5em 1em 1em;">
     <div class="button-dock">
+        <a href="javascript:void(0);" ng-click="openImportTab()"
+           ng-class="context.selectedGigaspace.selectedTab == 'import' ? 'selected-button' : 'button'">Import</a>
         <a href="javascript:void(0);" ng-click="openCopyTab()"
            ng-class="context.selectedGigaspace.selectedTab == 'copy' ? 'selected-button' : 'button'">Copy</a>
         <a href="javascript:void(0);" ng-click="openTypesTab()"
            ng-class="context.selectedGigaspace.selectedTab == 'types' ? 'selected-button' : 'button'">Types</a>
         <a href="javascript:void(0);" ng-click="openQueryTab()"
            ng-class="context.selectedGigaspace.selectedTab == 'query' ? 'selected-button' : 'button'">Query</a>
+    </div>
+
+    <div ng-show="context.selectedGigaspace.selectedTab == 'import'">
+        <form method="post" action="import" enctype="multipart/form-data" ng-submit="startImport()">
+            <input type="hidden" id="import-json" name="json">
+
+            <label>
+                Select exported before file (.ser)<p></p>
+                <input type="file" name="file">
+
+                <input type="submit" name="Import">
+            </label>
+        </form>
     </div>
 
     <div ng-show="context.selectedGigaspace.selectedTab == 'copy'">
@@ -79,7 +94,8 @@
                ng-click="selectTargetGigaspace(gigaspace)" href="javascript:void(0);">{{ gigaspace.name }}</a>
         </div>
 
-        <input placeholder="Target GigaSpace URL" ng-model="context.selectedGigaspace.copyTab.targetUrl" style="width: 100%;"
+        <input placeholder="Target GigaSpace URL" ng-model="context.selectedGigaspace.copyTab.targetUrl"
+               style="width: 100%;"
                class="mono-text connection"/>
 
         <p></p>
@@ -91,7 +107,8 @@
         <p></p>
 
         <textarea ng-model="context.selectedGigaspace.copyTab.content" class="mono-text"
-                  style="width: 100%" rows="6" placeholder="Example: copy spaceTypeName [reset list of reset fields by ,] [where conditions]"></textarea>
+                  style="width: 100%" rows="6"
+                  placeholder="Example: copy spaceTypeName [reset list of reset fields by ,] [where conditions]"></textarea>
 
         <p></p>
 
