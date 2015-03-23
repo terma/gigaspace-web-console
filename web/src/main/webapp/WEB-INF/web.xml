@@ -15,11 +15,6 @@
       </servlet>
 
       <servlet>
-            <servlet-name>ImportServlet</servlet-name>
-            <servlet-class>com.github.terma.gigaspacesqlconsole.ImportServlet</servlet-class>
-      </servlet>
-
-      <servlet>
             <servlet-name>GroovyExecuteServlet</servlet-name>
             <servlet-class>com.github.terma.gigaspacesqlconsole.GroovyExecuteServlet</servlet-class>
       </servlet>
@@ -37,6 +32,16 @@
       <servlet>
             <servlet-name>CopyServlet</servlet-name>
             <servlet-class>com.github.terma.gigaspacesqlconsole.CopyServlet</servlet-class>
+      </servlet>
+
+      <servlet>
+            <servlet-name>ExportServlet</servlet-name>
+            <servlet-class>com.github.terma.gigaspacesqlconsole.ExportServlet</servlet-class>
+      </servlet>
+
+      <servlet>
+            <servlet-name>ImportServlet</servlet-name>
+            <servlet-class>com.github.terma.gigaspacesqlconsole.ImportServlet</servlet-class>
       </servlet>
 
       <servlet-mapping>
@@ -67,6 +72,11 @@
       <servlet-mapping>
             <servlet-name>CopyServlet</servlet-name>
             <url-pattern>/copy</url-pattern>
+      </servlet-mapping>
+
+      <servlet-mapping>
+            <servlet-name>ExportServlet</servlet-name>
+            <url-pattern>/export</url-pattern>
       </servlet-mapping>
 
       <servlet-mapping>
