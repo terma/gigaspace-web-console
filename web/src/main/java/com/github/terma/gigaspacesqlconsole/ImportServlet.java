@@ -50,6 +50,7 @@ public class ImportServlet extends HttpServlet {
                 }
             } else {
                 inputStream = stream;
+                break;
             }
         }
 

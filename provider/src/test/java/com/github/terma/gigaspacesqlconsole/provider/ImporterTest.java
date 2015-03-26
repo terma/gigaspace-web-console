@@ -17,7 +17,6 @@ import java.util.zip.ZipInputStream;
 public class ImporterTest {
 
     private GigaSpace exportGigaSpace;
-    private GigaSpace gigaSpace;
     private byte[] zip;
     private byte[] aSer;
 
@@ -49,18 +48,36 @@ public class ImporterTest {
         int data;
         while ((data = zipInputStream.read()) > -1) aSerOutputStream.write(data);
         aSer = aSerOutputStream.toByteArray();
-
-        gigaSpace = GigaSpaceUtils.getGigaSpace("/./import");
-        GigaSpaceUtils.registerType(gigaSpace, "A");
-        gigaSpace.clear(null);
     }
 
     @Test
     public void shouldImportFromSerFile() throws Exception {
+        final GigaSpace gigaSpace = GigaSpaceUtils.getGigaSpace("/./import1");
+        GigaSpaceUtils.registerType(gigaSpace, "A");
+
         // given
         ImportRequest request = new ImportRequest();
         request.file = "my.ser";
-        request.url = "/./import";
+        request.url = "/./import1";
+
+        // when
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(aSer);
+        Importer.execute(request, inputStream);
+
+        // then
+        SpaceDocument template = new SpaceDocument("A");
+        Assert.assertEquals(
+                new HashSet<>(Arrays.asList(exportGigaSpace.readMultiple(template))),
+                new HashSet<>(Arrays.asList(gigaSpace.readMultiple(template))));
+    }
+
+    @Test
+    public void shouldRegisterExportedTypesDuringImport() throws Exception {
+        // given
+        final GigaSpace gigaSpace = GigaSpaceUtils.getGigaSpace("/./import-no-types");
+        ImportRequest request = new ImportRequest();
+        request.file = "my.ser";
+        request.url = "/./import-no-types";
 
         // when
         ByteArrayInputStream inputStream = new ByteArrayInputStream(aSer);

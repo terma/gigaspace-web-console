@@ -23,7 +23,7 @@ public class ExportServlet extends HttpServlet {
         final ExportRequest req = gson.fromJson(getRequestJson(request), ExportRequest.class);
 
         response.setContentType(FILE_CONTENT_TYPE);
-        response.addHeader("Content-Disposition", "attachment; filename=\"export\"");
+        response.addHeader("Content-Disposition", "attachment; filename=\"export.zip\"");
 
         final OutputStream outputStream = response.getOutputStream();
 

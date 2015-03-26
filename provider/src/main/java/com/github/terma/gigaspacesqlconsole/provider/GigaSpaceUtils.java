@@ -38,10 +38,14 @@ public class GigaSpaceUtils {
         return new GigaSpaceConfigurer(urlSpaceConfigurer.create()).create();
     }
 
-    @SuppressWarnings("deprecation")
     public static GigaSpace getGigaSpace(final GeneralRequest request) {
-        UrlSpaceConfigurer urlSpaceConfigurer = new UrlSpaceConfigurer(request.url);
-        urlSpaceConfigurer.userDetails(request.user, request.password);
+        return getGigaSpace(request.url, request.user, request.password);
+    }
+
+    @SuppressWarnings("deprecation")
+    public static GigaSpace getGigaSpace(final String url, final String user, final String password) {
+        UrlSpaceConfigurer urlSpaceConfigurer = new UrlSpaceConfigurer(url);
+        urlSpaceConfigurer.userDetails(user, password);
         return new GigaSpaceConfigurer(urlSpaceConfigurer.create()).create();
     }
 
