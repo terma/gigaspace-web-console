@@ -12,11 +12,18 @@ import org.openspaces.core.IteratorBuilder;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 public class Exporter {
+
+    private final static Set<String> IGNORING_TYPES = new HashSet<String>() {{
+        add("java.lang.Object");
+    }};
 
     private final static int BUFFER_SIZE = 1000;
 
@@ -60,7 +67,9 @@ public class Exporter {
 
     private static List<String> findTypesForExport(final GigaSpace gigaSpace) throws RemoteException {
         final JSpaceAdminProxy admin = (JSpaceAdminProxy) gigaSpace.getSpace().getAdmin();
-        return admin.getRuntimeInfo().m_ClassNames;
+        final List<String> existentTypes = new ArrayList<>(admin.getRuntimeInfo().m_ClassNames);
+        existentTypes.removeAll(IGNORING_TYPES);
+        return existentTypes;
     }
 
     private static TypeDescriptor getTypeDescriptor(final GigaSpace gigaSpace, final String typeName) {

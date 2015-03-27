@@ -31,6 +31,9 @@ public class ImporterTest {
         Assert.assertEquals(2, exportGigaSpace.count(new SpaceDocument("A")));
 
         GigaSpaceUtils.registerType(exportGigaSpace, "B");
+        GigaSpaceUtils.writeDocument(exportGigaSpace, "B");
+        Assert.assertEquals(1, exportGigaSpace.count(new SpaceDocument("B")));
+
         GigaSpaceUtils.registerType(exportGigaSpace, "C");
 
         ExportRequest request = new ExportRequest();
@@ -42,7 +45,6 @@ public class ImporterTest {
         zip = outputStream.toByteArray();
 
         ZipInputStream zipInputStream = new ZipInputStream(new ByteArrayInputStream(zip));
-        zipInputStream.getNextEntry(); // Object
         zipInputStream.getNextEntry(); // A
         final ByteArrayOutputStream aSerOutputStream = new ByteArrayOutputStream();
         int data;
@@ -69,6 +71,32 @@ public class ImporterTest {
         Assert.assertEquals(
                 new HashSet<>(Arrays.asList(exportGigaSpace.readMultiple(template))),
                 new HashSet<>(Arrays.asList(gigaSpace.readMultiple(template))));
+    }
+
+    @Test
+    public void shouldImportFromZipWithSerFiles() throws Exception {
+        final GigaSpace gigaSpace = GigaSpaceUtils.getGigaSpace("/./import-from-zip");
+        GigaSpaceUtils.registerType(gigaSpace, "A");
+
+        // given
+        ImportRequest request = new ImportRequest();
+        request.file = "my.zip";
+        request.url = "/./import-from-zip";
+
+        // when
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(zip);
+        Importer.execute(request, inputStream);
+
+        // then
+        SpaceDocument template = new SpaceDocument("A");
+        Assert.assertEquals(
+                new HashSet<>(Arrays.asList(exportGigaSpace.readMultiple(template))),
+                new HashSet<>(Arrays.asList(gigaSpace.readMultiple(template))));
+
+        SpaceDocument templateB = new SpaceDocument("B");
+        Assert.assertEquals(
+                new HashSet<>(Arrays.asList(exportGigaSpace.readMultiple(templateB))),
+                new HashSet<>(Arrays.asList(gigaSpace.readMultiple(templateB))));
     }
 
     @Test
