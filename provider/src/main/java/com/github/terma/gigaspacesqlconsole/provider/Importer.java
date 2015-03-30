@@ -8,14 +8,10 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 public class Importer {
-
-    private final static int BATCH = 1000;
 
     public static void execute(final ImportRequest request, final InputStream inputStream) throws Exception {
         final GigaSpace gigaSpace = GigaSpaceUtils.getGigaSpace(request);
@@ -75,27 +71,6 @@ public class Importer {
             typeBuilder.routingProperty(typeDescriptor.routingProperty);
         }
         gigaSpace.getTypeManager().registerTypeDescriptor(typeBuilder.create());
-    }
-
-    private static class BufferedWriter {
-
-        private final GigaSpace gigaSpace;
-        private final List<Object> buffer = new ArrayList<>(BATCH);
-
-        private BufferedWriter(final GigaSpace gigaSpace) {
-            this.gigaSpace = gigaSpace;
-        }
-
-        public void write(Object object) {
-            buffer.add(object);
-            if (buffer.size() >= BATCH) flush();
-        }
-
-        public void flush() {
-            if (buffer.size() > 0) gigaSpace.writeMultiple(buffer.toArray());
-            buffer.clear();
-        }
-
     }
 
 }
