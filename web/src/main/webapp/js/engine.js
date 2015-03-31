@@ -572,6 +572,32 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
         $scope.context.selectedGigaspace.selectedTab = "export";
     };
 
+    $scope.sortQueryData = function (query, orderByIndex) {
+        if (query.data.orderBy == orderByIndex) {
+            query.data.orderAsc = !query.data.orderAsc;
+        } else {
+            query.data.orderBy = orderByIndex;
+            query.data.orderAsc = undefined;
+        }
+
+        console.log("order by " + query.data.orderBy + " and reverse " + query.data.orderAsc);
+
+        query.data.selectedRecord = undefined;
+
+        query.data.data.sort(function (record1, record2) {
+            var val1 = record1[orderByIndex];
+            var val2 = record2[orderByIndex];
+
+            var result = 0;
+            if (val1 > val2) result = 1;
+            else if (val1 < val2) result = -1;
+
+            return query.data.orderAsc ? result : -result;
+        });
+
+        console.log("sort done");
+    };
+
     $scope.export = function () {
         types = [];
 
