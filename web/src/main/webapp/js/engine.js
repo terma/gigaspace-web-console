@@ -572,6 +572,22 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
         $scope.context.selectedGigaspace.selectedTab = "export";
     };
 
+    $scope.orderTypesBy = function (orderByColumn) {
+        var typesTab = $scope.context.selectedGigaspace.typesTab;
+        if (typesTab.orderBy == orderByColumn) {
+            typesTab.orderAsc = !typesTab.orderAsc;
+        } else {
+            typesTab.orderAsc = undefined;
+            typesTab.orderBy = orderByColumn;
+        }
+    };
+
+    $scope.getTypesOrderBy = function () {
+        if (!$scope.context.selectedGigaspace) return undefined;
+        var typesTab = $scope.context.selectedGigaspace.typesTab;
+        return typesTab.orderBy ? typesTab.orderBy : "name";
+    };
+
     $scope.sortQueryData = function (query, orderByIndex) {
         if (query.data.orderBy == orderByIndex) {
             query.data.orderAsc = !query.data.orderAsc;
@@ -685,17 +701,6 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
         else return "count_down";
     };
 
-    $scope.prevCountStatus = function (count) {
-        if (!count || count.prevCount == undefined || count.prevCountUpdate == undefined) return "no update";
-
-        var status = ((new Date().getTime() - count.prevCountUpdate) / (1000 * 60)).toFixed(0) + " min ago";
-
-        if (count.count > count.prevCount) status += " +" + (count.count - count.prevCount);
-        else status += " " + (count.count - count.prevCount);
-
-        return status;
-    };
-
     $scope.queryCounts = function (gigaspace) {
         if (!gigaspace.typesTab.checking) return; // stopped
 
@@ -717,6 +722,17 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
             var typesTab = gigaspace.typesTab;
 
             if (!typesTab.checking) return; // stopped
+
+            function prevCountStatus(count) {
+                if (!count || count.prevCount == undefined || count.prevCountUpdate == undefined) return "no update";
+
+                var status = ((new Date().getTime() - count.prevCountUpdate) / (1000 * 60)).toFixed(0) + " min ago";
+
+                if (count.count > count.prevCount) status += " +" + (count.count - count.prevCount);
+                else status += " " + (count.count - count.prevCount);
+
+                count.status = status;
+            }
 
             function updateCount(count, newCount) {
                 if (count.count != newCount) {
@@ -763,12 +779,18 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
             }
 
             var total = 0;
-            for (var n = 0; n < res.counts.length; n++) {
-                total += res.counts[n].count;
+            for (var n = 0; n < typesTab.data.length; n++) {
+                total += typesTab.data[n].count;
             }
 
             if (!typesTab.total) typesTab.total = {count: total};
             updateCount(typesTab.total, total);
+
+            // update status
+            for (var m = 0; m < typesTab.data.length; m++) {
+                prevCountStatus(typesTab.data[m]);
+            }
+            prevCountStatus(typesTab.total);
 
             $timeout(function () {
                 $scope.queryCounts(gigaspace);

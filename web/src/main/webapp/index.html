@@ -190,20 +190,28 @@
             <p></p>
 
             <table class="result">
+                <thead>
+                    <tr>
+                        <th class="mono-text" ng-click="orderTypesBy('name')">Type</th>
+                        <th class="mono-text" ng-click="orderTypesBy('count')">Count</th>
+                        <th class="mono-text">Updated</th>
+                        <th class="mono-text"></th>
+                    </tr>
+                </thead>
                 <tbody>
                 <tr class="mono-text">
                     <td>Total</td>
-                    <td align="right">{{ counts.total.count }}</td>
-                    <td align="right">{{ prevCountStatus(counts.total) }}</td>
+                    <td align="right">{{ context.selectedGigaspace.typesTab.total.count }}</td>
+                    <td align="right">{{ context.selectedGigaspace.typesTab.total.status }}</td>
                     <td>&nbsp;</td>
                 </tr>
-                <tr ng-repeat="count in context.selectedGigaspace.typesTab.data | filter : filterCounts | orderBy:'name'"
+                <tr ng-repeat="count in context.selectedGigaspace.typesTab.data | filter : filterCounts | orderBy : getTypesOrderBy() : context.selectedGigaspace.typesTab.orderAsc"
                     class="mono-text"
                     ng-click="context.selectedGigaspace.typesTab.selectedCount = count"
                     ng-class="context.selectedGigaspace.typesTab.selectedCount == count ? 'selected' : ''">
                     <td class="{{ getCountClass(count) }}">{{ count.name }}</td>
                     <td align="right">{{ count.count }}</td>
-                    <td align="right">{{ prevCountStatus(count) }}</td>
+                    <td align="right">{{ count.status }}</td>
                     <td>
                         <a href="javascript:void(0);" ng-click="openQueryTabWithSelectFor(count.name)">select</a>
                         <a href="javascript:void(0);" ng-click="openQueryTabWithUpdateFor(count.name)">update</a>
