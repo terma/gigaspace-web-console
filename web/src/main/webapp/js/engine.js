@@ -655,6 +655,11 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
         asyncUpdateAndGoToEndAndFocus(updatedContent);
     }
 
+    $scope.openCopyTabFor = function (typeName) {
+        $scope.openCopyTab();
+        $scope.context.selectedGigaspace.copyTab.content = "copy " + typeName;
+    };
+
     function asyncUpdateAndGoToEndAndFocus(content) {
         // timeout here is fix of issues that codemirror doesn't reflect new value when hidden
         $timeout(function () {
