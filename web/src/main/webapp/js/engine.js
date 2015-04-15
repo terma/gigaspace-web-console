@@ -114,6 +114,9 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
                         // restore link on selected editor
                         this.gigaspaces[i].queryTab.selectedEditor =
                             fromStore.gigaspaces[i].queryTab.editors[fromStore.gigaspaces[i].queryTab.selectedEditor];
+
+                        // create export if not present
+                        if (!this.gigaspaces[i].exportTab) this.gigaspaces[i].exportTab = {};
                     }
                 }
             } else {
@@ -133,6 +136,7 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
                                 password: predefinedGigaspace.password,
                                 selectedTab: "query",
                                 typesTab: {},
+                                exportTab: {},
                                 queryTab: {
                                     editors: [
                                         {
@@ -556,6 +560,50 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
     $scope.openCopyTab = function () {
         $scope.closeTabs();
         $scope.context.selectedGigaspace.selectedTab = "copy";
+    };
+
+    $scope.openImportTab = function () {
+        $scope.closeTabs();
+        $scope.context.selectedGigaspace.selectedTab = "import";
+    };
+
+    $scope.openExportTab = function () {
+        $scope.closeTabs();
+        $scope.context.selectedGigaspace.selectedTab = "export";
+    };
+
+    $scope.export = function () {
+        types = [];
+
+        var typesString = $scope.context.selectedGigaspace.exportTab.types;
+        if (typesString) {
+            // todo parse types
+            //typesString.splite(",")
+        }
+
+        var request = {
+            url: $scope.context.selectedGigaspace.url,
+            user: $scope.context.selectedGigaspace.user,
+            password: $scope.context.selectedGigaspace.password,
+            gs: $scope.context.selectedGigaspace.gs,
+            types: types,
+            appVersion: $scope.config.internal.appVersion
+        };
+
+        var form = $("<form></form>").attr("action", "export").attr("method", "post");
+        form.append($("<input></input>").attr("type", "hidden").attr("name", "json").attr("value", angular.toJson(request)));
+        form.appendTo("body").submit().remove();
+    };
+
+    $scope.startImport = function () {
+        console.log("enrich import form with json");
+        $("#import-json").val(angular.toJson({
+            url: $scope.context.selectedGigaspace.url,
+            user: $scope.context.selectedGigaspace.user,
+            password: $scope.context.selectedGigaspace.password,
+            gs: $scope.context.selectedGigaspace.gs,
+            appVersion: $scope.config.internal.appVersion
+        }));
     };
 
     function openQueryTabWith(sql, replaceContent) {

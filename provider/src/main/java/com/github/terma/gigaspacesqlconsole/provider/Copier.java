@@ -8,11 +8,11 @@ import com.j_spaces.core.client.ExternalEntry;
 import com.j_spaces.core.client.GSIterator;
 import com.j_spaces.core.client.SQLQuery;
 import org.openspaces.core.GigaSpace;
-import org.openspaces.core.GigaSpaceConfigurer;
 import org.openspaces.core.IteratorBuilder;
-import org.openspaces.core.space.UrlSpaceConfigurer;
 
 import java.util.logging.Logger;
+
+import static com.github.terma.gigaspacesqlconsole.provider.GigaSpaceUtils.getGigaSpace;
 
 public class Copier {
 
@@ -25,11 +25,8 @@ public class Copier {
 
         final CopySql copySql = CopySqlParser.parse(request.sql);
 
-        final GigaSpace sourceGigaspace = gigaSpaceConnection(request);
-
-        final UrlSpaceConfigurer urlSpaceConfigurer = new UrlSpaceConfigurer(request.targetUrl);
-        urlSpaceConfigurer.userDetails(request.targetUser, request.targetPassword);
-        final GigaSpace targetGigaspace = new GigaSpaceConfigurer(urlSpaceConfigurer.create()).create();
+        final GigaSpace sourceGigaspace = getGigaSpace(request);
+        final GigaSpace targetGigaspace = getGigaSpace(request.targetUrl, request.targetUser, request.targetPassword);
 
         final SQLQuery sqlQuery = new SQLQuery(copySql.typeName, copySql.where);
 
@@ -64,13 +61,6 @@ public class Copier {
         final CopyResponse response = new CopyResponse();
         response.count = total;
         return response;
-    }
-
-    @SuppressWarnings("deprecation")
-    private static GigaSpace gigaSpaceConnection(CopyRequest request) {
-        UrlSpaceConfigurer urlSpaceConfigurer = new UrlSpaceConfigurer(request.url);
-        urlSpaceConfigurer.userDetails(request.user, request.password);
-        return new GigaSpaceConfigurer(urlSpaceConfigurer.create()).create();
     }
 
 }

@@ -9,6 +9,7 @@
         "/Users/terma/.m2/repository/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar",
         // todo only for embedded spaces
         "/Users/terma/.m2/repository/org/springframework/spring-core/3.2.4.RELEASE/spring-core-3.2.4.RELEASE.jar",
+        "/Users/terma/.m2/repository/org/springframework/spring-context/3.2.4.RELEASE/spring-context-3.2.4.RELEASE.jar",
         "/Users/terma/.m2/repository/org/springframework/spring-tx/3.2.4.RELEASE/spring-tx-3.2.4.RELEASE.jar"
       ]
     },
@@ -31,7 +32,11 @@
         "/Users/terma/.m2/repository/com/gigaspaces/gs-runtime/9.7.0-10491-M6/gs-runtime-9.7.0-10491-M6.jar",
         "/Users/terma/.m2/repository/com/gigaspaces/gs-openspaces/9.7.0-10491-M6/gs-openspaces-9.7.0-10491-M6.jar",
         "/Users/terma/.m2/repository/org/springframework/spring-beans/3.2.4.RELEASE/spring-beans-3.2.4.RELEASE.jar",
-        "/Users/terma/.m2/repository/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar"
+        "/Users/terma/.m2/repository/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar",
+        // todo only for embedded spaces
+        "/Users/terma/.m2/repository/org/springframework/spring-core/3.2.4.RELEASE/spring-core-3.2.4.RELEASE.jar",
+        "/Users/terma/.m2/repository/org/springframework/spring-context/3.2.4.RELEASE/spring-context-3.2.4.RELEASE.jar",
+        "/Users/terma/.m2/repository/org/springframework/spring-tx/3.2.4.RELEASE/spring-tx-3.2.4.RELEASE.jar"
       ]
     }
   ],

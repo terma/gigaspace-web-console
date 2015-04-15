@@ -4,6 +4,7 @@ import com.gigaspaces.document.SpaceDocument;
 import com.gigaspaces.metadata.SpaceTypeDescriptor;
 import com.gigaspaces.metadata.SpaceTypeDescriptorBuilder;
 import com.github.terma.gigaspacesqlconsole.core.ExecuteRequest;
+import com.github.terma.gigaspacesqlconsole.core.GeneralRequest;
 import com.j_spaces.jdbc.driver.GConnection;
 import org.openspaces.core.GigaSpace;
 import org.openspaces.core.GigaSpaceConfigurer;
@@ -24,7 +25,7 @@ public class GigaSpaceUtils {
         gigaSpace.getTypeManager().registerTypeDescriptor(typeDescriptor);
     }
 
-    public static void createDocument(GigaSpace gigaSpace, String typeName) {
+    public static void writeDocument(GigaSpace gigaSpace, String typeName) {
         final SpaceDocument spaceDocument = new SpaceDocument(typeName);
         spaceDocument.setProperty("A", idGenerator.incrementAndGet());
         spaceDocument.setProperty("B", false);
@@ -37,9 +38,14 @@ public class GigaSpaceUtils {
         return new GigaSpaceConfigurer(urlSpaceConfigurer.create()).create();
     }
 
-    public static GigaSpace getGigaSpace(ExecuteRequest request) {
-        UrlSpaceConfigurer urlSpaceConfigurer = new UrlSpaceConfigurer(request.url);
-        urlSpaceConfigurer.userDetails(request.user, request.password);
+    public static GigaSpace getGigaSpace(final GeneralRequest request) {
+        return getGigaSpace(request.url, request.user, request.password);
+    }
+
+    @SuppressWarnings("deprecation")
+    public static GigaSpace getGigaSpace(final String url, final String user, final String password) {
+        UrlSpaceConfigurer urlSpaceConfigurer = new UrlSpaceConfigurer(url);
+        urlSpaceConfigurer.userDetails(user, password);
         return new GigaSpaceConfigurer(urlSpaceConfigurer.create()).create();
     }
 

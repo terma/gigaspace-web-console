@@ -29,9 +29,9 @@ public class CountsTest {
         final GigaSpace gigaSpace = GigaSpaceUtils.getGigaSpace(url);
         GigaSpaceUtils.registerType(gigaSpace, "com.a");
 
-        GigaSpaceUtils.createDocument(gigaSpace, "com.a");
-        GigaSpaceUtils.createDocument(gigaSpace, "com.a");
-        GigaSpaceUtils.createDocument(gigaSpace, "com.a");
+        GigaSpaceUtils.writeDocument(gigaSpace, "com.a");
+        GigaSpaceUtils.writeDocument(gigaSpace, "com.a");
+        GigaSpaceUtils.writeDocument(gigaSpace, "com.a");
 
         CountsRequest countsRequest = new CountsRequest();
         countsRequest.url = url;

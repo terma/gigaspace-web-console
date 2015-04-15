@@ -2,6 +2,10 @@ package com.github.terma.gigaspacesqlconsole.provider;
 
 import com.github.terma.gigaspacesqlconsole.core.*;
 
+import java.io.InputStream;
+import java.io.OutputStream;
+
+@SuppressWarnings("UnusedDeclaration")
 public class ProviderImpl implements Provider {
 
     private Counts countsProvider = new Counts();
@@ -24,6 +28,16 @@ public class ProviderImpl implements Provider {
     @Override
     public void execute(ExecuteRequest request, GroovyExecuteResponseStream responseStream) throws Exception {
         GroovyExecutor.execute(request, responseStream);
+    }
+
+    @Override
+    public void export(ExportRequest request, OutputStream outputStream) throws Exception {
+        Exporter.execute(request, outputStream);
+    }
+
+    @Override
+    public void import1(ImportRequest request, InputStream inputStream) throws Exception {
+        Importer.execute(request, inputStream);
     }
 
 }
