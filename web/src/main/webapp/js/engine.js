@@ -784,9 +784,31 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
     };
 
     $scope.queryColumnToTimestamp = function (data, columnIndex) {
+        // <= 10 - seconds
+        // <= 13 - ms
+        // > 13 - reduce to ms
+
+        function secTimestampToTime(string) {
+            return msTimestampToTime(string + "000");
+        }
+
+        function msTimestampToTime(string) {
+            return new Date(parseInt(string)).toUTCString();
+        }
+
+        function moreThanMsTimestampToTime(string) {
+            return msTimestampToTime(string.substring(0, 13));
+        }
+
+        var stringToTime = undefined;
+        var testValueLength = data.data[0][columnIndex].length;
+        if (testValueLength <= 10) stringToTime = secTimestampToTime;
+        else if (testValueLength <= 13) stringToTime = msTimestampToTime;
+        else stringToTime = moreThanMsTimestampToTime;
+
         for (var i = 0; i < data.data.length; i++) {
             var value = data.data[i][columnIndex];
-            data.data[i][columnIndex] = value + " > " + new Date(parseInt(value)).toUTCString();
+            data.data[i][columnIndex] = value + " > " + stringToTime(value);
         }
     };
 
