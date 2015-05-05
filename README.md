@@ -123,6 +123,20 @@ public interface SqlResult {
 * ```java void out(message: java.lang.Object)``` - print any result to console output
 * ```java gs``` - ref on GigaSpace instance
 
+#### Useful fast scripts
+
+Show space type description:
+```java  
+groovy
+gs.typeManager.getTypeDescriptor("typeName")  
+```
+
+*Clean all data from space! Think twice!*
+```java  
+groovy
+gs.clear(null)  
+```
+
 ### Copy data between spaces
 
 ![Copy data between spaces](https://raw.githubusercontent.com/terma/gigaspace-sql-console/master/img/copy.png)
