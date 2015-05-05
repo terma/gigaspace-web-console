@@ -94,13 +94,13 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
         //},
 
         restore: function () {
-            console.log("start restoring context...");
+            log.log("start restoring context...");
             this.gigaspaces = [];
 
             var fromStore = angular.fromJson(window.localStorage.getItem(this.LOCAL_STORAGE_KEY));
 
             if (fromStore) {
-                console.log("stored context found, restoring...");
+                log.log("stored context found, restoring...");
                 for (var i = 0; i < fromStore.gigaspaces.length; i++) {
                     var fromStoreGigaspace = fromStore.gigaspaces[i];
 
@@ -122,7 +122,7 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
             } else {
                 var oldFromStore = angular.fromJson(window.localStorage.getItem(this.LOCAL_STORAGE_OLD_KEY));
                 if (oldFromStore) {
-                    console.log("old context found, migrating...");
+                    log.log("old context found, migrating...");
                     for (var i = 0; i < oldFromStore.length; i++) {
                         var url = oldFromStore[i].url;
                         var oldEditor = oldFromStore[i].editor;
@@ -155,12 +155,12 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
                 }
             }
 
-            console.log("context restored");
-            console.log(this.gigaspaces);
+            log.log("context restored");
+            log.log(this.gigaspaces);
         },
 
         store: function () {
-            console.log("starting store context");
+            log.log("starting store context");
 
             keepSelectedEditorCursor(); // as no direct update to model we should do this manually
 
@@ -214,7 +214,7 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
             }
 
             window.localStorage.setItem(this.LOCAL_STORAGE_KEY, angular.toJson(toStore));
-            console.log("context was stored");
+            log.log("context was stored");
         }
 
     };
@@ -247,7 +247,7 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
     function keepSelectedEditorCursor() {
         // todo keep not only line but selection as well
         $scope.context.selectedGigaspace.queryTab.selectedEditor.cursor = $scope.codeMirrorEditor.getCursor().line;
-        console.log("store cursor in " + $scope.context.selectedGigaspace.queryTab.cursor);
+        log.log("store cursor in " + $scope.context.selectedGigaspace.queryTab.cursor);
     }
 
     $scope.selectGigaspace = function (predefinedGigaspace) {
@@ -261,8 +261,8 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
                     editors: []
                 }
             };
-            console.log("Add new gigaspace:");
-            console.log(gigaspace);
+            log.log("Add new gigaspace:");
+            log.log(gigaspace);
             $scope.context.gigaspaces.push(gigaspace);
         }
 
@@ -292,8 +292,8 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
         }
 
         // select gigaspace
-        console.log("select gigaspace:");
-        console.log(gigaspace);
+        log.log("select gigaspace:");
+        log.log(gigaspace);
         $scope.context.selectedGigaspace = gigaspace;
 
         // restore cursor position
@@ -409,7 +409,7 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
                     }
                     editor.status = undefined;
                 }).error(function (res) {
-                    console.log(res);
+                    log.log(res);
                     editor.status = undefined;
                     var errorQuery = {error: responseToError(res)};
                     editor.queries.push(errorQuery);
@@ -417,8 +417,8 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
             } else { // real SQL lines
                 for (var j = 0; j < lines.length; j++) {
                     var sql = lines[j];
-                    console.log("start execute sql:");
-                    console.log(sql);
+                    log.log("start execute sql:");
+                    log.log(sql);
                     executeOneQuery({sql: sql});
                 }
             }
@@ -433,14 +433,14 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
 
         var content = $scope.codeMirrorEditor.getSelection()
             || $scope.context.selectedGigaspace.queryTab.selectedEditor.content;
-        console.log("content to execute:");
-        console.log(content);
+        log.log("content to execute:");
+        log.log(content);
 
         var sqlList = filterCommentedAndEmpty(getLines(content));
         if (sqlList.length > 0) executeQueries(sqlList);
 
         if (sqlList.length == 0) {
-            console.log("nothing to execute");
+            log.log("nothing to execute");
             $scope.context.selectedGigaspace.queryTab.selectedEditor.status = "Nothing to execute";
         }
     }
@@ -499,7 +499,7 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
             query.data = res;
             query.data.textLengthLimit = $scope.textLengthLimit;
         }).error(function (res) {
-            console.log(res);
+            log.log(res);
             query.status = undefined;
             query.error = responseToError(res);
         });
@@ -519,12 +519,12 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
 
     $scope.startCheckTypes = function () {
         if ($scope.context.selectedGigaspace.typesTab.checking) {
-            console.log("already started");
+            log.log("already started");
             return;
         }
 
         if ($scope.context.selectedGigaspace.typesTab.error) {
-            console.log("we have errors no start");
+            log.log("we have errors no start");
             return;
         }
 
@@ -538,7 +538,7 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
         if ($scope.context.selectedGigaspace.typesTab.checking) {
             $scope.context.selectedGigaspace.typesTab.status = undefined;
             $scope.context.selectedGigaspace.typesTab.checking = false;
-            console.log("checking stopped");
+            log.log("checking stopped");
         }
     };
 
@@ -591,7 +591,7 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
     };
 
     $scope.startImport = function () {
-        console.log("enrich import form with json");
+        log.log("enrich import form with json");
         $("#import-json").val(angular.toJson({
             url: $scope.context.selectedGigaspace.url,
             user: $scope.context.selectedGigaspace.user,
@@ -756,19 +756,19 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
         $scope.context.selectedGigaspace.copyTab.queries = [];
 
         var content = $scope.context.selectedGigaspace.copyTab.content;
-        console.log("content to copy:");
-        console.log(content);
+        log.log("content to copy:");
+        log.log(content);
 
         var sqlList = filterCommentedAndEmpty(getLines(content));
         for (var j = 0; j < sqlList.length; j++) {
             var sql = sqlList[j];
-            console.log("start copy for sql:");
-            console.log(sql);
+            log.log("start copy for sql:");
+            log.log(sql);
             copyOne({sql: sql});
         }
 
         if (sqlList.length == 0) {
-            console.log("nothing to copy");
+            log.log("nothing to copy");
             $scope.context.selectedGigaspace.copyTab.status = "Nothing to copy";
         }
     };
@@ -808,8 +808,8 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
     };
 
     $scope.selectTargetGigaspace = function (gigaspace) {
-        console.log("select target g");
-        console.log($scope.context.selectedGigaspace.copyTab);
+        log.log("select target g");
+        log.log($scope.context.selectedGigaspace.copyTab);
         $scope.context.selectedGigaspace.copyTab.targetUrl = gigaspace.url;
         $scope.context.selectedGigaspace.copyTab.targetUser = gigaspace.user;
         $scope.context.selectedGigaspace.copyTab.targetPassword = gigaspace.password;
@@ -845,7 +845,7 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
         }).success(function (res) {
             query.status = undefined;
             query.count = res.count;
-            console.log(query);
+            log.log(query);
         }).error(function (res) {
             query.status = undefined;
             query.error = responseToError(res);
@@ -878,7 +878,7 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
             }
         }).error(function (res) {
             // todo show error if can't load config, as temporary solution
-            console.log(res);
+            log.log(res);
             alert("Oops... \n" + res);
         });
     };
