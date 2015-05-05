@@ -58,10 +58,8 @@
 
 <div style="padding: 0.5em 1em 1em;">
     <div class="button-dock">
-        <a href="javascript:void(0);" ng-click="openExportTab()"
-           ng-class="context.selectedGigaspace.selectedTab == 'export' ? 'selected-button' : 'button'">Export</a>
-        <a href="javascript:void(0);" ng-click="openImportTab()"
-           ng-class="context.selectedGigaspace.selectedTab == 'import' ? 'selected-button' : 'button'">Import</a>
+        <a href="javascript:void(0);" ng-click="openExportImportTab()"
+           ng-class="context.selectedGigaspace.selectedTab == 'exportImport' ? 'selected-button' : 'button'">Export/Import</a>
         <a href="javascript:void(0);" ng-click="openCopyTab()"
            ng-class="context.selectedGigaspace.selectedTab == 'copy' ? 'selected-button' : 'button'">Copy</a>
         <a href="javascript:void(0);" ng-click="openTypesTab()"
@@ -70,17 +68,25 @@
            ng-class="context.selectedGigaspace.selectedTab == 'query' ? 'selected-button' : 'button'">Query</a>
     </div>
 
-    <div ng-show="context.selectedGigaspace.selectedTab == 'export'">
-        <textarea ng-model="context.selectedGigaspace.exportTab.types"
+    <div ng-show="context.selectedGigaspace.selectedTab == 'exportImport'">
+        Export
+
+        <p></p>
+
+        <textarea ng-model="context.selectedGigaspace.exportImportTab.types"
                   style="width: 100%" rows="6" class="mono-text"
                   placeholder="Keep empty to export all or put types names separated by ,"></textarea>
 
         <p></p>
 
         <a href="javascript:void(0);" ng-click="export()">Export</a>
-    </div>
 
-    <div ng-show="context.selectedGigaspace.selectedTab == 'import'">
+        <p></p>
+
+        Import
+
+        <p></p>
+
         <form method="post" action="import" enctype="multipart/form-data" ng-submit="startImport()">
             <input type="hidden" id="import-json" name="json">
 

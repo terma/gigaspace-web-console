@@ -116,7 +116,7 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
                             fromStore.gigaspaces[i].queryTab.editors[fromStore.gigaspaces[i].queryTab.selectedEditor];
 
                         // create export if not present
-                        if (!this.gigaspaces[i].exportTab) this.gigaspaces[i].exportTab = {};
+                        if (!this.gigaspaces[i].exportImportTab) this.gigaspaces[i].exportImportTab = {};
                     }
                 }
             } else {
@@ -136,7 +136,7 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
                                 password: predefinedGigaspace.password,
                                 selectedTab: "query",
                                 typesTab: {},
-                                exportTab: {},
+                                exportImportTab: {},
                                 queryTab: {
                                     editors: [
                                         {
@@ -562,20 +562,15 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
         $scope.context.selectedGigaspace.selectedTab = "copy";
     };
 
-    $scope.openImportTab = function () {
+    $scope.openExportImportTab = function () {
         $scope.closeTabs();
-        $scope.context.selectedGigaspace.selectedTab = "import";
-    };
-
-    $scope.openExportTab = function () {
-        $scope.closeTabs();
-        $scope.context.selectedGigaspace.selectedTab = "export";
+        $scope.context.selectedGigaspace.selectedTab = "exportImport";
     };
 
     $scope.export = function () {
         types = [];
 
-        var typesString = $scope.context.selectedGigaspace.exportTab.types;
+        var typesString = $scope.context.selectedGigaspace.exportImportTab.types;
         if (typesString) {
             // todo parse types
             //typesString.splite(",")
