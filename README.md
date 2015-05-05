@@ -100,18 +100,28 @@ To execute SQL queries in selected space you just need to select -Query- and SQL
 
 ### Work with Groovy
 
-Sometimes you have complex queries which depends on each other or you need to have spacial calculation on data in space. For example I want to collect all values from select to one string. how I can do that?
+Sometimes you have complex queries which depends on each other or complex calculation. For example I want to collect all values from select to one string. How I can do that?
 
 First of all enable groovy by adding ```groovy``` word in first line of editor.
 Second, create simple [Groovy](http://groovy.codehaus.org/) script and run it in console!
 
 ![Execute Groovy Script](https://raw.githubusercontent.com/terma/gigaspace-sql-console/master/img/groovy.png)
 
-A few additional words about Groovy in console. Withing your script you can use all groovy features plus a few additional: 
+A few additional words about Groovy in console. Withing your script you can use all groovy features (don't forget about proper import) plus a few additional: 
 
-* sql(string) - function which can execute any SQL in GigaSpace and return result
-* out(string) - print any result to console output
-* gs - ref on GigaSpace instance
+* ```java SqlResult sql(sql: java.lang.String)``` - function which can execute any SQL in GigaSpace and return result
+
+```java 
+public interface SqlResult {
+    boolean next() throws SQLException;
+    List<String> getColumns() throws SQLException;
+    List<String> getRow() throws SQLException;
+    String getSql();
+}
+```
+
+* ```java void out(message: java.lang.Object)``` - print any result to console output
+* ```java gs``` - ref on GigaSpace instance
 
 ### Copy data between spaces
 
