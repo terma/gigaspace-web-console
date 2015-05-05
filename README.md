@@ -7,8 +7,9 @@ Free lightweight java web application. Powerful alternative for GigaSpace Manage
 * [How to use](#how-to-use)
  * [Execute SQL Queries](#execute-sql-queries)
  * [Registered Types and Counts](#registered-types-and-counts)
- * [Copy data between spaces](#copy-data-between-spaces)
  * [Execute Groovy](#work-with-groovy)
+ * [Copy data between spaces](#copy-data-between-spaces)
+ * [Export / Import data](#export-import-data)
 
 ## Key Features 
 
@@ -23,6 +24,7 @@ _All of them you don't find in GigaSpace Management Console_
 * Copy data between spaces
 * Export query result to CSV
 * Support Groovy language in console
+* Export / Import data between spaces
 
 ## How install
 
@@ -96,10 +98,6 @@ To execute SQL queries in selected space you just need to select -Query- and SQL
 
 ![Registered Types and Counts](https://raw.githubusercontent.com/terma/gigaspace-sql-console/master/img/types.png)
 
-### Copy data between spaces
-
-![Copy data between spaces](https://raw.githubusercontent.com/terma/gigaspace-sql-console/master/img/copy.png)
-
 ### Work with Groovy
 
 Sometimes you have complex queries which depends on each other or you need to have spacial calculation on data in space. For example I want to collect all values from select to one string. how I can do that?
@@ -114,3 +112,11 @@ A few additional words about Groovy in console. Withing your script you can use 
 * sql(string) - function which can execute any SQL in GigaSpace and return result
 * out(string) - print any result to console output
 * gs - ref on GigaSpace instance
+
+### Copy data between spaces
+
+![Copy data between spaces](https://raw.githubusercontent.com/terma/gigaspace-sql-console/master/img/copy.png)
+
+### Export / Import data
+
+???
