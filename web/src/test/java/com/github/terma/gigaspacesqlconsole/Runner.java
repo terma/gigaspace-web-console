@@ -6,18 +6,31 @@ import org.eclipse.jetty.webapp.WebAppContext;
 
 public class Runner {
 
-    public static void main(String[] args) throws Exception {
+    private Server server;
+
+    public void start() {
         // set config
         System.setProperty(Config.CONFIG_PATH_SYSTEM_PROPERTY, "classpath:/config.json");
 
         WebAppContext webAppContext = new WebAppContext();
-        webAppContext.setContextPath("/");
-        webAppContext.setWar("target/gigaspace-sql-console-0.0.1-SNAPSHOT.war");
+        webAppContext.setContextPath("/gs-sql-console");
+        webAppContext.setWar("target/gigaspace-sql-console-web-0.0.28-SNAPSHOT.war");
 
-        Server server = new Server(8080);
+        server = new Server(8080);
         server.setHandler(webAppContext);
-        server.start();
-        server.join();
+        try {
+            server.start();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void stop() {
+        try {
+            server.stop();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
