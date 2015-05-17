@@ -79,3 +79,17 @@ tr.selected {
     color: black;
     text-decoration: none;
 }
+
+/* fixed header */
+
+.container {
+    margin: auto;
+}
+
+.fixed {
+    background: white;
+    top: 0;
+    position: fixed;
+    display: none;
+    border: none;
+}

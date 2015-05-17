@@ -498,6 +498,9 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
             query.status = undefined;
             query.data = res;
             query.data.textLengthLimit = $scope.textLengthLimit;
+
+            // init fixed header
+            window.setTimeout(function () {$(".fixMe").fixMe();}, 100);
         }).error(function (res) {
             log.log(res);
             query.status = undefined;
@@ -774,6 +777,7 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
     };
 
     $scope.queryColumnIsTimestamp = function (data, columnIndex) {
+        if (data.data.length < 1) return false;
         var firstValue = data.data[0][columnIndex];
         return /^\d{9,}$/.test(firstValue);
     };
