@@ -2,15 +2,17 @@ package com.github.terma.gigaspacesqlconsole;
 
 import org.hamcrest.Matchers;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 import java.util.concurrent.TimeUnit;
 
-public class E2ETest {
+import static org.junit.Assert.assertThat;
+
+public class E2ERun {
 
     private Runner server;
     private WebDriver driver;
@@ -25,9 +27,16 @@ public class E2ETest {
     }
 
     @Test
-    public void testSimple() throws Exception {
+    public void shouldShowMainPage() throws Exception {
         driver.get("http://localhost:8080/gs-sql-console/");
-        Assert.assertThat(driver.getTitle(), Matchers.containsString("GigaSpace SQL Console"));
+        assertThat(driver.getTitle(), Matchers.containsString("GigaSpace SQL Console"));
+    }
+
+    @Ignore
+    @Test
+    public void shouldExecuteSqlForSelectedGsAndShowResult() throws Exception {
+        driver.get("http://localhost:8080/gs-sql-console/");
+        assertThat(driver.getTitle(), Matchers.containsString("GigaSpace SQL Console"));
     }
 
     @After

@@ -4,7 +4,7 @@
     <title>GigaSpace SQL Console {{ config.internal.appVersion }}</title>
     <script type="text/javascript" src="js/log.js"></script>
     <script type="text/javascript" src="js/angular.min.js"></script>
-    <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
+    <script type="text/javascript" src="js/jquery-1.11.3.js"></script>
     <script type="text/javascript" src="js/fixed-header.js"></script>
     <script type="text/javascript" src="js/engine.js"></script>
 
@@ -256,7 +256,7 @@
 
             <p/>
 
-            <table ng-show="query.data" class="result fixMe">
+            <table ng-show="query.data" class="result fixMe" style="table-layout: fixed;">
                 <thead>
                 <tr>
                     <th ng-repeat="value in query.data.columns track by $index" valign="top" class="mono-text">

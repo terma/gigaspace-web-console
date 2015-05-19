@@ -1,44 +1,57 @@
-(function ($) {
-    $.fn.fixMe = function () {
-        return this.each(function () {
-            var $this = $(this),
-                $t_fixed;
+var fixedHeaders = {
 
-            function init() {
-                $this.wrap('<div class="container" />');
-                $t_fixed = $this.clone(); // todo bad approach to copy entire table
-                $t_fixed.find("tbody").remove().end().addClass("fixed").insertBefore($this);
-                resizeFixed();
-            }
+    removeFixed: function (table) {
+        var fixedHeader = table.parent().children(".fixed");
+        fixedHeader.remove();
+    },
 
-            function resizeFixed() {
-                $t_fixed.find("th").each(function (index) {
-                    $(this).css("width", ($this.find("th").eq(index).width() + 1) + "px");
-                });
-            }
+    createFixed: function (table) {
+        var fixedHeader = $(table[0].cloneNode(false));
 
-            function scrollFixed() {
-                $t_fixed.css("left", -$this.scrollLeft());
-                console.log($this.scrollLeft());
+        fixedHeader.append(table.children("thead").clone());
 
-                var offset = $(this).scrollTop(),
-                    tableOffsetTop = $this.offset().top,
-                    tableOffsetBottom = tableOffsetTop + $this.height() - $this.find("thead").height();
+        fixedHeader.addClass("fixed").removeClass("fixMe").insertBefore(table);
+        fixedHeader.css("width", table.width());
 
-                if (offset < tableOffsetTop || offset > tableOffsetBottom)
-                    $t_fixed.hide();
-                else if (offset >= tableOffsetTop && offset <= tableOffsetBottom && $t_fixed.is(":hidden"))
-                    $t_fixed.show();
-            }
+        fixedHeader.find("th").each(function (index) {
+            var width = table.find("th").eq(index).width();
+            $(this).css("width", (width + 1));
+        });
 
-            if (!$this.parent().hasClass("container")) {
-                $(window).resize(resizeFixed);
-                $(window).scroll(scrollFixed);
-                init();
-                console.log("attached");
-            } else {
-                console.log("skip");
+        fixedHeader.show();
+
+        return fixedHeader;
+    },
+
+    showFixed: function (table, offsetLeft, tableOffset) {
+        var fixedHeader = table.parent().children(".fixed");
+
+        if (fixedHeader.length == 0) {
+            fixedHeader = fixedHeaders.createFixed(table);
+        }
+
+        fixedHeader.css("left", tableOffset.left - offsetLeft);
+    },
+
+    onScroll: function () {
+        var offsetTop = $(document).scrollTop();
+        var offsetLeft = $(document).scrollLeft();
+
+        $(".fixMe").each(function () {
+            var table = $(this);
+            var tableOffset = table.offset();
+
+            var tableOffsetTop = tableOffset.top;
+            var tableOffsetBottom = tableOffsetTop + table.height() - table.children("thead").height();
+
+            if (offsetTop < tableOffsetTop || offsetTop > tableOffsetBottom) {
+                fixedHeaders.removeFixed(table);
+            } else if (offsetTop >= tableOffsetTop && offsetTop <= tableOffsetBottom) {
+                fixedHeaders.showFixed(table, offsetLeft, tableOffset);
             }
         });
-    };
-})(jQuery);
+    }
+
+};
+
+$(window).on("scroll", fixedHeaders.onScroll);

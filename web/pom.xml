@@ -192,10 +192,9 @@
                     <jsSrcDir>${basedir}/src/main/webapp/js</jsSrcDir>
 
                     <preloadSources>
+                        <source>${basedir}/src/main/webapp/js/jquery-1.11.3.js</source>
                         <source>${basedir}/src/main/webapp/js/angular.min.js</source>
-                        <!--<source>${bower-components}/angular-resource/angular-resource.js</source>-->
                         <source>${basedir}/src/test/javascript/angular-mocks.js</source>
-                        <source>${basedir}/src/main/webapp/js/app.js</source>
                     </preloadSources>
                 </configuration>
             </plugin>

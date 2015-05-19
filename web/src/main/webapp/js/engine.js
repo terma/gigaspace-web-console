@@ -498,9 +498,6 @@ App.controller("GigaSpaceBrowserController", ["$scope", "$http", "$q", "$timeout
             query.status = undefined;
             query.data = res;
             query.data.textLengthLimit = $scope.textLengthLimit;
-
-            // init fixed header
-            window.setTimeout(function () {$(".fixMe").fixMe();}, 100);
         }).error(function (res) {
             log.log(res);
             query.status = undefined;
