@@ -4,29 +4,31 @@ import com.github.terma.gigaspacesqlconsole.core.CountsRequest;
 import org.openspaces.admin.AdminFactory;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 class AdminCache {
 
     private final Map<AdminCacheKey, AdminCacheItem> cache = new HashMap<>();
+    private final long expirationTime;
 
-    public synchronized void clearExpired() {
-        for (final Map.Entry<AdminCacheKey, AdminCacheItem> cacheItem : cache.entrySet()) {
-            if (System.currentTimeMillis() - cacheItem.getValue().lastUsage > TimeUnit.MINUTES.toMillis(10)) {
-                cache.remove(cacheItem.getKey());
-                cacheItem.getValue().admin.close();
-            }
-        }
+    public AdminCache(final long expirationTime) {
+        this.expirationTime = expirationTime;
     }
 
-    public synchronized void clear() {
-        System.out.println("Start clear...");
+    public AdminCache() {
+        this(TimeUnit.MINUTES.toMillis(10));
+    }
 
-        // todo add map clear
-        for (final Map.Entry<AdminCacheKey, AdminCacheItem> item : cache.entrySet()) {
-            System.out.println("Start clear...");
-            item.getValue().admin.close();
+    public synchronized void clearExpired() {
+        Iterator<Map.Entry<AdminCacheKey, AdminCacheItem>> iterator = cache.entrySet().iterator();
+        while (iterator.hasNext()) {
+            final Map.Entry<AdminCacheKey, AdminCacheItem> item = iterator.next();
+            if (System.currentTimeMillis() - item.getValue().lastUsage > expirationTime) {
+                iterator.remove();
+                item.getValue().admin.close();
+            }
         }
     }
 
@@ -59,6 +61,10 @@ class AdminCache {
         item.lastUsage = System.currentTimeMillis();
 
         return item;
+    }
+
+    public synchronized int size() {
+        return cache.size();
     }
 
     private static AdminCacheKey requestToKey(final CountsRequest request) {
