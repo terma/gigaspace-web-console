@@ -33,4 +33,23 @@ public class AdminCacheTest {
         assertThat(adminCache.size(), equalTo(0));
     }
 
+    @Test
+    public void shouldNotCloseNotExpiredAdmin() throws InterruptedException {
+        // given
+        final AdminCache adminCache = new AdminCache(TimeUnit.MINUTES.toMillis(1));
+        final CountsRequest countsRequest = new CountsRequest();
+
+        countsRequest.url = "/./admin-cache-test";
+        adminCache.createOrGet(countsRequest);
+
+        assertThat(adminCache.size(), equalTo(1));
+
+        // when
+        Thread.sleep(TimeUnit.SECONDS.toMillis(1));
+        adminCache.clearExpired();
+
+        // then
+        assertThat(adminCache.size(), equalTo(1));
+    }
+
 }
