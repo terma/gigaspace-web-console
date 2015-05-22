@@ -34,4 +34,9 @@ class AdminCacheKey {
         return result;
     }
 
+    @Override
+    public String toString() {
+        return "locators: " + locators + ", user: " + user;
+    }
+
 }

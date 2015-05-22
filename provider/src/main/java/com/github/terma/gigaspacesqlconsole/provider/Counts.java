@@ -12,8 +12,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 public class Counts {
+
+    private static final Logger LOGGER = Logger.getLogger(Counts.class.getName());
 
     private static final AdminCache adminCache = new AdminCache();
 
@@ -54,13 +57,13 @@ public class Counts {
                 .waitFor(GigaSpaceUrl.parseSpace(request.url), 10, TimeUnit.SECONDS);
         if (space != null) {
             SpaceInstance[] spaceInstances = space.getInstances();
-            System.out.println("Admin has " + spaceInstances.length + " space instances");
+            LOGGER.fine("Admin has " + spaceInstances.length + " space instances");
 
             final Map<String, Integer> counts = new HashMap<>();
             for (final SpaceInstance spaceInstance : spaceInstances) {
                 if (spaceInstance.getMode() != SpaceMode.BACKUP) {
                     for (final Map.Entry<String, Integer> countItem : instanceToCounts(spaceInstance).entrySet()) {
-                        System.out.println("Space instance " + spaceInstance + " has " + countItem + " types");
+                        LOGGER.fine("Space instance " + spaceInstance + " has " + countItem + " types");
                         Integer count = counts.get(countItem.getKey());
                         if (count == null) count = 0;
                         counts.put(countItem.getKey(), count + countItem.getValue());

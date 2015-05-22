@@ -7,8 +7,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 class AdminCache {
+
+    private static final Logger LOGGER = Logger.getLogger(AdminCache.class.getName());
 
     private final Map<AdminCacheKey, AdminCacheItem> cache = new HashMap<>();
     private final long expirationTime;
@@ -26,8 +29,10 @@ class AdminCache {
         while (iterator.hasNext()) {
             final Map.Entry<AdminCacheKey, AdminCacheItem> item = iterator.next();
             if (System.currentTimeMillis() - item.getValue().lastUsage > expirationTime) {
+                LOGGER.fine("Close expired admin " + item.getKey() + "...");
                 iterator.remove();
                 item.getValue().admin.close();
+                LOGGER.fine("Expired admin closed");
             }
         }
     }
@@ -42,11 +47,11 @@ class AdminCache {
             // reduce amount of info which admin collects
 //            adminFactory.setDiscoveryServices(Space.class);
 
+            LOGGER.fine("Creating admin for " + key + "...");
             if (key.locators == null) {
                 adminFactory.discoverUnmanagedSpaces();
             } else {
                 adminFactory.userDetails(request.user, request.password);
-                System.out.println("Starting to get admin for " + key.locators + "...");
                 adminFactory.addLocators(key.locators);
             }
 
@@ -54,7 +59,7 @@ class AdminCache {
             item.admin = adminFactory.createAdmin();
             cache.put(key, item);
         } else {
-            System.out.println("Use cached admin for " + request.url);
+            LOGGER.fine("Use cached admin for " + request.url);
         }
 
         // update last usage
