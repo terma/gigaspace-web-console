@@ -60,6 +60,8 @@
 
 <div style="padding: 0.5em 1em 1em;">
     <div class="button-dock">
+        <a href="javascript:void(0);" ng-click="openAdminTab()"
+           ng-class="context.selectedGigaspace.selectedTab == 'admin' ? 'selected-button' : 'button'">Admin</a>
         <a href="javascript:void(0);" ng-click="openExportImportTab()"
            ng-class="context.selectedGigaspace.selectedTab == 'exportImport' ? 'selected-button' : 'button'">Export/Import</a>
         <a href="javascript:void(0);" ng-click="openCopyTab()"
@@ -68,6 +70,22 @@
            ng-class="context.selectedGigaspace.selectedTab == 'types' ? 'selected-button' : 'button'">Types</a>
         <a href="javascript:void(0);" ng-click="openQueryTab()"
            ng-class="context.selectedGigaspace.selectedTab == 'query' ? 'selected-button' : 'button'">Query</a>
+    </div>
+
+    <div ng-show="context.selectedGigapsace.selectedTab == 'admin'">
+        <input type="text" placeholder="PU name to filter">
+
+        <a href="javascript:void(0);">Restart Partitions</a>
+        <a href="javascript:void(0);">Undeploy</a>
+
+        <table>
+            <tbody>
+                <tr ng-repeat="gsc in gs.gscs">
+                    <td>{{ gsc.name }} {{ gsc.processId }} {{ gsc.host }}</td>
+                    <td>Mem</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
     <div ng-show="context.selectedGigaspace.selectedTab == 'exportImport'">

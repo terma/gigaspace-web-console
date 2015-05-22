@@ -88,6 +88,15 @@ public class GroovyExecutorTest {
 
         GroovyExecutor.execute(request, responseStream);
 
+
+        assertEquals(1, responseStream.results.size());
+    }
+    @Test
+    public void shouldAllowToGetSpaceMemUsage() throws Exception {
+        request.sql = "mem()";
+
+        GroovyExecutor.execute(request, responseStream);
+
         assertEquals(1, responseStream.results.size());
     }
 
