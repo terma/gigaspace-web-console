@@ -72,17 +72,33 @@
            ng-class="context.selectedGigaspace.selectedTab == 'query' ? 'selected-button' : 'button'">Query</a>
     </div>
 
-    <div ng-show="context.selectedGigapsace.selectedTab == 'admin'">
-        <input type="text" placeholder="PU name to filter">
+    <div ng-show="context.selectedGigaspace.selectedTab == 'admin'">
+        <input type="text" class="mono-text" placeholder="PU name to filter" ng-model="puFilter">
 
         <a href="javascript:void(0);">Restart Partitions</a>
         <a href="javascript:void(0);">Undeploy</a>
 
-        <table>
+        <p></p>
+
+        <table class="result" style="table-layout: fixed;">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" ng-click="togglePUs()" ng-model="admin.selected"></th>
+                    <th>Name</th>
+                    <th>Status</th>
+                    <th>Instances</th>
+                    <th>Mem (Mb)</th>
+                    <th>GSCs</th>
+                </tr>
+            </thead>
             <tbody>
-                <tr ng-repeat="gsc in gs.gscs">
-                    <td>{{ gsc.name }} {{ gsc.processId }} {{ gsc.host }}</td>
-                    <td>Mem</td>
+                <tr class="mono-text" ng-repeat="pu in pus | orderBy : 'name' | filter : puFilter">
+                    <td><input type="checkbox" ng-model="pu.selected"></td>
+                    <td>{{ pu.name }}</td>
+                    <td>{{ pu.status }}</td>
+                    <td align="center">{{ pu.expectedInstances }} / {{ pu.instances }}</td>
+                    <td align="center">{{ pu.mem.max }} / {{ pu.mem.used }}</td>
+                    <td>{{ pu.gscs }}</td>
                 </tr>
             </tbody>
         </table>

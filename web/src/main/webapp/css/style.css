@@ -24,8 +24,8 @@ body {
 input, textarea {
     margin: 0;
     background-color: transparent;
-    -webkit-appearance: none;
-    -moz-appearance: none;
+    /*-webkit-appearance: none;*/
+    /*-moz-appearance: none;*/
     border: 1px solid #C0C0C0;
 }
 
@@ -80,18 +80,10 @@ tr.selected {
     text-decoration: none;
 }
 
-/* fixed header */
-
-/*.container {*/
-    /*margin: auto;*/
-/*}*/
-
 .fixed {
     background: white;
     top: 0;
     position: fixed;
-    /*position: absolute;*/
-    /*left: 1em;*/
     display: none;
     border: none;
 }
