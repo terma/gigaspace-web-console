@@ -1,0 +1,85 @@
+{
+  "gs": [
+    {
+      "name": "GS-10",
+      "libs": [
+        "${localRepository}/com/gigaspaces/gs-runtime/10.0.1-11800-RELEASE/gs-runtime-10.0.1-11800-RELEASE.jar",
+        "${localRepository}/com/gigaspaces/gs-openspaces/10.0.1-11800-RELEASE/gs-openspaces-10.0.1-11800-RELEASE.jar",
+        "${localRepository}/org/springframework/spring-beans/3.2.4.RELEASE/spring-beans-3.2.4.RELEASE.jar",
+        "${localRepository}/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar",
+        // todo only for embedded spaces
+        "${localRepository}/org/springframework/spring-core/3.2.4.RELEASE/spring-core-3.2.4.RELEASE.jar",
+        "${localRepository}/org/springframework/spring-context/3.2.4.RELEASE/spring-context-3.2.4.RELEASE.jar",
+        "${localRepository}/org/springframework/spring-tx/3.2.4.RELEASE/spring-tx-3.2.4.RELEASE.jar"
+      ]
+    },
+    {
+      "name": "GS-9.5",
+      "libs": [
+        "${localRepository}/com/gigaspaces/gs-runtime/9.5.0-M7/gs-runtime-9.5.0-M7.jar",
+        "${localRepository}/com/gigaspaces/gs-openspaces/9.5.0-M7/gs-openspaces-9.5.0-M7.jar",
+        "${localRepository}/org/springframework/spring-beans/3.2.4.RELEASE/spring-beans-3.2.4.RELEASE.jar",
+        "${localRepository}/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar",
+        // todo only for embedded spaces
+        "${localRepository}/org/springframework/spring-core/3.2.4.RELEASE/spring-core-3.2.4.RELEASE.jar",
+        "${localRepository}/org/springframework/spring-context/3.2.4.RELEASE/spring-context-3.2.4.RELEASE.jar",
+        "${localRepository}/org/springframework/spring-tx/3.2.4.RELEASE/spring-tx-3.2.4.RELEASE.jar"
+      ]
+    },
+    {
+      "name": "GS-9.7",
+      "libs": [
+        "${localRepository}/com/gigaspaces/gs-runtime/9.7.0-10491-M6/gs-runtime-9.7.0-10491-M6.jar",
+        "${localRepository}/com/gigaspaces/gs-openspaces/9.7.0-10491-M6/gs-openspaces-9.7.0-10491-M6.jar",
+        "${localRepository}/org/springframework/spring-beans/3.2.4.RELEASE/spring-beans-3.2.4.RELEASE.jar",
+        "${localRepository}/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar",
+        // todo only for embedded spaces
+        "${localRepository}/org/springframework/spring-core/3.2.4.RELEASE/spring-core-3.2.4.RELEASE.jar",
+        "${localRepository}/org/springframework/spring-context/3.2.4.RELEASE/spring-context-3.2.4.RELEASE.jar",
+        "${localRepository}/org/springframework/spring-tx/3.2.4.RELEASE/spring-tx-3.2.4.RELEASE.jar"
+      ]
+    }
+  ],
+  "links": [
+    {
+      "name": "Home",
+      "url": "http://www.yandex.ru"
+    },
+    {
+      "name": "Status",
+      "url": "http://www.google.com"
+    }
+  ],
+  "converters": [
+//    "com.github.terma.gigaspacesqlconsole.TestConverter"
+  ],
+  "gigaspaces": [
+    {
+      "name": "LOCAL",
+      "url": "/./local",
+      "user": "",
+      "password": "",
+      "gs": "GS-10"
+    },
+    {
+      "name": "GS-10",
+      "url": "jini:/*/*/gs10?locators=localhost:4700",
+      "user": "",
+      "password": ""
+    },
+    {
+      "name": "GS-9.5",
+      "url": "jini:/*/*/gs95?locators=localhost:4300",
+      "user": "admin",
+      "password": "admin",
+      "gs": "GS-9.5"
+    },
+    {
+      "name": "GS-9.7",
+      "url": "jini:/*/*/gs97?locators=localhost:4500",
+      "user": "",
+      "password": "",
+      "gs": "GS-9.7"
+    }
+  ]
+}

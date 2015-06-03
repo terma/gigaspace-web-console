@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html ng-app="App" ng-controller="controller">
+<head>
+    <title>GigaSpace SQL Console {{ config.internal.appVersion }}</title>
+    <script type="text/javascript" src="js/log.js"></script>
+    <script type="text/javascript" src="js/angular.min.js"></script>
+    <script type="text/javascript" src="js/jquery-1.11.3.js"></script>
+    <script type="text/javascript" src="js/fixed-header.js"></script>
+    <script type="text/javascript" src="js/engine.js"></script>
+
+    <script type="text/javascript" src="js/codemirror.js"></script>
+    <script type="text/javascript" src="js/ui-codemirror.min.js"></script>
+    <script type="text/javascript" src="js/codemirror/mode/sql.js"></script>
+    <script type="text/javascript" src="js/codemirror/addon/hint/show-hint.js"></script>
+    <script type="text/javascript" src="js/codemirror/addon/hint/sql-hint.js"></script>
+    <script type="text/javascript" src="js/codemirror/addon/placeholder.js"></script>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/codemirror.css">
+    <link rel="stylesheet" href="js/codemirror/addon/hint/show-hint.css">
+</head>
+<body>
+
+<div style="overflow: auto; padding: 1em 1em 0.5em;">
+    <div ng-repeat="link in config.user.links" style="float: left;">
+        <a href="{{ link.url }}">{{ link.name }}</a>&nbsp;
+    </div>
+
+    <div style="float: right;">
+        <a target="_blank" href="http://terma.github.io/gigaspace-sql-console">Help</a>
+    </div>
+</div>
+
+<div style="padding: 0.5em 1em;">
+    <div class="button-dock">
+        <a ng-repeat="gigaspace in config.user.gigaspaces"
+           ng-class="context.selectedGigaspace.name == gigaspace.name ? 'selected-button' : 'button'"
+           ng-click="selectGigaspace(gigaspace)" href="javascript:void(0);">{{ gigaspace.name }}</a>
+    </div>
+
+    <input placeholder="GigaSpace URL" ng-model="context.selectedGigaspace.url" style="width: 100%;"
+           class="mono-text connection"/>
+
+    <div ng-show="config.user.gs.length > 1">
+        <p></p>
+        <select class="mono-text connection" ng-model="request.gs">
+            <option ng-repeat="gs in config.user.gs" value="{{ gs.name }}"
+                    ng-selected="context.selectedGigaspace.gs == gs.name">
+                {{ gs.name }}
+            </option>
+        </select>
+    </div>
+
+    <p></p>
+    <input ng-model="context.selectedGigaspace.user" class="mono-text connection" placeholder="User"/>
+    <input type="password" ng-model="context.selectedGigaspace.password" class="mono-text connection"
+           placeholder="Password"/>
+
+</div>
+
+<div style="padding: 0.5em 1em 1em;">
+    <div class="button-dock">
+        <!--<a href="javascript:void(0);" ng-click="openAdminTab()"-->
+           <!--ng-class="context.selectedGigaspace.selectedTab == 'admin' ? 'selected-button' : 'button'">Admin</a>-->
+        <a href="javascript:void(0);" ng-click="openExportImportTab()"
+           ng-class="context.selectedGigaspace.selectedTab == 'exportImport' ? 'selected-button' : 'button'">Export/Import</a>
+        <a href="javascript:void(0);" ng-click="openCopyTab()"
+           ng-class="context.selectedGigaspace.selectedTab == 'copy' ? 'selected-button' : 'button'">Copy</a>
+        <a href="javascript:void(0);" ng-click="openTypesTab()"
+           ng-class="context.selectedGigaspace.selectedTab == 'types' ? 'selected-button' : 'button'">Types</a>
+        <a href="javascript:void(0);" ng-click="openQueryTab()"
+           ng-class="context.selectedGigaspace.selectedTab == 'query' ? 'selected-button' : 'button'">Query</a>
+    </div>
+
+    <!--<div ng-show="context.selectedGigaspace.selectedTab == 'admin'">-->
+        <!--<input type="text" class="mono-text" placeholder="PU name to filter" ng-model="puFilter">-->
+
+        <!--<a href="javascript:void(0);">Restart Partitions</a>-->
+        <!--<a href="javascript:void(0);">Undeploy</a>-->
+
+        <!--<p></p>-->
+
+        <!--<table class="result" style="table-layout: fixed;">-->
+            <!--<thead>-->
+                <!--<tr>-->
+                    <!--<th><input type="checkbox" ng-click="togglePUs()" ng-model="admin.selected"></th>-->
+                    <!--<th>Name</th>-->
+                    <!--<th>Status</th>-->
+                    <!--<th>Instances</th>-->
+                    <!--<th>Mem (Mb)</th>-->
+                    <!--<th>GSCs</th>-->
+                <!--</tr>-->
+            <!--</thead>-->
+            <!--<tbody>-->
+                <!--<tr class="mono-text" ng-repeat="pu in pus | orderBy : 'name' | filter : puFilter">-->
+                    <!--<td><input type="checkbox" ng-model="pu.selected"></td>-->
+                    <!--<td>{{ pu.name }}</td>-->
+                    <!--<td>{{ pu.status }}</td>-->
+                    <!--<td align="center">{{ pu.expectedInstances }} / {{ pu.instances }}</td>-->
+                    <!--<td align="center">{{ pu.mem.max }} / {{ pu.mem.used }}</td>-->
+                    <!--<td>{{ pu.gscs }}</td>-->
+                <!--</tr>-->
+            <!--</tbody>-->
+        <!--</table>-->
+    <!--</div>-->
+
+    <div ng-show="context.selectedGigaspace.selectedTab == 'exportImport'">
+        Export
+
+        <p></p>
+
+        <textarea ng-model="context.selectedGigaspace.exportImportTab.types"
+                  style="width: 100%" rows="6" class="mono-text"
+                  placeholder="Keep empty to export all or put types names separated by ,"></textarea>
+
+        <p></p>
+
+        <a href="javascript:void(0);" ng-click="export()">Export</a>
+
+        <p></p>
+
+        Import
+
+        <p></p>
+
+        <form method="post" action="import" enctype="multipart/form-data" ng-submit="startImport()">
+            <input type="hidden" id="import-json" name="json">
+
+            <label>
+                Select exported before file (ser or zip with ser)<p></p>
+                <input type="file" name="file">
+
+                <input type="submit" name="Import">
+            </label>
+        </form>
+    </div>
+
+    <div ng-show="context.selectedGigaspace.selectedTab == 'copy'">
+        <p></p>
+
+        Target Space
+
+        <p></p>
+
+        <div class="button-dock">
+            <a ng-repeat="gigaspace in config.user.gigaspaces"
+               ng-class="context.selectedGigaspace.copyTab.targetName == gigaspace.name ? 'selected-button' : 'button'"
+               ng-click="selectTargetGigaspace(gigaspace)" href="javascript:void(0);">{{ gigaspace.name }}</a>
+        </div>
+
+        <input placeholder="Target GigaSpace URL" ng-model="context.selectedGigaspace.copyTab.targetUrl"
+               style="width: 100%;"
+               class="mono-text connection"/>
+
+        <p></p>
+        <input ng-model="context.selectedGigaspace.copyTab.targetUser" class="mono-text connection"
+               placeholder="Target User"/>
+        <input type="password" ng-model="context.selectedGigaspace.copyTab.targetPassword" class="mono-text connection"
+               placeholder="Target Password"/>
+
+        <p></p>
+
+        <textarea ng-model="context.selectedGigaspace.copyTab.content" class="mono-text"
+                  style="width: 100%" rows="6"
+                  placeholder="Example: copy spaceTypeName [reset list of reset fields by ,] [where conditions]"></textarea>
+
+        <p></p>
+
+        <a href="javascript:void(0);" ng-click="executeCopy()">Copy</a>
+
+        <div ng-show="context.selectedGigaspace.copyTab.status">
+            <p></p>
+
+            {{ context.selectedGigaspace.copyTab.status }}
+        </div>
+
+        <div ng-show="context.selectedGigaspace.copyTab.error">
+            <p>
+            <pre class="mono-error">{{ context.selectedGigaspace.copyTab.error.exceptionClass }}</pre>
+            <pre class="mono-error">{{ context.selectedGigaspace.copyTab.error.message }}</pre>
+            <pre class="mono-error">{{ context.selectedGigaspace.copyTab.error.stacktrace }}</pre>
+        </div>
+
+        <div ng-repeat="query in context.selectedGigaspace.copyTab.queries">
+
+            <h4>Copying for {{ query.sql }}</h4>
+
+            <div ng-show="query.error">
+                <p>
+                <pre class="mono-error">{{ query.error.exceptionClass }}</pre>
+                <pre class="mono-error">{{ query.error.message }}</pre>
+                <pre class="mono-error">{{ query.error.stacktrace }}</pre>
+            </div>
+
+            <p ng-show="query.status">{{ query.status }}</p>
+
+            <span ng-show="query.count">
+                Was copied {{ query.count }}
+                <ng-switch on="query.count">
+                    <span ng-switch-when="1">document</span>
+                    <span ng-switch-default>documents</span>
+                </ng-switch>
+            </span>
+        </div>
+    </div>
+
+    <div ng-show="context.selectedGigaspace.selectedTab == 'types'">
+        <p ng-show="context.selectedGigaspace.typesTab.status">{{ context.selectedGigaspace.typesTab.status }}</p>
+
+        <div ng-show="context.selectedGigaspace.typesTab.error">
+            <p/>
+            <a href="javascript:void(0);" ng-click="forceStartCheckTypes()">Try Again</a>
+            <pre class="mono-error">{{ context.selectedGigaspace.typesTab.error.exceptionClass }}</pre>
+            <pre class="mono-error">{{ context.selectedGigaspace.typesTab.error.message }}</pre>
+            <pre class="mono-error">{{ context.selectedGigaspace.typesTab.error.stacktrace }}</pre>
+        </div>
+
+        <p/>
+
+        <p ng-show="!context.selectedGigaspace.typesTab.checking && !context.selectedGigaspace.typesTab.error">
+            Monitoring stopped <a href="javascript:void(0);" ng-click="startCheckTypes()">Start Again</a>
+        </p>
+
+        <div ng-show="context.selectedGigaspace.typesTab.data">
+            <input type="text" ng-model="context.selectedGigaspace.typesTab.filter" placeholder="Type Filter"
+                   class="mono-text">
+            <a href="javascript:void(0);" ng-click="context.selectedGigaspace.typesTab.hideZero = false"
+               ng-show="context.selectedGigaspace.typesTab.hideZero">Show Zero</a>
+            <a href="javascript:void(0);" ng-click="context.selectedGigaspace.typesTab.hideZero = true"
+               ng-show="!context.selectedGigaspace.typesTab.hideZero">Hide Zero</a>
+
+            <p></p>
+
+            <table class="result">
+                <tbody>
+                <tr class="mono-text">
+                    <td>Total</td>
+                    <td align="right">{{ counts.total.count }}</td>
+                    <td align="right">{{ prevCountStatus(counts.total) }}</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr ng-repeat="count in context.selectedGigaspace.typesTab.data | filter : filterCounts | orderBy:'name'"
+                    class="mono-text"
+                    ng-click="context.selectedGigaspace.typesTab.selectedCount = count"
+                    ng-class="context.selectedGigaspace.typesTab.selectedCount == count ? 'selected' : ''">
+                    <td class="{{ getCountClass(count) }}">{{ count.name }}</td>
+                    <td align="right">{{ count.count }}</td>
+                    <td align="right">{{ prevCountStatus(count) }}</td>
+                    <td>
+                        <a href="javascript:void(0);" ng-click="openQueryTabWithSelectFor(count.name)">select</a>
+                        <a href="javascript:void(0);" ng-click="openQueryTabWithUpdateFor(count.name)">update</a>
+                        <a href="javascript:void(0);" ng-click="openQueryTabWithDeleteFor(count.name)">delete</a>
+                        <a href="javascript:void(0);" ng-click="openQueryTabWithTypeFor(count.name)">type</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div ng-show="context.selectedGigaspace.selectedTab == 'query'">
+        <ui-codemirror ui-codemirror-opts="editorOptions"
+                       ng-model="context.selectedGigaspace.queryTab.selectedEditor.content"
+                       class="mono-text"></ui-codemirror>
+
+        <p/>
+
+        <a ng-click="executeQuery()" href="javascript:void(0);">Execute</a>
+        <a ng-click="executeToCsv()" href="javascript:void(0);">To CSV</a>
+
+        <p ng-show="context.selectedGigaspace.queryTab.selectedEditor.status">
+            {{ context.selectedGigaspace.queryTab.selectedEditor.status }}
+        </p>
+
+        <div class="query" ng-repeat="query in context.selectedGigaspace.queryTab.selectedEditor.queries">
+
+            <h4>Results {{ query.data.data.length }} for {{ query.sql }}</h4>
+
+            <div ng-show="query.error">
+                <p>
+                <pre class="mono-error">{{ query.error.exceptionClass }}</pre>
+                <pre class="mono-error">{{ query.error.message }}</pre>
+                <pre class="mono-error">{{ query.error.stacktrace }}</pre>
+            </div>
+
+            <p ng-show="query.status">{{ query.status }}</p>
+
+            <a ng-show="query.data" href="javascript:void(0);" ng-click="toggleShowAllText(query)">Show/Hide all
+                text</a>
+
+            <p/>
+
+            <table ng-show="query.data" class="result fixMe" style="table-layout: fixed;">
+                <thead>
+                <tr>
+                    <th ng-repeat="value in query.data.columns track by $index" valign="top" class="mono-text">
+                        {{ value }}
+                        <a ng-if="queryColumnIsTimestamp(query.data, $index)"
+                           ng-click="queryColumnToTimestamp(query.data, $index)"
+                           href="javascript:void(0);">T?</a>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="record in query.data.data track by $index"
+                    ng-click="query.data.selectedRecord = record"
+                    ng-class="query.data.selectedRecord == record ? 'selected' : ''">
+                    <td ng-repeat="value in record track by $index" valign="top">
+                        <pre style="margin: 0; padding: 0;" class="mono-text">{{ value | limitTo: query.data.textLengthLimit }}</pre>
+                        <span ng-if="value.length > 50" ng-show="!query.data.showAllText">...</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+

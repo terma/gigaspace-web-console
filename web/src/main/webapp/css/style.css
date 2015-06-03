@@ -1,0 +1,89 @@
+ul {
+    margin-top: 0;
+}
+
+body {
+    font-family: tahoma, serif;
+    font-size: 90%;
+    margin: 0;
+    padding: 0;
+}
+
+.mono-text {
+    font-family: courier, monospace;
+    font-size: 90%;
+}
+
+.mono-error {
+    color: red;
+    font-family: courier, monospace;
+    /* Menlo, Monaco, Consolas, 'Lucida Console', courier, monospace */
+    font-size: 90%;
+}
+
+input, textarea {
+    margin: 0;
+    background-color: transparent;
+    /*-webkit-appearance: none;*/
+    /*-moz-appearance: none;*/
+    border: 1px solid #C0C0C0;
+}
+
+.count_up {
+    font-weight: bold;
+}
+
+.count_stable_zero {
+    color: grey;
+}
+
+.count_down {
+    font-weight: bold;
+}
+
+.result {
+    border-collapse: collapse;
+}
+
+.result td, .result th {
+    border: 1px solid #C0C0C0;
+    padding: 8px;
+}
+
+.result tr:hover {
+    background-color: #E8E8E8;
+}
+
+tr.selected {
+    background-color: #E0E0E0;
+}
+
+.button-dock {
+    overflow: auto;
+    margin-left: -0.3em;
+    margin-bottom: 0.6em;
+}
+
+.button {
+    padding: 0.3em;
+    display: block;
+    float: left;
+}
+
+.selected-button {
+    padding: 0.3em;
+    display: block;
+    float: left;
+
+    background-color: #e8e8e8;
+    color: black;
+    text-decoration: none;
+}
+
+.fixed {
+    background: white;
+    top: 0;
+    position: fixed;
+    display: none;
+    border: none;
+}
