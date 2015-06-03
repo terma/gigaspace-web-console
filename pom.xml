@@ -43,4 +43,11 @@
         <tag>gigaspace-sql-console-0.0.25</tag>
     </scm>
 
+    <repositories>
+        <repository>
+            <id>gigaspace</id>
+            <url>http://gigaspaces-maven-repository-eu.s3.amazonaws.com</url>
+        </repository>
+    </repositories>
+
 </project>
