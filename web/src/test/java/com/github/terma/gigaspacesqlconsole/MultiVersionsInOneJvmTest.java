@@ -3,12 +3,14 @@ package com.github.terma.gigaspacesqlconsole;
 import com.github.terma.gigaspacesqlconsole.core.CountsRequest;
 import com.github.terma.gigaspacesqlconsole.core.ExecuteRequest;
 import com.github.terma.gigaspacesqlconsole.core.ObjectExecuteResponseStream;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * Checking that we can work with different versions of GS in
  * same JVM in one thread
  */
+@Ignore
 public class MultiVersionsInOneJvmTest {
 
     private static final int NATURAL_DELAY = 50;
