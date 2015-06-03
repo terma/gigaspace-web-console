@@ -1,5 +1,7 @@
 # GigaSpaces SQL Console
 
+[![Build Status](https://travis-ci.org/terma/gigaspace-sql-console.svg)](https://travis-ci.org/terma/gigaspace-sql-console)
+
 Free lightweight java web application. Powerful alternative for GigaSpace Management Console when you have a lot of work with spaces data, especially for Quality Assurance Team.
 
 * [Features](#key-features)
