@@ -18,8 +18,8 @@ package com.github.terma.gigaspacesqlconsole.provider;
 
 import com.gigaspaces.cluster.activeelection.SpaceMode;
 import com.github.terma.gigaspacesqlconsole.core.Count;
-import com.github.terma.gigaspacesqlconsole.core.CountsRequest;
 import com.github.terma.gigaspacesqlconsole.core.CountsResponse;
+import com.github.terma.gigaspacesqlconsole.core.GeneralRequest;
 import org.openspaces.admin.space.Space;
 import org.openspaces.admin.space.SpaceInstance;
 
@@ -34,32 +34,7 @@ public class Counts {
 
     private static final Logger LOGGER = Logger.getLogger(Counts.class.getName());
 
-    private static final AdminCache adminCache = new AdminCache();
-
-    private static final Thread cleaner = new Thread(new Runnable() {
-        @Override
-        public void run() {
-            while (true) {
-                adminCache.clearExpired();
-
-                try {
-                    Thread.sleep(TimeUnit.MINUTES.toMillis(5));
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    return;
-                }
-            }
-        }
-
-    });
-
-    static {
-        cleaner.setName("COUNTS-ADMIN-CLEANER");
-        cleaner.setDaemon(true);
-        cleaner.start();
-    }
-
-    public CountsResponse counts(CountsRequest request) {
+    public CountsResponse counts(GeneralRequest request) {
         if (request.url.equals("/./test")) {
             return createTestResponse();
         }
@@ -67,7 +42,7 @@ public class Counts {
         final CountsResponse countsResponse = new CountsResponse();
         countsResponse.counts = new ArrayList<>();
 
-        final AdminCacheItem adminAndSpace = adminCache.createOrGet(request);
+        final AdminCacheItem adminAndSpace = AdminService.get(request);
 
         Space space = adminAndSpace.admin.getSpaces()
                 .waitFor(GigaSpaceUrl.parseSpace(request.url), 10, TimeUnit.SECONDS);

@@ -1,6 +1,5 @@
 package com.github.terma.gigaspacesqlconsole;
 
-import com.github.terma.gigaspacesqlconsole.core.CountsRequest;
 import com.github.terma.gigaspacesqlconsole.core.ExecuteRequest;
 import com.github.terma.gigaspacesqlconsole.core.ObjectExecuteResponseStream;
 import org.junit.Ignore;

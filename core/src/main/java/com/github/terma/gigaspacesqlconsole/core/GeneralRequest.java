@@ -23,4 +23,36 @@ public class GeneralRequest extends AppVersionRequest {
     public String gs;
     public String url;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        GeneralRequest that = (GeneralRequest) o;
+
+        if (password != null ? !password.equals(that.password) : that.password != null) return false;
+        if (url != null ? !url.equals(that.url) : that.url != null) return false;
+        if (user != null ? !user.equals(that.user) : that.user != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = url != null ? url.hashCode() : 0;
+        result = 31 * result + (user != null ? user.hashCode() : 0);
+        result = 31 * result + (password != null ? password.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "GeneralRequest{" +
+                "url='" + url + '\'' +
+                ", user='" + user + '\'' +
+                ", password='" + password + '\'' +
+                ", gs='" + gs + '\'' +
+                '}';
+    }
+
 }

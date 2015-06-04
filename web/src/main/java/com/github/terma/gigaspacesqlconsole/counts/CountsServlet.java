@@ -19,7 +19,6 @@ package com.github.terma.gigaspacesqlconsole.counts;
 import com.github.terma.gigaspacesqlconsole.AppVersionValidator;
 import com.github.terma.gigaspacesqlconsole.JsonServlet;
 import com.github.terma.gigaspacesqlconsole.Validator;
-import com.github.terma.gigaspacesqlconsole.core.CountsRequest;
 
 public class CountsServlet extends JsonServlet<CountsRequest> {
 

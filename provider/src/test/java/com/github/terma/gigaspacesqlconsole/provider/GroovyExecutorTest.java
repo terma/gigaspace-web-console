@@ -107,9 +107,28 @@ public class GroovyExecutorTest {
 
         assertEquals(1, responseStream.results.size());
     }
+
     @Test
     public void shouldAllowToGetSpaceMemUsage() throws Exception {
         request.sql = "mem()";
+
+        GroovyExecutor.execute(request, responseStream);
+
+        assertEquals(1, responseStream.results.size());
+    }
+
+    @Test
+    public void shouldAllowUseAdmin() throws Exception {
+        request.sql = "admin()";
+
+        GroovyExecutor.execute(request, responseStream);
+
+        assertEquals(1, responseStream.results.size());
+    }
+
+    @Test
+    public void shouldAllowRestartPartitions() throws Exception {
+        request.sql = "restart_partitions()";
 
         GroovyExecutor.execute(request, responseStream);
 

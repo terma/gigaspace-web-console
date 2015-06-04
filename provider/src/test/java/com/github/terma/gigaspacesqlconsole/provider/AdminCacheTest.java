@@ -1,6 +1,5 @@
 package com.github.terma.gigaspacesqlconsole.provider;
 
-import com.github.terma.gigaspacesqlconsole.core.CountsRequest;
 import org.junit.Test;
 
 import java.util.concurrent.TimeUnit;

@@ -20,6 +20,7 @@ import com.github.terma.gigaspacesqlconsole.core.ExecuteRequest;
 import com.github.terma.gigaspacesqlconsole.core.GroovyExecuteResponseStream;
 import com.github.terma.gigaspacesqlconsole.provider.groovy.MemClosure;
 import com.github.terma.gigaspacesqlconsole.provider.groovy.PrintClosure;
+import com.github.terma.gigaspacesqlconsole.provider.groovy.RestartPartitionsClosure;
 import com.github.terma.gigaspacesqlconsole.provider.groovy.SqlClosure;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
@@ -35,6 +36,7 @@ public class GroovyExecutor {
             binding.setVariable("gs", GigaSpaceUtils.getGigaSpace(request));
             binding.setVariable("sql", sqlClosure);
             binding.setVariable("mem", new MemClosure(request));
+            binding.setVariable("restart_partitions", new RestartPartitionsClosure(request));
             final PrintClosure printClosure = new PrintClosure(responseStream);
             binding.setVariable("out", printClosure);
 

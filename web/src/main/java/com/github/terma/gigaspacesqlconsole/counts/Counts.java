@@ -18,7 +18,6 @@ package com.github.terma.gigaspacesqlconsole.counts;
 
 import com.github.terma.gigaspacesqlconsole.CachedProviderResolver;
 import com.github.terma.gigaspacesqlconsole.core.Count;
-import com.github.terma.gigaspacesqlconsole.core.CountsRequest;
 import com.github.terma.gigaspacesqlconsole.core.CountsResponse;
 
 import java.util.ArrayList;

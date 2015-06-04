@@ -16,7 +16,6 @@ limitations under the License.
 
 package com.github.terma.gigaspacesqlconsole.provider;
 
-import com.github.terma.gigaspacesqlconsole.core.CountsRequest;
 import com.github.terma.gigaspacesqlconsole.core.CountsResponse;
 import junit.framework.Assert;
 import org.junit.Test;

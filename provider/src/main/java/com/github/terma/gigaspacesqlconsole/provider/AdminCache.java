@@ -16,7 +16,7 @@ limitations under the License.
 
 package com.github.terma.gigaspacesqlconsole.provider;
 
-import com.github.terma.gigaspacesqlconsole.core.CountsRequest;
+import com.github.terma.gigaspacesqlconsole.core.GeneralRequest;
 import org.openspaces.admin.AdminFactory;
 
 import java.util.HashMap;
@@ -53,7 +53,7 @@ class AdminCache {
         }
     }
 
-    public synchronized AdminCacheItem createOrGet(final CountsRequest request) {
+    public synchronized AdminCacheItem createOrGet(final GeneralRequest request) {
         final AdminCacheKey key = requestToKey(request);
 
         AdminCacheItem item = cache.get(key);
@@ -88,7 +88,7 @@ class AdminCache {
         return cache.size();
     }
 
-    private static AdminCacheKey requestToKey(final CountsRequest request) {
+    private static AdminCacheKey requestToKey(final GeneralRequest request) {
         if (GigaSpaceUrl.isLocal(request.url)) {
             return new AdminCacheKey(null, request.user, request.password);
         } else {
