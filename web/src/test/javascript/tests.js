@@ -12,7 +12,7 @@ describe("UI query result presentation suite", function () {
 
         it("from SEC (when less 10 digits)", function () {
             var $scope = {};
-            $controller("GigaSpaceBrowserController", {$scope: $scope});
+            $controller("controller", {$scope: $scope});
 
             var data = {
                 data: [
@@ -28,7 +28,7 @@ describe("UI query result presentation suite", function () {
 
         it("from SEC (when 10 digits)", function () {
             var $scope = {};
-            $controller("GigaSpaceBrowserController", {$scope: $scope});
+            $controller("controller", {$scope: $scope});
 
             var data = {
                 data: [
@@ -44,7 +44,7 @@ describe("UI query result presentation suite", function () {
 
         it("from MS", function () {
             var $scope = {};
-            $controller("GigaSpaceBrowserController", {$scope: $scope});
+            $controller("controller", {$scope: $scope});
 
             var data = {
                 data: [
@@ -61,7 +61,7 @@ describe("UI query result presentation suite", function () {
 
         it("from MICRO", function () {
             var $scope = {};
-            $controller("GigaSpaceBrowserController", {$scope: $scope});
+            $controller("controller", {$scope: $scope});
 
             var data = {
                 data: [
@@ -78,7 +78,7 @@ describe("UI query result presentation suite", function () {
 
         it("from more than MICRO", function () {
             var $scope = {};
-            $controller("GigaSpaceBrowserController", {$scope: $scope});
+            $controller("controller", {$scope: $scope});
 
             var data = {
                 data: [

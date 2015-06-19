@@ -189,7 +189,6 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <skipTests>true</skipTests>
                     <webDriverClassName>org.openqa.selenium.phantomjs.PhantomJSDriver</webDriverClassName>
                     <webDriverCapabilities>
                         <capability>
