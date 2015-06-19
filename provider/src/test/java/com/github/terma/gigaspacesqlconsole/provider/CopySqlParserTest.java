@@ -23,9 +23,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNull;
-import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.*;
 
 public class CopySqlParserTest {
 
@@ -130,6 +128,51 @@ public class CopySqlParserTest {
         assertEquals("ObjectA", copySql.typeName);
         assertEquals(new HashSet<>(Collections.singletonList("field_C")), copySql.reset);
         assertEquals("", copySql.where);
+    }
+
+    @Test
+    public void supportFromOnly() throws IOException {
+        final CopySql copySql = CopySqlParser.parse("copy ObjectA from 10 only 100");
+
+        assertEquals("ObjectA", copySql.typeName);
+        assertEquals("", copySql.where);
+        assertEquals(new Integer(10), copySql.from);
+        assertEquals(new Integer(100), copySql.only);
+    }
+
+    @Test
+    public void supportFromWithoutOnly() throws IOException {
+        final CopySql copySql = CopySqlParser.parse("copy ObjectA from 10");
+
+        assertEquals("ObjectA", copySql.typeName);
+        assertEquals("", copySql.where);
+        assertEquals(new Integer(10), copySql.from);
+        assertEquals(null, copySql.only);
+    }
+
+    @Test(expected = IOException.class)
+    public void failsIfNonDigitFrom() throws IOException {
+        CopySqlParser.parse("copy ObjectA from A");
+    }
+
+    @Test(expected = IOException.class)
+    public void failsIfFromWithoutValue() throws IOException {
+        CopySqlParser.parse("copy ObjectA from only 1");
+    }
+
+    @Test(expected = IOException.class)
+    public void failsIfNonDigitOnly() throws IOException {
+        CopySqlParser.parse("copy ObjectA to A");
+    }
+
+    @Test
+    public void supportOnlyWithoutFrom() throws IOException {
+        final CopySql copySql = CopySqlParser.parse("copy ObjectA only 100");
+
+        assertEquals("ObjectA", copySql.typeName);
+        assertEquals("", copySql.where);
+        assertEquals(null, copySql.from);
+        assertEquals(new Integer(100), copySql.only);
     }
 
     @Test

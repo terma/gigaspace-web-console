@@ -18,9 +18,7 @@ package com.github.terma.gigaspacesqlconsole.provider;
 
 /*
 Main construction is:
-copy SpaceDocumentType
-copy SpaceDocumentType where conditions
-copy SpaceDocumentType reset fieldName1, fieldName2 where conditions
+copy <TypeName> [reset <FieldName>[, <FieldName>]] [from <From>] [to <To>] [where conditions]
     */
 
 /* --------------------------Usercode Section------------------------ */
@@ -70,8 +68,18 @@ import java.io.IOException;
     private String typeName = "";
     private String where = "";
     private Set<String> reset = new HashSet<>();
+    private String from;
+    private String only;
 
-    public CopySql getSql() { return new CopySql(typeName, reset, where); }
+    public CopySql getSql() {
+        Integer fromInt = null;
+        if (from != null) fromInt = Integer.parseInt(from);
+
+        Integer onlyInt = null;
+        if (only != null) onlyInt = Integer.parseInt(only);
+
+        return new CopySql(typeName, reset, where, fromInt, onlyInt);
+    }
 
 %}
    
@@ -100,13 +108,24 @@ nextResetField = ,
 whereKeyword = where
 where = [^]+
 
-%state TYPE_NAME
+fromKeyword = from
+from = [0-9]+
+onlyKeyword = only
+only = [0-9]+
+
 
 %state COPY_KEYWORD
 
-%state RESET_KEYWORD
+%state TYPE_NAME
+%state AFTER_TYPE_NAME
+
 %state RESET_FIELD
 %state AFTER_RESET_FIELD
+
+%state FROM_VALUE
+%state AFTER_FROM
+%state ONLY_VALUE
+%state AFTER_ONLY
 
 %state WHERE
 
@@ -128,12 +147,14 @@ where = [^]+
 }
 
 <TYPE_NAME> {
-    {typeName} { typeName = yytext(); yybegin(RESET_KEYWORD); }
+    {typeName} { typeName = yytext(); yybegin(AFTER_TYPE_NAME); }
     {WhiteSpace} { /* just skip what was found, do nothing */ }
 }
 
-<RESET_KEYWORD> {
+<AFTER_TYPE_NAME> {
     {resetKeyword} { yybegin(RESET_FIELD); }
+    {fromKeyword} { yybegin(FROM_VALUE); }
+    {onlyKeyword} { yybegin(ONLY_VALUE); }
     {whereKeyword} { yybegin(WHERE); }
     {WhiteSpace} { /* just skip what was found, do nothing */ }
 }
@@ -146,6 +167,8 @@ where = [^]+
 
 <AFTER_RESET_FIELD> {
     {nextResetField} { yybegin(RESET_FIELD); }
+    {fromKeyword} { yybegin(FROM_VALUE); }
+    {onlyKeyword} { yybegin(ONLY_VALUE); }
     {whereKeyword} { yybegin(WHERE); }
     {WhiteSpace} { /* do nothing */ }
 }
@@ -154,10 +177,31 @@ where = [^]+
     {where} { where = yytext(); }
 }
 
+<FROM_VALUE> {
+    {from} { from = yytext(); yybegin(AFTER_FROM); }
+    {WhiteSpace} { /* do nothing */ }
+}
+
+<AFTER_FROM> {
+    {onlyKeyword} { yybegin(ONLY_VALUE); }
+    {whereKeyword} { yybegin(WHERE); }
+    {WhiteSpace} { /* do nothing */ }
+}
+
+<ONLY_VALUE> {
+    {only} { only = yytext(); yybegin(AFTER_ONLY); }
+    {WhiteSpace} { /* do nothing */ }
+}
+
+<AFTER_ONLY> {
+    {whereKeyword} { yybegin(WHERE); }
+    {WhiteSpace} { /* do nothing */ }
+}
+
 
 /* No token was found for the input so through an error.  Print out an
    Illegal character message with the illegal character that was found. */
 [^] {
-    if (copyStatement) throw new IOException("Illegal character <"+yytext()+">");
+    if (copyStatement) throw new IOException("Illegal character <" + yytext() + "> near: " + zzStartRead);
     else throw new UnsupportedOperationException();
 }

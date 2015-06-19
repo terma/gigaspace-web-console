@@ -25,11 +25,17 @@ class BufferedWriter {
 
     private static final int BATCH = 1000;
 
+    private final int batch;
     private final GigaSpace gigaSpace;
     private final List<Object> buffer = new ArrayList<>(BATCH);
 
-    public BufferedWriter(final GigaSpace gigaSpace) {
+    public BufferedWriter(final int batch, final GigaSpace gigaSpace) {
+        this.batch = batch;
         this.gigaSpace = gigaSpace;
+    }
+
+    public BufferedWriter(final GigaSpace gigaSpace) {
+        this(BATCH, gigaSpace);
     }
 
     public void write(Object object) {
