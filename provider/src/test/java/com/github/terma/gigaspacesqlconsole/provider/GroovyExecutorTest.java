@@ -107,9 +107,19 @@ public class GroovyExecutorTest {
 
         assertEquals(1, responseStream.results.size());
     }
+
     @Test
     public void shouldAllowToGetSpaceMemUsage() throws Exception {
         request.sql = "mem()";
+
+        GroovyExecutor.execute(request, responseStream);
+
+        assertEquals(1, responseStream.results.size());
+    }
+
+    @Test
+    public void haveDefaultGsDocumentImport() throws Exception {
+        request.sql = "new SpaceDocument(\"bb\")";
 
         GroovyExecutor.execute(request, responseStream);
 

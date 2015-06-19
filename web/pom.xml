@@ -151,7 +151,7 @@
                     <systemProperties>
                         <systemProperty>
                             <name>gigaspaceSqlConsoleConfig</name>
-                            <value>file:src/test/resources/no-converters-config.json</value>
+                            <value>file:target/test-classes/no-converters-config.json</value>
                         </systemProperty>
                     </systemProperties>
                     <webApp>
