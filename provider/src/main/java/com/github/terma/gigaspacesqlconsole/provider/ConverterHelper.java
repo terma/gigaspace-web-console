@@ -34,7 +34,10 @@ public class ConverterHelper {
     static {
         final Config config = Config.read();
 
-        for (final String converterClassName : config.user.converters) {
+        List<String> converters = config.user.converters;
+        converters.add(VirtualEntryConverter.class.getName());
+
+        for (final String converterClassName : converters) {
             final Class converterClass;
             try {
                 converterClass = Class.forName(converterClassName);

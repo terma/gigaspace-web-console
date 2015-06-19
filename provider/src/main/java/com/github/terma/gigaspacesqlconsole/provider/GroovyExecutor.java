@@ -16,6 +16,7 @@ limitations under the License.
 
 package com.github.terma.gigaspacesqlconsole.provider;
 
+import com.gigaspaces.document.SpaceDocument;
 import com.github.terma.gigaspacesqlconsole.core.ExecuteRequest;
 import com.github.terma.gigaspacesqlconsole.core.GroovyExecuteResponseStream;
 import com.github.terma.gigaspacesqlconsole.provider.groovy.MemClosure;
@@ -23,6 +24,8 @@ import com.github.terma.gigaspacesqlconsole.provider.groovy.PrintClosure;
 import com.github.terma.gigaspacesqlconsole.provider.groovy.SqlClosure;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
+import org.codehaus.groovy.control.CompilerConfiguration;
+import org.codehaus.groovy.control.customizers.ImportCustomizer;
 
 public class GroovyExecutor {
 
@@ -38,7 +41,13 @@ public class GroovyExecutor {
             final PrintClosure printClosure = new PrintClosure(responseStream);
             binding.setVariable("out", printClosure);
 
-            final GroovyShell shell = new GroovyShell(binding);
+            final CompilerConfiguration configuration = new CompilerConfiguration();
+            final ImportCustomizer importCustomizer = new ImportCustomizer();
+            importCustomizer.addImports(SpaceDocument.class.getName());
+            configuration.addCompilationCustomizers(importCustomizer);
+
+            final GroovyShell shell = new GroovyShell(
+                    GroovyExecutor.class.getClassLoader(), binding, configuration);
 
             final Object value = shell.evaluate(request.sql);
             if (value != null) printClosure.call(value);
