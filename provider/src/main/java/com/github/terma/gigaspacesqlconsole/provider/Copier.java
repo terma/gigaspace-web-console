@@ -37,6 +37,7 @@ public class Copier {
 
     private static final int BATCH = 1000;
 
+    @SuppressWarnings("deprecation")
     public static CopyResponse copy(final CopyRequest request) throws Exception {
         LOGGER.info("start copy: " + request.sql);
 

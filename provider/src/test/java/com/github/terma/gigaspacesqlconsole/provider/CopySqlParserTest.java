@@ -20,6 +20,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 
 import static junit.framework.Assert.assertEquals;
@@ -28,7 +29,7 @@ import static junit.framework.Assert.assertTrue;
 
 public class CopySqlParserTest {
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void shouldNotAcceptNonCopy() throws IOException {
         assertNull(CopySqlParser.parse("select ObjectA"));
     }
@@ -88,7 +89,7 @@ public class CopySqlParserTest {
         final CopySql copySql = CopySqlParser.parse("copy ObjectA reset fieldB");
 
         assertEquals("ObjectA", copySql.typeName);
-        assertEquals(new HashSet<>(Arrays.asList("fieldB")), copySql.reset);
+        assertEquals(new HashSet<>(Collections.singletonList("fieldB")), copySql.reset);
         assertEquals("", copySql.where);
     }
 
@@ -96,21 +97,21 @@ public class CopySqlParserTest {
     public void shouldAcceptCopyWithDashInResetField() throws IOException {
         final CopySql copySql = CopySqlParser.parse("copy ObjectA reset field-B");
 
-        assertEquals(new HashSet<>(Arrays.asList("field-B")), copySql.reset);
+        assertEquals(new HashSet<>(Collections.singletonList("field-B")), copySql.reset);
     }
 
     @Test
     public void shouldAcceptCopyWithDotInResetField() throws IOException {
         final CopySql copySql = CopySqlParser.parse("copy ObjectA reset field.B");
 
-        assertEquals(new HashSet<>(Arrays.asList("field.B")), copySql.reset);
+        assertEquals(new HashSet<>(Collections.singletonList("field.B")), copySql.reset);
     }
 
     @Test
     public void shouldAcceptCopyWithUndescoreInResetField() throws IOException {
         final CopySql copySql = CopySqlParser.parse("copy ObjectA reset field_B");
 
-        assertEquals(new HashSet<>(Arrays.asList("field_B")), copySql.reset);
+        assertEquals(new HashSet<>(Collections.singletonList("field_B")), copySql.reset);
     }
 
     @Test
@@ -127,7 +128,7 @@ public class CopySqlParserTest {
         final CopySql copySql = CopySqlParser.parse("copy ObjectA reset field_C");
 
         assertEquals("ObjectA", copySql.typeName);
-        assertEquals(new HashSet<>(Arrays.asList("field_C")), copySql.reset);
+        assertEquals(new HashSet<>(Collections.singletonList("field_C")), copySql.reset);
         assertEquals("", copySql.where);
     }
 
