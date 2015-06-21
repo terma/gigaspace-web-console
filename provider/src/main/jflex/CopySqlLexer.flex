@@ -19,14 +19,13 @@ package com.github.terma.gigaspacesqlconsole.provider;
 /*
 Main construction is:
 copy <TypeName> [reset <FieldName>[, <FieldName>]] [from <From>] [to <To>] [where conditions]
-    */
+*/
 
 /* --------------------------Usercode Section------------------------ */
 
 
 import java_cup.sym;
-//import java_cup.runtime.*;
-import java.util.Set;
+import java.util.Set;Fix
 import java.util.HashSet;
 import java.io.IOException;
 
