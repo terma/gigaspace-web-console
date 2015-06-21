@@ -16,7 +16,6 @@ limitations under the License.
 
 package com.github.terma.gigaspacesqlconsole.provider.executor;
 
-import com.gigaspaces.document.SpaceDocument;
 import com.gigaspaces.metadata.SpaceTypeDescriptor;
 import com.gigaspaces.metadata.SpaceTypeDescriptorBuilder;
 import com.github.terma.gigaspacesqlconsole.core.ExecuteRequest;
@@ -33,14 +32,6 @@ import org.openspaces.core.GigaSpace;
 
 import static org.hamcrest.CoreMatchers.is;
 
-
-/*
-where property 'a' and c = 12
-where property 'a' or c = 12
-where c = 12 and property 'a'
-where c = 12 or property 'a'
-where property 'b' ->
- */
 public class PropertySelectExecutorPluginTest {
 
     private static final String url = "/./property-select";
@@ -79,7 +70,7 @@ public class PropertySelectExecutorPluginTest {
                 .idProperty("autoID", true).create();
         gigaSpace.getTypeManager().registerTypeDescriptor(typeDescriptor);
 
-        writeDocument(gigaSpace, typeName, "R", true);
+        GigaSpaceUtils.writeDocument(gigaSpace, typeName, "R", true);
 
         request.sql = "select * from A where property 'B'";
 
@@ -96,9 +87,9 @@ public class PropertySelectExecutorPluginTest {
                 .idProperty("autoID", true).create();
         gigaSpace.getTypeManager().registerTypeDescriptor(typeDescriptor);
 
-        writeDocument(gigaSpace, typeName, "B1", true);
-        writeDocument(gigaSpace, typeName, "B", true);
-        writeDocument(gigaSpace, typeName, "B", null);
+        GigaSpaceUtils.writeDocument(gigaSpace, typeName, "B1", true);
+        GigaSpaceUtils.writeDocument(gigaSpace, typeName, "B", true);
+        GigaSpaceUtils.writeDocument(gigaSpace, typeName, "B", null);
 
         request.sql = "select * from A where property 'B'";
 
@@ -114,9 +105,9 @@ public class PropertySelectExecutorPluginTest {
                 .idProperty("autoID", true).create();
         gigaSpace.getTypeManager().registerTypeDescriptor(typeDescriptor);
 
-        writeDocument(gigaSpace, typeName, "B1", true);
-        writeDocument(gigaSpace, typeName, "B", true);
-        writeDocument(gigaSpace, typeName, "B", null);
+        GigaSpaceUtils.writeDocument(gigaSpace, typeName, "B1", true);
+        GigaSpaceUtils.writeDocument(gigaSpace, typeName, "B", true);
+        GigaSpaceUtils.writeDocument(gigaSpace, typeName, "B", null);
 
         request.sql = "update A set C = true where property 'B'";
 
@@ -133,9 +124,9 @@ public class PropertySelectExecutorPluginTest {
                 .idProperty("autoID", true).create();
         gigaSpace.getTypeManager().registerTypeDescriptor(typeDescriptor);
 
-        writeDocument(gigaSpace, typeName, "B1", true);
-        writeDocument(gigaSpace, typeName, "B", true);
-        writeDocument(gigaSpace, typeName, "B", null);
+        GigaSpaceUtils.writeDocument(gigaSpace, typeName, "B1", true);
+        GigaSpaceUtils.writeDocument(gigaSpace, typeName, "B", true);
+        GigaSpaceUtils.writeDocument(gigaSpace, typeName, "B", null);
 
         request.sql = "delete from A where property 'B'";
 
@@ -151,9 +142,9 @@ public class PropertySelectExecutorPluginTest {
                 .idProperty("autoID", true).create();
         gigaSpace.getTypeManager().registerTypeDescriptor(typeDescriptor);
 
-        writeDocument(gigaSpace, typeName, "B1", true, "name", "big");
-        writeDocument(gigaSpace, typeName, "B", true, "name", "small");
-        writeDocument(gigaSpace, typeName, "B", null);
+        GigaSpaceUtils.writeDocument(gigaSpace, typeName, "B1", true, "name", "big");
+        GigaSpaceUtils.writeDocument(gigaSpace, typeName, "B", true, "name", "small");
+        GigaSpaceUtils.writeDocument(gigaSpace, typeName, "B", null);
 
         request.sql = "select * from A where property 'B' and name = 'small'";
 
@@ -169,9 +160,9 @@ public class PropertySelectExecutorPluginTest {
                 .idProperty("autoID", true).create();
         gigaSpace.getTypeManager().registerTypeDescriptor(typeDescriptor);
 
-        writeDocument(gigaSpace, typeName, "B1", true, "name", "big");
-        writeDocument(gigaSpace, typeName, "B", true, "name", "small");
-        writeDocument(gigaSpace, typeName, "B", null);
+        GigaSpaceUtils.writeDocument(gigaSpace, typeName, "B1", true, "name", "big");
+        GigaSpaceUtils.writeDocument(gigaSpace, typeName, "B", true, "name", "small");
+        GigaSpaceUtils.writeDocument(gigaSpace, typeName, "B", null);
 
         request.sql = "select * from A where property 'B' or (name = 'big' or name = 'rumba')";
 
@@ -187,9 +178,9 @@ public class PropertySelectExecutorPluginTest {
                 .idProperty("autoID", true).create();
         gigaSpace.getTypeManager().registerTypeDescriptor(typeDescriptor);
 
-        writeDocument(gigaSpace, typeName, "non_B", true, "superman", "aga");
-        writeDocument(gigaSpace, typeName, "B", true, "superman", "aga");
-        writeDocument(gigaSpace, typeName, "B", true, "non_superman", "aga");
+        GigaSpaceUtils.writeDocument(gigaSpace, typeName, "non_B", true, "superman", "aga");
+        GigaSpaceUtils.writeDocument(gigaSpace, typeName, "B", true, "superman", "aga");
+        GigaSpaceUtils.writeDocument(gigaSpace, typeName, "B", true, "non_superman", "aga");
 
         request.sql = "select * from A where property 'B' and property 'superman'";
 
@@ -205,10 +196,10 @@ public class PropertySelectExecutorPluginTest {
                 .idProperty("autoID", true).create();
         gigaSpace.getTypeManager().registerTypeDescriptor(typeDescriptor);
 
-        writeDocument(gigaSpace, typeName, "non_B", 1);
-        writeDocument(gigaSpace, typeName, "B", 1);
-        writeDocument(gigaSpace, typeName, "B1", 1);
-        writeDocument(gigaSpace, typeName, "B", null);
+        GigaSpaceUtils.writeDocument(gigaSpace, typeName, "non_B", 1);
+        GigaSpaceUtils.writeDocument(gigaSpace, typeName, "B", 1);
+        GigaSpaceUtils.writeDocument(gigaSpace, typeName, "B1", 1);
+        GigaSpaceUtils.writeDocument(gigaSpace, typeName, "B", null);
 
         request.sql = "select * from A where property 'B%'";
 
@@ -224,11 +215,11 @@ public class PropertySelectExecutorPluginTest {
                 .idProperty("autoID", true).create();
         gigaSpace.getTypeManager().registerTypeDescriptor(typeDescriptor);
 
-        writeDocument(gigaSpace, typeName, "B", 1);
-        writeDocument(gigaSpace, typeName, "AB", 1);
-        writeDocument(gigaSpace, typeName, "ACB", 1);
-        writeDocument(gigaSpace, typeName, "G1ACB111", 1);
-        writeDocument(gigaSpace, typeName, "AB1222", 1);
+        GigaSpaceUtils.writeDocument(gigaSpace, typeName, "B", 1);
+        GigaSpaceUtils.writeDocument(gigaSpace, typeName, "AB", 1);
+        GigaSpaceUtils.writeDocument(gigaSpace, typeName, "ACB", 1);
+        GigaSpaceUtils.writeDocument(gigaSpace, typeName, "G1ACB111", 1);
+        GigaSpaceUtils.writeDocument(gigaSpace, typeName, "AB1222", 1);
 
         request.sql = "select * from A where property '%A%B%'";
 
@@ -247,21 +238,6 @@ public class PropertySelectExecutorPluginTest {
     private int countByType(final String typeName) {
         SQLQuery sqlQuery = new SQLQuery(typeName, "");
         return gigaSpace.readMultiple(sqlQuery).length;
-    }
-
-    private static void writeDocument(GigaSpace gigaSpace, String typeName, String property, Object value) {
-        SpaceDocument spaceDocument1 = new SpaceDocument(typeName);
-        spaceDocument1.setProperty(property, value);
-        gigaSpace.write(spaceDocument1);
-    }
-
-    private static void writeDocument(
-            GigaSpace gigaSpace, String typeName,
-            String property1, Object value1, String property2, Object value2) {
-        SpaceDocument spaceDocument1 = new SpaceDocument(typeName);
-        spaceDocument1.setProperty(property1, value1);
-        spaceDocument1.setProperty(property2, value2);
-        gigaSpace.write(spaceDocument1);
     }
 
 }

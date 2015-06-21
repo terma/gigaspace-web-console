@@ -32,6 +32,8 @@ import java.util.List;
 
 public class Executor {
 
+    private static final ExecutorPreprocessor PREPROCESSOR = new TimestampPreprocessor();
+
     private static final List<ExecutorPlugin> PLUGINS = Arrays.asList(
             new PropertySelectExecutorPlugin(),
             new ExecutorPluginUpdate(),
@@ -39,6 +41,8 @@ public class Executor {
     );
 
     public static void execute(final ExecuteRequest request, final ExecuteResponseStream responseStream) throws Exception {
+        request.sql = PREPROCESSOR.preprocess(request.sql);
+
         for (final ExecutorPlugin plugin : PLUGINS) {
             if (plugin.execute(request, responseStream)) return;
         }
