@@ -25,6 +25,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openspaces.core.GigaSpace;
 
+import java.util.Random;
+
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
 
@@ -41,25 +43,78 @@ public class CopierTest {
 
     @Test
     public void shouldCopyDocument() throws Exception {
-        SpaceTypeDescriptor typeDescriptor = new SpaceTypeDescriptorBuilder("ObjectA")
-                .idProperty("autoID", true).create();
+        SpaceTypeDescriptor typeDescriptor = randomDescriptor();
         sourceGigaSpace.getTypeManager().registerTypeDescriptor(typeDescriptor);
         targetGigaSpace.getTypeManager().registerTypeDescriptor(typeDescriptor);
 
-        SpaceDocument spaceDocument = new SpaceDocument("ObjectA");
+        SpaceDocument spaceDocument = new SpaceDocument(typeDescriptor.getTypeName());
         sourceGigaSpace.write(spaceDocument);
-        System.out.println(spaceDocument);
 
-        Assert.assertThat(sourceGigaSpace.count(new SpaceDocument("ObjectA")), equalTo(1));
+        Assert.assertThat(sourceGigaSpace.count(new SpaceDocument(typeDescriptor.getTypeName())), equalTo(1));
 
         CopyRequest request = new CopyRequest();
         request.url = "/./source";
-        request.sql = "copy ObjectA";
+        request.sql = "copy " + typeDescriptor.getTypeName();
         request.targetUrl = "/./target";
 
         Copier.copy(request);
 
-        Assert.assertThat(targetGigaSpace.count(new SpaceDocument("ObjectA")), equalTo(1));
+        Assert.assertThat(targetGigaSpace.count(new SpaceDocument(typeDescriptor.getTypeName())), equalTo(1));
+    }
+
+    @Test
+    public void shouldCopyDocumentFromOnly() throws Exception {
+        final SpaceTypeDescriptor typeDescriptor = randomDescriptor();
+        sourceGigaSpace.getTypeManager().registerTypeDescriptor(typeDescriptor);
+        targetGigaSpace.getTypeManager().registerTypeDescriptor(typeDescriptor);
+
+        SpaceDocument spaceDocument1 = new SpaceDocument(typeDescriptor.getTypeName());
+        sourceGigaSpace.write(spaceDocument1);
+        SpaceDocument spaceDocument2 = new SpaceDocument(typeDescriptor.getTypeName());
+        sourceGigaSpace.write(spaceDocument2);
+        SpaceDocument spaceDocument3 = new SpaceDocument(typeDescriptor.getTypeName());
+        sourceGigaSpace.write(spaceDocument3);
+
+        Assert.assertThat(sourceGigaSpace.count(new SpaceDocument(typeDescriptor.getTypeName())), equalTo(3));
+
+        CopyRequest request = new CopyRequest();
+        request.url = "/./source";
+        request.sql = "copy " + typeDescriptor.getTypeName() + " from 1 only 1";
+        request.targetUrl = "/./target";
+
+        Copier.copy(request);
+
+        Assert.assertThat(targetGigaSpace.count(new SpaceDocument(typeDescriptor.getTypeName())), equalTo(1));
+    }
+
+    @Test
+    public void shouldCopyDocumentOnly() throws Exception {
+        final SpaceTypeDescriptor typeDescriptor = randomDescriptor();
+        sourceGigaSpace.getTypeManager().registerTypeDescriptor(typeDescriptor);
+        targetGigaSpace.getTypeManager().registerTypeDescriptor(typeDescriptor);
+
+        SpaceDocument spaceDocument1 = new SpaceDocument(typeDescriptor.getTypeName());
+        sourceGigaSpace.write(spaceDocument1);
+        SpaceDocument spaceDocument2 = new SpaceDocument(typeDescriptor.getTypeName());
+        sourceGigaSpace.write(spaceDocument2);
+        SpaceDocument spaceDocument3 = new SpaceDocument(typeDescriptor.getTypeName());
+        sourceGigaSpace.write(spaceDocument3);
+
+        Assert.assertThat(sourceGigaSpace.count(new SpaceDocument(typeDescriptor.getTypeName())), equalTo(3));
+
+        CopyRequest request = new CopyRequest();
+        request.url = "/./source";
+        request.sql = "copy " + typeDescriptor.getTypeName() + " only 1";
+        request.targetUrl = "/./target";
+
+        Copier.copy(request);
+
+        Assert.assertThat(targetGigaSpace.count(new SpaceDocument(typeDescriptor.getTypeName())), equalTo(1));
+    }
+
+    private SpaceTypeDescriptor randomDescriptor() {
+        return new SpaceTypeDescriptorBuilder("Object" + new Random().nextLong())
+                .idProperty("autoID", true).create();
     }
 
     @Test

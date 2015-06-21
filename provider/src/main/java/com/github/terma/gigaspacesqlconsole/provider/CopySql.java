@@ -23,11 +23,15 @@ class CopySql {
     public final String typeName;
     public final Set<String> reset;
     public final String where;
+    public final Integer from;
+    public final Integer only;
 
-    public CopySql(String typeName, Set<String> reset, String where) {
+    public CopySql(String typeName, Set<String> reset, String where, Integer from, Integer only) {
         this.typeName = typeName;
         this.reset = reset;
         this.where = where;
+        this.from = from;
+        this.only = only;
     }
 
 }
