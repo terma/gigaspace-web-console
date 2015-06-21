@@ -25,7 +25,7 @@ copy <TypeName> [reset <FieldName>[, <FieldName>]] [from <From>] [to <To>] [wher
 
 
 import java_cup.sym;
-import java.util.Set;Fix
+import java.util.Set;
 import java.util.HashSet;
 import java.io.IOException;
 
