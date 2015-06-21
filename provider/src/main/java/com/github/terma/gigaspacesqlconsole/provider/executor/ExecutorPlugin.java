@@ -14,15 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package com.github.terma.gigaspacesqlconsole.provider;
+package com.github.terma.gigaspacesqlconsole.provider.executor;
 
 import com.github.terma.gigaspacesqlconsole.core.ExecuteRequest;
 import com.github.terma.gigaspacesqlconsole.core.ExecuteResponseStream;
 
-import java.io.IOException;
-
 public interface ExecutorPlugin {
 
-    boolean execute(ExecuteRequest request, ExecuteResponseStream responseStream) throws IOException;
+    boolean execute(ExecuteRequest request, ExecuteResponseStream responseStream) throws Exception;
 
 }

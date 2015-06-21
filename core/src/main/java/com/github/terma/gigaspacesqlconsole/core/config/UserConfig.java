@@ -13,14 +13,15 @@ limitations under the License.
 
 package com.github.terma.gigaspacesqlconsole.core.config;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserConfig {
 
     public String version;
-    public List<ConfigLink> links;
-    public List<String> converters;
-    public List<ConfigGigaSpace> gigaspaces;
-    public List<ConfigGs> gs;
+    public List<ConfigLink> links = new ArrayList<>();
+    public List<String> converters = new ArrayList<>();
+    public List<ConfigGigaSpace> gigaspaces = new ArrayList<>();
+    public List<ConfigGs> gs = new ArrayList<>();
 
 }
