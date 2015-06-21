@@ -17,7 +17,7 @@ limitations under the License.
 package com.github.terma.gigaspacesqlconsole.provider.groovy;
 
 import com.github.terma.gigaspacesqlconsole.core.ExecuteRequest;
-import com.github.terma.gigaspacesqlconsole.provider.Executor;
+import com.github.terma.gigaspacesqlconsole.provider.executor.Executor;
 import groovy.lang.Closure;
 
 import java.sql.SQLException;
@@ -47,7 +47,7 @@ public class SqlClosure extends Closure {
         concreteRequest.sql = arguments.toString();
 
         try {
-            final SqlResult sqlResult = Executor.execute(concreteRequest);
+            final SqlResult sqlResult = Executor.originalExecute(concreteRequest);
             sqlResults.add(sqlResult);
             return sqlResult;
         } catch (Exception exception) {

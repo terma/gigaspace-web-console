@@ -14,20 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package com.github.terma.gigaspacesqlconsole.provider;
+package com.github.terma.gigaspacesqlconsole.provider.executor;
 
 import java.util.Map;
 
-class GenerateSql {
+class UpdateSql {
 
     public final String typeName;
-    public final int count;
-    public final Map<String, Object> fields;
+    public final Map<String, Object> setFields;
+    public final String conditions;
 
-    public GenerateSql(String typeName, int count, Map<String, Object> fields) {
+    public UpdateSql(String typeName, Map<String, Object> setFields, String conditions) {
         this.typeName = typeName;
-        this.count = count;
-        this.fields = fields;
+        this.setFields = setFields;
+        this.conditions = conditions;
     }
 
 }

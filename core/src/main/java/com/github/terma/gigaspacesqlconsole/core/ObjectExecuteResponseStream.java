@@ -19,11 +19,12 @@ package com.github.terma.gigaspacesqlconsole.core;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ObjectExecuteResponseStream implements ExecuteResponseStream {
 
-    private List<String> columns;
-    private List<List<String>> data;
+    private List<String> columns = new ArrayList<>();
+    private List<List<String>> data = new ArrayList<>();
 
     @Override
     public void writeHeader(List<String> columns) throws IOException {
@@ -32,7 +33,6 @@ public class ObjectExecuteResponseStream implements ExecuteResponseStream {
 
     @Override
     public void writeRow(List<String> values) throws IOException {
-        if (data == null) data = new ArrayList<>();
         data.add(values);
     }
 
@@ -47,6 +47,28 @@ public class ObjectExecuteResponseStream implements ExecuteResponseStream {
 
     public List<List<String>> getData() {
         return data;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ObjectExecuteResponseStream that = (ObjectExecuteResponseStream) o;
+        return Objects.equals(columns, that.columns) &&
+                Objects.equals(data, that.data);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(columns, data);
+    }
+
+    @Override
+    public String toString() {
+        return "ObjectExecuteResponseStream{" +
+                "columns=" + columns +
+                ", data=" + data +
+                '}';
     }
 
 }

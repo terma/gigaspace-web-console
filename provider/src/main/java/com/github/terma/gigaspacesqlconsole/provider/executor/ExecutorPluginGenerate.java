@@ -14,12 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package com.github.terma.gigaspacesqlconsole.provider;
+package com.github.terma.gigaspacesqlconsole.provider.executor;
 
 import com.gigaspaces.client.WriteModifiers;
 import com.gigaspaces.document.SpaceDocument;
 import com.github.terma.gigaspacesqlconsole.core.ExecuteRequest;
 import com.github.terma.gigaspacesqlconsole.core.ExecuteResponseStream;
+import com.github.terma.gigaspacesqlconsole.provider.GigaSpaceUtils;
 
 import java.io.IOException;
 import java.util.Map;

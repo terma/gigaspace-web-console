@@ -25,8 +25,9 @@ public class Config {
 
     public static final String CONFIG_PATH_SYSTEM_PROPERTY = "gigaspaceSqlConsoleConfig";
 
-    private static final String CLASSPATH_PREFIX = "classpath:";
-    private static final String FILE_PREFIX = "file:";
+    public static final String CLASSPATH_PREFIX = "classpath:";
+    public static final String FILE_PREFIX = "file:";
+    public static final String NONE = "none";
 
     private static final String INTERNAL_CONFIG_PATH = "/internalConfig.json";
 
@@ -62,6 +63,8 @@ public class Config {
             } catch (FileNotFoundException e) {
                 throw new IllegalArgumentException("Can't load config from: " + configPath);
             }
+        } else if (configPath.equals(NONE)) {
+            return new UserConfig();
         }
 
         throw new IllegalArgumentException("Unknown config path: " + configPath);

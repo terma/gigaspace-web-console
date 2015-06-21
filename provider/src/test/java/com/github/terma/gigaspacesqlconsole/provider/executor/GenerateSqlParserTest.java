@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package com.github.terma.gigaspacesqlconsole.provider;
+package com.github.terma.gigaspacesqlconsole.provider.executor;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -33,7 +33,7 @@ public class GenerateSqlParserTest {
         Assert.assertEquals("1", sql.fields.get("A"));
         Assert.assertEquals(false, sql.fields.get("name"));
     }
-    
+
     @Test
     public void parseCount() throws IOException {
         GenerateSql sql = GenerateSqlParser.parse("generate 1009 of com.Customer with A = '1'");

@@ -14,10 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package com.github.terma.gigaspacesqlconsole.provider;
+package com.github.terma.gigaspacesqlconsole.provider.executor;
 
 import com.github.terma.gigaspacesqlconsole.core.ExecuteRequest;
 import com.github.terma.gigaspacesqlconsole.core.ExecuteResponseStream;
+import com.github.terma.gigaspacesqlconsole.provider.GigaSpaceUtils;
 import com.github.terma.gigaspacesqlconsole.provider.groovy.RealSqlResult;
 import com.github.terma.gigaspacesqlconsole.provider.groovy.SqlResult;
 import com.github.terma.gigaspacesqlconsole.provider.groovy.UpdateSqlResult;
@@ -36,17 +37,21 @@ public class Executor {
             new ExecutorPluginGenerate()
     );
 
-    public static void query(final ExecuteRequest request, final ExecuteResponseStream responseStream) throws Exception {
+    public static void execute(final ExecuteRequest request, final ExecuteResponseStream responseStream) throws Exception {
         for (final ExecutorPlugin plugin : PLUGINS) {
             if (plugin.execute(request, responseStream)) return;
         }
 
-        try (final SqlResult sqlResult = execute(request)) {
+        originalExecute(request, responseStream);
+    }
+
+    private static void originalExecute(ExecuteRequest request, ExecuteResponseStream responseStream) throws Exception {
+        try (final SqlResult sqlResult = originalExecute(request)) {
             sqlResultToResponseStream(sqlResult, responseStream);
         }
     }
 
-    public static SqlResult execute(final ExecuteRequest request) throws Exception {
+    public static SqlResult originalExecute(final ExecuteRequest request) throws Exception {
         final Connection connection = GigaSpaceUtils.createJdbcConnection(request);
         final Statement statement = connection.createStatement();
         if (statement.execute(request.sql)) {

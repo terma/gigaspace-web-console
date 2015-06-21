@@ -17,6 +17,7 @@ limitations under the License.
 package com.github.terma.gigaspacesqlconsole.provider;
 
 import com.github.terma.gigaspacesqlconsole.core.*;
+import com.github.terma.gigaspacesqlconsole.provider.executor.Executor;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -33,7 +34,7 @@ public class ProviderImpl implements Provider {
 
     @Override
     public void query(ExecuteRequest request, ExecuteResponseStream responseStream) throws Exception {
-        Executor.query(request, responseStream);
+        Executor.execute(request, responseStream);
     }
 
     @Override
