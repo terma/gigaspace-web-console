@@ -33,6 +33,7 @@ import java.util.List;
 public class Executor {
 
     private static final List<ExecutorPlugin> PLUGINS = Arrays.asList(
+            new PropertySelectExecutorPlugin(),
             new ExecutorPluginUpdate(),
             new ExecutorPluginGenerate()
     );

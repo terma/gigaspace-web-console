@@ -21,6 +21,7 @@ import com.gigaspaces.document.SpaceDocument;
 import com.github.terma.gigaspacesqlconsole.core.ExecuteRequest;
 import com.github.terma.gigaspacesqlconsole.core.ExecuteResponseStream;
 import com.github.terma.gigaspacesqlconsole.provider.GigaSpaceUtils;
+import com.j_spaces.core.client.ExternalEntry;
 import com.j_spaces.core.client.SQLQuery;
 import org.openspaces.core.GigaSpace;
 import org.openspaces.core.executor.DistributedTask;
@@ -28,10 +29,7 @@ import org.openspaces.core.executor.TaskGigaSpace;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -150,7 +148,7 @@ public class PropertySelectExecutorPlugin implements ExecutorPlugin {
         private final ArrayList<Pattern> patterns;
 
         @TaskGigaSpace
-        private GigaSpace gigaSpace;
+        private transient GigaSpace gigaSpace;
 
         private TT(final String typeName, final ArrayList<Pattern> patterns) {
             this.typeName = typeName;
@@ -178,9 +176,16 @@ public class PropertySelectExecutorPlugin implements ExecutorPlugin {
         public ArrayList<PropertyReplacement> execute() throws Exception {
             final ArrayList<PropertyReplacement> replacements = emptyReplacements();
 
-            SpaceDocument[] spaceDocuments = gigaSpace.readMultiple(new SQLQuery<SpaceDocument>(typeName, ""));
-            for (SpaceDocument spaceDocument : spaceDocuments) {
-                for (String property : spaceDocument.getProperties().keySet()) {
+            Object[] spaceDocuments = gigaSpace.readMultiple(new SQLQuery<>(typeName, ""));
+            for (Object spaceDocument : spaceDocuments) {
+                Collection<String> keys;
+                if (spaceDocument instanceof ExternalEntry) {
+                    keys = Arrays.asList(((ExternalEntry) spaceDocument).getFieldsNames());
+                } else {
+                    keys = ((SpaceDocument) spaceDocument).getProperties().keySet();
+                }
+
+                for (String property : keys) {
                     for (final PropertyReplacement replacement : replacements) {
                         if (replacement.accept(property)) replacement.real.add(property);
                     }
