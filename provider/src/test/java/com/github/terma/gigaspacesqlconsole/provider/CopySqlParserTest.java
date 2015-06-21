@@ -20,15 +20,14 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNull;
-import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.*;
 
 public class CopySqlParserTest {
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void shouldNotAcceptNonCopy() throws IOException {
         assertNull(CopySqlParser.parse("select ObjectA"));
     }
@@ -88,7 +87,7 @@ public class CopySqlParserTest {
         final CopySql copySql = CopySqlParser.parse("copy ObjectA reset fieldB");
 
         assertEquals("ObjectA", copySql.typeName);
-        assertEquals(new HashSet<>(Arrays.asList("fieldB")), copySql.reset);
+        assertEquals(new HashSet<>(Collections.singletonList("fieldB")), copySql.reset);
         assertEquals("", copySql.where);
     }
 
@@ -96,21 +95,21 @@ public class CopySqlParserTest {
     public void shouldAcceptCopyWithDashInResetField() throws IOException {
         final CopySql copySql = CopySqlParser.parse("copy ObjectA reset field-B");
 
-        assertEquals(new HashSet<>(Arrays.asList("field-B")), copySql.reset);
+        assertEquals(new HashSet<>(Collections.singletonList("field-B")), copySql.reset);
     }
 
     @Test
     public void shouldAcceptCopyWithDotInResetField() throws IOException {
         final CopySql copySql = CopySqlParser.parse("copy ObjectA reset field.B");
 
-        assertEquals(new HashSet<>(Arrays.asList("field.B")), copySql.reset);
+        assertEquals(new HashSet<>(Collections.singletonList("field.B")), copySql.reset);
     }
 
     @Test
     public void shouldAcceptCopyWithUndescoreInResetField() throws IOException {
         final CopySql copySql = CopySqlParser.parse("copy ObjectA reset field_B");
 
-        assertEquals(new HashSet<>(Arrays.asList("field_B")), copySql.reset);
+        assertEquals(new HashSet<>(Collections.singletonList("field_B")), copySql.reset);
     }
 
     @Test
@@ -127,8 +126,53 @@ public class CopySqlParserTest {
         final CopySql copySql = CopySqlParser.parse("copy ObjectA reset field_C");
 
         assertEquals("ObjectA", copySql.typeName);
-        assertEquals(new HashSet<>(Arrays.asList("field_C")), copySql.reset);
+        assertEquals(new HashSet<>(Collections.singletonList("field_C")), copySql.reset);
         assertEquals("", copySql.where);
+    }
+
+    @Test
+    public void supportFromOnly() throws IOException {
+        final CopySql copySql = CopySqlParser.parse("copy ObjectA from 10 only 100");
+
+        assertEquals("ObjectA", copySql.typeName);
+        assertEquals("", copySql.where);
+        assertEquals(new Integer(10), copySql.from);
+        assertEquals(new Integer(100), copySql.only);
+    }
+
+    @Test
+    public void supportFromWithoutOnly() throws IOException {
+        final CopySql copySql = CopySqlParser.parse("copy ObjectA from 10");
+
+        assertEquals("ObjectA", copySql.typeName);
+        assertEquals("", copySql.where);
+        assertEquals(new Integer(10), copySql.from);
+        assertEquals(null, copySql.only);
+    }
+
+    @Test(expected = IOException.class)
+    public void failsIfNonDigitFrom() throws IOException {
+        CopySqlParser.parse("copy ObjectA from A");
+    }
+
+    @Test(expected = IOException.class)
+    public void failsIfFromWithoutValue() throws IOException {
+        CopySqlParser.parse("copy ObjectA from only 1");
+    }
+
+    @Test(expected = IOException.class)
+    public void failsIfNonDigitOnly() throws IOException {
+        CopySqlParser.parse("copy ObjectA to A");
+    }
+
+    @Test
+    public void supportOnlyWithoutFrom() throws IOException {
+        final CopySql copySql = CopySqlParser.parse("copy ObjectA only 100");
+
+        assertEquals("ObjectA", copySql.typeName);
+        assertEquals("", copySql.where);
+        assertEquals(null, copySql.from);
+        assertEquals(new Integer(100), copySql.only);
     }
 
     @Test

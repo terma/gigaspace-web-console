@@ -37,6 +37,7 @@ public class Copier {
 
     private static final int BATCH = 1000;
 
+    @SuppressWarnings("deprecation")
     public static CopyResponse copy(final CopyRequest request) throws Exception {
         LOGGER.info("start copy: " + request.sql);
 
@@ -50,28 +51,38 @@ public class Copier {
         final GSIterator iterator = new IteratorBuilder(sourceGigaspace)
                 .addTemplate(sqlQuery).iteratorScope(IteratorScope.CURRENT).create();
 
+        final BufferedWriter bufferedWriter = new BufferedWriter(BATCH, targetGigaspace);
+
+        int index = -1;
         int total = 0;
+
+        final int from = copySql.from != null ? copySql.from : 0;
+        final int to = copySql.only != null ? from + copySql.only : Integer.MAX_VALUE;
+
         while (iterator.hasNext()) {
-            Object[] objects = iterator.nextBatch(BATCH);
+            final Object object = iterator.next();
+            index++;
+
+            if (from > index || index >= to) continue;
 
             if (!copySql.reset.isEmpty()) {
-                for (final Object object : objects) {
-                    if (object instanceof SpaceDocument) {
-                        for (final String resetField : copySql.reset) {
-                            ((SpaceDocument) object).removeProperty(resetField);
-                        }
-                    } else if (object instanceof ExternalEntry) {
-                        final ExternalEntry externalEntry = (ExternalEntry) object;
-                        for (final String resetField : copySql.reset) {
-                            externalEntry.setFieldValue(resetField, null);
-                        }
+                if (object instanceof SpaceDocument) {
+                    for (final String resetField : copySql.reset) {
+                        ((SpaceDocument) object).removeProperty(resetField);
+                    }
+                } else if (object instanceof ExternalEntry) {
+                    final ExternalEntry externalEntry = (ExternalEntry) object;
+                    for (final String resetField : copySql.reset) {
+                        externalEntry.setFieldValue(resetField, null);
                     }
                 }
             }
 
-            total += objects.length;
-            targetGigaspace.writeMultiple(objects);
+            total++;
+            bufferedWriter.write(object);
         }
+
+        bufferedWriter.flush();
 
         LOGGER.info("Copied " + total + " for " + request.sql);
 

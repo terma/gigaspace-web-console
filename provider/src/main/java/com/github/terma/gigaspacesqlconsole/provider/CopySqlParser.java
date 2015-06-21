@@ -39,7 +39,7 @@ class CopySqlParser {
                     return copySql;
                 }
             } catch (UnsupportedOperationException e) {
-                return null;
+                throw new IllegalArgumentException("Invalid COPY sql: " + sql, e);
             }
         }
     }

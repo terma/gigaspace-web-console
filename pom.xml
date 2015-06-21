@@ -38,9 +38,9 @@
     </build>
 
     <scm>
-        <developerConnection>scm:git:https://gitlab.com/terma/gigaspace-sql-console.git</developerConnection>
-        <connection>scm:git:https://gitlab.com/terma/gigaspace-sql-console.git</connection>
-        <tag>gigaspace-sql-console-0.0.25</tag>
+        <developerConnection>scm:git:https://github.com/terma/gigaspace-sql-console.git</developerConnection>
+        <connection>scm:git:https://github.com/terma/gigaspace-sql-console.git</connection>
+        <tag>gigaspace-sql-console-0.0.29</tag>
     </scm>
 
     <repositories>
