@@ -79,4 +79,19 @@ public class GigaSpaceUtils {
         return new GConnection(GConnection.JDBC_GIGASPACES_URL + request.url, info);
     }
 
+    public static void writeDocument(GigaSpace gigaSpace, String typeName, String property, Object value) {
+        SpaceDocument spaceDocument1 = new SpaceDocument(typeName);
+        spaceDocument1.setProperty(property, value);
+        gigaSpace.write(spaceDocument1);
+    }
+
+    public static void writeDocument(
+            GigaSpace gigaSpace, String typeName,
+            String property1, Object value1, String property2, Object value2) {
+        SpaceDocument spaceDocument1 = new SpaceDocument(typeName);
+        spaceDocument1.setProperty(property1, value1);
+        spaceDocument1.setProperty(property2, value2);
+        gigaSpace.write(spaceDocument1);
+    }
+
 }
