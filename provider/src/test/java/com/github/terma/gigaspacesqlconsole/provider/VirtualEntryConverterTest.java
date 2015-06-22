@@ -17,27 +17,36 @@ limitations under the License.
 package com.github.terma.gigaspacesqlconsole.provider;
 
 import com.gigaspaces.document.SpaceDocument;
+import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 import java.util.Arrays;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 public class VirtualEntryConverterTest {
-
-    @Test
-    public void nullForNull() {
-        assertThat(VirtualEntryConverter.convert(null), is("null"));
-    }
 
     @Test
     public void emptyForDocumentWithoutProperties() {
         assertThat(
                 VirtualEntryConverter.convert(new SpaceDocument()),
                 is("{\n  \"typeName\": \"java.lang.Object\",\n  \"properties\": {}\n}"));
+    }
+
+    @Test
+    public void ignoreNonVirtualEntry() {
+        assertThat(
+                VirtualEntryConverter.convert(90),
+                CoreMatchers.nullValue());
+    }
+
+    @Test
+    public void ignoreNull() {
+        assertThat(
+                VirtualEntryConverter.convert(null),
+                CoreMatchers.nullValue());
     }
 
     @Test

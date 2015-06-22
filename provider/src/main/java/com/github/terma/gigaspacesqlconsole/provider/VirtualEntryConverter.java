@@ -29,7 +29,8 @@ public class VirtualEntryConverter {
             .create();
 
     public static String convert(final Object o) {
-        return GSON.toJson(o);
+        if (o instanceof VirtualEntry) return GSON.toJson(o);
+        else return null;
     }
 
 }
