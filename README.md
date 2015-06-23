@@ -13,7 +13,7 @@ Free lightweight java web application. Powerful alternative for GigaSpace Manage
  * [Copy data between spaces](#copy-data-between-spaces)
  * [Export / Import data](#export--import-data)
 
-## Key Features 
+# Key Features 
 
 _Almost everything what you can't find in GigaSpace Management Console for data quering_
 
@@ -28,7 +28,7 @@ _Almost everything what you can't find in GigaSpace Management Console for data 
 * Support Groovy language in console
 * Export / Import data between spaces
 
-## How install
+# How install
 
 1. Download (WAR file) latest release [from](https://github.com/terma/gigaspaces-sql-console/releases)
 1. Prepare config file (JSON format) 
@@ -76,13 +76,13 @@ _Almost everything what you can't find in GigaSpace Management Console for data 
 1. Start within any Web Container like Jetty, Tomcat etc.
 1. Open web app in browser
 
-## How to use
+# How to use
 
 When you start your console first time after configuration you will see:
 
 ![Start](https://raw.githubusercontent.com/terma/gigaspace-sql-console/master/img/start.png)
 
-### Execute SQL queries
+## Execute SQL queries
 
 Select preconfigured space or type url details and click on -Query- tab
 
@@ -96,7 +96,7 @@ Select preconfigured space or type url details and click on -Query- tab
 
 ![Execute SQL Queries](https://raw.githubusercontent.com/terma/gigaspace-sql-console/master/img/execute.png)
 
-#### Work with timestamps
+### Work with timestamps
 
 That's general case when you have data stored with timestamp and you need to query by it. Instead of typing exactly count of millis from 1970 like:
 ```select * from Book where created < 1435028867000```
@@ -106,7 +106,7 @@ or
 ```select * from Book where created < NOW-1d```
 You can use ```-``` or ```+``` with ```d|w|h``` and ```TODAY``` means start of day when ```NOW``` means current millis
 
-#### Search documents with properties like 
+### Search documents with properties like 
 
 Sometimes you need to find documents with specific property. As example: application stores documents with property specified for each date like P-2016-05-11=true etc. How to find documents for 2016? 
 
@@ -116,11 +116,11 @@ _This type of query required full scan so be careful on PROD =)_
 
 That's all
 
-### Registered types and counts
+## Registered types and counts
 
 ![Registered Types and Counts](https://raw.githubusercontent.com/terma/gigaspace-sql-console/master/img/types.png)
 
-### Work with Groovy
+## Work with Groovy
 
 Sometimes you have complex queries which depends on each other or complex calculation. For example I want to collect all values from select to one string. How I can do that?
 
@@ -145,7 +145,7 @@ public interface SqlResult {
 * ```java void out(message: java.lang.Object)``` - print any result to console output
 * ```java gs``` - ref on GigaSpace instance
 
-#### Useful fast scripts
+### Useful fast scripts
 
 Show space type description:
 ```java  
@@ -159,16 +159,16 @@ groovy
 gs.clear(null)  
 ```
 
-### Copy data between spaces
+## Copy data between spaces
 
 ![Copy data between spaces](https://raw.githubusercontent.com/terma/gigaspace-sql-console/master/img/copy.png)
 
-#### Copy part of data
+### Copy part of data
 
 If you don't have criteria to limit you dataset for copy by business field. You can use ```from X only Y``` notation in copy queries for example to copy from 1k set 200 documents start from 160 you need:
 
 ```copy MyDocs from 160 only 200```
 
-### Export / Import data
+## Export / Import data
 
 TBD =)
