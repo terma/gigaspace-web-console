@@ -15,11 +15,11 @@ Free lightweight java web application. Powerful alternative for GigaSpace Manage
 
 ## Key Features 
 
-_All of them you don't find in GigaSpace Management Console_
+_Almost everything what you can't find in GigaSpace Management Console for data quering_
 
 * Supports all versions of GigaSpace starts from 9.X (never tested with previous) from one page
 * One click switch between different instances, versions and spaces
-* Supports custom render for user types in spaces, so no more ```my.package.Object@12223``` in results
+* Supports detailed view for embedded data, so no more ```my.package.Object@12223``` in results
 * Super view for types counts with filtering by name, non zero and date and count of last update
 * Supports multiqueries and comments when you have complex work with data
 * All settings store cross session, so you don't need to retype your queries again
@@ -84,9 +84,7 @@ When you start your console first time after configuration you will see:
 
 ### Execute SQL queries
 
-![Execute SQL Queries](https://raw.githubusercontent.com/terma/gigaspace-sql-console/master/img/execute.png)
-
-To execute SQL queries in selected space you just need to select -Query- and SQL query
+Select preconfigured space or type url details and click on -Query- tab
 
 * You can enter more than one query when you run them they will be execute in independenly so you will get all results as on example below
 * To disable execution of some query without remove just comment it by ```#``` or ```//``` or ```--```
@@ -95,6 +93,28 @@ To execute SQL queries in selected space you just need to select -Query- and SQL
 * For ```select``` you will get result table and count of records
 * When value size for one cell more ```50``` result will be truncated, so ```result``` plus ```...``` to show full result just click on ```Show/Hide all text``` under each result table
 * For columns which looks like timestamp you can click on ```T?``` after column name so console shows result in date format for example ```1424054208000``` will be show as ```1424054208000 = Mon, 16 Feb 2015 02:36:48 GMT```
+
+![Execute SQL Queries](https://raw.githubusercontent.com/terma/gigaspace-sql-console/master/img/execute.png)
+
+#### Work with timestamps
+
+That's general case when you have data stored with timestamp and you need to query by it. Instead of typing exactly count of millis from 1970 like:
+```select * from Book where created < 1435028867000```
+you can:
+```select * from Book where created < TODAY-1d```
+or
+```select * from Book where created < NOW-1d```
+You can use ```-``` or ```+``` with ```d|w|h``` and ```TODAY``` means start of day when ```NOW``` means current millis
+
+#### Search documents with properties like 
+
+Sometimes you need to find documents with specific property. As example: application stores documents with property specified for each date like P-2016-05-11=true etc. How to find documents for 2016? 
+
+_This type of query required full scan so be careful on PROD =)_
+
+```select * from MyDocs where property 'P-2016%'```
+
+That's all
 
 ### Registered types and counts
 
@@ -142,6 +162,12 @@ gs.clear(null)
 ### Copy data between spaces
 
 ![Copy data between spaces](https://raw.githubusercontent.com/terma/gigaspace-sql-console/master/img/copy.png)
+
+#### Copy part of data
+
+If you don't have criteria to limit you dataset for copy by business field. You can use ```from X only Y``` notation in copy queries for example to copy from 1k set 200 documents start from 160 you need:
+
+```copy MyDocs from 160 only 200```
 
 ### Export / Import data
 
