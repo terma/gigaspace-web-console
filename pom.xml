@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github.terma</groupId>
-    <artifactId>gigaspace-sql-console</artifactId>
+    <groupId>com.github.terma.gigaspace-sql-console</groupId>
+    <artifactId>aggregator</artifactId>
     <version>0.0.32-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <modules>
         <module>core</module>
         <module>provider</module>
-        <module>web</module>
+        <module>server</module>
+        <module>console-maven-plugin</module>
     </modules>
 
     <properties>
@@ -19,6 +21,9 @@
         <encoding>UTF-8</encoding>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.7</java.version>
+
+        <!-- as default version for tests and local start -->
+        <gsVersion>10.0.1-11800-RELEASE</gsVersion>
     </properties>
 
     <build>

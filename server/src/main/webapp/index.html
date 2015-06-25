@@ -259,8 +259,8 @@
     </div>
 
     <div ng-show="context.selectedGigaspace.selectedTab == 'query'">
-        <ui-codemirror ui-codemirror-opts="he"
-                       ng-modep="context.selectedGigaspace.queryTab.selectedEditor.content"
+        <ui-codemirror ui-codemirror-opts="editorOptions"
+                       ng-model="context.selectedGigaspace.queryTab.selectedEditor.content"
                        class="mono-text"></ui-codemirror>
 
         <p/>
