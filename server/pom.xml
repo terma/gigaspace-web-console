@@ -126,8 +126,8 @@
                         <configuration>
                             <artifactItems>
                                 <artifactItem>
-                                    <groupId>com.github.terma</groupId>
-                                    <artifactId>gigaspace-sql-console-provider</artifactId>
+                                    <groupId>com.github.terma.gigaspace-sql-console</groupId>
+                                    <artifactId>provider</artifactId>
                                     <version>${project.version}</version>
                                     <overWrite>true</overWrite>
                                     <outputDirectory>${project.build.outputDirectory}</outputDirectory>
