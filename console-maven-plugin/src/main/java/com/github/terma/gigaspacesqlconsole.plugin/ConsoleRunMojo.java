@@ -35,6 +35,10 @@ import org.codehaus.classworlds.DuplicateRealmException;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -69,12 +73,16 @@ public class ConsoleRunMojo extends AbstractMojo {
     @Parameter(property = "port", defaultValue = "7777")
     private int port;
 
-    @Parameter(property = "pluginVersion")
-    private String pluginVersion;
-
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         getLog().info("Starting gigaspace-sql-console...");
+
+        final String pluginVersion;
+        try {
+            pluginVersion = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/plugin.version"))).readLine();
+        } catch (IOException e) {
+            throw new MojoExecutionException("Can't read plugin version!", e);
+        }
 
         getLog().info("plugin version: " + pluginVersion);
         getLog().info("gsVersion: " + gsVersion);

@@ -17,6 +17,15 @@
         <pluginVersion>${project.version}</pluginVersion>
     </properties>
 
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+    </build>
+
     <dependencies>
         <dependency>
             <groupId>com.github.terma.gigaspace-sql-console</groupId>
