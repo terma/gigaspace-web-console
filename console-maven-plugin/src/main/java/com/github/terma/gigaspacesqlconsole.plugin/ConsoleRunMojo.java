@@ -69,10 +69,14 @@ public class ConsoleRunMojo extends AbstractMojo {
     @Parameter(property = "port", defaultValue = "7777")
     private int port;
 
+    @Parameter(property = "pluginVersion")
+    private String pluginVersion;
+
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         getLog().info("Starting gigaspace-sql-console...");
 
+        getLog().info("plugin version: " + pluginVersion);
         getLog().info("gsVersion: " + gsVersion);
         getLog().info(Config.CONFIG_PATH_SYSTEM_PROPERTY + ": " + configPath);
         getLog().info("console port: " + port);
@@ -96,7 +100,7 @@ public class ConsoleRunMojo extends AbstractMojo {
         Thread.currentThread().setContextClassLoader(realm.getClassLoader());
 
         final Artifact serverArtifact = artifactFactory.createArtifact(
-                "com.github.terma.gigaspace-sql-console", "server", "0.0.32-SNAPSHOT", "", "war");
+                "com.github.terma.gigaspace-sql-console", "server", pluginVersion, "", "war");
         resolveArtifact(serverArtifact);
 
         runServer(serverArtifact);
