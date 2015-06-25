@@ -4,7 +4,7 @@
 
     <groupId>com.github.terma.gigaspace-sql-console</groupId>
     <artifactId>aggregator</artifactId>
-    <version>0.0.34</version>
+    <version>0.0.35-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -44,7 +44,7 @@
     <scm>
         <developerConnection>scm:git:https://github.com/terma/gigaspace-sql-console.git</developerConnection>
         <connection>scm:git:https://github.com/terma/gigaspace-sql-console.git</connection>
-        <tag>aggregator-0.0.34</tag>
+        <tag>gigaspace-sql-console-0.0.29</tag>
     </scm>
 
     <repositories>
