@@ -16,6 +16,7 @@ limitations under the License.
 
 package com.github.terma.gigaspacesqlconsole.provider;
 
+import com.gigaspaces.document.DocumentProperties;
 import com.gigaspaces.document.SpaceDocument;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
@@ -26,33 +27,51 @@ import java.util.Arrays;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class VirtualEntryConverterTest {
+public class DocumentConverterTest {
 
     @Test
     public void emptyForDocumentWithoutProperties() {
         assertThat(
-                VirtualEntryConverter.convert(new SpaceDocument()),
+                DocumentConverter.convert(new SpaceDocument()),
                 is("{\n  \"typeName\": \"java.lang.Object\",\n  \"properties\": {}\n}"));
+    }
+
+    @Test
+    public void emptyForDocumentProperties() {
+        assertThat(
+                DocumentConverter.convert(new DocumentProperties()),
+                is("{}"));
+    }
+
+    @Test
+    public void documentProperties() {
+        DocumentProperties documentProperties = new DocumentProperties();
+        documentProperties.setProperty("aaa", 123);
+        documentProperties.setProperty("bb", "awer");
+
+        assertThat(
+                DocumentConverter.convert(documentProperties),
+                is("{\n  \"aaa\": 123,\n  \"bb\": \"awer\"\n}"));
     }
 
     @Test
     public void ignoreNonVirtualEntry() {
         assertThat(
-                VirtualEntryConverter.convert(90),
+                DocumentConverter.convert(90),
                 CoreMatchers.nullValue());
     }
 
     @Test
     public void ignoreNull() {
         assertThat(
-                VirtualEntryConverter.convert(null),
+                DocumentConverter.convert(null),
                 CoreMatchers.nullValue());
     }
 
     @Test
     public void showDocumentTypeName() {
         assertThat(
-                VirtualEntryConverter.convert(new SpaceDocument("MyDocument")),
+                DocumentConverter.convert(new SpaceDocument("MyDocument")),
                 is("{\n  \"typeName\": \"MyDocument\",\n  \"properties\": {}\n}"));
     }
 
@@ -63,7 +82,7 @@ public class VirtualEntryConverterTest {
         spaceDocument.setProperty("id", 12L);
 
         assertThat(
-                VirtualEntryConverter.convert(spaceDocument),
+                DocumentConverter.convert(spaceDocument),
                 is("{\n  \"typeName\": \"x\",\n  \"properties\": {\n    \"id\": 12,\n    \"name\": \"Dark Mol\"\n  }\n}"));
     }
 
@@ -73,7 +92,7 @@ public class VirtualEntryConverterTest {
         spaceDocument.setProperty("name", "Dark Mol");
 
         assertThat(
-                VirtualEntryConverter.convert(spaceDocument),
+                DocumentConverter.convert(spaceDocument),
                 is("{\n  \"typeName\": \"x\",\n  \"properties\": {\n    \"name\": \"Dark Mol\"\n  }\n}"));
     }
 
@@ -83,17 +102,17 @@ public class VirtualEntryConverterTest {
         spaceDocument.setProperty("name", null);
 
         assertThat(
-                VirtualEntryConverter.convert(spaceDocument),
+                DocumentConverter.convert(spaceDocument),
                 is("{\n  \"typeName\": \"x\",\n  \"properties\": {}\n}"));
     }
 
     @Test
     public void showByteStream() {
         SpaceDocument spaceDocument = new SpaceDocument("x");
-        spaceDocument.setProperty("name", new ByteArrayInputStream(new byte[] {1,2}));
+        spaceDocument.setProperty("name", new ByteArrayInputStream(new byte[]{1, 2}));
 
         assertThat(
-                VirtualEntryConverter.convert(spaceDocument),
+                DocumentConverter.convert(spaceDocument),
                 is("{\n  \"typeName\": \"x\",\n" +
                         "  \"properties\": {\n" +
                         "    \"name\": {\n" +
@@ -118,7 +137,7 @@ public class VirtualEntryConverterTest {
         spaceDocument.setProperty("pp", nestedSpaceDocument);
 
         assertThat(
-                VirtualEntryConverter.convert(spaceDocument),
+                DocumentConverter.convert(spaceDocument),
                 is("{\n  \"typeName\": \"x\",\n" +
                         "  \"properties\": {\n" +
                         "    \"pp\": {\n" +
@@ -143,7 +162,7 @@ public class VirtualEntryConverterTest {
         spaceDocument.setProperty("list", Arrays.asList(nestedSpaceDocument1, nestedSpaceDocument2));
 
         assertThat(
-                VirtualEntryConverter.convert(spaceDocument),
+                DocumentConverter.convert(spaceDocument),
                 is("{\n  \"typeName\": \"x\",\n  \"properties\": {\n    \"list\": [\n      {\n        \"typeName\": \"i\",\n        \"properties\": {\n          \"id\": 2\n        }\n      },\n      {\n        \"typeName\": \"i\",\n        \"properties\": {}\n      }\n    ]\n  }\n}"));
     }
 

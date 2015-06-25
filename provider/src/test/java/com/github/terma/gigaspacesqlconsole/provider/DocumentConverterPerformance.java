@@ -8,7 +8,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VirtualEntryConverterPerformance {
+public class DocumentConverterPerformance {
 
     private static final int ITERATIONS = 5;
     private static final int COUNT = 1000;
@@ -29,7 +29,7 @@ public class VirtualEntryConverterPerformance {
 
         Thread.sleep(1000);
 
-//        System.out.println(name + " example -> " + VirtualEntryConverter.convert(input.get(0)));
+//        System.out.println(name + " example -> " + DocumentConverter.convert(input.get(0)));
 
         // test
         long start = System.currentTimeMillis();
@@ -41,7 +41,7 @@ public class VirtualEntryConverterPerformance {
 
     private long performOneTest(List<SpaceDocument> input) {
         long trash = 0;
-        for (SpaceDocument document : input) trash += VirtualEntryConverter.convert(document).length();
+        for (SpaceDocument document : input) trash += DocumentConverter.convert(document).length();
         return trash;
     }
 

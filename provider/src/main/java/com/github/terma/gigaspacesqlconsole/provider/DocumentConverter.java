@@ -1,11 +1,12 @@
 package com.github.terma.gigaspacesqlconsole.provider;
 
+import com.gigaspaces.document.DocumentProperties;
 import com.gigaspaces.entry.VirtualEntry;
 import com.google.gson.*;
 
 import java.lang.reflect.Type;
 
-public class VirtualEntryConverter {
+public class DocumentConverter {
 
     private static final JsonSerializer<VirtualEntry> VIRTUAL_ENTRY_SERIALIZER =
             new JsonSerializer<VirtualEntry>() {
@@ -22,6 +23,20 @@ public class VirtualEntryConverter {
 
             };
 
+//    private static final JsonSerializer<DocumentProperties> DOCUMENT_PROPERTIES_SERIALIZER =
+//            new JsonSerializer<VirtualEntry>() {
+//
+//                @Override
+//                public JsonElement serialize(
+//                        final DocumentProperties documentProperties, final Type type,
+//                        final JsonSerializationContext jsonSerializationContext) {
+//                    JsonObject jsonObject = new JsonObject();
+//                    jsonObject.add("properties", jsonSerializationContext.serialize(documentProperties.()));
+//                    return jsonObject;
+//                }
+//
+//            };
+
     private static final Gson GSON = new GsonBuilder()
             .registerTypeHierarchyAdapter(VirtualEntry.class, VIRTUAL_ENTRY_SERIALIZER)
             .disableHtmlEscaping()
@@ -29,7 +44,7 @@ public class VirtualEntryConverter {
             .create();
 
     public static String convert(final Object o) {
-        if (o instanceof VirtualEntry) return GSON.toJson(o);
+        if (o instanceof VirtualEntry || o instanceof DocumentProperties) return GSON.toJson(o);
         else return null;
     }
 

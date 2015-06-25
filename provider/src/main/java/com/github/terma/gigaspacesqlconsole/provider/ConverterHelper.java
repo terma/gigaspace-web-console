@@ -35,7 +35,7 @@ public class ConverterHelper {
         final Config config = Config.read();
 
         List<String> converters = config.user.converters;
-        converters.add(VirtualEntryConverter.class.getName());
+        converters.add(DocumentConverter.class.getName());
 
         for (final String converterClassName : converters) {
             final Class converterClass;
