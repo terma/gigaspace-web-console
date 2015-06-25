@@ -3,15 +3,31 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.github.terma</groupId>
-        <artifactId>gigaspace-sql-console</artifactId>
+        <groupId>com.github.terma.gigaspace-sql-console</groupId>
+        <artifactId>aggregator</artifactId>
         <version>0.0.32-SNAPSHOT</version>
     </parent>
 
-    <artifactId>gigaspace-sql-console-core</artifactId>
+    <artifactId>core</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>
+        <!-- gigaspace -->
+
+        <dependency>
+            <groupId>com.gigaspaces</groupId>
+            <artifactId>gs-openspaces</artifactId>
+            <version>${gsVersion}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.gigaspaces</groupId>
+            <artifactId>gs-runtime</artifactId>
+            <version>${gsVersion}</version>
+            <scope>provided</scope>
+        </dependency>
+
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
