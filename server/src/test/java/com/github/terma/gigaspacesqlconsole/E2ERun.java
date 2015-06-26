@@ -1,4 +1,4 @@
-package com.github.terma.gigaspacesqlconsole;
+package com.github.terma.gigaspacewebconsole;
 
 import org.hamcrest.Matchers;
 import org.junit.After;
@@ -28,14 +28,14 @@ public class E2ERun {
 
     @Test
     public void shouldShowMainPage() throws Exception {
-        driver.get("http://localhost:8080/gs-sql-console/");
+        driver.get("http://localhost:8080/gs-web-console/");
         assertThat(driver.getTitle(), Matchers.containsString("GigaSpace SQL Console"));
     }
 
     @Ignore
     @Test
     public void shouldExecuteSqlForSelectedGsAndShowResult() throws Exception {
-        driver.get("http://localhost:8080/gs-sql-console/");
+        driver.get("http://localhost:8080/gs-web-console/");
         assertThat(driver.getTitle(), Matchers.containsString("GigaSpace SQL Console"));
     }
 

@@ -72,7 +72,7 @@ _Almost everything what you can't find in GigaSpace Management Console for data 
   ]
 }
 ```
-1. Pass JVM option ```-DgigaspaceSqlConsoleConfig=<classpath:X> or <file:X>``` to your Web Container
+1. Pass JVM option ```-DgigaspacewebconsoleConfig=<classpath:X> or <file:X>``` to your Web Container
 1. Start within any Web Container like Jetty, Tomcat etc.
 1. Open web app in browser
 

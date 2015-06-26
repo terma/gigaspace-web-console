@@ -1,4 +1,4 @@
-package com.github.terma.gigaspacesqlconsole;
+package com.github.terma.gigaspacewebconsole;
 
 import junit.framework.Assert;
 import org.junit.Test;
@@ -16,7 +16,7 @@ public class Functional {
     public void executeSqlQuery() {
         WebDriver driver = new FirefoxDriver();
 
-        driver.get("http://localhost:8080/gs-sql-console/");
+        driver.get("http://localhost:8080/gs-web-console/");
 
         final JavascriptExecutor javascriptExecutor = (JavascriptExecutor) driver;
         javascriptExecutor.executeScript(

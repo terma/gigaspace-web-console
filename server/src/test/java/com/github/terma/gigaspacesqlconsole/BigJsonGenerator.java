@@ -1,4 +1,4 @@
-package com.github.terma.gigaspacesqlconsole;
+package com.github.terma.gigaspacewebconsole;
 
 import com.google.gson.Gson;
 

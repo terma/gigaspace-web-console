@@ -19,7 +19,7 @@
     }
   ],
   "converters": [
-    "com.github.terma.gigaspacesqlconsole.TestConverter"
+    "com.github.terma.gigaspacewebconsole.TestConverter"
   ],
   "gigaspaces": [
     {

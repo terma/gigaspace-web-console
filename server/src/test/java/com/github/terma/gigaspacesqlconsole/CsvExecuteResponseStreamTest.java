@@ -1,6 +1,6 @@
-package com.github.terma.gigaspacesqlconsole;
+package com.github.terma.gigaspacewebconsole;
 
-import com.github.terma.gigaspacesqlconsole.core.ExecuteResponseStream;
+import com.github.terma.gigaspacewebconsole.core.ExecuteResponseStream;
 import junit.framework.Assert;
 import org.junit.Test;
 
