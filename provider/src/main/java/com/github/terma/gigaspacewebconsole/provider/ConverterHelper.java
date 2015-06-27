@@ -16,7 +16,7 @@ limitations under the License.
 
 package com.github.terma.gigaspacewebconsole.provider;
 
-import com.github.terma.gigaspacewebconsole.core.config.Config;
+import com.github.terma.gigaspacewebconsole.core.config.ConfigLocator;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -32,9 +32,7 @@ public class ConverterHelper {
     private static final List<Method> converterMethods = new ArrayList<>();
 
     static {
-        final Config config = Config.get();
-
-        List<String> converters = config.user.converters;
+        List<String> converters = ConfigLocator.CONFIG.user.converters;
         converters.add(DocumentConverter.class.getName());
 
         for (final String converterClassName : converters) {

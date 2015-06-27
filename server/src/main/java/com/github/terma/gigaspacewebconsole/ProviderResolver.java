@@ -17,8 +17,8 @@ limitations under the License.
 package com.github.terma.gigaspacewebconsole;
 
 import com.github.terma.gigaspacewebconsole.core.Provider;
-import com.github.terma.gigaspacewebconsole.core.config.Config;
 import com.github.terma.gigaspacewebconsole.core.config.ConfigGs;
+import com.github.terma.gigaspacewebconsole.core.config.ConfigLocator;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -45,21 +45,19 @@ public class ProviderResolver {
     }
 
     private static ConfigGs gsConfigByNameOrFirstOrNull(final String gs) {
-        final Config config = Config.get();
-
-        if (config.user.gs.isEmpty()) {
+        if (ConfigLocator.CONFIG.user.gs.isEmpty()) {
             LOGGER.info("No gs configured try to take from classpath");
             return null;
         }
 
-        for (final ConfigGs configGs : config.user.gs) {
+        for (final ConfigGs configGs : ConfigLocator.CONFIG.user.gs) {
             if (configGs.name.equals(gs)) {
                 LOGGER.info("Find config " + configGs + " for " + configGs);
                 return configGs;
             }
         }
 
-        final ConfigGs configGs = config.user.gs.get(0);
+        final ConfigGs configGs = ConfigLocator.CONFIG.user.gs.get(0);
         LOGGER.info("Can't find config for name: " + gs + ", use first: " + configGs);
         return configGs;
     }

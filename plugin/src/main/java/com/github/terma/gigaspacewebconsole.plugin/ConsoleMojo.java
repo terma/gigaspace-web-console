@@ -80,7 +80,7 @@ public class ConsoleMojo extends AbstractMojo {
         try {
             pluginVersion = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/plugin.version"))).readLine();
         } catch (IOException e) {
-            throw new MojoExecutionException("Can't get plugin version!", e);
+            throw new MojoExecutionException("Can't read plugin version!", e);
         }
 
         System.setProperty(Config.CONFIG_PATH_SYSTEM_PROPERTY, configPath);
@@ -121,6 +121,7 @@ public class ConsoleMojo extends AbstractMojo {
 
         final WebAppContext webAppContext = new WebAppContext();
 //        webAppContext.setExtractWAR(false);
+        webAppContext.setThrowUnavailableOnStartupException(true);
         webAppContext.setWar(serverArtifact.getFile().getAbsolutePath());
 
         final Server server = new Server(port);

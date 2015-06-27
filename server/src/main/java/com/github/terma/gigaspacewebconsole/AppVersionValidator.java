@@ -17,13 +17,13 @@ limitations under the License.
 package com.github.terma.gigaspacewebconsole;
 
 import com.github.terma.gigaspacewebconsole.core.AppVersionRequest;
-import com.github.terma.gigaspacewebconsole.core.config.Config;
+import com.github.terma.gigaspacewebconsole.core.config.ConfigLocator;
 
 import javax.servlet.ServletException;
 
 public class AppVersionValidator<T extends AppVersionRequest> implements Validator<T> {
 
-    private final String appVersion = Config.get().internal.appVersion;
+    private final String appVersion = ConfigLocator.CONFIG.internal.appVersion;
 
     @Override
     public void validate(T request) throws Exception {

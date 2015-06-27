@@ -16,13 +16,13 @@ limitations under the License.
 
 package com.github.terma.gigaspacewebconsole;
 
-import com.github.terma.gigaspacewebconsole.core.config.Config;
+import com.github.terma.gigaspacewebconsole.core.config.ConfigLocator;
 
 public class ConfigAndAppVersionServlet extends JsonServlet<Object> {
 
     @Override
     protected Object doJson(Object request) throws Exception {
-        return Config.get();
+        return ConfigLocator.CONFIG;
     }
 
     @Override

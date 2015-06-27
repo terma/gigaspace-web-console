@@ -20,14 +20,13 @@ import com.google.gson.Gson;
 import org.openspaces.admin.Admin;
 import org.openspaces.admin.AdminFactory;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.net.Socket;
 import java.util.*;
 
 public class Config {
 
+    public static final String DEFAULT_GS_HOST = "localhost";
     public static final int DEFAULT_GS_PORT = 4176;
 
     public static final String CONFIG_PATH_SYSTEM_PROPERTY = "gigaspacewebconsoleConfig";
@@ -39,16 +38,10 @@ public class Config {
 
     private static final String INTERNAL_CONFIG_PATH = "/internalConfig.json";
 
-    private static Config config;
-
-    public static Config get() {
-        if (config == null) { // could be race
-            final Config newConfig = new Config();
-            newConfig.internal = readInternal();
-            newConfig.user = readUser();
-            config = newConfig;
-        }
-
+    public static Config read() {
+        final Config config = new Config();
+        config.internal = readInternal();
+        config.user = readUser();
         return config;
     }
 
@@ -89,20 +82,22 @@ public class Config {
     private static UserConfig local() {
         UserConfig userConfig = new UserConfig();
 
-        final AdminFactory adminFactory = new AdminFactory();
-        adminFactory.useDaemonThreads(true);
+        if (isPortOpen(DEFAULT_GS_HOST, DEFAULT_GS_PORT)) {
+            final AdminFactory adminFactory = new AdminFactory();
+            adminFactory.useDaemonThreads(true);
 
-        adminFactory.addLocator("localhost:" + DEFAULT_GS_PORT);
-        final Admin admin = adminFactory.createAdmin();
+            adminFactory.addLocator(DEFAULT_GS_HOST + ":" + DEFAULT_GS_PORT);
+            final Admin admin = adminFactory.createAdmin();
 
-        for (String space : getSpaces(admin)) {
-            ConfigGigaSpace configGigaSpace = new ConfigGigaSpace();
-            configGigaSpace.name = space;
-            configGigaSpace.url = "jini://localhost:" + DEFAULT_GS_PORT + "/*/" + space;
-            userConfig.gigaspaces.add(configGigaSpace);
+            for (String space : getSpaces(admin)) {
+                ConfigGigaSpace configGigaSpace = new ConfigGigaSpace();
+                configGigaSpace.name = space;
+                configGigaSpace.url = "jini://localhost:" + DEFAULT_GS_PORT + "/*/" + space;
+                userConfig.gigaspaces.add(configGigaSpace);
+            }
+
+            admin.close();
         }
-
-        admin.close();
 
         ConfigGigaSpace local = new ConfigGigaSpace();
         local.name = "LOCAL";
@@ -134,6 +129,14 @@ public class Config {
         System.out.println(spaces);
 
         return spaces;
+    }
+
+    private static boolean isPortOpen(final String host, final int port) {
+        try (Socket ignored = new Socket(host, port)) {
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
     }
 
     public UserConfig user;
