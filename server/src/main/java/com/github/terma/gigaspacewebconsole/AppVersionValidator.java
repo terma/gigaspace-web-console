@@ -23,7 +23,7 @@ import javax.servlet.ServletException;
 
 public class AppVersionValidator<T extends AppVersionRequest> implements Validator<T> {
 
-    private final String appVersion = Config.read().internal.appVersion;
+    private final String appVersion = Config.get().internal.appVersion;
 
     @Override
     public void validate(T request) throws Exception {

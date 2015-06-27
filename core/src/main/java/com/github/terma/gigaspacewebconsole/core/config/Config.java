@@ -26,7 +26,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.*;
 
-// todo think about cache configuration as no reason to reload each time
 public class Config {
 
     public static final int DEFAULT_GS_PORT = 4176;
@@ -40,10 +39,16 @@ public class Config {
 
     private static final String INTERNAL_CONFIG_PATH = "/internalConfig.json";
 
-    public static Config read() {
-        final Config config = new Config();
-        config.internal = readInternal();
-        config.user = readUser();
+    private static Config config;
+
+    public static Config get() {
+        if (config == null) { // could be race
+            final Config newConfig = new Config();
+            newConfig.internal = readInternal();
+            newConfig.user = readUser();
+            config = newConfig;
+        }
+
         return config;
     }
 
@@ -99,17 +104,22 @@ public class Config {
 
         admin.close();
 
+        ConfigGigaSpace local = new ConfigGigaSpace();
+        local.name = "LOCAL";
+        local.url = "/./local";
+        userConfig.gigaspaces.add(local);
+
         return userConfig;
     }
 
     private static List<String> getSpaces(Admin admin) {
         List<String> spaces = new ArrayList<>();
 
-        for (int i = 1; i < 10; i++) {
+        for (int i = 1; i < 5; i++) {
             spaces = new ArrayList<>(admin.getSpaces().getNames().keySet());
             if (spaces.size() > 0) break;
             try {
-                Thread.sleep(i * 1000);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

@@ -8,13 +8,12 @@
         <version>0.0.35-SNAPSHOT</version>
     </parent>
 
-    <artifactId>console-maven-plugin</artifactId>
+    <artifactId>plugin</artifactId>
     <packaging>maven-plugin</packaging>
 
     <properties>
         <mavenVersion>3.0.3</mavenVersion>
         <pluginToolsVersion>3.1</pluginToolsVersion>
-        <pluginVersion>${project.version}</pluginVersion>
     </properties>
 
     <build>

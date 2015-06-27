@@ -11,7 +11,7 @@
         <module>core</module>
         <module>provider</module>
         <module>server</module>
-        <module>console-maven-plugin</module>
+        <module>plugin</module>
     </modules>
 
     <properties>

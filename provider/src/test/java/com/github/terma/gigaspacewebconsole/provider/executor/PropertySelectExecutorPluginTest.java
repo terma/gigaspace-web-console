@@ -30,6 +30,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openspaces.core.GigaSpace;
 
+import java.util.Arrays;
+
 import static org.hamcrest.CoreMatchers.is;
 
 public class PropertySelectExecutorPluginTest {
@@ -78,7 +80,8 @@ public class PropertySelectExecutorPluginTest {
         boolean handled = new PropertySelectExecutorPlugin().execute(request, responseStream);
 
         Assert.assertThat(handled, is(true));
-        Assert.assertThat(responseStream, is(new ObjectExecuteResponseStream()));
+        Assert.assertThat(responseStream.getData().size(), is(0));
+        Assert.assertThat(responseStream.getColumns(), is(Arrays.asList("id")));
     }
 
     @Test

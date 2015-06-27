@@ -22,7 +22,7 @@ public class ConfigAndAppVersionServlet extends JsonServlet<Object> {
 
     @Override
     protected Object doJson(Object request) throws Exception {
-        return Config.read();
+        return Config.get();
     }
 
     @Override

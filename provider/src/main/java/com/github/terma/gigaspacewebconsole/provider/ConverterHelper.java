@@ -32,7 +32,7 @@ public class ConverterHelper {
     private static final List<Method> converterMethods = new ArrayList<>();
 
     static {
-        final Config config = Config.read();
+        final Config config = Config.get();
 
         List<String> converters = config.user.converters;
         converters.add(DocumentConverter.class.getName());

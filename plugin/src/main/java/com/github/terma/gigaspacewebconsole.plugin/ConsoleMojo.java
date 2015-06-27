@@ -42,8 +42,8 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Mojo(name = "run", requiresProject = false, threadSafe = true)
-public class ConsoleRunMojo extends AbstractMojo {
+@Mojo(name = "console", requiresProject = false, threadSafe = true)
+public class ConsoleMojo extends AbstractMojo {
 
     @Component
     private ArtifactFactory artifactFactory;
@@ -80,8 +80,10 @@ public class ConsoleRunMojo extends AbstractMojo {
         try {
             pluginVersion = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/plugin.version"))).readLine();
         } catch (IOException e) {
-            throw new MojoExecutionException("Can't read plugin version!", e);
+            throw new MojoExecutionException("Can't get plugin version!", e);
         }
+
+        System.setProperty(Config.CONFIG_PATH_SYSTEM_PROPERTY, configPath);
 
         getLog().info("plugin version: " + pluginVersion);
         getLog().info("gsVersion: " + gsVersion);
@@ -96,6 +98,7 @@ public class ConsoleRunMojo extends AbstractMojo {
         gsArtifacts.add(resolveArtifact(artifactFactory, "org.springframework", "spring-core", "3.2.4.RELEASE", "jar"));
         gsArtifacts.add(resolveArtifact(artifactFactory, "org.springframework", "spring-context", "3.2.4.RELEASE", "jar"));
         gsArtifacts.add(resolveArtifact(artifactFactory, "org.springframework", "spring-tx", "3.2.4.RELEASE", "jar"));
+        gsArtifacts.add(resolveArtifact(artifactFactory, "org.springframework", "spring-beans", "3.2.4.RELEASE", "jar"));
 
         final ClassRealm realm;
         try {
@@ -125,8 +128,7 @@ public class ConsoleRunMojo extends AbstractMojo {
         try {
             server.start();
 
-            getLog().info("console started (cntr-C to stop it)");
-            getLog().info("goto: http://localhost:" + port);
+            getLog().info("ready and waiting you at http://localhost:" + port);
 
             server.join();
         } catch (Exception e) {

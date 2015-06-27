@@ -45,7 +45,7 @@ public class ProviderResolver {
     }
 
     private static ConfigGs gsConfigByNameOrFirstOrNull(final String gs) {
-        final Config config = Config.read();
+        final Config config = Config.get();
 
         if (config.user.gs.isEmpty()) {
             LOGGER.info("No gs configured try to take from classpath");

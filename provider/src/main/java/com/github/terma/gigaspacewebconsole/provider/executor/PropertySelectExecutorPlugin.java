@@ -62,6 +62,8 @@ public class PropertySelectExecutorPlugin implements ExecutorPlugin {
             }
 
             if (isEmpty(replacements)) {
+                responseStream.writeHeader(Arrays.asList("id"));
+                responseStream.close();
                 return true;
             }
 
@@ -148,7 +150,7 @@ public class PropertySelectExecutorPlugin implements ExecutorPlugin {
         private final ArrayList<Pattern> patterns;
 
         @TaskGigaSpace
-        private transient GigaSpace gigaSpace;
+        public transient GigaSpace gigaSpace;
 
         private TT(final String typeName, final ArrayList<Pattern> patterns) {
             this.typeName = typeName;
