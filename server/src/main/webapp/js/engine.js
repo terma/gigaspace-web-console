@@ -593,11 +593,12 @@ App.controller("controller", [
         $scope.export = function () {
             types = [];
 
-            var typesString = $scope.context.selectedGigaspace.exportImportTab.types;
-            if (typesString) {
+
+            //var typesString = $scope.context.selectedGigaspace.exportImportTab.types;
+            //if (typesString) {
                 // todo parse types
                 //typesString.splite(",")
-            }
+            //}
 
             var request = {
                 url: $scope.context.selectedGigaspace.url,

@@ -53,6 +53,7 @@ public class ImportServlet extends HttpServlet {
         final FileItemIterator iterator = upload.getItemIterator(request);
 
         ImportRequest importRequest = null;
+        String inputFile = null;
         InputStream inputStream = null;
 
         while (iterator.hasNext()) {
@@ -65,6 +66,7 @@ public class ImportServlet extends HttpServlet {
                     importRequest = gson.fromJson(Streams.asString(stream), ImportRequest.class);
                 }
             } else {
+                inputFile = item.getName();
                 inputStream = stream;
                 break;
             }
@@ -73,6 +75,7 @@ public class ImportServlet extends HttpServlet {
         if (importRequest == null) throw new IOException("Expect 'json' parameter!");
         if (inputStream == null) throw new IOException("Expect file to import!");
 
+        importRequest.file = inputFile;
         ProviderResolver.getProvider(importRequest.gs).import1(importRequest, inputStream);
     }
 

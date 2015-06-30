@@ -32,22 +32,22 @@ public class Importer {
     public static void execute(final ImportRequest request, final InputStream inputStream) throws Exception {
         final GigaSpace gigaSpace = GigaSpaceUtils.getGigaSpace(request);
 
-        if (zipFileForImport(request)) {
+        if (isSerFile(request)) {
+            importOneType(inputStream, gigaSpace);
+        } else {
             final ZipInputStream zipInputStream = new ZipInputStream(inputStream);
             while (true) {
                 final ZipEntry zipEntry = zipInputStream.getNextEntry();
                 if (zipEntry == null) break;
                 importOneType(zipInputStream, gigaSpace);
             }
-        } else {
-            importOneType(inputStream, gigaSpace);
         }
 
         inputStream.close();
     }
 
-    private static boolean zipFileForImport(final ImportRequest request) {
-        return request.file.endsWith(".zip");
+    private static boolean isSerFile(final ImportRequest request) {
+        return request.file != null && request.file.endsWith(".ser");
     }
 
     private static void importOneType(

@@ -90,13 +90,12 @@ public class ImporterTest {
     }
 
     @Test
-    public void shouldImportFromZipWithSerFiles() throws Exception {
+    public void shouldImportFromZipWithSerFilesByDefault() throws Exception {
         final GigaSpace gigaSpace = GigaSpaceUtils.getGigaSpace("/./import-from-zip");
         GigaSpaceUtils.registerType(gigaSpace, "A");
 
         // given
         ImportRequest request = new ImportRequest();
-        request.file = "my.zip";
         request.url = "/./import-from-zip";
 
         // when
