@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.terma.gigaspace-web-console</groupId>
     <artifactId>aggregator</artifactId>
-    <version>0.0.35-SNAPSHOT</version>
+    <version>0.0.36-SNAPSHOT</version>
     <packaging>pom</packaging>
+
+    <name>GigaSpace Web Console</name>
+    <description>Open source alternative for GigaSpace Web UI with enhanced data querying</description>
+    <url>https://github.com/terma/gigaspace-web-console</url>
 
     <modules>
         <module>core</module>
@@ -25,25 +30,132 @@
         <gsVersion>10.0.1-11800-RELEASE</gsVersion>
     </properties>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>2.5.1</version>
-                <configuration>
-                    <autoVersionSubmodules>true</autoVersionSubmodules>
-                    <preparationGoals>clean package</preparationGoals>
-                    <completionGoals>release:clean</completionGoals>
-                    <resume>false</resume>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+    <profiles>
+        <profile>
+            <id>nexus</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>2.4</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.10.3</version>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-release-plugin</artifactId>
+                        <version>2.5.1</version>
+                        <configuration>
+                            <autoVersionSubmodules>true</autoVersionSubmodules>
+                            <preparationGoals>clean package</preparationGoals>
+                            <completionGoals>release:clean</completionGoals>
+                            <resume>false</resume>
+                            <useReleaseProfile>false</useReleaseProfile>
+                            <releaseProfiles>nexus</releaseProfiles>
+                            <goals>deploy</goals>
+                        </configuration>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.5</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <!--<plugin>-->
+                        <!--<groupId>org.sonatype.plugins</groupId>-->
+                        <!--<artifactId>nexus-staging-maven-plugin</artifactId>-->
+                        <!--<version>1.6.5</version>-->
+                        <!--<extensions>true</extensions>-->
+                        <!--<configuration>-->
+                            <!--<serverId>ossrh</serverId>-->
+                            <!--<nexusUrl>https://oss.sonatype.org/</nexusUrl>-->
+                            <!--<autoReleaseAfterClose>true</autoReleaseAfterClose>-->
+                        <!--</configuration>-->
+                    <!--</plugin>-->
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>terma</id>
+            <name>Artem Stasiuk</name>
+            <email>artem.stasuk@gmail.com</email>
+            <roles>
+                <role>architect</role>
+                <role>developer</role>
+            </roles>
+            <timezone>America/New_York</timezone>
+        </developer>
+    </developers>
+
+    <contributors>
+        <contributor>
+            <name>valentine-v5k</name>
+            <email>valentine.v5k@gmail.com</email>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>America/New_York</timezone>
+        </contributor>
+    </contributors>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
 
     <scm>
         <developerConnection>scm:git:https://github.com/terma/gigaspace-web-console.git</developerConnection>
         <connection>scm:git:https://github.com/terma/gigaspace-web-console.git</connection>
+        <url>https://github.com/terma/gigaspace-web-console</url>
         <tag>HEAD</tag>
     </scm>
 
