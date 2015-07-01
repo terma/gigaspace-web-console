@@ -84,7 +84,7 @@ public class ConsoleMojo extends AbstractMojo {
         getLog().info(Config.CONFIG_PATH_SYSTEM_PROPERTY + ": " + configPath);
         getLog().info("console port: " + port);
 
-        getLog().info("Resolving gs dependencies...");
+        getLog().info("Resolving dependencies...");
         List<Artifact> gsArtifacts = new ArrayList<>();
         gsArtifacts.add(resolveArtifact(artifactFactory, "com.gigaspaces", "gs-openspaces", gsVersion, "jar"));
         gsArtifacts.add(resolveArtifact(artifactFactory, "com.gigaspaces", "gs-runtime", gsVersion, "jar"));
