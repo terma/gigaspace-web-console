@@ -37,7 +37,7 @@
                 <version>2.5.1</version>
                 <configuration>
                     <autoVersionSubmodules>true</autoVersionSubmodules>
-                    <preparationGoals>clean package</preparationGoals>
+                    <preparationGoals>clean deploy</preparationGoals>
                     <completionGoals>release:clean</completionGoals>
                     <resume>false</resume>
                     <useReleaseProfile>false</useReleaseProfile>
