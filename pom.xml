@@ -11,6 +11,38 @@
     <description>Open source alternative for GigaSpace Web UI with enhanced data querying</description>
     <url>https://github.com/terma/gigaspace-web-console</url>
 
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>terma</id>
+            <name>Artem Stasiuk</name>
+            <email>artem.stasuk@gmail.com</email>
+            <roles>
+                <role>architect</role>
+                <role>developer</role>
+            </roles>
+            <timezone>America/New_York</timezone>
+        </developer>
+    </developers>
+
+    <contributors>
+        <contributor>
+            <name>valentine-v5k</name>
+            <email>valentine.v5k@gmail.com</email>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>America/New_York</timezone>
+        </contributor>
+    </contributors>
+
     <modules>
         <module>core</module>
         <module>provider</module>
@@ -28,6 +60,65 @@
         <!-- as default version for tests and local start -->
         <gsVersion>10.0.1-11800-RELEASE</gsVersion>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- gigaspace -->
+            <dependency>
+                <groupId>com.gigaspaces</groupId>
+                <artifactId>gs-openspaces</artifactId>
+                <version>${gsVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.gigaspaces</groupId>
+                <artifactId>gs-runtime</artifactId>
+                <version>${gsVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <!-- other -->
+            <dependency>
+                <groupId>org.codehaus.groovy</groupId>
+                <artifactId>groovy</artifactId>
+                <version>2.4.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>2.3.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-webapp</artifactId>
+                <version>9.3.0.M1</version>
+            </dependency>
+
+            <!-- testing -->
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.10</version>
+                <scope>test</scope>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.hamcrest</groupId>
+                        <artifactId>hamcrest-core</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.hamcrest</groupId>
+                <artifactId>hamcrest-all</artifactId>
+                <version>1.3</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <plugins>
@@ -95,54 +186,10 @@
                             </execution>
                         </executions>
                     </plugin>
-
-                    <!--<plugin>-->
-                        <!--<groupId>org.sonatype.plugins</groupId>-->
-                        <!--<artifactId>nexus-staging-maven-plugin</artifactId>-->
-                        <!--<version>1.6.5</version>-->
-                        <!--<extensions>true</extensions>-->
-                        <!--<configuration>-->
-                            <!--<serverId>ossrh</serverId>-->
-                            <!--<nexusUrl>https://oss.sonatype.org/</nexusUrl>-->
-                            <!--<autoReleaseAfterClose>true</autoReleaseAfterClose>-->
-                        <!--</configuration>-->
-                    <!--</plugin>-->
                 </plugins>
             </build>
         </profile>
     </profiles>
-
-    <licenses>
-        <license>
-            <name>The Apache Software License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
-
-    <developers>
-        <developer>
-            <id>terma</id>
-            <name>Artem Stasiuk</name>
-            <email>artem.stasuk@gmail.com</email>
-            <roles>
-                <role>architect</role>
-                <role>developer</role>
-            </roles>
-            <timezone>America/New_York</timezone>
-        </developer>
-    </developers>
-
-    <contributors>
-        <contributor>
-            <name>valentine-v5k</name>
-            <email>valentine.v5k@gmail.com</email>
-            <roles>
-                <role>developer</role>
-            </roles>
-            <timezone>America/New_York</timezone>
-        </contributor>
-    </contributors>
 
     <distributionManagement>
         <snapshotRepository>

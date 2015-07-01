@@ -16,7 +16,6 @@
 
     <properties>
         <mavenVersion>3.0.3</mavenVersion>
-        <!--<pluginToolsVersion>3.1</pluginToolsVersion>-->
     </properties>
 
     <build>
@@ -63,7 +62,6 @@
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-webapp</artifactId>
-            <version>9.3.0.M1</version>
         </dependency>
     </dependencies>
 
