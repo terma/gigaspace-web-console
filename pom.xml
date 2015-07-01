@@ -40,7 +40,7 @@
                     <preparationGoals>clean deploy</preparationGoals>
                     <completionGoals>release:clean</completionGoals>
                     <resume>false</resume>
-                    <useReleaseProfile>false</useReleaseProfile>
+                    <useReleaseProfile>true</useReleaseProfile>
                     <releaseProfiles>nexus</releaseProfiles>
                     <goals>deploy</goals>
                 </configuration>
