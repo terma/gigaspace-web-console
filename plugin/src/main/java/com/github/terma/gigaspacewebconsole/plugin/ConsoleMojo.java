@@ -54,13 +54,7 @@ public class ConsoleMojo extends AbstractMojo {
     @Component
     protected ArtifactResolver artifactResolver;
 
-    /**
-     * List of Remote Repositories used by the resolver
-     *
-     * @parameter expression="${project.remoteArtifactRepositories}"
-     * @readonly
-     * @required
-     */
+    @Parameter(defaultValue = "${project.remoteArtifactRepositories}", readonly = true, required = true)
     private List remoteRepositories;
 
     @Parameter(property = "gsVersion", defaultValue = "10.0.1-11800-RELEASE")
