@@ -670,6 +670,15 @@ App.controller("controller", [
             openQueryTabWith("groovy\nout gs.typeManager.getTypeDescriptor('" + typeName + "')", true);
         };
 
+        $scope.toggleTemplates = function () {
+            $scope.showTemplates = !$scope.showTemplates;
+        };
+
+        $scope.useTemplate = function (template) {
+            $scope.showTemplates = undefined;
+            asyncUpdateAndGoToEndAndFocus(template.sql);
+        };
+
         $scope.getCountClass = function (count) {
             if (count.prevCount == undefined) return "";
             else if (count.count == count.prevCount && count.count == 0) return "count_stable_zero";

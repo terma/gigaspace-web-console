@@ -51,7 +51,7 @@
     }
   ],
   "converters": [
-//    "com.github.terma.gigaspacewebconsole.TestConverter"
+    //    "com.github.terma.gigaspacewebconsole.TestConverter"
   ],
   "gigaspaces": [
     {
@@ -80,6 +80,16 @@
       "user": "",
       "password": "",
       "gs": "GS-9.7"
+    }
+  ],
+  "templates": [
+    {
+      "name": "Clear Space",
+      "sql": "groovy\ngs.clear(null);"
+    },
+    {
+      "name": "Mem",
+      "sql": "groovy\nmem()"
     }
   ]
 }

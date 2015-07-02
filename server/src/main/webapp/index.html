@@ -70,6 +70,16 @@
            ng-class="context.selectedGigaspace.selectedTab == 'types' ? 'selected-button' : 'button'">Types</a>
         <a href="javascript:void(0);" ng-click="openQueryTab()"
            ng-class="context.selectedGigaspace.selectedTab == 'query' ? 'selected-button' : 'button'">Query</a>
+
+        <a ng-show="config.user.templates.length > 0 && context.selectedGigaspace.selectedTab == 'query'"
+           ng-click="toggleTemplates();" style="float: right; padding-top: 0.3em; padding-bottom: 0.3em;"
+           href="javascript:void(0);">Templates</a>
+    </div>
+
+    <div ng-if="showTemplates" style="padding-bottom: 0.5em;">
+        <a ng-repeat="template in ::config.user.templates | orderBy: 'name'"
+           href="javascript:void(0);" ng-click="useTemplate(template)"
+                style="margin-right: 0.3em;">{{ ::template.name }}</a>
     </div>
 
     <!--<div ng-show="context.selectedGigaspace.selectedTab == 'admin'">-->
