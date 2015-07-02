@@ -16,7 +16,6 @@ limitations under the License.
 
 package com.github.terma.gigaspacewebconsole.plugin;
 
-import com.github.terma.gigaspacewebconsole.core.config.Config;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.artifact.repository.ArtifactRepository;
@@ -45,6 +44,8 @@ import java.util.List;
 @Mojo(name = "console", requiresProject = false, threadSafe = true)
 public class ConsoleMojo extends AbstractMojo {
 
+    private static final String CONFIG_SYSTEM_PROPERTY = "gigaspacewebconsoleConfig";
+
     @Component
     private ArtifactFactory artifactFactory;
 
@@ -60,7 +61,7 @@ public class ConsoleMojo extends AbstractMojo {
     @Parameter(property = "gsVersion", defaultValue = "10.0.1-11800-RELEASE")
     private String gsVersion;
 
-    @Parameter(property = Config.CONFIG_PATH_SYSTEM_PROPERTY, alias = "config", defaultValue = Config.LOCAL)
+    @Parameter(property = CONFIG_SYSTEM_PROPERTY, alias = "config", defaultValue = "local")
     private String configPath;
 
     @Parameter(property = "port", defaultValue = "7777")
@@ -77,11 +78,11 @@ public class ConsoleMojo extends AbstractMojo {
             throw new MojoExecutionException("Can't read plugin version!", e);
         }
 
-        System.setProperty(Config.CONFIG_PATH_SYSTEM_PROPERTY, configPath);
+        System.setProperty(CONFIG_SYSTEM_PROPERTY, configPath);
 
         getLog().info("plugin version: " + pluginVersion);
         getLog().info("gsVersion: " + gsVersion);
-        getLog().info(Config.CONFIG_PATH_SYSTEM_PROPERTY + ": " + configPath);
+        getLog().info(CONFIG_SYSTEM_PROPERTY + ": " + configPath);
         getLog().info("console port: " + port);
 
         getLog().info("Resolving dependencies...");
@@ -103,9 +104,8 @@ public class ConsoleMojo extends AbstractMojo {
         }
         Thread.currentThread().setContextClassLoader(realm.getClassLoader());
 
-        final Artifact serverArtifact = artifactFactory.createArtifact(
-                "com.github.terma.gigaspace-web-console", "server", pluginVersion, "", "war");
-        resolveArtifact(serverArtifact);
+        final Artifact serverArtifact = resolveArtifact(artifactFactory,
+                "com.github.terma.gigaspace-web-console", "server", pluginVersion, "war");
 
         runServer(serverArtifact);
     }
