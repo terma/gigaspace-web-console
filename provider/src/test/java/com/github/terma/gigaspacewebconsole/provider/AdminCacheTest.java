@@ -1,6 +1,6 @@
 package com.github.terma.gigaspacewebconsole.provider;
 
-import com.github.terma.gigaspacewebconsole.core.CountsRequest;
+import com.github.terma.gigaspacewebconsole.core.GeneralRequest;
 import org.junit.Test;
 
 import java.util.concurrent.TimeUnit;
@@ -14,14 +14,14 @@ public class AdminCacheTest {
     public void shouldCloseExpiredAdmins() throws InterruptedException {
         // given
         final AdminCache adminCache = new AdminCache(0);
-        final CountsRequest countsRequest = new CountsRequest();
+        final GeneralRequest request = new GeneralRequest();
 
-        countsRequest.url = "/./admin-cache-test";
-        adminCache.createOrGet(countsRequest);
+        request.url = "/./admin-cache-test";
+        adminCache.createOrGet(request);
 
-        countsRequest.url = "/./admin-cache-test1";
-        countsRequest.user = "admin";
-        adminCache.createOrGet(countsRequest);
+        request.url = "/./admin-cache-test1";
+        request.user = "admin";
+        adminCache.createOrGet(request);
 
         assertThat(adminCache.size(), equalTo(2));
 
@@ -37,10 +37,10 @@ public class AdminCacheTest {
     public void shouldNotCloseNotExpiredAdmin() throws InterruptedException {
         // given
         final AdminCache adminCache = new AdminCache(TimeUnit.MINUTES.toMillis(1));
-        final CountsRequest countsRequest = new CountsRequest();
+        final GeneralRequest request = new GeneralRequest();
 
-        countsRequest.url = "/./admin-cache-test";
-        adminCache.createOrGet(countsRequest);
+        request.url = "/./admin-cache-test";
+        adminCache.createOrGet(request);
 
         assertThat(adminCache.size(), equalTo(1));
 

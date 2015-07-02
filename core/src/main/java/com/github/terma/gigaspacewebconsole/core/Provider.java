@@ -21,7 +21,7 @@ import java.io.OutputStream;
 
 public interface Provider {
 
-    CountsResponse counts(CountsRequest request);
+    CountsResponse counts(GeneralRequest request);
 
     void query(ExecuteRequest request, ExecuteResponseStream responseStream) throws Exception;
 

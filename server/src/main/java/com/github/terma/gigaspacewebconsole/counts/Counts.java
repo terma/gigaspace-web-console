@@ -18,15 +18,15 @@ package com.github.terma.gigaspacewebconsole.counts;
 
 import com.github.terma.gigaspacewebconsole.CachedProviderResolver;
 import com.github.terma.gigaspacewebconsole.core.Count;
-import com.github.terma.gigaspacewebconsole.core.CountsRequest;
 import com.github.terma.gigaspacewebconsole.core.CountsResponse;
+import com.github.terma.gigaspacewebconsole.core.GeneralRequest;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 public class Counts {
 
-    public static CountsResponse counts(CountsRequest request) {
+    public static CountsResponse counts(GeneralRequest request) {
         if (request.url.equals("/./test")) {
             return createTestResponse();
         }

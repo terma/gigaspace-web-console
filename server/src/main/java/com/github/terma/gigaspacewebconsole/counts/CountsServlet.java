@@ -19,24 +19,24 @@ package com.github.terma.gigaspacewebconsole.counts;
 import com.github.terma.gigaspacewebconsole.AppVersionValidator;
 import com.github.terma.gigaspacewebconsole.JsonServlet;
 import com.github.terma.gigaspacewebconsole.Validator;
-import com.github.terma.gigaspacewebconsole.core.CountsRequest;
+import com.github.terma.gigaspacewebconsole.core.GeneralRequest;
 
-public class CountsServlet extends JsonServlet<CountsRequest> {
+public class CountsServlet extends JsonServlet<GeneralRequest> {
 
     @Override
-    protected Object doJson(CountsRequest request) throws Exception {
+    protected Object doJson(GeneralRequest request) throws Exception {
         return Counts.counts(request);
     }
 
     @SuppressWarnings("unchecked")
     @Override
     protected Class getRequestClass() {
-        return CountsRequest.class;
+        return GeneralRequest.class;
     }
 
 
     @Override
-    protected Validator<CountsRequest> getValidator() {
+    protected Validator<GeneralRequest> getValidator() {
         return new AppVersionValidator<>();
     }
 

@@ -18,8 +18,9 @@ package com.github.terma.gigaspacewebconsole.provider;
 
 import com.gigaspaces.cluster.activeelection.SpaceMode;
 import com.github.terma.gigaspacewebconsole.core.Count;
-import com.github.terma.gigaspacewebconsole.core.CountsRequest;
 import com.github.terma.gigaspacewebconsole.core.CountsResponse;
+import com.github.terma.gigaspacewebconsole.core.GeneralRequest;
+import org.openspaces.admin.Admin;
 import org.openspaces.admin.space.Space;
 import org.openspaces.admin.space.SpaceInstance;
 
@@ -34,32 +35,7 @@ public class Counts {
 
     private static final Logger LOGGER = Logger.getLogger(Counts.class.getName());
 
-    private static final AdminCache adminCache = new AdminCache();
-
-    private static final Thread cleaner = new Thread(new Runnable() {
-        @Override
-        public void run() {
-            while (true) {
-                adminCache.clearExpired();
-
-                try {
-                    Thread.sleep(TimeUnit.MINUTES.toMillis(5));
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    return;
-                }
-            }
-        }
-
-    });
-
-    static {
-        cleaner.setName("COUNTS-ADMIN-CLEANER");
-        cleaner.setDaemon(true);
-        cleaner.start();
-    }
-
-    public CountsResponse counts(CountsRequest request) {
+    public CountsResponse counts(GeneralRequest request) {
         if (request.url.equals("/./test")) {
             return createTestResponse();
         }
@@ -67,9 +43,9 @@ public class Counts {
         final CountsResponse countsResponse = new CountsResponse();
         countsResponse.counts = new ArrayList<>();
 
-        final AdminCacheItem adminAndSpace = adminCache.createOrGet(request);
+        final Admin admin = AdminLocator.get(request);
 
-        Space space = adminAndSpace.admin.getSpaces()
+        Space space = admin.getSpaces()
                 .waitFor(GigaSpaceUrl.parseSpace(request.url), 10, TimeUnit.SECONDS);
         if (space != null) {
             SpaceInstance[] spaceInstances = space.getInstances();

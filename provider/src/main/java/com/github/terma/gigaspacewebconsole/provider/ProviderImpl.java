@@ -28,7 +28,7 @@ public class ProviderImpl implements Provider {
     private Counts countsProvider = new Counts();
 
     @Override
-    public CountsResponse counts(CountsRequest request) {
+    public CountsResponse counts(GeneralRequest request) {
         return countsProvider.counts(request);
     }
 

@@ -118,6 +118,15 @@ public class GroovyExecutorTest {
     }
 
     @Test
+    public void shouldAllowToGetAdmin() throws Exception {
+        request.sql = "admin().spaces.spaces.length";
+
+        GroovyExecutor.execute(request, responseStream);
+
+        assertEquals(1, responseStream.results.size());
+    }
+
+    @Test
     public void haveDefaultGsDocumentImport() throws Exception {
         request.sql = "new SpaceDocument(\"bb\")";
 

@@ -16,8 +16,8 @@ limitations under the License.
 
 package com.github.terma.gigaspacewebconsole.provider;
 
-import com.github.terma.gigaspacewebconsole.core.CountsRequest;
 import com.github.terma.gigaspacewebconsole.core.CountsResponse;
+import com.github.terma.gigaspacewebconsole.core.GeneralRequest;
 import junit.framework.Assert;
 import org.junit.Test;
 
@@ -69,7 +69,7 @@ public class CountsStabilityTest {
 
         @Override
         public Void call() {
-            CountsRequest countsRequest = new CountsRequest();
+            GeneralRequest countsRequest = new GeneralRequest();
             countsRequest.url = space;
             final CountsResponse countsResponse = new Counts().counts(countsRequest);
             Assert.assertEquals(1, countsResponse.counts.size());

@@ -14,18 +14,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package com.github.terma.gigaspacewebconsole.core;
+package com.github.terma.gigaspacewebconsole.provider.groovy;
 
-public class GeneralRequest extends AppVersionRequest {
+import com.github.terma.gigaspacewebconsole.core.ExecuteRequest;
+import com.github.terma.gigaspacewebconsole.provider.AdminLocator;
+import groovy.lang.Closure;
 
-    public String user;
-    public String password;
-    public String gs;
-    public String url;
+public class AdminClosure extends Closure {
+
+    private final ExecuteRequest request;
+
+    public AdminClosure(final ExecuteRequest request) {
+        super(null);
+        this.request = request;
+    }
 
     @Override
-    public String toString() {
-        return "{ url = '" + url + "', user = '" + user + "', password = **** " + ", gs = '" + gs + "\' }";
+    public Object call() {
+        return AdminLocator.get(request);
     }
 
 }

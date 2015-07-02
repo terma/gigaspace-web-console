@@ -1,7 +1,7 @@
 package com.github.terma.gigaspacewebconsole;
 
-import com.github.terma.gigaspacewebconsole.core.CountsRequest;
 import com.github.terma.gigaspacewebconsole.core.ExecuteRequest;
+import com.github.terma.gigaspacewebconsole.core.GeneralRequest;
 import com.github.terma.gigaspacewebconsole.core.ObjectExecuteResponseStream;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -21,14 +21,14 @@ public class MultiVersionsInOneJvmTest {
         request1.url = "/./gs95-" + System.currentTimeMillis();
         request1.sql = "create table gs95 (id int)";
 
-        CountsRequest countsRequest1 = new CountsRequest();
+        GeneralRequest countsRequest1 = new GeneralRequest();
         countsRequest1.url = request1.url + "?";
 
         ExecuteRequest request2 = new ExecuteRequest();
         request2.url = "/./gs10-" + System.currentTimeMillis();
         request2.sql = "create table gs10 (id int)";
 
-        CountsRequest countsRequest2 = new CountsRequest();
+        GeneralRequest countsRequest2 = new GeneralRequest();
         countsRequest2.url = request2.url + "?";
 
         for (int i = 0; i < 15; i++) {

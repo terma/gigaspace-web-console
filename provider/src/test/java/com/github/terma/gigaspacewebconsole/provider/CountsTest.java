@@ -16,8 +16,8 @@ limitations under the License.
 
 package com.github.terma.gigaspacewebconsole.provider;
 
-import com.github.terma.gigaspacewebconsole.core.CountsRequest;
 import com.github.terma.gigaspacewebconsole.core.CountsResponse;
+import com.github.terma.gigaspacewebconsole.core.GeneralRequest;
 import junit.framework.Assert;
 import org.junit.Test;
 import org.openspaces.core.GigaSpace;
@@ -31,7 +31,7 @@ public class CountsTest {
     public void shouldReturnEmptyResultIfNoTypesInSpace() {
         GigaSpaceUtils.getGigaSpace("/./ff");
 
-        CountsRequest countsRequest = new CountsRequest();
+        GeneralRequest countsRequest = new GeneralRequest();
         countsRequest.url = "/./ff?";
         final CountsResponse countsResponse = new Counts().counts(countsRequest);
 
@@ -49,7 +49,7 @@ public class CountsTest {
         GigaSpaceUtils.writeDocument(gigaSpace, "com.a");
         GigaSpaceUtils.writeDocument(gigaSpace, "com.a");
 
-        CountsRequest countsRequest = new CountsRequest();
+        GeneralRequest countsRequest = new GeneralRequest();
         countsRequest.url = url;
         final CountsResponse countsResponse = new Counts().counts(countsRequest);
 
