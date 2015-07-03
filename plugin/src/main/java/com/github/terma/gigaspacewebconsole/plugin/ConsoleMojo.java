@@ -49,11 +49,11 @@ public class ConsoleMojo extends AbstractMojo {
     @Component
     private ArtifactFactory artifactFactory;
 
-    @Parameter(defaultValue = "${localRepository}", readonly = true, required = true)
-    private ArtifactRepository localRepository;
-
     @Component
-    protected ArtifactResolver artifactResolver;
+    private ArtifactResolver artifactResolver;
+
+    @Parameter(defaultValue = "${localRepository}", readonly = true)
+    private ArtifactRepository localRepository;
 
     @Parameter(defaultValue = "${project.remoteArtifactRepositories}", readonly = true, required = true)
     private List remoteRepositories;
@@ -94,6 +94,8 @@ public class ConsoleMojo extends AbstractMojo {
         gsArtifacts.add(resolveArtifact(artifactFactory, "org.springframework", "spring-context", "3.2.4.RELEASE", "jar"));
         gsArtifacts.add(resolveArtifact(artifactFactory, "org.springframework", "spring-tx", "3.2.4.RELEASE", "jar"));
         gsArtifacts.add(resolveArtifact(artifactFactory, "org.springframework", "spring-beans", "3.2.4.RELEASE", "jar"));
+        final Artifact serverArtifact = resolveArtifact(artifactFactory,
+                "com.github.terma.gigaspace-web-console", "server", pluginVersion, "war");
 
         final ClassRealm realm;
         try {
@@ -103,9 +105,6 @@ public class ConsoleMojo extends AbstractMojo {
             throw new MojoExecutionException(e.getMessage(), e);
         }
         Thread.currentThread().setContextClassLoader(realm.getClassLoader());
-
-        final Artifact serverArtifact = resolveArtifact(artifactFactory,
-                "com.github.terma.gigaspace-web-console", "server", pluginVersion, "war");
 
         runServer(serverArtifact);
     }
@@ -133,7 +132,7 @@ public class ConsoleMojo extends AbstractMojo {
 
     private void resolveArtifact(Artifact serverArtifact) throws MojoExecutionException {
         try {
-            artifactResolver.resolve(serverArtifact, remoteRepositories, this.localRepository);
+            artifactResolver.resolve(serverArtifact, remoteRepositories, localRepository);
         } catch (ArtifactResolutionException | ArtifactNotFoundException e) {
             throw new MojoExecutionException("", e);
         }
@@ -141,8 +140,8 @@ public class ConsoleMojo extends AbstractMojo {
 
     private Artifact resolveArtifact(
             ArtifactFactory artifactFactory,
-            String groupId, String artifactId, String version, String type) throws MojoExecutionException {
-        final Artifact artifact = artifactFactory.createArtifact(groupId, artifactId, version, "", type);
+            String groupId, String artifactId, String version, String packaging) throws MojoExecutionException {
+        final Artifact artifact = artifactFactory.createBuildArtifact(groupId, artifactId, version, packaging);
         resolveArtifact(artifact);
         return artifact;
     }
