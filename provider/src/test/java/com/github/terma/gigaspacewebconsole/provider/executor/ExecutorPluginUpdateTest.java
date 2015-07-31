@@ -83,7 +83,7 @@ public class ExecutorPluginUpdateTest {
     }
 
     private SpaceDocument readByType(final String typeName) {
-        return gigaSpace.read(new SpaceDocument(typeName));
+        return GigaSpaceUtils.readByType(gigaSpace, typeName);
     }
 
 }

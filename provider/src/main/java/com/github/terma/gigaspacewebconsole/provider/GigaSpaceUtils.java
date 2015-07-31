@@ -94,4 +94,7 @@ public class GigaSpaceUtils {
         gigaSpace.write(spaceDocument1);
     }
 
+    public static SpaceDocument readByType(final GigaSpace gigaSpace, final String typeName) {
+        return gigaSpace.read(new SpaceDocument(typeName));
+    }
 }
