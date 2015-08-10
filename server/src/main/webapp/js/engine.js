@@ -34,147 +34,49 @@ App.controller("controller", [
 
             selectedGigaspace: undefined,
 
-            gigaspaces: [
-                //{
-                //    name: "GS-9.5",
-                //    custom: undefined, // for future usage
-                //
-                //    url: "URL",
-                //    gs: "GS-9.5",
-                //    user: "USER",
-                //    password: "XXX", // transient
-                //
-                //    selectedTab: "query",
-                //
-                //    typesTab: {
-                //        hideZero: undefined,
-                //        filter: undefined,
-                //        selectedCount: undefined,
-                //
-                //        // transient
-                //        checking: false,
-                //        status: undefined,
-                //        error: undefined,
-                //        // or
-                //        data: undefined
-                //    },
-                //
-                //    queryTab: {
-                //        selectedEditor: undefined,
-                //
-                //        editors: [
-                //            {
-                //                name: undefined, // default
-                //                content: "SQLs",
-                //                cursor: 1, // line number
-                //
-                //                // transient
-                //                status: undefined
-                //
-                //                queries: [
-                //                    //    {
-                //                    //query: "SQL",
-                //
-                //                    //status: undefined,
-                //
-                //                    //error: {
-                //                    //    exceptionClass: undefined,
-                //                    //    message: undefined,
-                //                    //    stacktrace: undefined
-                //                    //}
-                //
-                //                    // or
-                //
-                //                    //data: {
-                //                    //    showAllText: false,
-                //                    //    selectedRecord: undefined,
-                //                    //    textLengthLimit: $scope.textLengthLimit
-                //                    //}
-                //                    //}
-                //                ]
-                //            },
-                //            {
-                //                name: "Custom1",
-                //                content: "SQLs"
-                //            }
-                //        ]
-                //    }
-                //}
-            ],
+            gigaspaces: [],
 
             LOCAL_STORAGE_KEY: "settings",
             LOCAL_STORAGE_OLD_KEY: "history",
-
-            //init: function () {
-            //    this.restore();
-            //    // old version so just free storage
-            //    window.localStorage.setItem(this.LOCAL_STORAGE_OLD_KEY, null);
-            //},
 
             restore: function () {
                 log.log("start restoring context...");
                 this.gigaspaces = [];
 
-                var fromStore = angular.fromJson(window.localStorage.getItem(this.LOCAL_STORAGE_KEY));
+                function unsafeRestore() {
+                    var fromStore = angular.fromJson(window.localStorage.getItem(this.LOCAL_STORAGE_KEY));
+                    if (fromStore) {
+                        log.log("stored context found, restoring...");
+                        for (var i = 0; i < fromStore.gigaspaces.length; i++) {
+                            var fromStoreGigaspace = fromStore.gigaspaces[i];
 
-                if (fromStore) {
-                    log.log("stored context found, restoring...");
-                    for (var i = 0; i < fromStore.gigaspaces.length; i++) {
-                        var fromStoreGigaspace = fromStore.gigaspaces[i];
+                            // check if restored predefinedGigaspace present in config other skip restore
+                            if (findPredefinedGigaspace(fromStoreGigaspace.name)) {
+                                this.gigaspaces.push(fromStoreGigaspace);
 
-                        // check if restored predefinedGigaspace present in config other skip restore
-                        if (findPredefinedGigaspace(fromStoreGigaspace.name)) {
-                            this.gigaspaces.push(fromStoreGigaspace);
+                                // restore link on selected predefinedGigaspace
+                                if (fromStore.selectedGigaspace == i) this.selectedGigaspace = fromStoreGigaspace;
 
-                            // restore link on selected predefinedGigaspace
-                            if (fromStore.selectedGigaspace == i) this.selectedGigaspace = fromStoreGigaspace;
+                                // restore link on selected editor
+                                this.gigaspaces[i].queryTab.selectedEditor =
+                                    fromStore.gigaspaces[i].queryTab.editors[fromStore.gigaspaces[i].queryTab.selectedEditor];
 
-                            // restore link on selected editor
-                            this.gigaspaces[i].queryTab.selectedEditor =
-                                fromStore.gigaspaces[i].queryTab.editors[fromStore.gigaspaces[i].queryTab.selectedEditor];
-
-                            // create export if not present
-                            if (!this.gigaspaces[i].exportImportTab) this.gigaspaces[i].exportImportTab = {};
-                        }
-                    }
-                } else {
-                    var oldFromStore = angular.fromJson(window.localStorage.getItem(this.LOCAL_STORAGE_OLD_KEY));
-                    if (oldFromStore) {
-                        log.log("old context found, migrating...");
-                        for (var i = 0; i < oldFromStore.length; i++) {
-                            var url = oldFromStore[i].url;
-                            var oldEditor = oldFromStore[i].editor;
-
-                            var predefinedGigaspace = findPredefinedGigaspaceByUrl(url);
-                            if (predefinedGigaspace) {
-                                var gigaspace = {
-                                    name: predefinedGigaspace.name,
-                                    url: predefinedGigaspace.url,
-                                    user: predefinedGigaspace.user,
-                                    password: predefinedGigaspace.password,
-                                    selectedTab: "query",
-                                    typesTab: {},
-                                    exportImportTab: {},
-                                    queryTab: {
-                                        editors: [
-                                            {
-                                                name: undefined,
-                                                content: oldEditor
-                                            }
-                                        ]
-                                    }
-                                };
-
-                                gigaspace.queryTab.selectedEditor = gigaspace.queryTab.editors[0];
-                                this.gigaspaces.push(gigaspace);
+                                // create export if not present
+                                if (!this.gigaspaces[i].exportImportTab) this.gigaspaces[i].exportImportTab = {};
                             }
                         }
-                        //window.localStorage.removeItem(this.LOCAL_STORAGE_OLD_KEY);
                     }
                 }
 
-                log.log("context restored");
-                log.log(this.gigaspaces);
+                try {
+                    unsafeRestore();
+
+                    log.log('context restored');
+                    log.log(this.gigaspaces);
+                } catch (e) {
+                    log.log('cant restore context, go with empty');
+                    log.log(e);
+                }
             },
 
             store: function () {
@@ -240,15 +142,6 @@ App.controller("controller", [
         function findPredefinedGigaspace(name) {
             for (var m = 0; m < $scope.config.user.gigaspaces.length; m++) {
                 if ($scope.config.user.gigaspaces[m].name == name) return $scope.config.user.gigaspaces[m];
-            }
-            return undefined;
-        }
-
-        function findPredefinedGigaspaceByUrl(url) {
-            for (var i = 0; i < $scope.config.user.gigaspaces.length; i++) {
-                if ($scope.config.user.gigaspaces[i].url === url) {
-                    return $scope.config.user.gigaspaces[i];
-                }
             }
             return undefined;
         }
@@ -323,7 +216,7 @@ App.controller("controller", [
             else $scope.stopCheckTypes();
         });
 
-        $("select").change(function (e) {
+        $("select").change(function () {
             $scope.stopCheckTypes();
         });
 
@@ -591,13 +484,13 @@ App.controller("controller", [
         };
 
         $scope.export = function () {
-            types = [];
+            var types = [];
 
 
             //var typesString = $scope.context.selectedGigaspace.exportImportTab.types;
             //if (typesString) {
-                // todo parse types
-                //typesString.splite(",")
+            // todo parse types
+            //typesString.splite(",")
             //}
 
             var request = {
