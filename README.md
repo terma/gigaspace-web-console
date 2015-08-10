@@ -28,9 +28,30 @@ _Almost everything what you can't find in GigaSpace Management Console for data 
 * Support Groovy language in console
 * Export / Import data between spaces
 
-# How install
+# How Use
 
-1. Download (WAR file) latest release [from](https://github.com/terma/gigaspaces-sql-console/releases)
+## Just Run and Use
+
+```console
+$ mvn com.github.terma.gigaspace-web-console:plugin:console
+```
+
+Useful parameters:
+
+* ```-DgsVersion=<GS_VERSION>``` - to specify version of Gigaspace (will takes it from your maven repository)
+* ```-Dport=<PORT>``` - specify port to run by default ```7777```
+* ```-DconfigPath=file:<FILE_PATH>``` - if need to provide custom config
+
+## Integrate in other app
+
+```xml
+<dependency>
+    <groupId>com.github.terma.gigaspace-web-console</groupId>
+    <artifactId>server</artifactId>
+    <version>0.0.43</version>
+</dependency>
+```
+
 1. Prepare config file (JSON format) 
 ```json
 {
