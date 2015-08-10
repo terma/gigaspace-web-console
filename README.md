@@ -5,7 +5,7 @@
 Free lightweight java web application. Powerful alternative for GigaSpace Management Console when you have a lot of work with spaces data, especially for Quality Assurance Team.
 
 * [Features](#key-features)
-* [How to install](#how-to-install)
+* [How to run](#how-to-run)
 * [How to use](#how-to-use)
  * [Execute SQL Queries](#execute-sql-queries)
  * [Registered Types and Counts](#registered-types-and-counts)
@@ -28,7 +28,7 @@ _Almost everything what you can't find in GigaSpace Management Console for data 
 * Support Groovy language in console
 * Export / Import data between spaces
 
-# How Use
+# How to Run
 
 ## Just Run and Use
 
