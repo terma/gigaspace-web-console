@@ -23,20 +23,6 @@ public class DocumentConverter {
 
             };
 
-//    private static final JsonSerializer<DocumentProperties> DOCUMENT_PROPERTIES_SERIALIZER =
-//            new JsonSerializer<VirtualEntry>() {
-//
-//                @Override
-//                public JsonElement serialize(
-//                        final DocumentProperties documentProperties, final Type type,
-//                        final JsonSerializationContext jsonSerializationContext) {
-//                    JsonObject jsonObject = new JsonObject();
-//                    jsonObject.add("properties", jsonSerializationContext.serialize(documentProperties.()));
-//                    return jsonObject;
-//                }
-//
-//            };
-
     private static final Gson GSON = new GsonBuilder()
             .registerTypeHierarchyAdapter(VirtualEntry.class, VIRTUAL_ENTRY_SERIALIZER)
             .disableHtmlEscaping()

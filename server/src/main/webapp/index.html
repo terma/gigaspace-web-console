@@ -204,7 +204,7 @@
 
             <p ng-show="query.status">{{ query.status }}</p>
 
-            <span ng-show="query.count">
+            <span ng-show="query.count != undefined">
                 Was copied {{ query.count }}
                 <ng-switch on="query.count">
                     <span ng-switch-when="1">document</span>
