@@ -5,8 +5,10 @@ import com.gigaspaces.entry.VirtualEntry;
 import com.google.gson.*;
 
 import java.lang.reflect.Type;
+import java.util.Map;
+import java.util.Set;
 
-public class DocumentConverter {
+public class EmbeddedObjectsConverter {
 
     private static final JsonSerializer<VirtualEntry> VIRTUAL_ENTRY_SERIALIZER =
             new JsonSerializer<VirtualEntry>() {
@@ -30,7 +32,11 @@ public class DocumentConverter {
             .create();
 
     public static String convert(final Object o) {
-        if (o instanceof VirtualEntry || o instanceof DocumentProperties) return GSON.toJson(o);
+        if (o instanceof VirtualEntry
+                || o instanceof DocumentProperties
+                || o instanceof Map
+                || o instanceof Iterable)
+            return GSON.toJson(o);
         else return null;
     }
 

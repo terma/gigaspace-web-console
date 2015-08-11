@@ -22,24 +22,24 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
-import java.util.Arrays;
+import java.util.*;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class DocumentConverterTest {
+public class EmbeddedObjectsConverterTest {
 
     @Test
     public void emptyForDocumentWithoutProperties() {
         assertThat(
-                DocumentConverter.convert(new SpaceDocument()),
+                EmbeddedObjectsConverter.convert(new SpaceDocument()),
                 is("{\n  \"typeName\": \"java.lang.Object\",\n  \"properties\": {}\n}"));
     }
 
     @Test
     public void emptyForDocumentProperties() {
         assertThat(
-                DocumentConverter.convert(new DocumentProperties()),
+                EmbeddedObjectsConverter.convert(new DocumentProperties()),
                 is("{}"));
     }
 
@@ -50,69 +50,69 @@ public class DocumentConverterTest {
         documentProperties.setProperty("bb", "awer");
 
         assertThat(
-                DocumentConverter.convert(documentProperties),
+                EmbeddedObjectsConverter.convert(documentProperties),
                 is("{\n  \"aaa\": 123,\n  \"bb\": \"awer\"\n}"));
     }
 
     @Test
     public void ignoreNonVirtualEntry() {
         assertThat(
-                DocumentConverter.convert(90),
+                EmbeddedObjectsConverter.convert(90),
                 CoreMatchers.nullValue());
     }
 
     @Test
     public void ignoreNull() {
         assertThat(
-                DocumentConverter.convert(null),
+                EmbeddedObjectsConverter.convert(null),
                 CoreMatchers.nullValue());
     }
 
     @Test
-    public void showDocumentTypeName() {
+    public void covertDocumentTypeName() {
         assertThat(
-                DocumentConverter.convert(new SpaceDocument("MyDocument")),
+                EmbeddedObjectsConverter.convert(new SpaceDocument("MyDocument")),
                 is("{\n  \"typeName\": \"MyDocument\",\n  \"properties\": {}\n}"));
     }
 
     @Test
-    public void showDocumentProperties() {
+    public void covertDocumentProperties() {
         SpaceDocument spaceDocument = new SpaceDocument("x");
         spaceDocument.setProperty("name", "Dark Mol");
         spaceDocument.setProperty("id", 12L);
 
         assertThat(
-                DocumentConverter.convert(spaceDocument),
+                EmbeddedObjectsConverter.convert(spaceDocument),
                 is("{\n  \"typeName\": \"x\",\n  \"properties\": {\n    \"id\": 12,\n    \"name\": \"Dark Mol\"\n  }\n}"));
     }
 
     @Test
-    public void showDocumentStringPropertyWithQuotas() {
+    public void covertDocumentStringPropertyWithQuotas() {
         SpaceDocument spaceDocument = new SpaceDocument("x");
         spaceDocument.setProperty("name", "Dark Mol");
 
         assertThat(
-                DocumentConverter.convert(spaceDocument),
+                EmbeddedObjectsConverter.convert(spaceDocument),
                 is("{\n  \"typeName\": \"x\",\n  \"properties\": {\n    \"name\": \"Dark Mol\"\n  }\n}"));
     }
 
     @Test
-    public void showDocumentNullPropertyAsNull() {
+    public void covertDocumentNullPropertyAsNull() {
         SpaceDocument spaceDocument = new SpaceDocument("x");
         spaceDocument.setProperty("name", null);
 
         assertThat(
-                DocumentConverter.convert(spaceDocument),
+                EmbeddedObjectsConverter.convert(spaceDocument),
                 is("{\n  \"typeName\": \"x\",\n  \"properties\": {}\n}"));
     }
 
     @Test
-    public void showByteStream() {
+    public void covertByteStream() {
         SpaceDocument spaceDocument = new SpaceDocument("x");
         spaceDocument.setProperty("name", new ByteArrayInputStream(new byte[]{1, 2}));
 
         assertThat(
-                DocumentConverter.convert(spaceDocument),
+                EmbeddedObjectsConverter.convert(spaceDocument),
                 is("{\n  \"typeName\": \"x\",\n" +
                         "  \"properties\": {\n" +
                         "    \"name\": {\n" +
@@ -128,7 +128,7 @@ public class DocumentConverterTest {
     }
 
     @Test
-    public void showSpaceDocumentPropertyAsNested() {
+    public void covertSpaceDocumentPropertyAsNested() {
         SpaceDocument nestedSpaceDocument = new SpaceDocument("nested");
         nestedSpaceDocument.setProperty("hasCar", true);
         nestedSpaceDocument.setProperty("noDrugs", false);
@@ -137,7 +137,7 @@ public class DocumentConverterTest {
         spaceDocument.setProperty("pp", nestedSpaceDocument);
 
         assertThat(
-                DocumentConverter.convert(spaceDocument),
+                EmbeddedObjectsConverter.convert(spaceDocument),
                 is("{\n  \"typeName\": \"x\",\n" +
                         "  \"properties\": {\n" +
                         "    \"pp\": {\n" +
@@ -151,7 +151,7 @@ public class DocumentConverterTest {
     }
 
     @Test
-    public void showNestedSpaceDocumentsInCollection() {
+    public void covertNestedSpaceDocumentsInCollection() {
         SpaceDocument nestedSpaceDocument1 = new SpaceDocument("i");
         nestedSpaceDocument1.setProperty("id", 1);
 
@@ -162,8 +162,38 @@ public class DocumentConverterTest {
         spaceDocument.setProperty("list", Arrays.asList(nestedSpaceDocument1, nestedSpaceDocument2));
 
         assertThat(
-                DocumentConverter.convert(spaceDocument),
+                EmbeddedObjectsConverter.convert(spaceDocument),
                 is("{\n  \"typeName\": \"x\",\n  \"properties\": {\n    \"list\": [\n      {\n        \"typeName\": \"i\",\n        \"properties\": {\n          \"id\": 2\n        }\n      },\n      {\n        \"typeName\": \"i\",\n        \"properties\": {}\n      }\n    ]\n  }\n}"));
+    }
+
+    @Test
+    public void convertMap() {
+        Map<String, String> map = new TreeMap<>();
+        map.put("a", "12");
+
+        assertThat(
+                EmbeddedObjectsConverter.convert(map),
+                is("{\n  \"a\": \"12\"\n}"));
+    }
+
+    @Test
+    public void convertList() {
+        List<String> list = new ArrayList<>();
+        list.add("12");
+
+        assertThat(
+                EmbeddedObjectsConverter.convert(list),
+                is("[\n  \"12\"\n]"));
+    }
+
+    @Test
+    public void convertSet() {
+        Set<String> set = new HashSet<>();
+        set.add("12");
+
+        assertThat(
+                EmbeddedObjectsConverter.convert(set),
+                is("[\n  \"12\"\n]"));
     }
 
 }
