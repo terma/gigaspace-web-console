@@ -1,9 +1,11 @@
 #!/bin/sh
 
+set -e
+
 echo "Clear logs..."
-rm ./gs10.log
-rm ./gs95.log
-#rm ./gs97.log
+rm ./gs10.log || echo ""
+rm ./gs95.log || echo ""
+#rm ./gs97.log || echo ""
 
 echo "Kill running spaces..."
 pkill -f GSA

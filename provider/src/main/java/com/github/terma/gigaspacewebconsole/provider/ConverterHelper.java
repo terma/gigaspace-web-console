@@ -33,7 +33,7 @@ public class ConverterHelper {
 
     static {
         List<String> converters = ConfigLocator.CONFIG.user.converters;
-        converters.add(DocumentConverter.class.getName());
+        converters.add(EmbeddedObjectsConverter.class.getName());
 
         for (final String converterClassName : converters) {
             final Class converterClass;

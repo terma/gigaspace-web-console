@@ -303,8 +303,8 @@
             <table ng-show="query.data" class="result fixMe" style="table-layout: fixed;">
                 <thead>
                 <tr>
-                    <th ng-repeat="value in query.data.columns track by $index" valign="top" class="mono-text">
-                        {{ value }}
+                    <th ng-repeat="value in ::query.data.columns track by $index" valign="top" class="mono-text">
+                        {{ ::value }}
                         <a ng-if="queryColumnIsTimestamp(query.data, $index)"
                            ng-click="queryColumnToTimestamp(query.data, $index)"
                            href="javascript:void(0);">T?</a>
@@ -315,10 +315,8 @@
                 <tr ng-repeat="record in query.data.data track by $index"
                     ng-click="query.data.selectedRecord = record"
                     ng-class="query.data.selectedRecord == record ? 'selected' : ''">
-                    <td ng-repeat="value in record track by $index" valign="top">
-                        <pre style="margin: 0; padding: 0;" class="mono-text">{{ value | limitTo: query.data.textLengthLimit }}</pre>
-                        <span ng-if="value.length > 50" ng-show="!query.data.showAllText">...</span>
-                    </td>
+                    <td ng-repeat="value in record track by $index" valign="top" class="result-value" ng-class="::{'null-text': value === null}"
+                    >{{ value | nullAsString | limitTo: query.data.textLengthLimit }}<span ng-if="value.length > 50" ng-show="!query.data.showAllText">...</span></td>
                 </tr>
                 </tbody>
             </table>
