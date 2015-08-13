@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -e
+
 echo "Clear logs..."
 rm ./gs10.log
 rm ./gs95.log

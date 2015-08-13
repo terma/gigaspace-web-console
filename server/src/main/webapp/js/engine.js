@@ -18,6 +18,12 @@
 
 var App = angular.module("App", ["ui.codemirror"]);
 
+App.filter('nullAsString', function () {
+    return function (value) {
+        return value === null ? 'null' : value;
+    };
+});
+
 App.controller("controller", [
     "$scope", "$http", "$q", "$timeout", "$filter",
     function ($scope, $http, $q, $timeout, $filter) {

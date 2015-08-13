@@ -14,6 +14,19 @@ body {
     font-size: 90%;
 }
 
+.result-value {
+    font-family: courier, monospace;
+    font-size: 90%;
+
+    unicode-bidi: embed;
+    white-space: pre;
+
+}
+
+.null-text {
+    color: #C0C0C0;
+}
+
 .mono-error {
     color: red;
     font-family: courier, monospace;
