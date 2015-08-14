@@ -315,7 +315,7 @@
                 <tr ng-repeat="record in query.data.data track by $index"
                     ng-click="query.data.selectedRecord = record"
                     ng-class="query.data.selectedRecord == record ? 'selected' : ''">
-                    <td ng-repeat="value in record track by $index" valign="top" class="result-value" ng-class="::{'null-text': value === null}"
+                    <td ng-repeat="value in record track by $index" valign="top" class="result-value" ng-class="value === null ? 'null-text' : ''"
                     >{{ value | nullAsString | limitTo: query.data.textLengthLimit }}<span ng-if="value.length > 50" ng-show="!query.data.showAllText">...</span></td>
                 </tr>
                 </tbody>
