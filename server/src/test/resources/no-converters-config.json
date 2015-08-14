@@ -1,5 +1,5 @@
 {
-  "gs": [
+  "drivers": [
     {
       "name": "GS-10",
       "libs": [
@@ -38,6 +38,12 @@
         "${localRepository}/org/springframework/spring-context/3.2.4.RELEASE/spring-context-3.2.4.RELEASE.jar",
         "${localRepository}/org/springframework/spring-tx/3.2.4.RELEASE/spring-tx-3.2.4.RELEASE.jar"
       ]
+    },
+    {
+      "name": "org.h2.Driver",
+      "libs": [
+        "${localRepository}/com/h2database/h2/1.4.188/h2-1.4.188.jar"
+      ]
     }
   ],
   "links": [
@@ -59,7 +65,7 @@
       "url": "/./local",
       "user": "",
       "password": "",
-      "gs": "GS-10"
+      "driver": "GS-10"
     },
     {
       "name": "GS-10",
@@ -72,14 +78,21 @@
       "url": "jini:/*/*/gs95?locators=localhost:4300",
       "user": "admin",
       "password": "admin",
-      "gs": "GS-9.5"
+      "driver": "GS-9.5"
     },
     {
       "name": "GS-9.7",
       "url": "jini:/*/*/gs97?locators=localhost:4500",
       "user": "",
       "password": "",
-      "gs": "GS-9.7"
+      "driver": "GS-9.7"
+    },
+    {
+      "name": "in-mem-h2",
+      "url": "jdbc:h2:mem:query;DB_CLOSE_DELAY=-1",
+      "user": "",
+      "password": "",
+      "driver": "org.h2.Driver"
     }
   ],
   "templates": [

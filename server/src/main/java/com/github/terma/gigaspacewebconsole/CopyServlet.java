@@ -22,7 +22,7 @@ public class CopyServlet extends JsonServlet<CopyRequest> {
 
     @Override
     protected Object doJson(CopyRequest request) throws Exception {
-        return CachedProviderResolver.getProvider(request.gs).copy(request);
+        return CachedProviderResolver.getProvider(request.driver).copy(request);
     }
 
     @Override

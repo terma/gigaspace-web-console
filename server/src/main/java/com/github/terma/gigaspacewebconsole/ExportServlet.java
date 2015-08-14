@@ -44,7 +44,7 @@ public class ExportServlet extends HttpServlet {
         final OutputStream outputStream = response.getOutputStream();
 
         try {
-            CachedProviderResolver.getProvider(req.gs).export(req, outputStream);
+            CachedProviderResolver.getProvider(req.driver).export(req, outputStream);
         } catch (final Throwable exception) {
             throw new IOException(exception);
         }

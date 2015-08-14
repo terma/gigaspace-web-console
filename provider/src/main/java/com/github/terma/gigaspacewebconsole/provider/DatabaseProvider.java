@@ -16,45 +16,43 @@ limitations under the License.
 
 package com.github.terma.gigaspacewebconsole.provider;
 
-import com.github.terma.gigaspacewebconsole.provider.executor.Executor;
 import com.github.terma.gigaspacewebconsole.core.*;
+import com.github.terma.gigaspacewebconsole.provider.executor.DatabaseExecutor;
 
 import java.io.InputStream;
 import java.io.OutputStream;
 
 @SuppressWarnings("UnusedDeclaration")
-public class ProviderImpl implements Provider {
-
-    private Counts countsProvider = new Counts();
+public class DatabaseProvider implements Provider {
 
     @Override
     public CountsResponse counts(GeneralRequest request) {
-        return countsProvider.counts(request);
+        throw new UnsupportedOperationException("We don't support count for DB, please wait future releases!");
     }
 
     @Override
     public void query(ExecuteRequest request, ExecuteResponseStream responseStream) throws Exception {
-        Executor.execute(request, responseStream);
+        DatabaseExecutor.INSTANCE.execute(request, responseStream);
     }
 
     @Override
     public CopyResponse copy(final CopyRequest request) throws Exception {
-        return Copier.copy(request);
+        throw new UnsupportedOperationException("We don't support copy for DB, please wait future releases!");
     }
 
     @Override
     public void execute(ExecuteRequest request, GroovyExecuteResponseStream responseStream) throws Exception {
-        GroovyExecutor.execute(request, responseStream);
+        throw new UnsupportedOperationException("We don't support groovy for DB, please wait future releases!");
     }
 
     @Override
     public void export(ExportRequest request, OutputStream outputStream) throws Exception {
-        Exporter.execute(request, outputStream);
+        throw new UnsupportedOperationException("We don't support export for DB, please wait future releases!");
     }
 
     @Override
     public void import1(ImportRequest request, InputStream inputStream) throws Exception {
-        Importer.execute(request, inputStream);
+        throw new UnsupportedOperationException("We don't support import for DB, please wait future releases!");
     }
 
 }

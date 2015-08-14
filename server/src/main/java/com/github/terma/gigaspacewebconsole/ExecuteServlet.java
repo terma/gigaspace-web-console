@@ -27,7 +27,7 @@ public class ExecuteServlet extends StreamJsonServlet<ExecuteRequest> {
     @Override
     protected void doPost(final ExecuteRequest request, final PrintWriter writer) throws Exception {
         final ExecuteResponseStream responseStream = new JsonExecuteResponseStream(writer);
-        CachedProviderResolver.getProvider(request.gs).query(request, responseStream);
+        CachedProviderResolver.getProvider(request.driver).query(request, responseStream);
     }
 
     @Override

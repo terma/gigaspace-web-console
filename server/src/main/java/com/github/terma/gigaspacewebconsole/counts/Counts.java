@@ -31,7 +31,7 @@ public class Counts {
             return createTestResponse();
         }
 
-        return CachedProviderResolver.getProvider(request.gs).counts(request);
+        return CachedProviderResolver.getProvider(request.driver).counts(request);
     }
 
     private static CountsResponse createTestResponse() {

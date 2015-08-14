@@ -55,6 +55,13 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.188</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>

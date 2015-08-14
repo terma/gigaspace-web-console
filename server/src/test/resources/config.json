@@ -1,5 +1,5 @@
 {
-  "gs": [
+  "drivers": [
     {
       "name": "test",
       "libs": [

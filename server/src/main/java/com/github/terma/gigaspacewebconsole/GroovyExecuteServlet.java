@@ -26,7 +26,7 @@ public class GroovyExecuteServlet extends StreamJsonServlet<ExecuteRequest> {
     @Override
     protected void doPost(final ExecuteRequest request, final PrintWriter writer) throws Exception {
         final GroovyExecuteResponseStream responseStream = new JsonGroovyExecuteResponseStream(writer);
-        CachedProviderResolver.getProvider(request.gs).execute(request, responseStream);
+        CachedProviderResolver.getProvider(request.driver).execute(request, responseStream);
     }
 
     @Override

@@ -65,7 +65,7 @@ public class GigaSpaceUtils {
         return new GigaSpaceConfigurer(urlSpaceConfigurer.create()).create();
     }
 
-    public static Connection createJdbcConnection(final ExecuteRequest request)
+    public static Connection createJdbcConnection(final GeneralRequest request)
             throws SQLException, ClassNotFoundException {
         Properties info = new Properties();
 

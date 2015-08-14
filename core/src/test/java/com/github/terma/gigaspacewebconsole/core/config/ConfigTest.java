@@ -45,9 +45,9 @@ public class ConfigTest {
         UserConfig userConfig = Config.readUser();
 
         Assert.assertNotNull(userConfig);
-        Assert.assertEquals(1, userConfig.gs.size());
-        Assert.assertEquals("test", userConfig.gs.get(0).name);
-        Assert.assertEquals(2, userConfig.gs.get(0).libs.size());
+        Assert.assertEquals("Unexpected count of drivers", 1, userConfig.drivers.size());
+        Assert.assertEquals("test", userConfig.drivers.get(0).name);
+        Assert.assertEquals(2, userConfig.drivers.get(0).libs.size());
     }
 
     @Test

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package com.github.terma.gigaspacewebconsole.provider.executor;
+package com.github.terma.gigaspacewebconsole.provider.executor.gigaspace;
 
 import com.gigaspaces.metadata.SpaceTypeDescriptor;
 import com.gigaspaces.metadata.SpaceTypeDescriptorBuilder;
@@ -38,10 +38,8 @@ public class PropertySelectExecutorPluginTest {
 
     private static final String url = "/./property-select";
     private static final String typeName = "A";
-
-    private final ExecuteRequest request = new ExecuteRequest();
-
     private static GigaSpace gigaSpace;
+    private final ExecuteRequest request = new ExecuteRequest();
 
     @BeforeClass
     public static void init() {

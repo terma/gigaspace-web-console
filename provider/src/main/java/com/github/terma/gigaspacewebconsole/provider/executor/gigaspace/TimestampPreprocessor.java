@@ -14,8 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package com.github.terma.gigaspacewebconsole.provider.executor;
+package com.github.terma.gigaspacewebconsole.provider.executor.gigaspace;
 
+import com.github.terma.gigaspacewebconsole.provider.executor.ExecutorPreprocessor;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 

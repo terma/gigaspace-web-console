@@ -93,7 +93,7 @@ public class GroovyExecutorTest {
 
     @Test
     public void shouldAllowToUseGsInstanceInScript() throws Exception {
-        request.sql = "gs.clear(null)";
+        request.sql = "driver.clear(null)";
 
         GroovyExecutor.execute(request, responseStream);
     }

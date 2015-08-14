@@ -103,7 +103,7 @@ App.controller("controller", [
                         name: _this.gigaspaces[i].name,
                         user: _this.gigaspaces[i].user,
                         url: _this.gigaspaces[i].url,
-                        gs: _this.gigaspaces[i].gs,
+                        driver: _this.gigaspaces[i].driver,
                         selectedTab: _this.gigaspaces[i].selectedTab,
 
                         typesTab: {
@@ -201,7 +201,7 @@ App.controller("controller", [
             }
 
             gigaspace.url = predefinedGigaspace.url;
-            gigaspace.gs = predefinedGigaspace.gs;
+            gigaspace.driver = predefinedGigaspace.driver;
             if (predefinedGigaspace.user) gigaspace.user = predefinedGigaspace.user;
             if (predefinedGigaspace.password) gigaspace.password = predefinedGigaspace.password;
 
@@ -281,7 +281,7 @@ App.controller("controller", [
                     url: $scope.context.selectedGigaspace.url,
                     user: $scope.context.selectedGigaspace.user,
                     password: $scope.context.selectedGigaspace.password,
-                    gs: $scope.context.selectedGigaspace.gs,
+                    driver: $scope.context.selectedGigaspace.driver,
                     sql: sqlToExecute,
                     appVersion: $scope.config.internal.appVersion
                 };
@@ -308,7 +308,7 @@ App.controller("controller", [
                         url: $scope.context.selectedGigaspace.url,
                         user: $scope.context.selectedGigaspace.user,
                         password: $scope.context.selectedGigaspace.password,
-                        gs: $scope.context.selectedGigaspace.gs,
+                        driver: $scope.context.selectedGigaspace.driver,
                         sql: lines.mkString("\n"),
                         appVersion: $scope.config.internal.appVersion
                     };
@@ -402,7 +402,7 @@ App.controller("controller", [
                 url: $scope.context.selectedGigaspace.url,
                 user: $scope.context.selectedGigaspace.user,
                 password: $scope.context.selectedGigaspace.password,
-                gs: $scope.context.selectedGigaspace.gs,
+                driver: $scope.context.selectedGigaspace.driver,
                 sql: query.sql,
                 appVersion: $scope.config.internal.appVersion
             };
@@ -507,7 +507,7 @@ App.controller("controller", [
                 url: $scope.context.selectedGigaspace.url,
                 user: $scope.context.selectedGigaspace.user,
                 password: $scope.context.selectedGigaspace.password,
-                gs: $scope.context.selectedGigaspace.gs,
+                driver: $scope.context.selectedGigaspace.driver,
                 types: types,
                 appVersion: $scope.config.internal.appVersion
             };
@@ -523,7 +523,7 @@ App.controller("controller", [
                 url: $scope.context.selectedGigaspace.url,
                 user: $scope.context.selectedGigaspace.user,
                 password: $scope.context.selectedGigaspace.password,
-                gs: $scope.context.selectedGigaspace.gs,
+                driver: $scope.context.selectedGigaspace.driver,
                 appVersion: $scope.config.internal.appVersion
             }));
         };
@@ -608,7 +608,7 @@ App.controller("controller", [
                 url: gigaspace.url,
                 user: gigaspace.user,
                 password: gigaspace.password,
-                gs: gigaspace.gs,
+                driver: gigaspace.driver,
                 appVersion: $scope.config.internal.appVersion
             };
 
@@ -772,7 +772,7 @@ App.controller("controller", [
                 url: $scope.context.selectedGigaspace.url,
                 user: $scope.context.selectedGigaspace.user,
                 password: $scope.context.selectedGigaspace.password,
-                gs: $scope.context.selectedGigaspace.gs,
+                driver: $scope.context.selectedGigaspace.driver,
                 targetUrl: $scope.context.selectedGigaspace.copyTab.targetUrl,
                 targetUser: $scope.context.selectedGigaspace.copyTab.targetUser,
                 targetPassword: $scope.context.selectedGigaspace.copyTab.targetPassword,

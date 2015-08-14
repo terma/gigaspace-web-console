@@ -1,5 +1,5 @@
 /*
-Copyright 2015 Artem Stasiuk
+    Copyright 2015 Artem Stasiuk
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,18 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package com.github.terma.gigaspacewebconsole.core;
+package com.github.terma.gigaspacewebconsole.provider.executor;
 
-public class GeneralRequest extends AppVersionRequest {
+import com.github.terma.gigaspacewebconsole.core.GeneralRequest;
 
-    public String user;
-    public String password;
-    public String driver;
-    public String url;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+public class DatabaseConnectionFactory implements ConnectionFactory {
 
     @Override
-    public String toString() {
-        return "{ url = '" + url + "', user = '" + user + "', password = **** " + ", driver = '" + driver + "\' }";
+    public Connection get(GeneralRequest request) throws SQLException, ClassNotFoundException {
+        Class.forName(request.driver);
+        return DriverManager.getConnection(request.url, request.user, request.password);
     }
 
 }
