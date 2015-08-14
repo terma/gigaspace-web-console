@@ -17,7 +17,7 @@ limitations under the License.
 package com.github.terma.gigaspacewebconsole.provider.groovy;
 
 import com.github.terma.gigaspacewebconsole.core.ExecuteRequest;
-import com.github.terma.gigaspacewebconsole.provider.executor.Executor;
+import com.github.terma.gigaspacewebconsole.provider.executor.gigaspace.GigaSpaceExecutor;
 import groovy.lang.Closure;
 
 import java.sql.SQLException;
@@ -39,7 +39,7 @@ public class SqlClosure extends Closure {
         if (arguments == null) throw new NullPointerException("Can't sql null!");
 
         final ExecuteRequest concreteRequest = new ExecuteRequest();
-        concreteRequest.gs = request.gs;
+        concreteRequest.driver = request.driver;
         concreteRequest.url = request.url;
         concreteRequest.user = request.user;
         concreteRequest.password = request.password;
@@ -47,7 +47,7 @@ public class SqlClosure extends Closure {
         concreteRequest.sql = arguments.toString();
 
         try {
-            final SqlResult sqlResult = Executor.originalExecute(concreteRequest);
+            final SqlResult sqlResult = GigaSpaceExecutor.INSTANCE.originalExecute(concreteRequest);
             sqlResults.add(sqlResult);
             return sqlResult;
         } catch (Exception exception) {

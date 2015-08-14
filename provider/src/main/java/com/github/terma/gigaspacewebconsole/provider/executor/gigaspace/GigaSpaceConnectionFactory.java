@@ -14,18 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package com.github.terma.gigaspacewebconsole.core;
+package com.github.terma.gigaspacewebconsole.provider.executor.gigaspace;
 
-public class GeneralRequest extends AppVersionRequest {
+import com.github.terma.gigaspacewebconsole.core.GeneralRequest;
+import com.github.terma.gigaspacewebconsole.provider.GigaSpaceUtils;
+import com.github.terma.gigaspacewebconsole.provider.executor.ConnectionFactory;
 
-    public String user;
-    public String password;
-    public String driver;
-    public String url;
+import java.sql.Connection;
+import java.sql.SQLException;
+
+public class GigaSpaceConnectionFactory implements ConnectionFactory {
 
     @Override
-    public String toString() {
-        return "{ url = '" + url + "', user = '" + user + "', password = **** " + ", driver = '" + driver + "\' }";
+    public Connection get(GeneralRequest request) throws SQLException, ClassNotFoundException {
+        return GigaSpaceUtils.createJdbcConnection(request);
     }
 
 }

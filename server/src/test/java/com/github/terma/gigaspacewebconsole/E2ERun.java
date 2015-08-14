@@ -28,14 +28,14 @@ public class E2ERun {
 
     @Test
     public void shouldShowMainPage() throws Exception {
-        driver.get("http://localhost:8080/gs-web-console/");
+        driver.get("http://localhost:8080/driver-web-console/");
         assertThat(driver.getTitle(), Matchers.containsString("GigaSpace SQL Console"));
     }
 
     @Ignore
     @Test
     public void shouldExecuteSqlForSelectedGsAndShowResult() throws Exception {
-        driver.get("http://localhost:8080/gs-web-console/");
+        driver.get("http://localhost:8080/driver-web-console/");
         assertThat(driver.getTitle(), Matchers.containsString("GigaSpace SQL Console"));
     }
 

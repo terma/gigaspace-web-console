@@ -1,5 +1,5 @@
 /*
-Copyright 2015 Artem Stasiuk
+    Copyright 2015 Artem Stasiuk
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,18 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package com.github.terma.gigaspacewebconsole.core;
+package com.github.terma.gigaspacewebconsole.provider.executor;
 
-public class GeneralRequest extends AppVersionRequest {
-
-    public String user;
-    public String password;
-    public String driver;
-    public String url;
+public class ZeroExecutorPreprocessor implements ExecutorPreprocessor {
 
     @Override
-    public String toString() {
-        return "{ url = '" + url + "', user = '" + user + "', password = **** " + ", driver = '" + driver + "\' }";
+    public String preprocess(String sql) {
+        return sql;
     }
 
 }

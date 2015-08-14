@@ -76,7 +76,7 @@ public class ImportServlet extends HttpServlet {
         if (inputStream == null) throw new IOException("Expect file to import!");
 
         importRequest.file = inputFile;
-        ProviderResolver.getProvider(importRequest.gs).import1(importRequest, inputStream);
+        ProviderResolver.getProvider(importRequest.driver).import1(importRequest, inputStream);
     }
 
 }

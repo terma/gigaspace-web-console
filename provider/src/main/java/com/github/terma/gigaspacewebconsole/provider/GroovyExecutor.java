@@ -36,7 +36,7 @@ public class GroovyExecutor {
 
         try {
             final Binding binding = new Binding();
-            binding.setVariable("gs", GigaSpaceUtils.getGigaSpace(request));
+            binding.setVariable("driver", GigaSpaceUtils.getGigaSpace(request));
             binding.setVariable("sql", sqlClosure);
             binding.setVariable("mem", new MemClosure(request));
             binding.setVariable("admin", new AdminClosure(request));

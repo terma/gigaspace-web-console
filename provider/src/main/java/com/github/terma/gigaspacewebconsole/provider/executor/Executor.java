@@ -18,7 +18,7 @@ package com.github.terma.gigaspacewebconsole.provider.executor;
 
 import com.github.terma.gigaspacewebconsole.core.ExecuteRequest;
 import com.github.terma.gigaspacewebconsole.core.ExecuteResponseStream;
-import com.github.terma.gigaspacewebconsole.provider.GigaSpaceUtils;
+import com.github.terma.gigaspacewebconsole.provider.ConverterHelper;
 import com.github.terma.gigaspacewebconsole.provider.groovy.RealSqlResult;
 import com.github.terma.gigaspacewebconsole.provider.groovy.SqlResult;
 import com.github.terma.gigaspacewebconsole.provider.groovy.UpdateSqlResult;
@@ -27,40 +27,45 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Arrays;
 import java.util.List;
 
 public class Executor {
 
-    private static final ExecutorPreprocessor PREPROCESSOR = new TimestampPreprocessor();
+    private final ConnectionFactory connectionFactory;
+    private final ExecutorPreprocessor preprocessor;
+    private final List<ExecutorPlugin> plugins;
+    private final ConverterHelper converterHelper;
 
-    private static final List<ExecutorPlugin> PLUGINS = Arrays.asList(
-            new PropertySelectExecutorPlugin(),
-            new ExecutorPluginUpdate(),
-            new ExecutorPluginGenerate()
-    );
+    public Executor(
+            final ConnectionFactory connectionFactory, final ExecutorPreprocessor preprocessor,
+            final List<ExecutorPlugin> plugins, final ConverterHelper converterHelper) {
+        this.connectionFactory = connectionFactory;
+        this.preprocessor = preprocessor;
+        this.plugins = plugins;
+        this.converterHelper = converterHelper;
+    }
 
-    public static void execute(final ExecuteRequest request, final ExecuteResponseStream responseStream) throws Exception {
-        request.sql = PREPROCESSOR.preprocess(request.sql);
+    public void execute(final ExecuteRequest request, final ExecuteResponseStream responseStream) throws Exception {
+        request.sql = preprocessor.preprocess(request.sql);
 
-        for (final ExecutorPlugin plugin : PLUGINS) {
+        for (final ExecutorPlugin plugin : plugins) {
             if (plugin.execute(request, responseStream)) return;
         }
 
         originalExecute(request, responseStream);
     }
 
-    private static void originalExecute(ExecuteRequest request, ExecuteResponseStream responseStream) throws Exception {
+    private void originalExecute(ExecuteRequest request, ExecuteResponseStream responseStream) throws Exception {
         try (final SqlResult sqlResult = originalExecute(request)) {
             sqlResultToResponseStream(sqlResult, responseStream);
         }
     }
 
-    public static SqlResult originalExecute(final ExecuteRequest request) throws Exception {
-        final Connection connection = GigaSpaceUtils.createJdbcConnection(request);
+    public SqlResult originalExecute(final ExecuteRequest request) throws Exception {
+        final Connection connection = connectionFactory.get(request);
         final Statement statement = connection.createStatement();
         if (statement.execute(request.sql)) {
-            return new RealSqlResult(statement, request.sql);
+            return new RealSqlResult(statement, request.sql, converterHelper);
         } else {
             return new UpdateSqlResult(statement, request.sql);
         }

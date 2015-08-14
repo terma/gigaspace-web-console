@@ -47,7 +47,7 @@ public class ExecuteToCsvServlet extends HttpServlet {
         final ExecuteResponseStream responseStream = new CsvExecuteResponseStream(writer);
 
         try {
-            CachedProviderResolver.getProvider(req.gs).query(req, responseStream);
+            CachedProviderResolver.getProvider(req.driver).query(req, responseStream);
         } catch (final Throwable exception) {
 //            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             writer.append(exception.getClass().getName()).append('\n');

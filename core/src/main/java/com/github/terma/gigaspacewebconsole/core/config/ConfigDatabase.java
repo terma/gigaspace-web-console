@@ -13,11 +13,12 @@ limitations under the License.
 
 package com.github.terma.gigaspacewebconsole.core.config;
 
-import java.util.List;
-
-public class ConfigGs {
+public class ConfigDatabase {
 
     public String name;
-    public List<String> libs;
+    public String url;
+    public String user;
+    public String password;
+    public String driver;
 
 }

@@ -4,7 +4,7 @@
 
     <groupId>com.github.terma.gigaspace-web-console</groupId>
     <artifactId>aggregator</artifactId>
-    <version>0.0.46-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>GigaSpace Web Console</name>
@@ -57,7 +57,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.7</java.version>
 
-        <jetty>9.3.2.v20150730</jetty>
+        <jetty>9.2.13.v20150730</jetty>
 
         <!-- as default version for tests and local start -->
         <gsVersion>9.7.0-10491-M6</gsVersion>

@@ -62,7 +62,7 @@ public class ExporterTest {
         final List<String> zipFiles = new LinkedList<>();
         ZipEntry zipEntry;
         while ((zipEntry = zipInputStream.getNextEntry()) != null) zipFiles.add(zipEntry.getName());
-        Assert.assertEquals("Should contains entry per type, however: " + zipFiles, 3, zipFiles.size());
+        Assert.assertEquals("Should contains entry per driver, however: " + zipFiles, 3, zipFiles.size());
     }
 
     @Test
@@ -81,7 +81,7 @@ public class ExporterTest {
         final List<String> zipFiles = new LinkedList<>();
         ZipEntry zipEntry;
         while ((zipEntry = zipInputStream.getNextEntry()) != null) zipFiles.add(zipEntry.getName());
-        Assert.assertEquals("Should contains entry per type, however: " + zipFiles, 1, zipFiles.size());
+        Assert.assertEquals("Should contains entry per driver, however: " + zipFiles, 1, zipFiles.size());
     }
 
 }

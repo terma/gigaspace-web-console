@@ -90,16 +90,16 @@ public class Config {
             final Admin admin = adminFactory.createAdmin();
 
             for (String space : getSpaces(admin)) {
-                ConfigGigaSpace configGigaSpace = new ConfigGigaSpace();
-                configGigaSpace.name = space;
-                configGigaSpace.url = "jini://localhost:" + DEFAULT_GS_PORT + "/*/" + space;
-                userConfig.gigaspaces.add(configGigaSpace);
+                ConfigDatabase configDatabase = new ConfigDatabase();
+                configDatabase.name = space;
+                configDatabase.url = "jini://localhost:" + DEFAULT_GS_PORT + "/*/" + space;
+                userConfig.gigaspaces.add(configDatabase);
             }
 
             admin.close();
         }
 
-        ConfigGigaSpace local = new ConfigGigaSpace();
+        ConfigDatabase local = new ConfigDatabase();
         local.name = "LOCAL";
         local.url = "/./local";
         userConfig.gigaspaces.add(local);

@@ -13,7 +13,7 @@ public class Runner {
         System.setProperty(Config.CONFIG_PATH_SYSTEM_PROPERTY, "classpath:/config.json");
 
         WebAppContext webAppContext = new WebAppContext();
-        webAppContext.setContextPath("/gs-web-console");
+        webAppContext.setContextPath("/driver-web-console");
         webAppContext.setWar("target/gigaspace-web-console-web-0.0.28-SNAPSHOT.war");
 
         server = new Server(8080);

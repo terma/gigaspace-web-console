@@ -16,8 +16,6 @@ limitations under the License.
 
 package com.github.terma.gigaspacewebconsole.provider;
 
-import com.github.terma.gigaspacewebconsole.core.config.ConfigLocator;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.ResultSet;
@@ -29,12 +27,9 @@ public class ConverterHelper {
 
     private static final String CONVERTER_METHOD = "convert";
 
-    private static final List<Method> converterMethods = new ArrayList<>();
+    private final List<Method> converterMethods = new ArrayList<>();
 
-    static {
-        List<String> converters = ConfigLocator.CONFIG.user.converters;
-        converters.add(EmbeddedObjectsConverter.class.getName());
-
+    public ConverterHelper(List<String> converters) {
         for (final String converterClassName : converters) {
             final Class converterClass;
             try {
@@ -48,14 +43,14 @@ public class ConverterHelper {
                 method = converterClass.getMethod(CONVERTER_METHOD, Object.class);
             } catch (NoSuchMethodException e) {
                 throw new IllegalArgumentException("Can't find converter method: " + CONVERTER_METHOD +
-                        " in class: " + converterClassName + " with one Object type parameter!");
+                        " in class: " + converterClassName + " with one Object driver parameter!");
             }
 
             converterMethods.add(method);
         }
     }
 
-    public static String getFormattedValue(final Object rawValue, final String stringValue) throws SQLException {
+    public String getFormattedValue(final Object rawValue, final String stringValue) throws SQLException {
         for (final Method convertMethod : converterMethods) {
             try {
                 final String value = (String) convertMethod.invoke(null, rawValue);
@@ -68,7 +63,7 @@ public class ConverterHelper {
         return stringValue;
     }
 
-    public static String getFormattedValue(final ResultSet resultSet, final String column) throws SQLException {
+    public String getFormattedValue(final ResultSet resultSet, final String column) throws SQLException {
         final Object rawValue = resultSet.getObject(column);
         return getFormattedValue(rawValue, resultSet.getString(column));
     }

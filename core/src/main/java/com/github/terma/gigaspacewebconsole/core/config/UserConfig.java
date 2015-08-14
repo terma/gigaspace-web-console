@@ -24,8 +24,8 @@ public class UserConfig {
     public String version;
     public List<ConfigLink> links = new ArrayList<>();
     public List<String> converters = new ArrayList<>();
-    public List<ConfigGigaSpace> gigaspaces = new ArrayList<>();
-    public List<ConfigGs> gs = new ArrayList<>();
+    public List<ConfigDatabase> gigaspaces = new ArrayList<>();
+    public List<ConfigDriver> drivers = new ArrayList<>();
     public List<ConfigTemplate> templates = new ArrayList<>();
 
 }

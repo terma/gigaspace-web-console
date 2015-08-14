@@ -17,7 +17,7 @@ limitations under the License.
 package com.github.terma.gigaspacewebconsole;
 
 import com.github.terma.gigaspacewebconsole.core.Provider;
-import com.github.terma.gigaspacewebconsole.core.config.ConfigGs;
+import com.github.terma.gigaspacewebconsole.core.config.ConfigDriver;
 import com.github.terma.gigaspacewebconsole.core.config.ConfigLocator;
 
 import java.net.MalformedURLException;
@@ -33,33 +33,37 @@ public class ProviderResolver {
     private static final Logger LOGGER = Logger.getLogger(ProviderResolver.class.getSimpleName());
 
     private static final String PROVIDER_LIB_RESOURCE_PATH = "/provider-9.X.zip";
-    private static final String PROVIDER_IMPL_CLASS_NAME =
-            "com.github.terma.gigaspacewebconsole.provider.ProviderImpl";
 
-    public static Provider getProvider(final String gs) {
-        LOGGER.info("Start getting provider for " + gs + "...");
-        final ConfigGs configGs = gsConfigByNameOrFirstOrNull(gs);
-        final URLClassLoader classLoader = createClassLoader(configGs);
-        LOGGER.info("Create for " + gs + " classloader " + Arrays.asList(classLoader.getURLs()));
-        return getClassInstance(classLoader, PROVIDER_IMPL_CLASS_NAME);
+    private static final String GIGSPACE_PROVIDER =
+            "com.github.terma.gigaspacewebconsole.provider.GigaSpaceProvider";
+
+    private static final String DATABASE_PROVIDER =
+            "com.github.terma.gigaspacewebconsole.provider.DatabaseProvider";
+
+    public static Provider getProvider(final String driver) {
+        LOGGER.info("Start getting provider for " + driver + "...");
+        final ConfigDriver configDriver = gsConfigByNameOrFirstOrNull(driver);
+        final URLClassLoader classLoader = createClassLoader(configDriver);
+        LOGGER.info("Create for " + driver + " classloader " + Arrays.asList(classLoader.getURLs()));
+        return getClassInstance(classLoader, getProviderClassName(driver));
     }
 
-    private static ConfigGs gsConfigByNameOrFirstOrNull(final String gs) {
-        if (ConfigLocator.CONFIG.user.gs.isEmpty()) {
-            LOGGER.info("No gs configured try to take from classpath");
+    private static ConfigDriver gsConfigByNameOrFirstOrNull(final String gs) {
+        if (ConfigLocator.CONFIG.user.drivers.isEmpty()) {
+            LOGGER.info("No driver configured try to take from classpath");
             return null;
         }
 
-        for (final ConfigGs configGs : ConfigLocator.CONFIG.user.gs) {
-            if (configGs.name.equals(gs)) {
-                LOGGER.info("Find config " + configGs + " for " + configGs);
-                return configGs;
+        for (final ConfigDriver configDriver : ConfigLocator.CONFIG.user.drivers) {
+            if (configDriver.name.equals(gs)) {
+                LOGGER.info("Find config " + configDriver + " for " + configDriver);
+                return configDriver;
             }
         }
 
-        final ConfigGs configGs = ConfigLocator.CONFIG.user.gs.get(0);
-        LOGGER.info("Can't find config for name: " + gs + ", use first: " + configGs);
-        return configGs;
+        final ConfigDriver configDriver = ConfigLocator.CONFIG.user.drivers.get(0);
+        LOGGER.info("Can't find config for name: " + gs + ", use first: " + configDriver);
+        return configDriver;
     }
 
     @SuppressWarnings("unchecked")
@@ -83,7 +87,7 @@ public class ProviderResolver {
         }
     }
 
-    private static URLClassLoader createClassLoader(final ConfigGs configGs) {
+    private static URLClassLoader createClassLoader(final ConfigDriver configDriver) {
         final List<URL> urls = new ArrayList<>();
 
         final URL providerLibUrl = ProviderResolver.class.getResource(PROVIDER_LIB_RESOURCE_PATH);
@@ -91,8 +95,8 @@ public class ProviderResolver {
                 "Can't find provider lib in classpath by path: " + PROVIDER_LIB_RESOURCE_PATH);
         urls.add(providerLibUrl);
 
-        if (configGs != null) {
-            for (final String lib : configGs.libs) {
+        if (configDriver != null && configDriver.libs != null) {
+            for (final String lib : configDriver.libs) {
                 try {
                     urls.add(new URL("file:" + lib));
                 } catch (MalformedURLException e) {
@@ -103,6 +107,14 @@ public class ProviderResolver {
 
         return URLClassLoader.newInstance(urls.toArray(new URL[urls.size()]),
                 Thread.currentThread().getContextClassLoader());
+    }
+
+    private static String getProviderClassName(String driver) {
+        if (driver != null && !driver.startsWith("GS") && !driver.startsWith("gs")) {
+            return DATABASE_PROVIDER;
+        } else {
+            return GIGSPACE_PROVIDER;
+        }
     }
 
 }

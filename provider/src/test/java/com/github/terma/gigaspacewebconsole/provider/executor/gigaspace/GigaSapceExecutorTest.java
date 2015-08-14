@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package com.github.terma.gigaspacewebconsole.provider.executor;
+package com.github.terma.gigaspacewebconsole.provider.executor.gigaspace;
 
 import com.gigaspaces.document.SpaceDocument;
 import com.gigaspaces.metadata.SpaceTypeDescriptor;
@@ -30,7 +30,7 @@ import org.openspaces.core.GigaSpace;
 
 import static org.hamcrest.CoreMatchers.nullValue;
 
-public class ExecutorTest {
+public class GigaSapceExecutorTest {
 
     private static GigaSpace gigaSpace;
 
@@ -55,7 +55,7 @@ public class ExecutorTest {
         request.url = "/./executor";
         request.sql = "select * from " + typeName;
 
-        Executor.execute(request, new ObjectExecuteResponseStream());
+        GigaSpaceExecutor.INSTANCE.execute(request, new ObjectExecuteResponseStream());
 
         Assert.assertThat(readByType(typeName).getProperty("field1"), nullValue());
     }

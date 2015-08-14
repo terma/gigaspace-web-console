@@ -14,13 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package com.github.terma.gigaspacewebconsole.provider.executor;
+package com.github.terma.gigaspacewebconsole.provider.executor.gigaspace;
 
 import com.gigaspaces.async.AsyncResult;
 import com.gigaspaces.document.SpaceDocument;
 import com.github.terma.gigaspacewebconsole.core.ExecuteRequest;
 import com.github.terma.gigaspacewebconsole.core.ExecuteResponseStream;
 import com.github.terma.gigaspacewebconsole.provider.GigaSpaceUtils;
+import com.github.terma.gigaspacewebconsole.provider.executor.ExecutorPlugin;
+import com.github.terma.gigaspacewebconsole.provider.executor.gigaspace.GigaSpaceExecutor;
 import com.j_spaces.core.client.ExternalEntry;
 import com.j_spaces.core.client.SQLQuery;
 import org.openspaces.core.GigaSpace;
@@ -68,7 +70,7 @@ public class PropertySelectExecutorPlugin implements ExecutorPlugin {
             }
 
             request.sql = buildRealSql(request.sql, replacements);
-            Executor.execute(request, responseStream);
+            GigaSpaceExecutor.INSTANCE.execute(request, responseStream);
             return true;
         }
         return false;

@@ -30,9 +30,11 @@ public class RealSqlResult implements SqlResult {
     private final ResultSet resultSet;
     private final List<String> columns;
     private final String sql;
+    private final ConverterHelper converterHelper;
 
-    public RealSqlResult(final Statement statement, final String sql) throws SQLException {
+    public RealSqlResult(final Statement statement, final String sql, ConverterHelper converterHelper) throws SQLException {
         this.sql = sql;
+        this.converterHelper = converterHelper;
         this.resultSet = statement.getResultSet();
 
         columns = new ArrayList<>();
@@ -56,7 +58,7 @@ public class RealSqlResult implements SqlResult {
     public List<String> getRow() throws SQLException {
         List<String> row = new ArrayList<>();
         for (final String column : columns) {
-            row.add(ConverterHelper.getFormattedValue(resultSet, column));
+            row.add(converterHelper.getFormattedValue(resultSet, column));
         }
         return row;
     }

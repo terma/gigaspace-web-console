@@ -16,7 +16,7 @@ public class Functional {
     public void executeSqlQuery() {
         WebDriver driver = new FirefoxDriver();
 
-        driver.get("http://localhost:8080/gs-web-console/");
+        driver.get("http://localhost:8080/driver-web-console/");
 
         final JavascriptExecutor javascriptExecutor = (JavascriptExecutor) driver;
         javascriptExecutor.executeScript(
