@@ -19,16 +19,11 @@ package com.github.terma.gigaspacewebconsole.provider;
 import com.gigaspaces.document.SpaceDocument;
 import com.gigaspaces.metadata.SpaceTypeDescriptor;
 import com.gigaspaces.metadata.SpaceTypeDescriptorBuilder;
-import com.github.terma.gigaspacewebconsole.core.ExecuteRequest;
-import com.github.terma.gigaspacewebconsole.core.ObjectExecuteResponseStream;
-import com.github.terma.gigaspacewebconsole.core.config.Config;
-import com.github.terma.gigaspacewebconsole.provider.executor.Executor;
 import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
 import org.openspaces.core.GigaSpace;
 
-import static org.hamcrest.CoreMatchers.nullValue;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DataPreload {
 
@@ -47,16 +42,18 @@ public class DataPreload {
 
         gigaSpace.clear(new SpaceDocument("SmallData"));
 
-        for (int i = 0; i < 1000; i++) {
+        List<SpaceDocument> buffer = new ArrayList<>();
+        for (int i = 0; i < 100000; i++) {
             SpaceDocument spaceDocument = new SpaceDocument("SmallData");
             spaceDocument.setProperty("boolOrNull", Math.random() > 0.5 ? true : null);
             spaceDocument.setProperty("name", "My name is " + Math.random());
             spaceDocument.setProperty("timestamp", System.currentTimeMillis());
             spaceDocument.setProperty("description", "My description is " + Math.random());
-            gigaSpace.write(spaceDocument);
+            buffer.add(spaceDocument);
         }
+        gigaSpace.writeMultiple(buffer.toArray(new Object[buffer.size()]));
 
-        Assert.assertEquals(1000, gigaSpace.count(new SpaceDocument("SmallData")));
+        Assert.assertEquals(buffer.size(), gigaSpace.count(new SpaceDocument("SmallData")));
     }
 
     private static void longData(GigaSpace gigaSpace) {
