@@ -16,7 +16,7 @@
 
 // todo add support column name with "-"
 
-var App = angular.module("App", ["ui.codemirror"]);
+//var App = angular.module("App", ["ui.codemirror"]);
 
 App.filter('nullAsString', function () {
     return function (value) {
@@ -710,8 +710,8 @@ App.controller("controller", [
         };
 
         $scope.queryColumnIsTimestamp = function (data, columnIndex) {
-            if (data.data.length < 1) return false;
-            var firstValue = data.data[0][columnIndex];
+            if (data.length < 1) return false;
+            var firstValue = data[0][columnIndex];
             return /^\d{9,}$/.test(firstValue);
         };
 
@@ -733,14 +733,14 @@ App.controller("controller", [
             }
 
             var stringToTime = undefined;
-            var testValueLength = data.data[0][columnIndex].length;
+            var testValueLength = data[0][columnIndex].length;
             if (testValueLength <= 10) stringToTime = secTimestampToTime;
             else if (testValueLength <= 13) stringToTime = msTimestampToTime;
             else stringToTime = moreThanMsTimestampToTime;
 
-            for (var i = 0; i < data.data.length; i++) {
-                var value = data.data[i][columnIndex];
-                data.data[i][columnIndex] = value + " > " + stringToTime(value);
+            for (var i = 0; i < data.length; i++) {
+                var value = data[i][columnIndex];
+                data[i][columnIndex] = value + " > " + stringToTime(value);
             }
         };
 
