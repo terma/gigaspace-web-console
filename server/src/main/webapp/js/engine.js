@@ -16,8 +16,6 @@
 
 // todo add support column name with "-"
 
-//var App = angular.module("App", ["ui.codemirror"]);
-
 App.filter('nullAsString', function () {
     return function (value) {
         return value === null ? 'null' : value;

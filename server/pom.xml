@@ -196,6 +196,8 @@
                         <source>${basedir}/src/main/webapp/js/jquery-1.11.3.js</source>
                         <source>${basedir}/src/main/webapp/js/angular.min.js</source>
                         <source>${basedir}/src/test/javascript/angular-mocks.js</source>
+
+                        <source>${basedir}/src/main/webapp/js/query-result-table.js</source>
                     </preloadSources>
                 </configuration>
             </plugin>
