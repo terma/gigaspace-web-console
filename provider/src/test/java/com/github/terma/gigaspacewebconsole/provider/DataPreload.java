@@ -45,7 +45,7 @@ public class DataPreload {
         List<SpaceDocument> buffer = new ArrayList<>();
         for (int i = 0; i < 100000; i++) {
             SpaceDocument spaceDocument = new SpaceDocument("SmallData");
-            spaceDocument.setProperty("boolOrNull", Math.random() > 0.5 ? true : null);
+            injectAllTypes(spaceDocument);
             spaceDocument.setProperty("name", "My name is " + Math.random());
             spaceDocument.setProperty("timestamp", System.currentTimeMillis());
             spaceDocument.setProperty("description", "My description is " + Math.random());
@@ -54,6 +54,11 @@ public class DataPreload {
         gigaSpace.writeMultiple(buffer.toArray(new Object[buffer.size()]));
 
         Assert.assertEquals(buffer.size(), gigaSpace.count(new SpaceDocument("SmallData")));
+    }
+
+    private static void injectAllTypes(SpaceDocument spaceDocument) {
+        spaceDocument.setProperty("boolOrNull", Math.random() > 0.5 ? true : null);
+        spaceDocument.setProperty("xml", "<node attribute=\"900ff\">\n<shortNode/>\n<value>112</value>\n<es>\"Escape\"</es>\n</node>");
     }
 
     private static void longData(GigaSpace gigaSpace) {
@@ -66,6 +71,7 @@ public class DataPreload {
 
         for (int i = 0; i < 1000; i++) {
             SpaceDocument spaceDocument = new SpaceDocument("LongData");
+            injectAllTypes(spaceDocument);
             spaceDocument.setProperty("description", "Top books that are recommended by EPAM Solution Architects:\n" +
                     "Software Architecture in Practice (3rd Edition) (available in EPAM Library: Software Architecture in Practice (3rd Edition))\n" +
                     "Microsoft Application Architecture Guide;\n" +

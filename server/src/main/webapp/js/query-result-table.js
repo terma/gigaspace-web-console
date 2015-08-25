@@ -50,7 +50,7 @@ App.directive('queryResultTable', ['$rootScope', '$filter', function ($rootScope
                 thead.append(columnTr);
 
                 angular.forEach(columns, function (column, columnIndex) {
-                    var th = angular.element('<th valign="top" class="mono-text">' + column + '</th>');
+                    var th = angular.element('<th valign="top" class="mono-text">' + column.escapeHtml() + '</th>');
                     columnTr.append(th);
 
                     if (columnIsTimestamp(model.data, columnIndex)) {
@@ -84,7 +84,8 @@ App.directive('queryResultTable', ['$rootScope', '$filter', function ($rootScope
                         var additionalClass = '';
                         if (!value) additionalClass = 'null-text';
 
-                        trHtml += '<td class="result-value ' + additionalClass + '" valign="top">' + renderValue + '</td>';
+                        trHtml += '<td class="result-value ' + additionalClass + '" valign="top">'
+                            + renderValue.escapeHtml() + '</td>';
                     });
                     tbodyHtml += '<tr>' + trHtml + '</tr>';
                 });
@@ -113,3 +114,7 @@ App.directive('queryResultTable', ['$rootScope', '$filter', function ($rootScope
         }
     }
 }]);
+
+String.prototype.escapeHtml = function () {
+    return this.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+};
