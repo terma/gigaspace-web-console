@@ -58,7 +58,7 @@ public class DataPreload {
 
     private static void injectAllTypes(SpaceDocument spaceDocument) {
         spaceDocument.setProperty("boolOrNull", Math.random() > 0.5 ? true : null);
-        spaceDocument.setProperty("xml", "<node attribute=\"900ff\">\n<shortNode/>\n<value>112</value>\n<es>\"Escape\"</es>\n</node>");
+        spaceDocument.setProperty("xml", "<node attribute=\"900ff\">\n<shortNode/>\n<value>1&nbsp;12</value>\n<es>\"Escape\"</es>\n</node>");
     }
 
     private static void longData(GigaSpace gigaSpace) {

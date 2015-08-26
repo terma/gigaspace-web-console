@@ -17,14 +17,18 @@ limitations under the License.
 package com.github.terma.gigaspacewebconsole.provider.groovy;
 
 import com.github.terma.gigaspacewebconsole.core.GroovyExecuteResponseStream;
+import com.github.terma.gigaspacewebconsole.provider.ConverterHelper;
+import com.github.terma.gigaspacewebconsole.provider.SqlResult;
+import com.github.terma.gigaspacewebconsole.provider.executor.gigaspace.GigaSpaceExecutor;
 import groovy.lang.Closure;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Arrays;
+import java.util.Collections;
 
 public class PrintClosure extends Closure {
 
+    private static final ConverterHelper converterHelper = GigaSpaceExecutor.CONVERTER_HELPER;
     private final GroovyExecuteResponseStream responseStream;
 
     public PrintClosure(final GroovyExecuteResponseStream responseStream) {
@@ -32,21 +36,18 @@ public class PrintClosure extends Closure {
         this.responseStream = responseStream;
     }
 
-    @Override
-    public Object call(Object... args) {
-        for (Object arg : args) print(arg, responseStream);
-        return null;
-    }
-
-    @Override
-    public Object call(Object arguments) {
-        print(arguments, responseStream);
-        return null;
-    }
-
     private static void print(final Object value, final GroovyExecuteResponseStream responseStream) {
         try {
-            if (value instanceof SqlResult) {
+            if (value instanceof Iterable) {
+                responseStream.startResult("");
+                responseStream.writeColumns(Collections.singletonList("result"));
+                final Iterable iterable = ((Iterable) value);
+                for (Object item : iterable) {
+                    final String formattedValue = converterHelper.getFormattedValue(item);
+                    responseStream.writeRow(Collections.singletonList(formattedValue));
+                }
+                responseStream.closeResult();
+            } else if (value instanceof SqlResult) {
                 final SqlResult sqlResult = (SqlResult) value;
                 responseStream.startResult(sqlResult.getSql());
                 responseStream.writeColumns(sqlResult.getColumns());
@@ -54,13 +55,25 @@ public class PrintClosure extends Closure {
                 responseStream.closeResult();
             } else {
                 responseStream.startResult("");
-                responseStream.writeColumns(Arrays.asList("result"));
-                responseStream.writeRow(Arrays.asList(value.toString()));
+                responseStream.writeColumns(Collections.singletonList("result"));
+                responseStream.writeRow(Collections.singletonList(value.toString()));
                 responseStream.closeResult();
             }
         } catch (IOException | SQLException exception) {
             throw new RuntimeException(exception);
         }
+    }
+
+    @Override
+    public Object call(final Object... args) {
+        for (final Object arg : args) print(arg, responseStream);
+        return null;
+    }
+
+    @Override
+    public Object call(final Object arguments) {
+        print(arguments, responseStream);
+        return null;
     }
 
 }

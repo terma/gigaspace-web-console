@@ -115,6 +115,18 @@ App.directive('queryResultTable', ['$rootScope', '$filter', function ($rootScope
     }
 }]);
 
+var htmlEscaper = /[&<>"'\/]/g;
+var htmlEscapes = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#x27;',
+    '/': '&#x2F;'
+};
+
 String.prototype.escapeHtml = function () {
-    return this.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    return this.replace(htmlEscaper, function (match) {
+        return htmlEscapes[match];
+    });
 };

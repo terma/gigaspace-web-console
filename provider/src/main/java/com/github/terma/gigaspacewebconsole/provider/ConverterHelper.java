@@ -63,6 +63,11 @@ public class ConverterHelper {
         return stringValue;
     }
 
+    public String getFormattedValue(final Object rawValue) throws SQLException {
+        String stringValue = rawValue == null ? null : rawValue.toString();
+        return getFormattedValue(rawValue, stringValue);
+    }
+
     public String getFormattedValue(final ResultSet resultSet, final String column) throws SQLException {
         final Object rawValue = resultSet.getObject(column);
         return getFormattedValue(rawValue, resultSet.getString(column));

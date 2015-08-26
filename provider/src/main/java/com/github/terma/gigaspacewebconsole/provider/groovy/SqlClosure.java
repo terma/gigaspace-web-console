@@ -17,6 +17,7 @@ limitations under the License.
 package com.github.terma.gigaspacewebconsole.provider.groovy;
 
 import com.github.terma.gigaspacewebconsole.core.ExecuteRequest;
+import com.github.terma.gigaspacewebconsole.provider.SqlResult;
 import com.github.terma.gigaspacewebconsole.provider.executor.gigaspace.GigaSpaceExecutor;
 import groovy.lang.Closure;
 

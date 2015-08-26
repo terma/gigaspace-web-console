@@ -16,6 +16,8 @@ limitations under the License.
 
 package com.github.terma.gigaspacewebconsole.provider.groovy;
 
+import com.github.terma.gigaspacewebconsole.provider.SqlResult;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;

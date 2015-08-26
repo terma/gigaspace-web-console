@@ -27,6 +27,8 @@ import java.util.List;
 
 public class GigaSpaceExecutor {
 
+    public static final ConverterHelper CONVERTER_HELPER = buildConverterHelper();
+
     public static final Executor INSTANCE = new Executor(
             new GigaSpaceConnectionFactory(),
             new TimestampPreprocessor(),
@@ -34,7 +36,7 @@ public class GigaSpaceExecutor {
                     new PropertySelectExecutorPlugin(),
                     new ExecutorPluginUpdate(),
                     new ExecutorPluginGenerate()),
-            buildConverterHelper()
+            CONVERTER_HELPER
     );
 
     private static ConverterHelper buildConverterHelper() {

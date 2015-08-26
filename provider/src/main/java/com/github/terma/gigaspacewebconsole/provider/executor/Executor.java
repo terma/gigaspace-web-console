@@ -19,8 +19,8 @@ package com.github.terma.gigaspacewebconsole.provider.executor;
 import com.github.terma.gigaspacewebconsole.core.ExecuteRequest;
 import com.github.terma.gigaspacewebconsole.core.ExecuteResponseStream;
 import com.github.terma.gigaspacewebconsole.provider.ConverterHelper;
-import com.github.terma.gigaspacewebconsole.provider.groovy.RealSqlResult;
-import com.github.terma.gigaspacewebconsole.provider.groovy.SqlResult;
+import com.github.terma.gigaspacewebconsole.provider.RealSqlResult;
+import com.github.terma.gigaspacewebconsole.provider.SqlResult;
 import com.github.terma.gigaspacewebconsole.provider.groovy.UpdateSqlResult;
 
 import java.io.IOException;

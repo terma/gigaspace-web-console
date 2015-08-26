@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package com.github.terma.gigaspacewebconsole.provider.groovy;
+package com.github.terma.gigaspacewebconsole.provider;
 
 import java.sql.SQLException;
 import java.util.List;

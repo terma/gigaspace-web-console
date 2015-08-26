@@ -14,9 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package com.github.terma.gigaspacewebconsole.provider.groovy;
+package com.github.terma.gigaspacewebconsole.provider;
 
 import com.github.terma.gigaspacewebconsole.provider.ConverterHelper;
+import com.github.terma.gigaspacewebconsole.provider.SqlResult;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
