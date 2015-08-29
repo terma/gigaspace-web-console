@@ -17,8 +17,10 @@ limitations under the License.
 package com.github.terma.gigaspacewebconsole.provider;
 
 import com.github.terma.gigaspacewebconsole.core.ExecuteRequest;
+import com.github.terma.gigaspacewebconsole.core.config.Config;
 import com.github.terma.gigaspacewebconsole.provider.groovy.ObjectGroovyExecuteResponseStream;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
@@ -27,6 +29,11 @@ public class GroovyExecutorTest {
 
     private ObjectGroovyExecuteResponseStream responseStream = new ObjectGroovyExecuteResponseStream();
     private ExecuteRequest request = new ExecuteRequest();
+
+    @BeforeClass
+    public static void init() {
+        System.setProperty(Config.CONFIG_PATH_SYSTEM_PROPERTY, Config.NONE);
+    }
 
     @Before
     public void before() {
@@ -88,7 +95,7 @@ public class GroovyExecutorTest {
 
         GroovyExecutor.execute(request, responseStream);
 
-        assertEquals(2, responseStream.results.size());
+        assertEquals(1, responseStream.results.size());
     }
 
     @Test
