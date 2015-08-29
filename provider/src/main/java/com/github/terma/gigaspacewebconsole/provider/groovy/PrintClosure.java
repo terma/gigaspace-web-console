@@ -23,6 +23,7 @@ import com.github.terma.gigaspacewebconsole.provider.executor.gigaspace.GigaSpac
 import groovy.lang.Closure;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.sql.SQLException;
 import java.util.Collections;
 
@@ -38,9 +39,17 @@ public class PrintClosure extends Closure {
 
     private static void print(final Object value, final GroovyExecuteResponseStream responseStream) {
         try {
-            if (value instanceof Iterable) {
+            if (value != null && value.getClass().isArray()) {
                 responseStream.startResult("");
-                responseStream.writeColumns(Collections.singletonList("result"));
+                responseStream.writeColumns(Collections.singletonList("result: " + value.getClass()));
+                for (int i = 0; i < Array.getLength(value); i++) {
+                    final String formattedValue = converterHelper.getFormattedValue(Array.get(value, i));
+                    responseStream.writeRow(Collections.singletonList(formattedValue));
+                }
+                responseStream.closeResult();
+            } else if (value instanceof Iterable) {
+                responseStream.startResult("");
+                responseStream.writeColumns(Collections.singletonList("result: " + value.getClass()));
                 final Iterable iterable = ((Iterable) value);
                 for (Object item : iterable) {
                     final String formattedValue = converterHelper.getFormattedValue(item);
@@ -65,14 +74,14 @@ public class PrintClosure extends Closure {
     }
 
     @Override
-    public Object call(final Object... args) {
-        for (final Object arg : args) print(arg, responseStream);
+    public Object call(final Object[] arguments) {
+        print(arguments, responseStream);
         return null;
     }
 
     @Override
-    public Object call(final Object arguments) {
-        print(arguments, responseStream);
+    public Object call(final Object argument) {
+        print(argument, responseStream);
         return null;
     }
 

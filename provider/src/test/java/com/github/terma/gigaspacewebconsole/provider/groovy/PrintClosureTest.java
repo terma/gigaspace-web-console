@@ -22,8 +22,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+
+import static java.util.Collections.singletonList;
 
 public class PrintClosureTest {
 
@@ -40,13 +41,37 @@ public class PrintClosureTest {
         new PrintClosure(responseStream).call(list);
 
         Assert.assertEquals(1, responseStream.results.size());
-        Assert.assertEquals(Collections.singletonList("result"), responseStream.results.get(0).columns);
+        Assert.assertEquals(singletonList("result: class java.util.Arrays$ArrayList"), responseStream.results.get(0).columns);
         Assert.assertEquals(
-                Arrays.asList(
-                        Arrays.asList("1"),
-                        Arrays.asList("2"),
-                        Arrays.asList("aaa")
-                ),
+                Arrays.asList(singletonList("1"), singletonList("2"), singletonList("aaa")),
+                responseStream.results.get(0).data);
+    }
+
+    @Test
+    public void shouldPrintArrayOfObjectAsTable() {
+        ObjectGroovyExecuteResponseStream responseStream = new ObjectGroovyExecuteResponseStream();
+
+        Object[] array = new Object[]{"a", 'v', 123};
+        new PrintClosure(responseStream).call(array);
+
+        Assert.assertEquals(1, responseStream.results.size());
+        Assert.assertEquals(singletonList("result: class [Ljava.lang.Object;"), responseStream.results.get(0).columns);
+        Assert.assertEquals(
+                Arrays.asList(singletonList("a"), singletonList("v"), singletonList("123")),
+                responseStream.results.get(0).data);
+    }
+
+    @Test
+    public void shouldPrintArrayOfPrimitivesAsTable() {
+        ObjectGroovyExecuteResponseStream responseStream = new ObjectGroovyExecuteResponseStream();
+
+        int[] array = new int[]{-1, 0, 1};
+        new PrintClosure(responseStream).call(array);
+
+        Assert.assertEquals(1, responseStream.results.size());
+        Assert.assertEquals(singletonList("result: class [I"), responseStream.results.get(0).columns);
+        Assert.assertEquals(
+                Arrays.asList(singletonList("-1"), singletonList("0"), singletonList("1")),
                 responseStream.results.get(0).data);
     }
 
