@@ -23,6 +23,7 @@ import com.github.terma.gigaspacewebconsole.provider.groovy.AdminClosure;
 import com.github.terma.gigaspacewebconsole.provider.groovy.MemClosure;
 import com.github.terma.gigaspacewebconsole.provider.groovy.PrintClosure;
 import com.github.terma.gigaspacewebconsole.provider.groovy.SqlClosure;
+import com.j_spaces.core.client.SQLQuery;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 import org.codehaus.groovy.control.CompilerConfiguration;
@@ -44,9 +45,7 @@ public class GroovyExecutor {
             binding.setVariable("out", printClosure);
 
             final CompilerConfiguration configuration = new CompilerConfiguration();
-            final ImportCustomizer importCustomizer = new ImportCustomizer();
-            importCustomizer.addImports(SpaceDocument.class.getName());
-            configuration.addCompilationCustomizers(importCustomizer);
+            configureDefaultImports(configuration);
 
             final GroovyShell shell = new GroovyShell(
                     GroovyExecutor.class.getClassLoader(), binding, configuration);
@@ -58,6 +57,13 @@ public class GroovyExecutor {
         } finally {
             sqlClosure.close();
         }
+    }
+
+    private static void configureDefaultImports(CompilerConfiguration configuration) {
+        final ImportCustomizer importCustomizer = new ImportCustomizer();
+        importCustomizer.addImports(SpaceDocument.class.getName());
+        importCustomizer.addImports(SQLQuery.class.getName());
+        configuration.addCompilationCustomizers(importCustomizer);
     }
 
 }

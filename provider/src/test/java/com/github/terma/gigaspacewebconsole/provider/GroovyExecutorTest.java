@@ -142,4 +142,13 @@ public class GroovyExecutorTest {
         assertEquals(1, responseStream.results.size());
     }
 
+    @Test
+    public void haveDefaultGsSqlQueryImport() throws Exception {
+        request.sql = "new SQLQuery(\"bb\", \"a\")";
+
+        GroovyExecutor.execute(request, responseStream);
+
+        assertEquals(1, responseStream.results.size());
+    }
+
 }
