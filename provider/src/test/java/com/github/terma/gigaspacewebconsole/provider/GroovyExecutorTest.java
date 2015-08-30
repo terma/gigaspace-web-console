@@ -99,8 +99,15 @@ public class GroovyExecutorTest {
     }
 
     @Test
-    public void shouldAllowToUseGsInstanceInScript() throws Exception {
+    public void shouldAllowToUseDriverAsGsInstanceInScript() throws Exception {
         request.sql = "driver.clear(null)";
+
+        GroovyExecutor.execute(request, responseStream);
+    }
+
+    @Test
+    public void shouldAllowToUseGsInstanceInScript() throws Exception {
+        request.sql = "gs.clear(null)";
 
         GroovyExecutor.execute(request, responseStream);
     }

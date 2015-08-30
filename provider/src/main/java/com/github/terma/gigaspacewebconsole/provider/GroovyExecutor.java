@@ -28,16 +28,19 @@ import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 import org.codehaus.groovy.control.CompilerConfiguration;
 import org.codehaus.groovy.control.customizers.ImportCustomizer;
+import org.openspaces.core.GigaSpace;
 
 public class GroovyExecutor {
 
     public static void execute
             (final ExecuteRequest request, final GroovyExecuteResponseStream responseStream) throws Exception {
         final SqlClosure sqlClosure = new SqlClosure(request);
+        final GigaSpace gigaSpace = GigaSpaceUtils.getGigaSpace(request);
 
         try {
             final Binding binding = new Binding();
-            binding.setVariable("driver", GigaSpaceUtils.getGigaSpace(request));
+            binding.setVariable("driver", gigaSpace);
+            binding.setVariable("gs", gigaSpace);
             binding.setVariable("sql", sqlClosure);
             binding.setVariable("mem", new MemClosure(request));
             binding.setVariable("admin", new AdminClosure(request));
