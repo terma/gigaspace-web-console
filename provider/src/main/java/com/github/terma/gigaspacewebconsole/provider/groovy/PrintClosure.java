@@ -16,8 +16,10 @@ limitations under the License.
 
 package com.github.terma.gigaspacewebconsole.provider.groovy;
 
+import com.gigaspaces.document.SpaceDocument;
 import com.github.terma.gigaspacewebconsole.core.GroovyExecuteResponseStream;
 import com.github.terma.gigaspacewebconsole.provider.ConverterHelper;
+import com.github.terma.gigaspacewebconsole.provider.IterableUtils;
 import com.github.terma.gigaspacewebconsole.provider.SqlResult;
 import com.github.terma.gigaspacewebconsole.provider.executor.gigaspace.GigaSpaceExecutor;
 import groovy.lang.Closure;
@@ -25,9 +27,7 @@ import groovy.lang.Closure;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Map;
+import java.util.*;
 
 public class PrintClosure extends Closure {
 
@@ -41,7 +41,9 @@ public class PrintClosure extends Closure {
 
     private static void print(final Object value, final GroovyExecuteResponseStream responseStream) {
         try {
-            if (value != null && value.getClass().isArray()) {
+            if (isIterableOrArrayOfSpaceDocument(value)) {
+                printIterableOrArrayOfSpaceDocument(value, responseStream);
+            } else if (value != null && value.getClass().isArray()) {
                 printArray(value, responseStream);
             } else if (value instanceof Iterable) {
                 printIterable(value, responseStream);
@@ -55,6 +57,46 @@ public class PrintClosure extends Closure {
         } catch (IOException | SQLException exception) {
             throw new RuntimeException(exception);
         }
+    }
+
+    private static void printIterableOrArrayOfSpaceDocument(
+            final Object value, final GroovyExecuteResponseStream responseStream) throws IOException, SQLException {
+        responseStream.startResult("result: " + value);
+
+        final Iterable iterable = IterableUtils.asIterable(value);
+
+        final LinkedHashSet<String> columns = new LinkedHashSet<>();
+        for (final Object item : iterable) {
+            SpaceDocument spaceDocument = (SpaceDocument) item;
+            if (spaceDocument != null) columns.addAll(spaceDocument.getProperties().keySet());
+        }
+        responseStream.writeColumns(new ArrayList<>(columns));
+
+        for (final Object item : iterable) {
+            final SpaceDocument spaceDocument = (SpaceDocument) item;
+            if (spaceDocument != null) {
+                final List<String> row = new ArrayList<>(columns.size());
+                for (String column : columns)
+                    row.add(converterHelper.getFormattedValue(spaceDocument.getProperty(column)));
+                responseStream.writeRow(row);
+            } else {
+                final List<String> row = new ArrayList<>(columns.size());
+                for (String ignored : columns) row.add(null);
+                responseStream.writeRow(row);
+            }
+        }
+
+        responseStream.closeResult();
+    }
+
+    private static boolean isIterableOrArrayOfSpaceDocument(Object value) {
+        if (value != null && (value.getClass().isArray() || value instanceof Iterable)) {
+            final Iterable iterable = IterableUtils.asIterable(value);
+            for (final Object item : iterable)
+                if (item != null && !(item instanceof SpaceDocument)) return false;
+            return true;
+        }
+        return false;
     }
 
     private static void printAny(Object value, GroovyExecuteResponseStream responseStream)

@@ -16,15 +16,14 @@ limitations under the License.
 
 package com.github.terma.gigaspacewebconsole.provider.groovy;
 
+import com.gigaspaces.document.SpaceDocument;
 import com.github.terma.gigaspacewebconsole.core.config.Config;
+import com.github.terma.gigaspacewebconsole.provider.ArrayIterable;
 import junit.framework.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 import static java.util.Collections.singletonList;
 
@@ -105,6 +104,129 @@ public class PrintClosureTest {
                 responseStream.results.get(0).columns);
         Assert.assertEquals(
                 Arrays.asList(Arrays.asList("a", "1"), Arrays.asList("b", "12")),
+                responseStream.results.get(0).data);
+    }
+
+    @Test
+    public void shouldPrintIterableOfSpaceDocumentsAsTable() {
+        ObjectGroovyExecuteResponseStream responseStream = new ObjectGroovyExecuteResponseStream();
+
+        SpaceDocument spaceDocument1 = new SpaceDocument();
+        spaceDocument1.setProperty("id", 1);
+        Iterable iterable = new ArrayIterable(new Object[] {spaceDocument1});
+
+        new PrintClosure(responseStream).call(iterable);
+
+        Assert.assertEquals(1, responseStream.results.size());
+        Assert.assertEquals(
+                singletonList("id"),
+                responseStream.results.get(0).columns);
+        Assert.assertEquals(
+                singletonList(singletonList("1")),
+                responseStream.results.get(0).data);
+    }
+
+    @Test
+    public void shouldPrintArrayOfSpaceDocumentsAsTable() {
+        ObjectGroovyExecuteResponseStream responseStream = new ObjectGroovyExecuteResponseStream();
+
+        SpaceDocument spaceDocument = new SpaceDocument();
+        spaceDocument.setProperty("id", 1);
+        SpaceDocument[] spaceDocuments = new SpaceDocument[]{spaceDocument};
+
+        new PrintClosure(responseStream).call(spaceDocuments);
+
+        Assert.assertEquals(1, responseStream.results.size());
+        Assert.assertEquals(
+                singletonList("id"),
+                responseStream.results.get(0).columns);
+        Assert.assertEquals(
+                singletonList(singletonList("1")),
+                responseStream.results.get(0).data);
+    }
+
+    @Test
+    public void shouldPrintAllColumnsForSpaceDocumentsAsTable() {
+        ObjectGroovyExecuteResponseStream responseStream = new ObjectGroovyExecuteResponseStream();
+
+        SpaceDocument spaceDocument1 = new SpaceDocument();
+        spaceDocument1.setProperty("id", 1);
+        SpaceDocument spaceDocument2 = new SpaceDocument();
+        spaceDocument2.setProperty("id", 12);
+        spaceDocument2.setProperty("text", "next");
+        SpaceDocument[] spaceDocuments = new SpaceDocument[]{spaceDocument1, spaceDocument2};
+
+        new PrintClosure(responseStream).call(spaceDocuments);
+
+        Assert.assertEquals(1, responseStream.results.size());
+        Assert.assertEquals(
+                Arrays.asList("id", "text"),
+                responseStream.results.get(0).columns);
+        Assert.assertEquals(
+                Arrays.asList(Arrays.asList("1", null), Arrays.asList("12", "next")),
+                responseStream.results.get(0).data);
+    }
+
+    @Test
+    public void shouldPrintSpaceDocumentsWithNull() {
+        ObjectGroovyExecuteResponseStream responseStream = new ObjectGroovyExecuteResponseStream();
+
+        SpaceDocument spaceDocument1 = new SpaceDocument();
+        spaceDocument1.setProperty("id", 1);
+        SpaceDocument[] spaceDocuments = new SpaceDocument[]{spaceDocument1, null};
+
+        new PrintClosure(responseStream).call(spaceDocuments);
+
+        Assert.assertEquals(1, responseStream.results.size());
+        Assert.assertEquals(
+                singletonList("id"),
+                responseStream.results.get(0).columns);
+        Assert.assertEquals(
+                Arrays.asList(singletonList("1"), singletonList(null)),
+                responseStream.results.get(0).data);
+    }
+
+    @Test
+    public void shouldPrintCollectionsOfNulls() {
+        ObjectGroovyExecuteResponseStream responseStream = new ObjectGroovyExecuteResponseStream();
+
+        SpaceDocument[] spaceDocuments = new SpaceDocument[]{null, null};
+
+        new PrintClosure(responseStream).call(spaceDocuments);
+
+        Assert.assertEquals(1, responseStream.results.size());
+        Assert.assertEquals(
+                Collections.emptyList(),
+                responseStream.results.get(0).columns);
+        Assert.assertEquals(
+                Arrays.asList(Collections.emptyList(), Collections.emptyList()),
+                responseStream.results.get(0).data);
+    }
+
+    @Test
+    public void shouldPrintMixedIterableWithSpaceDocumentsAndOtherTypesAsTable() {
+        ObjectGroovyExecuteResponseStream responseStream = new ObjectGroovyExecuteResponseStream();
+
+        SpaceDocument spaceDocument = new SpaceDocument();
+        spaceDocument.setProperty("id", 0);
+        spaceDocument.setProperty("name", "A");
+        Object[] array = new Object[]{spaceDocument, "123"};
+
+        new PrintClosure(responseStream).call(array);
+
+        Assert.assertEquals(1, responseStream.results.size());
+        Assert.assertEquals(
+                singletonList("result: class [Ljava.lang.Object;"),
+                responseStream.results.get(0).columns);
+        Assert.assertEquals(
+                Arrays.asList(singletonList("{\n" +
+                                "  \"typeName\": \"java.lang.Object\",\n" +
+                                "  \"properties\": {\n" +
+                                "    \"id\": 0,\n" +
+                                "    \"name\": \"A\"\n" +
+                                "  }\n" +
+                                "}"
+                ), singletonList("123")),
                 responseStream.results.get(0).data);
     }
 
