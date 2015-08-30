@@ -25,7 +25,9 @@ import groovy.lang.Closure;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Map;
 
 public class PrintClosure extends Closure {
 
@@ -40,37 +42,73 @@ public class PrintClosure extends Closure {
     private static void print(final Object value, final GroovyExecuteResponseStream responseStream) {
         try {
             if (value != null && value.getClass().isArray()) {
-                responseStream.startResult("");
-                responseStream.writeColumns(Collections.singletonList("result: " + value.getClass()));
-                for (int i = 0; i < Array.getLength(value); i++) {
-                    final String formattedValue = converterHelper.getFormattedValue(Array.get(value, i));
-                    responseStream.writeRow(Collections.singletonList(formattedValue));
-                }
-                responseStream.closeResult();
+                printArray(value, responseStream);
             } else if (value instanceof Iterable) {
-                responseStream.startResult("");
-                responseStream.writeColumns(Collections.singletonList("result: " + value.getClass()));
-                final Iterable iterable = ((Iterable) value);
-                for (Object item : iterable) {
-                    final String formattedValue = converterHelper.getFormattedValue(item);
-                    responseStream.writeRow(Collections.singletonList(formattedValue));
-                }
-                responseStream.closeResult();
+                printIterable(value, responseStream);
+            } else if (value instanceof Map) {
+                printMap(value, responseStream);
             } else if (value instanceof SqlResult) {
-                final SqlResult sqlResult = (SqlResult) value;
-                responseStream.startResult(sqlResult.getSql());
-                responseStream.writeColumns(sqlResult.getColumns());
-                while (sqlResult.next()) responseStream.writeRow(sqlResult.getRow());
-                responseStream.closeResult();
+                printSqlResult((SqlResult) value, responseStream);
             } else {
-                responseStream.startResult("");
-                responseStream.writeColumns(Collections.singletonList("result"));
-                responseStream.writeRow(Collections.singletonList(converterHelper.getFormattedValue(value)));
-                responseStream.closeResult();
+                printAny(value, responseStream);
             }
         } catch (IOException | SQLException exception) {
             throw new RuntimeException(exception);
         }
+    }
+
+    private static void printAny(Object value, GroovyExecuteResponseStream responseStream)
+            throws IOException, SQLException {
+        responseStream.startResult("");
+        responseStream.writeColumns(Collections.singletonList("result"));
+        responseStream.writeRow(Collections.singletonList(converterHelper.getFormattedValue(value)));
+        responseStream.closeResult();
+    }
+
+    private static void printSqlResult(SqlResult value, GroovyExecuteResponseStream responseStream)
+            throws IOException, SQLException {
+        responseStream.startResult(value.getSql());
+        responseStream.writeColumns(value.getColumns());
+        while (value.next()) responseStream.writeRow(value.getRow());
+        responseStream.closeResult();
+    }
+
+    private static void printArray(Object value, GroovyExecuteResponseStream responseStream)
+            throws IOException, SQLException {
+        responseStream.startResult("");
+        responseStream.writeColumns(Collections.singletonList("result: " + value.getClass()));
+        for (int i = 0; i < Array.getLength(value); i++) {
+            final String formattedValue = converterHelper.getFormattedValue(Array.get(value, i));
+            responseStream.writeRow(Collections.singletonList(formattedValue));
+        }
+        responseStream.closeResult();
+    }
+
+    private static void printIterable(Object value, GroovyExecuteResponseStream responseStream)
+            throws IOException, SQLException {
+        responseStream.startResult("");
+        responseStream.writeColumns(Collections.singletonList("result: " + value.getClass()));
+        final Iterable iterable = ((Iterable) value);
+        for (Object item : iterable) {
+            final String formattedValue = converterHelper.getFormattedValue(item);
+            responseStream.writeRow(Collections.singletonList(formattedValue));
+        }
+        responseStream.closeResult();
+    }
+
+    private static void printMap(Object value, GroovyExecuteResponseStream responseStream)
+            throws IOException, SQLException {
+        responseStream.startResult(value.getClass().getName());
+        responseStream.writeColumns(Arrays.asList("key", "value"));
+        @SuppressWarnings("unchecked")
+        final Map<Object, Object> map = (Map<Object, Object>) value;
+        for (Map.Entry<Object, Object> entry : map.entrySet()) {
+            responseStream.writeRow(Arrays.asList(
+                    converterHelper.getFormattedValue(entry.getKey()),
+                    converterHelper.getFormattedValue(entry.getValue())
+            ));
+        }
+        responseStream.closeResult();
     }
 
     @Override

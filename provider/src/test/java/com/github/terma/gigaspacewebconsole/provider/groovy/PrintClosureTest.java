@@ -23,6 +23,8 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import static java.util.Collections.singletonList;
 
@@ -85,6 +87,24 @@ public class PrintClosureTest {
         Assert.assertEquals(singletonList("result"), responseStream.results.get(0).columns);
         Assert.assertEquals(
                 singletonList(singletonList(null)),
+                responseStream.results.get(0).data);
+    }
+
+    @Test
+    public void shouldPrintMapAsTableWithTwoColumns() {
+        ObjectGroovyExecuteResponseStream responseStream = new ObjectGroovyExecuteResponseStream();
+
+        Map<Object, Object> map = new TreeMap<>();
+        map.put("a", 1);
+        map.put("b", 12);
+        new PrintClosure(responseStream).call(map);
+
+        Assert.assertEquals(1, responseStream.results.size());
+        Assert.assertEquals(
+                Arrays.asList("key", "value"),
+                responseStream.results.get(0).columns);
+        Assert.assertEquals(
+                Arrays.asList(Arrays.asList("a", "1"), Arrays.asList("b", "12")),
                 responseStream.results.get(0).data);
     }
 
