@@ -75,4 +75,17 @@ public class PrintClosureTest {
                 responseStream.results.get(0).data);
     }
 
+    @Test
+    public void shouldPrintNull() {
+        ObjectGroovyExecuteResponseStream responseStream = new ObjectGroovyExecuteResponseStream();
+
+        new PrintClosure(responseStream).call(null);
+
+        Assert.assertEquals(1, responseStream.results.size());
+        Assert.assertEquals(singletonList("result"), responseStream.results.get(0).columns);
+        Assert.assertEquals(
+                singletonList(singletonList(null)),
+                responseStream.results.get(0).data);
+    }
+
 }

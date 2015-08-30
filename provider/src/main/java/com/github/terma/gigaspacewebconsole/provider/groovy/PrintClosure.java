@@ -65,7 +65,7 @@ public class PrintClosure extends Closure {
             } else {
                 responseStream.startResult("");
                 responseStream.writeColumns(Collections.singletonList("result"));
-                responseStream.writeRow(Collections.singletonList(value.toString()));
+                responseStream.writeRow(Collections.singletonList(converterHelper.getFormattedValue(value)));
                 responseStream.closeResult();
             }
         } catch (IOException | SQLException exception) {
