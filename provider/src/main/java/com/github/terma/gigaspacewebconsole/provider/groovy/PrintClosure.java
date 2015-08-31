@@ -41,7 +41,9 @@ public class PrintClosure extends Closure {
 
     private static void print(final Object value, final GroovyExecuteResponseStream responseStream) {
         try {
-            if (isIterableOrArrayOfSpaceDocument(value)) {
+            if (value instanceof SpaceDocument) {
+                printSpaceDocument(value, responseStream);
+            } else if (isIterableOrArrayOfSpaceDocument(value)) {
                 printIterableOrArrayOfSpaceDocument(value, responseStream);
             } else if (value != null && value.getClass().isArray()) {
                 printArray(value, responseStream);
@@ -57,6 +59,12 @@ public class PrintClosure extends Closure {
         } catch (IOException | SQLException exception) {
             throw new RuntimeException(exception);
         }
+    }
+
+    private static void printSpaceDocument(
+            final Object value, final GroovyExecuteResponseStream responseStream)
+            throws IOException, SQLException {
+        printIterableOrArrayOfSpaceDocument(new Object[]{value}, responseStream);
     }
 
     private static void printIterableOrArrayOfSpaceDocument(

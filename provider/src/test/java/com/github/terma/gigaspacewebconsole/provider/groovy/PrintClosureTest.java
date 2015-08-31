@@ -113,7 +113,7 @@ public class PrintClosureTest {
 
         SpaceDocument spaceDocument1 = new SpaceDocument();
         spaceDocument1.setProperty("id", 1);
-        Iterable iterable = new ArrayIterable(new Object[] {spaceDocument1});
+        Iterable iterable = new ArrayIterable(new Object[]{spaceDocument1});
 
         new PrintClosure(responseStream).call(iterable);
 
@@ -227,6 +227,25 @@ public class PrintClosureTest {
                                 "  }\n" +
                                 "}"
                 ), singletonList("123")),
+                responseStream.results.get(0).data);
+    }
+
+    @Test
+    public void shouldPrintSingleSpaceDocumentAsOneRowTable() {
+        ObjectGroovyExecuteResponseStream responseStream = new ObjectGroovyExecuteResponseStream();
+
+        SpaceDocument spaceDocument = new SpaceDocument();
+        spaceDocument.setProperty("id", 0);
+        spaceDocument.setProperty("name", "A");
+
+        new PrintClosure(responseStream).call(spaceDocument);
+
+        Assert.assertEquals(1, responseStream.results.size());
+        Assert.assertEquals(
+                Arrays.asList("id", "name"),
+                responseStream.results.get(0).columns);
+        Assert.assertEquals(
+                singletonList(Arrays.asList("0", "A")),
                 responseStream.results.get(0).data);
     }
 
