@@ -6,3 +6,6 @@ jdk:
   - openjdk7
 
 script: mvn package
+
+after_success:
+  - coveralls
