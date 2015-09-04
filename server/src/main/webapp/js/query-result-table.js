@@ -34,8 +34,9 @@ App.directive('queryResultTable', ['$rootScope', '$filter', function ($rootScope
 
             var model = void 0;
             var showAllText = false;
+            var selectedIndex = void 0;
 
-            function renderModel() {
+            function renderModel(restoreSelection) {
                 element.empty();
                 if (!model) return;
 
@@ -91,25 +92,38 @@ App.directive('queryResultTable', ['$rootScope', '$filter', function ($rootScope
                 });
                 tbody.append(tbodyHtml);
 
-                tbody.children().on('click', function (event) {
+                // restore selection
+                log.log('selectedIndex');
+                log.log(selectedIndex);
+                if (selectedIndex !== void 0) angular.element(tbody.children()[selectedIndex]).addClass('selected');
+                else selectedIndex = void 0;
+
+
+                function clickHandler(event) {
                     tbody.children().removeClass('selected');
-                    angular.element(event.target).parent().addClass('selected');
+                    var selectedTr = angular.element(event.target).parent();
+                    selectedTr.addClass('selected');
+                    selectedIndex = selectedTr.data('index');
+                }
+
+                angular.forEach(tbody.children(), function (rawTd, index) {
+                    var tr = angular.element(rawTd);
+                    tr.on('click', clickHandler);
+                    tr.data('index', index);
                 });
 
-                log.debug('replace with:');
-                log.debug(table);
                 element.append(table);
             }
 
             $scope.$watch(attrs.qrtModel, function (newValue) {
                 model = newValue;
                 showAllText = false;
-                renderModel();
+                renderModel(false);
             });
 
             $scope.$watch(attrs.qrtShowAllText, function (newValue) {
                 showAllText = newValue;
-                renderModel();
+                renderModel(true);
             });
         }
     }
