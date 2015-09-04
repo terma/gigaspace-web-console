@@ -5,4 +5,4 @@ jdk:
   - oraclejdk7
   - openjdk7
 
-script: mvn test jacoco:report coveralls:report
+script: mvn package jacoco:report coveralls:report
