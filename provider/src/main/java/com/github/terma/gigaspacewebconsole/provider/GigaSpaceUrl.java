@@ -19,10 +19,13 @@ package com.github.terma.gigaspacewebconsole.provider;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class GigaSpaceUrl {
+public final class GigaSpaceUrl {
 
     private static final Pattern locatorPattern = Pattern.compile("locators=([.:a-zA-Z0-9,]+)");
     private static final Pattern spacePattern = Pattern.compile("/([]a-zA-Z0-9-]+)\\?");
+
+    private GigaSpaceUrl() {
+    }
 
     public static String parseLocators(final String url) {
         final Matcher m = locatorPattern.matcher(url);
