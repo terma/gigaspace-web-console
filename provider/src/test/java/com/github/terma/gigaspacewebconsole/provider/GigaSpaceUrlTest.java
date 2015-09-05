@@ -18,8 +18,6 @@ package com.github.terma.gigaspacewebconsole.provider;
 
 import org.junit.Test;
 
-import java.lang.reflect.Constructor;
-
 import static junit.framework.Assert.*;
 
 public class GigaSpaceUrlTest {
@@ -69,14 +67,6 @@ public class GigaSpaceUrlTest {
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowExceptionIfCantFindSpaceName() {
         GigaSpaceUrl.parseSpace("jini:/*/");
-    }
-
-    @Test(expected = IllegalAccessException.class)
-    public void testConstructorPrivate() throws Exception {
-        Constructor<?> constructor = GigaSpaceUrl.class.getDeclaredConstructor();
-        constructor.setAccessible(true);
-        GigaSpaceUrl.class.newInstance();
-        fail("Utility class constructor should be private");
     }
 
 }
