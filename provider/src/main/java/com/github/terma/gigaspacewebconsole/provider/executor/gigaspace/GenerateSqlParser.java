@@ -21,9 +21,12 @@ import java_cup.runtime.Symbol;
 import java.io.IOException;
 import java.io.StringReader;
 
-class GenerateSqlParser {
+final class GenerateSqlParser {
 
     private static final String TEMPLATE = "generate count of typeName with fieldName = fieldValue[, fieldName1 = fieldValue1]";
+
+    private GenerateSqlParser() {
+    }
 
     public static GenerateSql parse(String data) throws IOException {
         final GenerateSqlLexer lexer = new GenerateSqlLexer(new StringReader(data));

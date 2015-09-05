@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class GigaSpaceExecutor {
+public final class GigaSpaceExecutor {
 
     public static final ConverterHelper CONVERTER_HELPER = buildConverterHelper();
 
@@ -38,6 +38,9 @@ public class GigaSpaceExecutor {
                     new ExecutorPluginGenerate()),
             CONVERTER_HELPER
     );
+
+    private GigaSpaceExecutor() {
+    }
 
     private static ConverterHelper buildConverterHelper() {
         List<String> converters = new ArrayList<>();

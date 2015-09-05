@@ -21,7 +21,10 @@ import java_cup.runtime.Symbol;
 import java.io.IOException;
 import java.io.StringReader;
 
-class UpdateSqlParser {
+final class UpdateSqlParser {
+
+    private UpdateSqlParser() {
+    }
 
     public static UpdateSql parse(String data) throws IOException {
         final UpdateSqlLexer lexer = new UpdateSqlLexer(new StringReader(data));

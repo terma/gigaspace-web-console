@@ -21,7 +21,10 @@ import java_cup.runtime.Symbol;
 import java.io.IOException;
 import java.io.StringReader;
 
-class CopySqlParser {
+final class CopySqlParser {
+
+    private CopySqlParser() {
+    }
 
     public static CopySql parse(String sql) throws IOException {
         final CopySqlLexer lexer = new CopySqlLexer(new StringReader(sql));
@@ -43,7 +46,6 @@ class CopySqlParser {
             }
         }
     }
-
 }
 
 
