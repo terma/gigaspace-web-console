@@ -1,7 +1,5 @@
-package com.github.terma.gigaspacewebconsole;
+package com.github.terma.gigaspacewebconsole.core;
 
-import com.github.terma.gigaspacewebconsole.core.ExecuteResponseStream;
-import com.github.terma.gigaspacewebconsole.core.JsonExecuteResponseStream;
 import junit.framework.Assert;
 import org.junit.Test;
 
