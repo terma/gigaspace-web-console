@@ -20,6 +20,7 @@ import com.gigaspaces.client.iterator.IteratorScope;
 import com.gigaspaces.document.SpaceDocument;
 import com.gigaspaces.metadata.SpaceTypeDescriptor;
 import com.github.terma.gigaspacewebconsole.core.ExportRequest;
+import com.github.terma.gigaspacewebconsole.driver.GigaSpaceUtils;
 import com.j_spaces.core.admin.JSpaceAdminProxy;
 import com.j_spaces.core.client.GSIterator;
 import org.openspaces.core.GigaSpace;

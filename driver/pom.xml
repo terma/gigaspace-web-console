@@ -8,7 +8,7 @@
         <version>1.0.5-SNAPSHOT</version>
     </parent>
 
-    <artifactId>provider</artifactId>
+    <artifactId>driver</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>
@@ -17,12 +17,6 @@
         <dependency>
             <groupId>com.github.terma.gigaspace-web-console</groupId>
             <artifactId>core</artifactId>
-            <version>${project.version}</version>
-        </dependency
-        >
-        <dependency>
-            <groupId>com.github.terma.gigaspace-web-console</groupId>
-            <artifactId>driver</artifactId>
             <version>${project.version}</version>
         </dependency>
 

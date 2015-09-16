@@ -19,6 +19,7 @@ package com.github.terma.gigaspacewebconsole.provider;
 import com.gigaspaces.document.SpaceDocument;
 import com.gigaspaces.metadata.SpaceTypeDescriptor;
 import com.gigaspaces.metadata.SpaceTypeDescriptorBuilder;
+import com.github.terma.gigaspacewebconsole.driver.GigaSpaceUtils;
 import org.junit.Assert;
 import org.openspaces.core.GigaSpace;
 

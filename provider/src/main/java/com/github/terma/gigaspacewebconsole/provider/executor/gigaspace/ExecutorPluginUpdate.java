@@ -20,7 +20,7 @@ import com.gigaspaces.client.ChangeResult;
 import com.gigaspaces.client.ChangeSet;
 import com.github.terma.gigaspacewebconsole.core.ExecuteRequest;
 import com.github.terma.gigaspacewebconsole.core.ExecuteResponseStream;
-import com.github.terma.gigaspacewebconsole.provider.GigaSpaceUtils;
+import com.github.terma.gigaspacewebconsole.driver.GigaSpaceUtils;
 import com.github.terma.gigaspacewebconsole.provider.executor.ExecutorPlugin;
 import com.j_spaces.core.client.SQLQuery;
 

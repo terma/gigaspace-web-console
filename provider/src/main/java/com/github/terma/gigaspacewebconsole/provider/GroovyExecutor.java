@@ -19,6 +19,7 @@ package com.github.terma.gigaspacewebconsole.provider;
 import com.gigaspaces.document.SpaceDocument;
 import com.github.terma.gigaspacewebconsole.core.ExecuteRequest;
 import com.github.terma.gigaspacewebconsole.core.GroovyExecuteResponseStream;
+import com.github.terma.gigaspacewebconsole.driver.GigaSpaceUtils;
 import com.github.terma.gigaspacewebconsole.provider.groovy.AdminClosure;
 import com.github.terma.gigaspacewebconsole.provider.groovy.MemClosure;
 import com.github.terma.gigaspacewebconsole.provider.groovy.PrintClosure;

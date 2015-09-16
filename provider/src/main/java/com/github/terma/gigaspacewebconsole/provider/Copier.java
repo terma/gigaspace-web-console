@@ -29,7 +29,7 @@ import org.openspaces.core.IteratorBuilder;
 
 import java.util.logging.Logger;
 
-import static com.github.terma.gigaspacewebconsole.provider.GigaSpaceUtils.getGigaSpace;
+import static com.github.terma.gigaspacewebconsole.driver.GigaSpaceUtils.getGigaSpace;
 
 public class Copier {
 

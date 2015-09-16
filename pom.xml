@@ -45,6 +45,7 @@
 
     <modules>
         <module>core</module>
+        <module>driver</module>
         <module>provider</module>
         <module>server</module>
         <module>plugin</module>
