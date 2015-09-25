@@ -17,7 +17,7 @@ limitations under the License.
 package com.github.terma.gigaspacewebconsole.provider;
 
 import com.gigaspaces.document.SpaceDocument;
-import com.github.terma.gigaspacewebconsole.driver.GigaSpaceUtils;
+import com.github.terma.gigaspacewebconsole.provider.driver.GigaSpaceUtils;
 import org.openspaces.core.GigaSpace;
 
 public class ExporterNfr {

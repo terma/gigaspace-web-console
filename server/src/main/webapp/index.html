@@ -273,7 +273,9 @@
         <ui-codemirror ui-codemirror-opts="editorOptions"
                        ng-model="context.selectedGigaspace.queryTab.selectedEditor.content"
                        class="mono-text"></ui-codemirror>
-
+        <div id="autocompete">
+            <a ng-repeat="item in autocomplete | filter : autocompletePattern | orderBy : '+' | limitTo : 5" href="javascript:void(0);" ng-click="injectAutocomplete(item)">{{ ::item }}</a>
+        </div>
         <p/>
 
         <a ng-click="executeQuery()" href="javascript:void(0);">Execute</a>

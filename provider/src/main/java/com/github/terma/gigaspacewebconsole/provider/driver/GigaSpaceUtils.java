@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package com.github.terma.gigaspacewebconsole.driver;
+package com.github.terma.gigaspacewebconsole.provider.driver;
 
 import com.gigaspaces.document.SpaceDocument;
 import com.gigaspaces.metadata.SpaceTypeDescriptor;
@@ -79,7 +79,7 @@ public class GigaSpaceUtils {
             info.put("password", password);
         }
 
-        return new GConnection(GConnection.JDBC_GIGASPACES_URL + url, info);
+        return new Connection(Driver.JDBC_PREFIX + url, info);
     }
 
     public static GConnection createJdbcConnection(final String url)

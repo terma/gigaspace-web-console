@@ -25,15 +25,15 @@ import java.io.OutputStream;
 @SuppressWarnings("UnusedDeclaration")
 public class GigaSpaceProvider implements Provider {
 
-    private Counts countsProvider = new Counts();
+    private final Counts countsProvider = new Counts();
 
     @Override
-    public CountsResponse counts(GeneralRequest request) {
+    public CountsResponse counts(final GeneralRequest request) {
         return countsProvider.counts(request);
     }
 
     @Override
-    public void query(ExecuteRequest request, ExecuteResponseStream responseStream) throws Exception {
+    public void query(final ExecuteRequest request, final ExecuteResponseStream responseStream) throws Exception {
         GigaSpaceExecutor.INSTANCE.execute(request, responseStream);
     }
 
@@ -43,18 +43,23 @@ public class GigaSpaceProvider implements Provider {
     }
 
     @Override
-    public void execute(ExecuteRequest request, GroovyExecuteResponseStream responseStream) throws Exception {
+    public void execute(final ExecuteRequest request, final GroovyExecuteResponseStream responseStream) throws Exception {
         GroovyExecutor.execute(request, responseStream);
     }
 
     @Override
-    public void export(ExportRequest request, OutputStream outputStream) throws Exception {
+    public void export(final ExportRequest request, final OutputStream outputStream) throws Exception {
         Exporter.execute(request, outputStream);
     }
 
     @Override
-    public void import1(ImportRequest request, InputStream inputStream) throws Exception {
+    public void import1(final ImportRequest request, final InputStream inputStream) throws Exception {
         Importer.execute(request, inputStream);
+    }
+
+    @Override
+    public ExploreResponse explore(final ExploreRequest request) throws Exception {
+        return Explorer.explore(request);
     }
 
 }

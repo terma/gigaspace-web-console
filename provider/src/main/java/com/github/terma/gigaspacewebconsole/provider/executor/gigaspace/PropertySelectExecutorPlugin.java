@@ -20,7 +20,7 @@ import com.gigaspaces.async.AsyncResult;
 import com.gigaspaces.document.SpaceDocument;
 import com.github.terma.gigaspacewebconsole.core.ExecuteRequest;
 import com.github.terma.gigaspacewebconsole.core.ExecuteResponseStream;
-import com.github.terma.gigaspacewebconsole.driver.GigaSpaceUtils;
+import com.github.terma.gigaspacewebconsole.provider.driver.GigaSpaceUtils;
 import com.github.terma.gigaspacewebconsole.provider.executor.ExecutorPlugin;
 import com.j_spaces.core.client.ExternalEntry;
 import com.j_spaces.core.client.SQLQuery;

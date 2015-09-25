@@ -21,7 +21,7 @@ import com.gigaspaces.metadata.SpaceTypeDescriptorBuilder;
 import com.github.terma.gigaspacewebconsole.core.ExecuteRequest;
 import com.github.terma.gigaspacewebconsole.core.ObjectExecuteResponseStream;
 import com.github.terma.gigaspacewebconsole.core.config.Config;
-import com.github.terma.gigaspacewebconsole.driver.GigaSpaceUtils;
+import com.github.terma.gigaspacewebconsole.provider.driver.GigaSpaceUtils;
 import com.j_spaces.core.client.SQLQuery;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;

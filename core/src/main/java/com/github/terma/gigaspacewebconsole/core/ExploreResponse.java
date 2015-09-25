@@ -11,15 +11,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package com.github.terma.gigaspacewebconsole.core.config;
+package com.github.terma.gigaspacewebconsole.core;
 
-public class ConfigDatabase {
+import java.util.List;
 
-    public String name;
-    public String url;
-    public String user;
-    public String password;
-    public String driver;
-    public boolean secure;
+public class ExploreResponse {
+
+    public List<ExploreTable> tables;
 
 }
+

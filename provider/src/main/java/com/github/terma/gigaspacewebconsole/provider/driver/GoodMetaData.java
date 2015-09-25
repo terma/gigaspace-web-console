@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package com.github.terma.gigaspacewebconsole.driver;
+package com.github.terma.gigaspacewebconsole.provider.driver;
 
 import com.gigaspaces.internal.client.spaceproxy.ISpaceProxy;
 import com.j_spaces.core.admin.JSpaceAdminProxy;

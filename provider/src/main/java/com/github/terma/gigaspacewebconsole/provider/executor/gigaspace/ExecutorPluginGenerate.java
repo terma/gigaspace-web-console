@@ -20,7 +20,7 @@ import com.gigaspaces.client.WriteModifiers;
 import com.gigaspaces.document.SpaceDocument;
 import com.github.terma.gigaspacewebconsole.core.ExecuteRequest;
 import com.github.terma.gigaspacewebconsole.core.ExecuteResponseStream;
-import com.github.terma.gigaspacewebconsole.driver.GigaSpaceUtils;
+import com.github.terma.gigaspacewebconsole.provider.driver.GigaSpaceUtils;
 import com.github.terma.gigaspacewebconsole.provider.executor.ExecutorPlugin;
 
 import java.io.IOException;

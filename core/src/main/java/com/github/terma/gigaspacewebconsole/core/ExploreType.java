@@ -14,21 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package com.github.terma.gigaspacewebconsole.driver;
+package com.github.terma.gigaspacewebconsole.core;
 
-import junit.framework.Assert;
-import org.junit.Test;
+public enum ExploreType {
 
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-
-public class EmptyResultSetMetaDataTest {
-
-    private final ResultSetMetaData resultSetMetaData = new EmptyResultSetMetaData();
-
-    @Test
-    public void zeroColumnCount() throws SQLException {
-        Assert.assertEquals(0, resultSetMetaData.getColumnCount());
-    }
+    TABLES, COLUMNS
 
 }

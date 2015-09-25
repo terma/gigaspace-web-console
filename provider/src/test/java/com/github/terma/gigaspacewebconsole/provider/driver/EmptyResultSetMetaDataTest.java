@@ -14,22 +14,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package com.github.terma.gigaspacewebconsole.driver;
+package com.github.terma.gigaspacewebconsole.provider.driver;
 
 import junit.framework.Assert;
 import org.junit.Test;
 
-import java.sql.DatabaseMetaData;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.Properties;
 
-public class ConnectionTest {
+public class EmptyResultSetMetaDataTest {
+
+    private final ResultSetMetaData resultSetMetaData = new EmptyResultSetMetaData();
 
     @Test
-    public void shouldHaveGoodMetaData() throws SQLException {
-        Connection connection = new Connection("jdbc:com.github.terma.gigaspacewebconsole:/./connection", new Properties());
-        DatabaseMetaData databaseMetaData = connection.getMetaData();
-        Assert.assertTrue(databaseMetaData instanceof GoodMetaData);
+    public void zeroColumnCount() throws SQLException {
+        Assert.assertEquals(0, resultSetMetaData.getColumnCount());
     }
 
 }

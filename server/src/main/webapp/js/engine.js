@@ -151,7 +151,7 @@ App.controller("controller", [
             for (var m = 0; m < $scope.config.user.gigaspaces.length; m++) {
                 if ($scope.config.user.gigaspaces[m].name == name) return $scope.config.user.gigaspaces[m];
             }
-            return undefined;
+            return void 0;
         }
 
         function findGigaspace(name) {
@@ -160,7 +160,7 @@ App.controller("controller", [
                     return $scope.context.gigaspaces[i];
                 }
             }
-            return undefined;
+            return void 0;
         }
 
         function keepSelectedEditorCursor() {
@@ -327,6 +327,7 @@ App.controller("controller", [
                             editor.queries.push(query);
                         }
                         editor.status = undefined;
+                        $scope.successefullyConnected();
                     }).error(function (res) {
                         log.log(res);
                         editor.status = undefined;
@@ -417,6 +418,7 @@ App.controller("controller", [
                 query.status = undefined;
                 query.data = res;
                 query.data.textLengthLimit = $scope.textLengthLimit;
+                $scope.successefullyConnected();
             }).error(function (res) {
                 log.log(res);
                 query.status = undefined;
@@ -826,6 +828,81 @@ App.controller("controller", [
             });
         };
 
+        var autocompleteCancel = void 0;
+
+        $scope.successefullyConnected = function () {
+            $scope.loadStructureOnlyIfError();
+        };
+
+        $scope.loadStructureOnlyIfError = function () {
+            var structure = $scope.context.selectedGigaspace.structure;
+            if (!structure || structure.loadError) {
+                $scope.context.selectedGigaspace.structure = undefined;
+                $scope.loadStructure(function () {
+                });
+            }
+        };
+
+        $scope.injectAutocomplete = function (text) {
+            var cursor = $scope.codeMirrorEditor.getCursor();
+
+            var currentLine = $scope.codeMirrorEditor.lineInfo(cursor.line).text;
+            var firstPartOfLine = currentLine.substring(0, cursor.ch);
+            var lastSpaceIndex = Math.max(firstPartOfLine.lastIndexOf(' '), firstPartOfLine.lastIndexOf(','));
+            if (lastSpaceIndex > -1) {
+                $scope.codeMirrorEditor.replaceRange(
+                    text,
+                    {line: cursor.line, ch: lastSpaceIndex + 1},
+                    {line: cursor.line, ch: cursor.ch});
+            } else {
+                $scope.codeMirrorEditor.replaceRange(text, cursor);
+            }
+            $scope.codeMirrorEditor.focus();
+        };
+
+        $scope.isCredentialForSelectedGigaspaceCorrect = function () {
+            var gigaspace = findPredefinedGigaspace($scope.context.selectedGigaspace.name);
+            if (gigaspace) {
+                if (gigaspace.secure)
+                    return nonEmptyString($scope.context.selectedGigaspace.user)
+                        && nonEmptyString($scope.context.selectedGigaspace.password);
+                else return true;
+            } else return false;
+        };
+
+        $scope.loadStructure = function (callback) {
+            if ($scope.context.selectedGigaspace.structure) {
+                callback($scope.context.selectedGigaspace.structure);
+            } else {
+                if (!$scope.isCredentialForSelectedGigaspaceCorrect()) return;
+
+                if (autocompleteCancel) autocompleteCancel.resolve("cancelled by user!");
+                autocompleteCancel = $q.defer();
+
+                var request = {
+                    url: $scope.context.selectedGigaspace.url,
+                    user: $scope.context.selectedGigaspace.user,
+                    password: $scope.context.selectedGigaspace.password,
+                    driver: $scope.context.selectedGigaspace.driver,
+                    appVersion: $scope.config.internal.appVersion
+                };
+
+                $http({
+                    url: 'explore',
+                    method: 'POST',
+                    data: request,
+                    timeout: autocompleteCancel.promise,
+                    headers: {'Content-Type': 'application/json'},
+                    transformResponse: transformResponse
+                }).success(function (res) {
+                    $scope.context.selectedGigaspace.structure = res;
+                    callback($scope.context.selectedGigaspace.structure);
+                }).error(function () {
+                    $scope.context.selectedGigaspace.structure = {loadError: true};
+                });
+            }
+        };
+
         $scope.editorOptions = {
             mode: "text/x-sql",
             indentWithTabs: true,
@@ -834,16 +911,68 @@ App.controller("controller", [
             lineNumbers: false,
             matchBrackets: true,
             autofocus: true,
-            extraKeys: {"Ctrl-Space": "autocomplete"},
             placeholder: "SQL to execute, support lists, use #, // or -- for comment",
             hint: CodeMirror.hint.sql,
-            hintOptions: {
-                tables: {//todo load automatically based on real GigaSpaces; Issue #23
-                }
-            },
             onLoad: function (cm) {
                 $scope.codeMirrorEditor = cm;
                 $scope.codeMirrorEditor.setSize(null, 95);
+                cm.on('cursorActivity', function (cm) {
+                    $timeout(function () {
+                        var cursor = cm.getCursor();
+                        var currentLine = cm.lineInfo(cursor.line).text;
+
+                        function showTablesAutocomplete(searchPattern) {
+                            $scope.loadStructure(function (structure) {
+                                $scope.autocompletePattern = searchPattern;
+                                $scope.autocompleteType = 'tables';
+                                $scope.autocomplete = [];
+
+                                angular.forEach(structure.tables, function (table) {
+                                    $scope.autocomplete.push(table.name);
+                                });
+                            });
+                        }
+
+                        function showColumnsAutocomplete(tableName) {
+                            $scope.loadStructure(function (structure) {
+
+
+                                $scope.autocompletePattern = void 0;
+                                $scope.autocompleteType = 'columns';
+                                $scope.autocomplete = [];
+
+                                function findTableByName(tableName) {
+                                    for (var i = 0; i < structure.tables.length; i++) {
+                                        if (structure.tables[i].name === tableName) return structure.tables[i];
+                                    }
+                                    return void 0;
+                                }
+
+                                var table = findTableByName(tableName);
+                                if (table) $scope.autocomplete = table.columns;
+                            });
+                        }
+
+                        var closerIndexColumns = currentLine.closerIndexFromLeft(['select', 'where', 'order', 'set', 'setProperty', 'group'], cursor.ch);
+                        var closerIndexTables = currentLine.closerIndexFromLeft(['from', 'update'], cursor.ch);
+
+                        if (closerIndexColumns > -1 && closerIndexColumns > closerIndexTables) {
+                            var match = currentLine.match(/(from|update)[ ]+([a-zA-Z\._0-9-]+)/);
+                            if (match) showColumnsAutocomplete(match[2]);
+                            else $scope.autocomplete = [];
+                        } else if (closerIndexTables > -1) {
+                            var lastSpaceIndex = currentLine.substring(0, cursor.ch).lastIndexOf(' ');
+                            if (lastSpaceIndex > -1) {
+                                var alreadyEnteredTableName = currentLine.substring(lastSpaceIndex + 1, cursor.ch);
+                                showTablesAutocomplete(alreadyEnteredTableName);
+                            } else {
+                                showTablesAutocomplete('');
+                            }
+                        } else {
+                            $scope.autocomplete = [];
+                        }
+                    }, 0);
+                });
             }
         };
 
@@ -903,6 +1032,10 @@ App.controller("controller", [
         $scope.loadConfig();
     }]);
 
+function nonEmptyString(string) {
+    return string && string.length > 0;
+}
+
 Array.prototype.mkString = function (delimiter) {
     var result = "";
     for (var i = 0; i < this.length; i++) {
@@ -912,22 +1045,23 @@ Array.prototype.mkString = function (delimiter) {
     return result;
 };
 
-function countWatchers() {
-    var root = angular.element(document).injector().get('$rootScope');
-    var count = root.$$watchers ? root.$$watchers.length : 0; // include the current scope
-    var pendingChildHeads = [root.$$childHead];
-    var currentScope;
-
-    while (pendingChildHeads.length)
-    {
-        currentScope = pendingChildHeads.shift();
-
-        while (currentScope)
-        {
-            count += currentScope.$$watchers ? currentScope.$$watchers.length : 0;
-            pendingChildHeads.push(currentScope.$$childHead);
-            currentScope = currentScope.$$nextSibling;
+if (!String.prototype.endsWith) {
+    String.prototype.endsWith = function (searchString, position) {
+        var subjectString = this.toString();
+        if (position === undefined || position > subjectString.length) {
+            position = subjectString.length;
         }
+        position -= searchString.length;
+        var lastIndex = subjectString.indexOf(searchString, position);
+        return lastIndex !== -1 && lastIndex === position;
+    };
+}
+
+String.prototype.closerIndexFromLeft = function (searchStrings, lastPosition) {
+    var closerIndex = -1;
+    for (var i = 0; i < searchStrings.length; i++) {
+        var index = this.indexOf(searchStrings[i]);
+        if (index + searchStrings[i].length < lastPosition && closerIndex < index) closerIndex = index;
     }
-    console.log('watchers on page: ' + count);
+    return closerIndex;
 };

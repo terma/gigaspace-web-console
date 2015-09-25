@@ -71,7 +71,8 @@
       "name": "GS-10",
       "url": "jini:/*/*/gs10?locators=localhost:4700",
       "user": "",
-      "password": ""
+      "password": "",
+      "secure": true
     },
     {
       "name": "GS-9.5",

@@ -17,7 +17,7 @@ limitations under the License.
 package com.github.terma.gigaspacewebconsole.provider;
 
 import com.github.terma.gigaspacewebconsole.core.ExportRequest;
-import com.github.terma.gigaspacewebconsole.driver.GigaSpaceUtils;
+import com.github.terma.gigaspacewebconsole.provider.driver.GigaSpaceUtils;
 import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;

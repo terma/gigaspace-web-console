@@ -17,7 +17,7 @@ limitations under the License.
 package com.github.terma.gigaspacewebconsole.provider.executor.gigaspace;
 
 import com.github.terma.gigaspacewebconsole.core.GeneralRequest;
-import com.github.terma.gigaspacewebconsole.driver.GigaSpaceUtils;
+import com.github.terma.gigaspacewebconsole.provider.driver.GigaSpaceUtils;
 import com.github.terma.gigaspacewebconsole.provider.executor.ConnectionFactory;
 
 import java.sql.Connection;

@@ -100,3 +100,12 @@ tr.selected {
     display: none;
     border: none;
 }
+
+#autocompete {
+    margin-left: -0.3em;
+}
+
+#autocompete a {
+    display: inline-block;
+    padding: 0.3em;
+}

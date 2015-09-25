@@ -14,28 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package com.github.terma.gigaspacewebconsole.driver;
+package com.github.terma.gigaspacewebconsole.provider.driver;
 
 import junit.framework.Assert;
 import org.junit.Test;
 
+import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
+import java.util.Properties;
 
-public class DriverTest {
-
-    @Test
-    public void notAcceptWrongRightDriverPath() throws SQLException {
-        Assert.assertFalse(new Driver().acceptsURL("x"));
-    }
+public class ConnectionTest {
 
     @Test
-    public void acceptRightDriverPath() throws SQLException {
-        Assert.assertTrue(new Driver().acceptsURL("jdbc:com.github.terma.gigaspacewebconsole:"));
-    }
-
-    @Test(expected = SQLException.class)
-    public void acceptThrowExceptionIfNullUrl() throws SQLException {
-        Assert.assertFalse(new Driver().acceptsURL(null));
+    public void shouldHaveGoodMetaData() throws SQLException {
+        Connection connection = new Connection("jdbc:com.github.terma.gigaspacewebconsole:/./connection", new Properties());
+        DatabaseMetaData databaseMetaData = connection.getMetaData();
+        Assert.assertTrue(databaseMetaData instanceof GoodMetaData);
     }
 
 }
