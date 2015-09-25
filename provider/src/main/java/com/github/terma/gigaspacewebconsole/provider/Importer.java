@@ -18,6 +18,7 @@ package com.github.terma.gigaspacewebconsole.provider;
 
 import com.gigaspaces.metadata.SpaceTypeDescriptorBuilder;
 import com.github.terma.gigaspacewebconsole.core.ImportRequest;
+import com.github.terma.gigaspacewebconsole.provider.driver.GigaSpaceUtils;
 import org.openspaces.core.GigaSpace;
 
 import java.io.EOFException;

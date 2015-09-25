@@ -19,7 +19,7 @@ package com.github.terma.gigaspacewebconsole.provider.groovy;
 import com.gigaspaces.async.AsyncResult;
 import com.github.terma.gigaspacewebconsole.core.ExecuteRequest;
 import com.github.terma.gigaspacewebconsole.provider.ArraySqlResultBuilder;
-import com.github.terma.gigaspacewebconsole.provider.GigaSpaceUtils;
+import com.github.terma.gigaspacewebconsole.provider.driver.GigaSpaceUtils;
 import groovy.lang.Closure;
 import org.openspaces.core.GigaSpace;
 import org.openspaces.core.executor.DistributedTask;

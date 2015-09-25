@@ -33,4 +33,6 @@ public interface Provider {
 
     void import1(ImportRequest request, InputStream inputStream) throws Exception;
 
+    ExploreResponse explore(ExploreRequest request) throws Exception;
+
 }

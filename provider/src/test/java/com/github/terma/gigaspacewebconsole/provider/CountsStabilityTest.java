@@ -18,6 +18,7 @@ package com.github.terma.gigaspacewebconsole.provider;
 
 import com.github.terma.gigaspacewebconsole.core.CountsResponse;
 import com.github.terma.gigaspacewebconsole.core.GeneralRequest;
+import com.github.terma.gigaspacewebconsole.provider.driver.GigaSpaceUtils;
 import junit.framework.Assert;
 import org.junit.Test;
 

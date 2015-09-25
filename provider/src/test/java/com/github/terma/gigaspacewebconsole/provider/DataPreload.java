@@ -19,6 +19,7 @@ package com.github.terma.gigaspacewebconsole.provider;
 import com.gigaspaces.document.SpaceDocument;
 import com.gigaspaces.metadata.SpaceTypeDescriptor;
 import com.gigaspaces.metadata.SpaceTypeDescriptorBuilder;
+import com.github.terma.gigaspacewebconsole.provider.driver.GigaSpaceUtils;
 import org.junit.Assert;
 import org.openspaces.core.GigaSpace;
 
@@ -32,6 +33,7 @@ public class DataPreload {
 
         smallData(gigaSpace);
         longData(gigaSpace);
+        otherData(gigaSpace);
     }
 
     private static void smallData(GigaSpace gigaSpace) {
@@ -43,7 +45,7 @@ public class DataPreload {
         gigaSpace.clear(new SpaceDocument("SmallData"));
 
         List<SpaceDocument> buffer = new ArrayList<>();
-        for (int i = 0; i < 100000; i++) {
+        for (int i = 0; i < 1000000; i++) {
             SpaceDocument spaceDocument = new SpaceDocument("SmallData");
             injectAllTypes(spaceDocument);
             spaceDocument.setProperty("name", "My name is " + Math.random());
@@ -54,6 +56,19 @@ public class DataPreload {
         gigaSpace.writeMultiple(buffer.toArray(new Object[buffer.size()]));
 
         Assert.assertEquals(buffer.size(), gigaSpace.count(new SpaceDocument("SmallData")));
+    }
+
+    private static void otherData(GigaSpace gigaSpace) {
+        for (int i = 0; i < 20; i++) {
+            String typeName = "com.github.terma.OtherData" + i;
+            SpaceTypeDescriptor typeDescriptor =
+                    new SpaceTypeDescriptorBuilder(typeName)
+                            .idProperty("id", true)
+                            .addFixedProperty("name", String.class).create();
+            gigaSpace.getTypeManager().registerTypeDescriptor(typeDescriptor);
+
+            gigaSpace.clear(new SpaceDocument(typeName));
+        }
     }
 
     private static void injectAllTypes(SpaceDocument spaceDocument) {

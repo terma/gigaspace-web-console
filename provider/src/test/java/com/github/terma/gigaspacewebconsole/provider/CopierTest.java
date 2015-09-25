@@ -20,6 +20,7 @@ import com.gigaspaces.document.SpaceDocument;
 import com.gigaspaces.metadata.SpaceTypeDescriptor;
 import com.gigaspaces.metadata.SpaceTypeDescriptorBuilder;
 import com.github.terma.gigaspacewebconsole.core.CopyRequest;
+import com.github.terma.gigaspacewebconsole.provider.driver.GigaSpaceUtils;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;

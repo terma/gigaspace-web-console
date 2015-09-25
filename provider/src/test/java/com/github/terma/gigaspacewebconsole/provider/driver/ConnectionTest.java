@@ -14,20 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package com.github.terma.gigaspacewebconsole.provider.executor.gigaspace;
+package com.github.terma.gigaspacewebconsole.provider.driver;
 
-import com.github.terma.gigaspacewebconsole.core.GeneralRequest;
-import com.github.terma.gigaspacewebconsole.provider.driver.GigaSpaceUtils;
-import com.github.terma.gigaspacewebconsole.provider.executor.ConnectionFactory;
+import junit.framework.Assert;
+import org.junit.Test;
 
-import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
+import java.util.Properties;
 
-public class GigaSpaceConnectionFactory implements ConnectionFactory {
+public class ConnectionTest {
 
-    @Override
-    public Connection get(GeneralRequest request) throws SQLException, ClassNotFoundException {
-        return GigaSpaceUtils.createJdbcConnection(request);
+    @Test
+    public void shouldHaveGoodMetaData() throws SQLException {
+        Connection connection = new Connection("jdbc:com.github.terma.gigaspacewebconsole:/./connection", new Properties());
+        DatabaseMetaData databaseMetaData = connection.getMetaData();
+        Assert.assertTrue(databaseMetaData instanceof GoodMetaData);
     }
 
 }

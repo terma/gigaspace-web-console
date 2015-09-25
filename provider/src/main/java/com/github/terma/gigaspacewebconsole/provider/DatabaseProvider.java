@@ -55,4 +55,9 @@ public class DatabaseProvider implements Provider {
         throw new UnsupportedOperationException("We don't support import for DB, please wait future releases!");
     }
 
+    @Override
+    public ExploreResponse explore(ExploreRequest request) throws Exception {
+        throw new UnsupportedOperationException("We don't support explore for DB, please wait future releases!");
+    }
+
 }

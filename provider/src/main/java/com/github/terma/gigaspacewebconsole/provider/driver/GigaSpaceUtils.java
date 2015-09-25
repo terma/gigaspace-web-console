@@ -14,19 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package com.github.terma.gigaspacewebconsole.provider;
+package com.github.terma.gigaspacewebconsole.provider.driver;
 
 import com.gigaspaces.document.SpaceDocument;
 import com.gigaspaces.metadata.SpaceTypeDescriptor;
 import com.gigaspaces.metadata.SpaceTypeDescriptorBuilder;
-import com.github.terma.gigaspacewebconsole.core.ExecuteRequest;
 import com.github.terma.gigaspacewebconsole.core.GeneralRequest;
 import com.j_spaces.jdbc.driver.GConnection;
 import org.openspaces.core.GigaSpace;
 import org.openspaces.core.GigaSpaceConfigurer;
 import org.openspaces.core.space.UrlSpaceConfigurer;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -65,18 +63,28 @@ public class GigaSpaceUtils {
         return new GigaSpaceConfigurer(urlSpaceConfigurer.create()).create();
     }
 
-    public static Connection createJdbcConnection(final GeneralRequest request)
+    public static GConnection createJdbcConnection(final GeneralRequest request)
+            throws SQLException, ClassNotFoundException {
+        return createJdbcConnection(request.url, request.user, request.password);
+    }
+
+    public static GConnection createJdbcConnection(final String url, String user, String password)
             throws SQLException, ClassNotFoundException {
         Properties info = new Properties();
 
-        if (request.user != null) {
-            info.put("user", request.user);
+        if (user != null) {
+            info.put("user", user);
         }
-        if (request.password != null) {
-            info.put("password", request.password);
+        if (password != null) {
+            info.put("password", password);
         }
 
-        return new GConnection(GConnection.JDBC_GIGASPACES_URL + request.url, info);
+        return new Connection(Driver.JDBC_PREFIX + url, info);
+    }
+
+    public static GConnection createJdbcConnection(final String url)
+            throws SQLException, ClassNotFoundException {
+        return createJdbcConnection(url, null, null);
     }
 
     public static void writeDocument(GigaSpace gigaSpace, String typeName, String property, Object value) {
