@@ -1,8 +1,15 @@
 language: java
 
+install: true
+
+env:
+  - GIGASPACE_VERSION=10.0.1-11800-RELEASE
+  - GIGASPACE_VERSION=9.7.0-10491-M6
+#  - GIGASPACE_VERSION=9.5.1-RELEASE
+# todo fix https://travis-ci.org/terma/gigaspace-web-console/jobs/82267744
+
 jdk:
   - oraclejdk8
   - oraclejdk7
-  - openjdk7
 
-script: mvn package jacoco:report coveralls:report
+script: mvn package jacoco:report coveralls:report -DgsVersion=$GIGASPACE_VERSION
