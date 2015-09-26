@@ -18,24 +18,36 @@ import com.gigaspaces.metadata.SpaceTypeDescriptor;
 import com.gigaspaces.metadata.SpaceTypeDescriptorBuilder;
 import com.github.terma.gigaspacewebconsole.core.ExploreRequest;
 import com.github.terma.gigaspacewebconsole.core.ExploreResponse;
+import com.github.terma.gigaspacewebconsole.provider.driver.DestroeableGigaSpace;
 import com.github.terma.gigaspacewebconsole.provider.driver.GigaSpaceUtils;
-import org.junit.Before;
+import org.junit.After;
 import org.junit.Test;
 import org.openspaces.core.GigaSpace;
 
 import java.util.Arrays;
 
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasItems;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 public class ExplorerTest {
 
-    @Before
-    public void before() {
-        GigaSpace gigaSpace = GigaSpaceUtils.getGigaSpace("/./explorer");
+    private DestroeableGigaSpace destroeableGigaSpace = GigaSpaceUtils.getUniqueDestroeableGigaSpace();
+    private GigaSpace gigaSpace = destroeableGigaSpace.getGigaSpace();
+    private String url = gigaSpace.getSpace().getURL().getURL();
 
+    @After
+    public void destroy() throws Exception {
+        destroeableGigaSpace.destroy();
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void throwExceptionIfNullRequest() throws Exception {
+        Explorer.explore(null);
+    }
+
+    @Test
+    public void getStructureWithTables() throws Exception {
         GigaSpaceUtils.registerType(gigaSpace, "test");
 
         SpaceTypeDescriptor typeDescriptor = new SpaceTypeDescriptorBuilder("M")
@@ -49,17 +61,9 @@ public class ExplorerTest {
         mSpaceDocument.setProperty("dynamic1", true);
         mSpaceDocument.setProperty("dynamic2", "A");
         gigaSpace.write(mSpaceDocument);
-    }
 
-    @Test(expected = NullPointerException.class)
-    public void throwExceptionIfNullRequest() throws Exception {
-        Explorer.explore(null);
-    }
-
-    @Test
-    public void getStructureWithTables() throws Exception {
         ExploreRequest request = new ExploreRequest();
-        request.url = "/./explorer";
+        request.url = url;
         ExploreResponse response = Explorer.explore(request);
 
         assertEquals(3, response.tables.size());
@@ -69,11 +73,48 @@ public class ExplorerTest {
     }
 
     @Test
-    public void getStructureWithFixedAndDynamicColumns() throws Exception {
+    public void skipInStructureTablesWithWhitespaces() throws Exception {
+        SpaceTypeDescriptor typeDescriptor = new SpaceTypeDescriptorBuilder("R o m a")
+                .idProperty("id").create();
+        gigaSpace.getTypeManager().registerTypeDescriptor(typeDescriptor);
+
         ExploreRequest request = new ExploreRequest();
-        request.url = "/./explorer";
+        request.url = url;
         ExploreResponse response = Explorer.explore(request);
-        assertThat(response.tables.get(2).columns, equalTo(Arrays.asList("fixed1", "fixed2", "id", "dynamic1", "dynamic2")));
+        assertThat(response.tables.size(), equalTo(1));
+    }
+
+    @Test
+    public void getStructureWithFixedColumns() throws Exception {
+        SpaceTypeDescriptor typeDescriptor = new SpaceTypeDescriptorBuilder("M")
+                .idProperty("id")
+                .addFixedProperty("fixed1", String.class)
+                .addFixedProperty("fixed2", Integer.class).create();
+        gigaSpace.getTypeManager().registerTypeDescriptor(typeDescriptor);
+
+        ExploreRequest request = new ExploreRequest();
+        request.url = url;
+        ExploreResponse response = Explorer.explore(request);
+        assertThat(response.tables.get(1).columns, equalTo(Arrays.asList("fixed1", "fixed2", "id")));
+    }
+
+    @Test
+    public void getStructureWithFixedAndDynamicColumns() throws Exception {
+        SpaceTypeDescriptor typeDescriptor = new SpaceTypeDescriptorBuilder("M")
+                .idProperty("id").create();
+        gigaSpace.getTypeManager().registerTypeDescriptor(typeDescriptor);
+
+        gigaSpace.clear(null);
+        SpaceDocument mSpaceDocument = new SpaceDocument("M");
+        mSpaceDocument.setProperty("id", 12);
+        mSpaceDocument.setProperty("dynamic1", true);
+        mSpaceDocument.setProperty("dynamic2", "A");
+        gigaSpace.write(mSpaceDocument);
+
+        ExploreRequest request = new ExploreRequest();
+        request.url = url;
+        ExploreResponse response = Explorer.explore(request);
+        assertThat(response.tables.get(1).columns, equalTo(Arrays.asList("id", "dynamic1", "dynamic2")));
     }
 
 }

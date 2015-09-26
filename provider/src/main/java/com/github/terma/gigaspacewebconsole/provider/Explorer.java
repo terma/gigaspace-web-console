@@ -22,6 +22,7 @@ import com.github.terma.gigaspacewebconsole.provider.executor.gigaspace.GigaSpac
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,30 +40,41 @@ public class Explorer {
             try (final ResultSet resultSet = connection.getMetaData().getTables(null, null, null, null)) {
                 while (resultSet.next()) {
                     final String tableName = resultSet.getString("TABLE_NAME");
-                    final List<String> columns = new ArrayList<>();
 
-                    try (final ResultSet columnsResultSet = connection.getMetaData().getColumns(null, null, tableName, null)) {
-                        while (columnsResultSet.next()) {
-                            columns.add(columnsResultSet.getString("COLUMN_NAME"));
-                        }
-                    }
+                    if (!tableName.contains(" ")) {
+                        final List<String> columns = new ArrayList<>();
 
-                    try (final PreparedStatement ps = connection.prepareStatement("select * from " + tableName + " where rownum < 2")) {
-                        try (final ResultSet rs = ps.executeQuery()) {
-                            if (rs.next()) {
-                                for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
-                                    String columnName = rs.getMetaData().getColumnName(i);
-                                    if (!columns.contains(columnName)) columns.add(columnName);
-                                }
-                            }
-                        }
+                        collectFixedColumns(connection, tableName, columns);
+                        collectDynamicColumns(connection, tableName, columns);
+
+                        response.tables.add(new ExploreTable(tableName, columns));
                     }
-                    response.tables.add(new ExploreTable(tableName, columns));
                 }
             }
         }
 
         return response;
+    }
+
+    private static void collectFixedColumns(Connection connection, String tableName, List<String> columns) throws SQLException {
+        try (final ResultSet columnsResultSet = connection.getMetaData().getColumns(null, null, tableName, null)) {
+            while (columnsResultSet.next()) {
+                columns.add(columnsResultSet.getString("COLUMN_NAME"));
+            }
+        }
+    }
+
+    private static void collectDynamicColumns(Connection connection, String tableName, List<String> columns) throws SQLException {
+        try (final PreparedStatement ps = connection.prepareStatement("select * from " + tableName + " where rownum < 2")) {
+            try (final ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
+                        String columnName = rs.getMetaData().getColumnName(i);
+                        if (!columns.contains(columnName)) columns.add(columnName);
+                    }
+                }
+            }
+        }
     }
 
 }

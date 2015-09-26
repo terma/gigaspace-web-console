@@ -48,8 +48,17 @@ public class GigaSpaceUtils {
     }
 
     public static GigaSpace getGigaSpace(String url) {
+        return getDestoeableGigaSpace(url).getGigaSpace();
+    }
+
+    public static DestroeableGigaSpace getDestoeableGigaSpace(final String url) {
         UrlSpaceConfigurer urlSpaceConfigurer = new UrlSpaceConfigurer(url);
-        return new GigaSpaceConfigurer(urlSpaceConfigurer.create()).create();
+        GigaSpace gigaSpace = new GigaSpaceConfigurer(urlSpaceConfigurer.create()).create();
+        return new DestroeableGigaSpace(gigaSpace, urlSpaceConfigurer);
+    }
+
+    public static DestroeableGigaSpace getUniqueDestroeableGigaSpace() {
+        return getDestoeableGigaSpace("/./unique-giga-space-" + idGenerator.incrementAndGet());
     }
 
     public static GigaSpace getGigaSpace(final GeneralRequest request) {

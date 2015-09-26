@@ -34,6 +34,7 @@ public class DataPreload {
         smallData(gigaSpace);
         longData(gigaSpace);
         otherData(gigaSpace);
+        typeWithWhitespace(gigaSpace);
     }
 
     private static void smallData(GigaSpace gigaSpace) {
@@ -45,7 +46,7 @@ public class DataPreload {
         gigaSpace.clear(new SpaceDocument("SmallData"));
 
         List<SpaceDocument> buffer = new ArrayList<>();
-        for (int i = 0; i < 1000000; i++) {
+        for (int i = 0; i < 100000; i++) {
             SpaceDocument spaceDocument = new SpaceDocument("SmallData");
             injectAllTypes(spaceDocument);
             spaceDocument.setProperty("name", "My name is " + Math.random());
@@ -69,6 +70,16 @@ public class DataPreload {
 
             gigaSpace.clear(new SpaceDocument(typeName));
         }
+    }
+
+    private static void typeWithWhitespace(GigaSpace gigaSpace) {
+        String typeName = "R o m a";
+        SpaceTypeDescriptor typeDescriptor =
+                new SpaceTypeDescriptorBuilder(typeName)
+                        .idProperty("id", true).create();
+        gigaSpace.getTypeManager().registerTypeDescriptor(typeDescriptor);
+
+        gigaSpace.clear(new SpaceDocument(typeName));
     }
 
     private static void injectAllTypes(SpaceDocument spaceDocument) {
