@@ -14,9 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package com.github.terma.gigaspacewebconsole.counts;
+package com.github.terma.gigaspacewebconsole.server;
 
 import com.github.terma.gigaspacewebconsole.AppVersionValidator;
+import com.github.terma.gigaspacewebconsole.CachedProviderResolver;
 import com.github.terma.gigaspacewebconsole.JsonServlet;
 import com.github.terma.gigaspacewebconsole.Validator;
 import com.github.terma.gigaspacewebconsole.core.GeneralRequest;
@@ -25,7 +26,7 @@ public class CountsServlet extends JsonServlet<GeneralRequest> {
 
     @Override
     protected Object doJson(GeneralRequest request) throws Exception {
-        return Counts.counts(request);
+        return CachedProviderResolver.getProvider(request.driver).counts(request);
     }
 
     @SuppressWarnings("unchecked")

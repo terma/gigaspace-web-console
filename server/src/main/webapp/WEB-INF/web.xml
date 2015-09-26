@@ -40,7 +40,7 @@
 
     <servlet>
         <servlet-name>CountsServlet</servlet-name>
-        <servlet-class>com.github.terma.gigaspacewebconsole.counts.CountsServlet</servlet-class>
+        <servlet-class>com.github.terma.gigaspacewebconsole.server.CountsServlet</servlet-class>
     </servlet>
 
     <servlet>
