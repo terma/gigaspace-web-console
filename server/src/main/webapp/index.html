@@ -48,14 +48,14 @@
         <select class="mono-text connection" ng-model="request.driver">
             <option ng-repeat="driver in config.user.drivers" value="{{ driver.name }}"
                     ng-selected="context.selectedGigaspace.driver == driver.name">
-                {{ gs.name }}
+                {{ driver.name }}
             </option>
         </select>
     </div>
 
     <p></p>
     <input ng-model="context.selectedGigaspace.user" class="mono-text connection" placeholder="User"/>
-    <input type="password" ng-model="context.selectedGigaspace.password" class="mono-text connection"
+    <input type="password" ng-model="context.selectedGigaspace.password" class="mono-text connection source"
            placeholder="Password"/>
 
 </div>
@@ -265,7 +265,7 @@
                        ng-model="context.selectedGigaspace.queryTab.selectedEditor.content"
                        class="mono-text"></ui-codemirror>
         <div id="autocompete">
-            <a ng-repeat="item in autocomplete | filter : autocompletePattern | orderBy : '+' | limitTo : 5" href="javascript:void(0);" ng-click="injectAutocomplete(item)">{{ ::item }}</a>
+            <a ng-repeat="item in autocomplete | filter : autocompletePattern | orderBy : '+' | limitTo : 10" href="javascript:void(0);" ng-click="injectAutocomplete(item)">{{ ::item }}</a>
         </div>
         <p/>
 

@@ -267,6 +267,8 @@ App.controller("controller", [
         }
 
         $scope.executeToCsv = function () {
+            if ($scope.isCredentialInvalid()) return;
+
             executeQueryToSmt(function (sqlList) {
                 var sqlToExecute = sqlList[sqlList.length - 1];
 
@@ -295,6 +297,8 @@ App.controller("controller", [
         }
 
         $scope.executeQuery = function () {
+            if ($scope.isCredentialInvalid()) return;
+
             executeQueryToSmt(function (lines) {
                 if (groovyScript(lines)) { // groovy script
                     lines.splice(0, 1); // remove groovy line
@@ -439,6 +443,8 @@ App.controller("controller", [
         };
 
         $scope.startCheckTypes = function () {
+            if ($scope.isCredentialInvalid()) return;
+
             if ($scope.context.selectedGigaspace.typesTab.checking) {
                 log.log("already started");
                 return;
@@ -686,6 +692,8 @@ App.controller("controller", [
         };
 
         $scope.executeCopy = function () {
+            if ($scope.isCredentialInvalid()) return;
+
             cancelDefers(copyingDefers);
 
             $scope.context.selectedGigaspace.copyTab.status = undefined;
@@ -860,7 +868,23 @@ App.controller("controller", [
             $scope.codeMirrorEditor.focus();
         };
 
-        $scope.isCredentialForSelectedGigaspaceCorrect = function () {
+        $scope.isCredentialInvalid = function () {
+            $('input.source[type="password"]').removeClass('border-error');
+            var gigaspace = findPredefinedGigaspace($scope.context.selectedGigaspace.name);
+            if (gigaspace) {
+                if (gigaspace.secure) {
+                    if (!nonEmptyString($scope.context.selectedGigaspace.user)
+                        || !nonEmptyString($scope.context.selectedGigaspace.password)) {
+                        $('input.source[type="password"]').focus();
+                        $('input.source[type="password"]').addClass('border-error');
+                        return true;
+                    }
+                }
+            }
+            return false;
+        };
+
+        $scope.isCredentialCorrect = function () {
             var gigaspace = findPredefinedGigaspace($scope.context.selectedGigaspace.name);
             if (gigaspace) {
                 if (gigaspace.secure)
@@ -874,7 +898,7 @@ App.controller("controller", [
             if ($scope.context.selectedGigaspace.structure) {
                 callback($scope.context.selectedGigaspace.structure);
             } else {
-                if (!$scope.isCredentialForSelectedGigaspaceCorrect()) return;
+                if (!$scope.isCredentialCorrect()) return;
 
                 if (autocompleteCancel) autocompleteCancel.resolve("cancelled by user!");
                 autocompleteCancel = $q.defer();

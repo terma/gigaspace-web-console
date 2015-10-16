@@ -27,6 +27,10 @@ body {
     color: #C0C0C0;
 }
 
+.border-error {
+    border: 1px solid red;
+}
+
 .mono-error {
     color: red;
     font-family: courier, monospace;
