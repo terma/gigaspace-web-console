@@ -7,6 +7,7 @@
     <script type="text/javascript" src="js/jquery-1.11.3.js"></script>
     <script type="text/javascript" src="js/fixed-header.js"></script>
     <script type="text/javascript" src="js/query-result-table.js"></script>
+    <script type="text/javascript" src="js/error.js"></script>
     <script type="text/javascript" src="js/engine.js"></script>
 
     <script type="text/javascript" src="js/codemirror.js"></script>
@@ -185,23 +186,13 @@
             {{ context.selectedGigaspace.copyTab.status }}
         </div>
 
-        <div ng-show="context.selectedGigaspace.copyTab.error">
-            <p>
-            <pre class="mono-error">{{ context.selectedGigaspace.copyTab.error.exceptionClass }}</pre>
-            <pre class="mono-error">{{ context.selectedGigaspace.copyTab.error.message }}</pre>
-            <pre class="mono-error">{{ context.selectedGigaspace.copyTab.error.stacktrace }}</pre>
-        </div>
+        <div er-error="context.selectedGigaspace.copyTab.error"></div>
 
         <div ng-repeat="query in context.selectedGigaspace.copyTab.queries">
 
             <h4>Copying for {{ query.sql }}</h4>
 
-            <div ng-show="query.error">
-                <p>
-                <pre class="mono-error">{{ query.error.exceptionClass }}</pre>
-                <pre class="mono-error">{{ query.error.message }}</pre>
-                <pre class="mono-error">{{ query.error.stacktrace }}</pre>
-            </div>
+            <div er-error="query.error"></div>
 
             <p ng-show="query.status">{{ query.status }}</p>
 
@@ -289,12 +280,7 @@
 
             <h4>Results {{ query.data.data.length }} for {{ query.sql }}</h4>
 
-            <div ng-show="query.error">
-                <p>
-                <pre class="mono-error">{{ query.error.exceptionClass }}</pre>
-                <pre class="mono-error">{{ query.error.message }}</pre>
-                <pre class="mono-error">{{ query.error.stacktrace }}</pre>
-            </div>
+            <div er-error="query.error"></div>
 
             <p ng-show="query.status">{{ query.status }}</p>
 
