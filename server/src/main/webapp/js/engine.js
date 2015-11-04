@@ -939,7 +939,6 @@ App.controller("controller", [
             hint: CodeMirror.hint.sql,
             onLoad: function (cm) {
                 $scope.codeMirrorEditor = cm;
-                $scope.codeMirrorEditor.setSize(null, 95);
                 cm.on('cursorActivity', function (cm) {
                     $timeout(function () {
                         var cursor = cm.getCursor();
