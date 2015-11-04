@@ -44,6 +44,11 @@ public class GigaSpaceUrlTest {
         assertEquals("loc.col.com", GigaSpaceUrl.parseLocators("jini:/*/x?groups=mega&locators=loc.col.com"));
     }
 
+    @Test
+    public void shouldParseLocatorsWithDash() {
+        assertEquals("a-b.com", GigaSpaceUrl.parseLocators("jini:/*/x?locators=a-b.com"));
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowExceptionIfEmptyLocator() {
         assertEquals("yy.com.ab:1200", GigaSpaceUrl.parseLocators("jini:/*/x?locators="));
