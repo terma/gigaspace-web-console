@@ -9,6 +9,11 @@ body {
     padding: 0;
 }
 
+.normal-padding {
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
 .mono-text {
     font-family: courier, monospace;
     font-size: 90%;

@@ -113,7 +113,7 @@
         <!--</table>-->
     <!--</div>-->
 
-    <div ng-show="context.selectedGigaspace.selectedTab == 'exportImport'">
+    <div ng-show="context.selectedGigaspace.selectedTab == 'exportImport'" class="normal-padding">
         Export
 
         <p></p>
@@ -144,7 +144,7 @@
         </form>
     </div>
 
-    <div ng-show="context.selectedGigaspace.selectedTab == 'copy'">
+    <div ng-show="context.selectedGigaspace.selectedTab == 'copy'" class="normal-padding"Update>
         <p></p>
 
         Target Space
@@ -203,7 +203,7 @@
         </div>
     </div>
 
-    <div ng-show="context.selectedGigaspace.selectedTab == 'types'">
+    <div ng-show="context.selectedGigaspace.selectedTab == 'types'" class="normal-padding">
         <p ng-show="context.selectedGigaspace.typesTab.status">{{ context.selectedGigaspace.typesTab.status }}</p>
 
         <div ng-show="context.selectedGigaspace.typesTab.error">
@@ -261,7 +261,7 @@
         <ui-codemirror ui-codemirror-opts="editorOptions"
                        ng-model="context.selectedGigaspace.queryTab.selectedEditor.content"
                        class="mono-text"></ui-codemirror>
-        <div style="padding-left: 1em; padding-right: 1em;">
+        <div class="normal-padding">
             <div id="autocompete">
                 <a ng-repeat="item in autocomplete | filter : autocompletePattern | orderBy : '+' | limitTo : 10" href="javascript:void(0);" ng-click="injectAutocomplete(item)">{{ ::item }}</a>
             </div>
