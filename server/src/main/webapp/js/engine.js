@@ -134,7 +134,8 @@ App.controller("controller", [
                         var toStoreEditor = {
                             name: _this.gigaspaces[i].queryTab.editors[j].name,
                             content: _this.gigaspaces[i].queryTab.editors[j].content,
-                            cursor: _this.gigaspaces[i].queryTab.editors[j].cursor
+                            cursor: _this.gigaspaces[i].queryTab.editors[j].cursor,
+                            height: _this.gigaspaces[i].queryTab.editors[j].height
                         };
 
                         toStoreGigaspace.queryTab.editors.push(toStoreEditor);
@@ -287,7 +288,7 @@ App.controller("controller", [
                 };
 
                 var form = $("<form></form>").attr("action", "execute-to-csv").attr("method", "post");
-                form.append($("<input></input>").attr("type", "hidden").attr("name", "json").attr("value", angular.toJson(request)));
+                form.append($("<input>").attr("type", "hidden").attr("name", "json").attr("value", angular.toJson(request)));
                 form.appendTo("body").submit().remove();
             });
         };
@@ -432,9 +433,8 @@ App.controller("controller", [
 
         $scope.filterCounts = function (count) {
             if ($scope.context.selectedGigaspace.typesTab.hideZero && count.count == 0) return false;
-            if ($scope.context.selectedGigaspace.typesTab.filter &&
-                count.name.toLowerCase().indexOf($scope.context.selectedGigaspace.typesTab.filter.toLowerCase()) < 0) return false;
-            return true;
+            return !($scope.context.selectedGigaspace.typesTab.filter
+            && count.name.toLowerCase().indexOf($scope.context.selectedGigaspace.typesTab.filter.toLowerCase()) < 0);
         };
 
         $scope.forceStartCheckTypes = function () {
@@ -546,6 +546,7 @@ App.controller("controller", [
             $timeout(function () {
                 $scope.codeMirrorEditor.setValue(content);
                 $scope.codeMirrorEditor.setCursor($scope.codeMirrorEditor.lineCount(), 0);
+                $scope.codeMirrorEditor.setSize(null, $scope.context.selectedGigaspace.queryTab.selectedEditor.height);
                 $scope.codeMirrorEditor.focus();
             });
         }
@@ -553,6 +554,7 @@ App.controller("controller", [
         function asyncGoToAndFocus(line) {
             $timeout(function () {
                 $scope.codeMirrorEditor.setCursor(line ? line : $scope.codeMirrorEditor.lineCount(), 0);
+                $scope.codeMirrorEditor.setSize(null, $scope.context.selectedGigaspace.queryTab.selectedEditor.height);
                 $scope.codeMirrorEditor.focus();
             });
         }
@@ -1001,8 +1003,10 @@ App.controller("controller", [
                 jQuery('.CodeMirror').resizable({
                     distance: 30,
                     handles: 's, n',
-                    resize: function() {
-                        $scope.codeMirrorEditor.setSize(null, $(this).height());
+                    resize: function () {
+                        var height = $(this).height();
+                        $scope.context.selectedGigaspace.queryTab.selectedEditor.height = height;
+                        $scope.codeMirrorEditor.setSize(null, height);
                     }
                 });
             }
