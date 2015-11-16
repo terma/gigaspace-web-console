@@ -103,6 +103,7 @@ tr.selected {
     padding: 0.3em;
     display: block;
     float: left;
+    text-decoration: none;
 }
 
 .selected-button {
@@ -134,5 +135,5 @@ tr.selected {
 
 a {
     color: black;
-    text-decoration: none;
+    /*text-decoration: none;*/
 }

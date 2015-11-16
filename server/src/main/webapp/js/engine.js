@@ -996,6 +996,15 @@ App.controller("controller", [
                         }
                     }, 0);
                 });
+
+                // add resize to CodeMirror editor as default textarea
+                jQuery('.CodeMirror').resizable({
+                    distance: 30,
+                    handles: 's, n',
+                    resize: function() {
+                        $scope.codeMirrorEditor.setSize(null, $(this).height());
+                    }
+                });
             }
         };
 
