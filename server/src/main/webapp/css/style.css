@@ -9,9 +9,21 @@ body {
     padding: 0;
 }
 
+.normal-padding {
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
 .mono-text {
     font-family: courier, monospace;
     font-size: 90%;
+}
+
+.CodeMirror {
+    border: none;
+    border-bottom: 2px solid #aeaeae;
+    height: 150px;
+    padding: 10px;
 }
 
 .result-value {
@@ -43,7 +55,15 @@ input, textarea {
     background-color: transparent;
     /*-webkit-appearance: none;*/
     /*-moz-appearance: none;*/
-    border: 1px solid #C0C0C0;
+    /*border: 1px solid #C0C0C0;*/
+    border: none;
+    border-bottom: 1px solid #c0c0c0;
+}
+
+select {
+    border: none;
+    background-color: transparent;
+    border-bottom: 1px solid #c0c0c0;
 }
 
 .count_up {
@@ -78,13 +98,13 @@ tr.selected {
 .button-dock {
     overflow: auto;
     margin-left: -0.3em;
-    margin-bottom: 0.6em;
 }
 
 .button {
     padding: 0.3em;
     display: block;
     float: left;
+    text-decoration: none;
 }
 
 .selected-button {
@@ -92,8 +112,8 @@ tr.selected {
     display: block;
     float: left;
 
-    background-color: #e8e8e8;
-    color: black;
+    background-color: #B7B7B7;
+    color: white;
     text-decoration: none;
 }
 
@@ -112,4 +132,10 @@ tr.selected {
 #autocompete a {
     display: inline-block;
     padding: 0.3em;
+}
+
+a {
+    color: black;
+    outline: none;
+    /*text-decoration: none;*/
 }
