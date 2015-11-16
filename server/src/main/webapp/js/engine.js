@@ -23,130 +23,13 @@ App.filter('nullAsString', function () {
 });
 
 App.controller("controller", [
-    "$scope", "$http", "$q", "$timeout", "$filter",
-    function ($scope, $http, $q, $timeout, $filter) {
+    "$scope", "$http", "$q", "$timeout", "$filter", "settings",
+    function ($scope, $http, $q, $timeout, $filter, settings) {
 
         /*
          How many symbols we need to show in result for long text fields without checking showAllText?
          */
         $scope.textLengthLimit = 50;
-
-        /*
-         Object to get user settings for everything
-         */
-        $scope.context = {
-
-            selectedGigaspace: undefined,
-
-            gigaspaces: [],
-
-            LOCAL_STORAGE_KEY: "settings",
-            LOCAL_STORAGE_OLD_KEY: "history",
-
-            restore: function () {
-                var _this = $scope.context;
-
-                log.log("start restoring context...");
-                this.gigaspaces = [];
-
-                function unsafeRestore() {
-                    var fromStore = angular.fromJson(window.localStorage.getItem(_this.LOCAL_STORAGE_KEY));
-                    if (fromStore) {
-                        log.log("stored context found, restoring...");
-                        for (var i = 0; i < fromStore.gigaspaces.length; i++) {
-                            var fromStoreGigaspace = fromStore.gigaspaces[i];
-
-                            // check if restored predefinedGigaspace present in config other skip restore
-                            if (findPredefinedGigaspace(fromStoreGigaspace.name)) {
-                                _this.gigaspaces.push(fromStoreGigaspace);
-
-                                // restore link on selected predefinedGigaspace
-                                if (fromStore.selectedGigaspace == i) _this.selectedGigaspace = fromStoreGigaspace;
-
-                                // restore link on selected editor
-                                _this.gigaspaces[i].queryTab.selectedEditor =
-                                    fromStore.gigaspaces[i].queryTab.editors[fromStore.gigaspaces[i].queryTab.selectedEditor];
-
-                                // create export if not present
-                                if (!_this.gigaspaces[i].exportImportTab) _this.gigaspaces[i].exportImportTab = {};
-                            }
-                        }
-                    }
-                }
-
-                try {
-                    unsafeRestore();
-
-                    log.log('context restored');
-                    log.log(this.gigaspaces);
-                } catch (e) {
-                    log.log('cant restore context, go with empty');
-                    log.log(e);
-                }
-            },
-
-            store: function () {
-                var _this = $scope.context;
-
-                log.log("starting store context");
-
-                keepSelectedEditorCursor(); // as no direct update to model we should do this manually
-
-                var toStore = {
-                    gigaspaces: []
-                };
-
-                for (var i = 0; i < this.gigaspaces.length; i++) {
-                    var toStoreGigaspace = {
-                        name: _this.gigaspaces[i].name,
-                        user: _this.gigaspaces[i].user,
-                        url: _this.gigaspaces[i].url,
-                        driver: _this.gigaspaces[i].driver,
-                        selectedTab: _this.gigaspaces[i].selectedTab,
-
-                        typesTab: {
-                            hideZero: _this.gigaspaces[i].typesTab.hideZero,
-                            filter: _this.gigaspaces[i].typesTab.filter,
-                            selectedCount: _this.gigaspaces[i].typesTab.selectedCount
-                        },
-
-                        copyTab: {
-                            targetUrl: _this.gigaspaces[i].copyTab ? _this.gigaspaces[i].copyTab.targetUrl : undefined,
-                            targetUser: _this.gigaspaces[i].copyTab ? _this.gigaspaces[i].copyTab.targetUser : undefined,
-                            content: _this.gigaspaces[i].copyTab ? _this.gigaspaces[i].copyTab.content : undefined
-                        },
-
-                        queryTab: {
-                            editors: []
-                        }
-                    };
-                    toStore.gigaspaces.push(toStoreGigaspace);
-
-                    // if selected store index
-                    if (_this.selectedGigaspace == _this.gigaspaces[i]) toStore.selectedGigaspace = i;
-
-                    // copy editors
-                    for (var j = 0; j < _this.gigaspaces[i].queryTab.editors.length; j++) {
-                        // if selected store index
-                        if (_this.gigaspaces[i].queryTab.selectedEditor == _this.gigaspaces[i].queryTab.editors[j])
-                            toStoreGigaspace.queryTab.selectedEditor = j;
-
-                        var toStoreEditor = {
-                            name: _this.gigaspaces[i].queryTab.editors[j].name,
-                            content: _this.gigaspaces[i].queryTab.editors[j].content,
-                            cursor: _this.gigaspaces[i].queryTab.editors[j].cursor,
-                            height: _this.gigaspaces[i].queryTab.editors[j].height
-                        };
-
-                        toStoreGigaspace.queryTab.editors.push(toStoreEditor);
-                    }
-                }
-
-                window.localStorage.setItem(_this.LOCAL_STORAGE_KEY, angular.toJson(toStore));
-                log.log("context was stored");
-            }
-
-        };
 
         function findPredefinedGigaspace(name) {
             for (var m = 0; m < $scope.config.user.gigaspaces.length; m++) {
@@ -816,11 +699,12 @@ App.controller("controller", [
             }).success(function (res) {
                 $scope.config = res;
 
-                $scope.context.restore();
+                $scope.context = settings.restore(findPredefinedGigaspace);
 
                 // register event to store context before unload
                 window.addEventListener("beforeunload", function () {
-                    $scope.context.store();
+                    keepSelectedEditorCursor();
+                    settings.store($scope.context);
                 });
 
                 // restore selected gigaspace, first or default
@@ -1067,37 +951,3 @@ App.controller("controller", [
 
         $scope.loadConfig();
     }]);
-
-function nonEmptyString(string) {
-    return string && string.length > 0;
-}
-
-Array.prototype.mkString = function (delimiter) {
-    var result = "";
-    for (var i = 0; i < this.length; i++) {
-        if (i > 0) result += delimiter;
-        result += this[i];
-    }
-    return result;
-};
-
-if (!String.prototype.endsWith) {
-    String.prototype.endsWith = function (searchString, position) {
-        var subjectString = this.toString();
-        if (position === undefined || position > subjectString.length) {
-            position = subjectString.length;
-        }
-        position -= searchString.length;
-        var lastIndex = subjectString.indexOf(searchString, position);
-        return lastIndex !== -1 && lastIndex === position;
-    };
-}
-
-String.prototype.closerIndexFromLeft = function (searchStrings, lastPosition) {
-    var closerIndex = -1;
-    for (var i = 0; i < searchStrings.length; i++) {
-        var index = this.indexOf(searchStrings[i]);
-        if (index + searchStrings[i].length < lastPosition && closerIndex < index) closerIndex = index;
-    }
-    return closerIndex;
-};
