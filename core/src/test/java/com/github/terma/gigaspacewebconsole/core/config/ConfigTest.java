@@ -23,14 +23,14 @@ public class ConfigTest {
 
     @Test
     public void shouldReadInternalConfig() {
-        Assert.assertNotNull(Config.readInternal().appVersion);
+        Assert.assertNotNull(ConfigFactory.readInternal().appVersion);
     }
 
     @Test
     public void shouldReadLinks() {
-        System.setProperty(Config.CONFIG_PATH_SYSTEM_PROPERTY, "classpath:/config.json");
+        System.setProperty(ConfigFactory.CONFIG_PATH_SYSTEM_PROPERTY, "classpath:/config.json");
 
-        UserConfig userConfig = Config.readUser();
+        UserConfig userConfig = ConfigFactory.readUser();
 
         Assert.assertNotNull(userConfig);
         Assert.assertEquals(2, userConfig.links.size());
@@ -40,9 +40,9 @@ public class ConfigTest {
 
     @Test
     public void shouldReadGs() {
-        System.setProperty(Config.CONFIG_PATH_SYSTEM_PROPERTY, "classpath:/config.json");
+        System.setProperty(ConfigFactory.CONFIG_PATH_SYSTEM_PROPERTY, "classpath:/config.json");
 
-        UserConfig userConfig = Config.readUser();
+        UserConfig userConfig = ConfigFactory.readUser();
 
         Assert.assertNotNull(userConfig);
         Assert.assertEquals("Unexpected count of drivers", 1, userConfig.drivers.size());
@@ -52,9 +52,9 @@ public class ConfigTest {
 
     @Test
     public void shouldReadGigaspaces() {
-        System.setProperty(Config.CONFIG_PATH_SYSTEM_PROPERTY, "classpath:/config.json");
+        System.setProperty(ConfigFactory.CONFIG_PATH_SYSTEM_PROPERTY, "classpath:/config.json");
 
-        UserConfig userConfig = Config.readUser();
+        UserConfig userConfig = ConfigFactory.readUser();
 
         Assert.assertNotNull(userConfig);
         Assert.assertEquals(2, userConfig.gigaspaces.size());
@@ -66,9 +66,9 @@ public class ConfigTest {
 
     @Test
     public void shouldReadConverters() {
-        System.setProperty(Config.CONFIG_PATH_SYSTEM_PROPERTY, "classpath:/config.json");
+        System.setProperty(ConfigFactory.CONFIG_PATH_SYSTEM_PROPERTY, "classpath:/config.json");
 
-        UserConfig userConfig = Config.readUser();
+        UserConfig userConfig = ConfigFactory.readUser();
 
         Assert.assertEquals(1, userConfig.converters.size());
         Assert.assertEquals("com.github.terma.gigaspacewebconsole.TestConverter", userConfig.converters.get(0));
@@ -76,9 +76,9 @@ public class ConfigTest {
 
     @Test
     public void shouldReadConfigFromClasspathFile() {
-        System.setProperty(Config.CONFIG_PATH_SYSTEM_PROPERTY, "classpath:/config.json");
+        System.setProperty(ConfigFactory.CONFIG_PATH_SYSTEM_PROPERTY, "classpath:/config.json");
 
-        UserConfig userConfig = Config.readUser();
+        UserConfig userConfig = ConfigFactory.readUser();
 
         Assert.assertNotNull(userConfig);
         Assert.assertEquals(2, userConfig.gigaspaces.size());
@@ -87,9 +87,9 @@ public class ConfigTest {
 
     @Test
     public void shouldReadConfigFromRealFile() {
-        System.setProperty(Config.CONFIG_PATH_SYSTEM_PROPERTY, "file:src/test/resources/config.json");
+        System.setProperty(ConfigFactory.CONFIG_PATH_SYSTEM_PROPERTY, "file:src/test/resources/config.json");
 
-        UserConfig userConfig = Config.readUser();
+        UserConfig userConfig = ConfigFactory.readUser();
 
         Assert.assertNotNull(userConfig);
         Assert.assertEquals(2, userConfig.gigaspaces.size());
@@ -98,14 +98,14 @@ public class ConfigTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowExceptionIfWrongConfigPathType() {
-        System.setProperty(Config.CONFIG_PATH_SYSTEM_PROPERTY, "xx:src/test/resources/config.json");
-        Config.readUser();
+        System.setProperty(ConfigFactory.CONFIG_PATH_SYSTEM_PROPERTY, "xx:src/test/resources/config.json");
+        ConfigFactory.readUser();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowExceptionIfSystemPropertyConfigPathNotDefined() {
-        System.getProperties().remove(Config.CONFIG_PATH_SYSTEM_PROPERTY);
-        Config.readUser();
+        System.getProperties().remove(ConfigFactory.CONFIG_PATH_SYSTEM_PROPERTY);
+        ConfigFactory.readUser();
     }
 
 }

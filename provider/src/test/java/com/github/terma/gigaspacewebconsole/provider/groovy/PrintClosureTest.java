@@ -17,7 +17,7 @@ limitations under the License.
 package com.github.terma.gigaspacewebconsole.provider.groovy;
 
 import com.gigaspaces.document.SpaceDocument;
-import com.github.terma.gigaspacewebconsole.core.config.Config;
+import com.github.terma.gigaspacewebconsole.core.config.ConfigFactory;
 import com.github.terma.gigaspacewebconsole.provider.ArrayIterable;
 import junit.framework.Assert;
 import org.junit.BeforeClass;
@@ -31,7 +31,7 @@ public class PrintClosureTest {
 
     @BeforeClass
     public static void init() {
-        System.setProperty(Config.CONFIG_PATH_SYSTEM_PROPERTY, Config.NONE);
+        System.setProperty(ConfigFactory.CONFIG_PATH_SYSTEM_PROPERTY, ConfigFactory.NONE);
     }
 
     @Test
@@ -220,12 +220,12 @@ public class PrintClosureTest {
                 responseStream.results.get(0).columns);
         Assert.assertEquals(
                 Arrays.asList(singletonList("{\n" +
-                                "  \"typeName\": \"java.lang.Object\",\n" +
-                                "  \"properties\": {\n" +
-                                "    \"id\": 0,\n" +
-                                "    \"name\": \"A\"\n" +
-                                "  }\n" +
-                                "}"
+                        "  \"typeName\": \"java.lang.Object\",\n" +
+                        "  \"properties\": {\n" +
+                        "    \"id\": 0,\n" +
+                        "    \"name\": \"A\"\n" +
+                        "  }\n" +
+                        "}"
                 ), singletonList("123")),
                 responseStream.results.get(0).data);
     }

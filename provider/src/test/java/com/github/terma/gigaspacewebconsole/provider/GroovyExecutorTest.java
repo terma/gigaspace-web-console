@@ -18,6 +18,7 @@ package com.github.terma.gigaspacewebconsole.provider;
 
 import com.github.terma.gigaspacewebconsole.core.ExecuteRequest;
 import com.github.terma.gigaspacewebconsole.core.config.Config;
+import com.github.terma.gigaspacewebconsole.core.config.ConfigFactory;
 import com.github.terma.gigaspacewebconsole.provider.groovy.ObjectGroovyExecuteResponseStream;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -32,7 +33,7 @@ public class GroovyExecutorTest {
 
     @BeforeClass
     public static void init() {
-        System.setProperty(Config.CONFIG_PATH_SYSTEM_PROPERTY, Config.NONE);
+        System.setProperty(ConfigFactory.CONFIG_PATH_SYSTEM_PROPERTY, ConfigFactory.NONE);
     }
 
     @Before

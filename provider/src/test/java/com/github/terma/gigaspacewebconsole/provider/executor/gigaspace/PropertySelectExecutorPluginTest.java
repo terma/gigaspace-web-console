@@ -20,7 +20,7 @@ import com.gigaspaces.metadata.SpaceTypeDescriptor;
 import com.gigaspaces.metadata.SpaceTypeDescriptorBuilder;
 import com.github.terma.gigaspacewebconsole.core.ExecuteRequest;
 import com.github.terma.gigaspacewebconsole.core.ObjectExecuteResponseStream;
-import com.github.terma.gigaspacewebconsole.core.config.Config;
+import com.github.terma.gigaspacewebconsole.core.config.ConfigFactory;
 import com.github.terma.gigaspacewebconsole.provider.driver.GigaSpaceUtils;
 import com.j_spaces.core.client.SQLQuery;
 import org.hamcrest.CoreMatchers;
@@ -43,7 +43,7 @@ public class PropertySelectExecutorPluginTest {
 
     @BeforeClass
     public static void init() {
-        System.setProperty("gigaspacewebconsoleConfig", Config.NONE);
+        System.setProperty("gigaspacewebconsoleConfig", ConfigFactory.NONE);
         gigaSpace = GigaSpaceUtils.getGigaSpace(url);
     }
 

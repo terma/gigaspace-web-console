@@ -2,7 +2,7 @@ package com.github.terma.gigaspacewebconsole.provider.executor.database;
 
 import com.github.terma.gigaspacewebconsole.core.ExecuteRequest;
 import com.github.terma.gigaspacewebconsole.core.ObjectExecuteResponseStream;
-import com.github.terma.gigaspacewebconsole.core.config.Config;
+import com.github.terma.gigaspacewebconsole.core.config.ConfigFactory;
 import com.github.terma.gigaspacewebconsole.provider.executor.DatabaseExecutor;
 import junit.framework.Assert;
 import org.junit.Before;
@@ -17,7 +17,7 @@ public class DatabaseExecutorTest {
 
     @BeforeClass
     public static void before() {
-        System.setProperty(Config.CONFIG_PATH_SYSTEM_PROPERTY, Config.NONE);
+        System.setProperty(ConfigFactory.CONFIG_PATH_SYSTEM_PROPERTY, ConfigFactory.NONE);
     }
 
     @Before

@@ -21,7 +21,7 @@ import com.gigaspaces.metadata.SpaceTypeDescriptor;
 import com.gigaspaces.metadata.SpaceTypeDescriptorBuilder;
 import com.github.terma.gigaspacewebconsole.core.ExecuteRequest;
 import com.github.terma.gigaspacewebconsole.core.ObjectExecuteResponseStream;
-import com.github.terma.gigaspacewebconsole.core.config.Config;
+import com.github.terma.gigaspacewebconsole.core.config.ConfigFactory;
 import com.github.terma.gigaspacewebconsole.provider.driver.GigaSpaceUtils;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -36,7 +36,7 @@ public class GigaSapceExecutorTest {
 
     @BeforeClass
     public static void init() {
-        System.setProperty(Config.CONFIG_PATH_SYSTEM_PROPERTY, Config.NONE);
+        System.setProperty(ConfigFactory.CONFIG_PATH_SYSTEM_PROPERTY, ConfigFactory.NONE);
         gigaSpace = GigaSpaceUtils.getGigaSpace("/./executor");
     }
 
