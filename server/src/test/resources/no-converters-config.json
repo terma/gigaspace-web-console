@@ -54,6 +54,34 @@
     {
       "name": "Status",
       "url": "http://www.google.com"
+    },
+    {
+      "name": "Custom",
+      "url": "http://custom"
+    },
+    {
+      "name": "Other",
+      "url": "http://other"
+    },
+    {
+      "name": "Component A",
+      "url": "http://a"
+    },
+    {
+      "name": "Component B",
+      "url": "http://b"
+    },
+    {
+      "name": "GitHub",
+      "url": "http://github.com"
+    },
+    {
+      "name": "Yandex",
+      "url": "http://yandex.com"
+    },
+    {
+      "name": "GigaSpace",
+      "url": "http://gigaspace.com"
     }
   ],
   "converters": [
