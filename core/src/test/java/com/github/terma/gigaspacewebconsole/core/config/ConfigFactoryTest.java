@@ -19,7 +19,7 @@ package com.github.terma.gigaspacewebconsole.core.config;
 import junit.framework.Assert;
 import org.junit.Test;
 
-public class ConfigTest {
+public class ConfigFactoryTest {
 
     @Test
     public void shouldReadInternalConfig() {
