@@ -11,6 +11,7 @@
 
     <script type="text/javascript" src="js/common.js"></script>
     <script type="text/javascript" src="js/fixed-header.js"></script>
+    <script type="text/javascript" src="js/fix-horizontally.js"></script>
     <script type="text/javascript" src="js/query-result-table.js"></script>
     <script type="text/javascript" src="js/settings.js"></script>
     <script type="text/javascript" src="js/error.js"></script>
@@ -30,17 +31,20 @@
 </head>
 <body>
 
-<div style="overflow: auto; padding-left: 1em; padding-right: 1em; padding-top: 0.5em; padding-bottom: 0.5em; background-color: #434343; color: white;">
-    <div ng-repeat="link in config.user.links" style="float: left;">
-        <a style="color: white;" href="{{ link.url }}">{{ link.name }}</a>&nbsp;
-    </div>
+<div class="fix-horizontally">
+    <div style="overflow: auto; padding-left: 1em; padding-right: 1em; padding-top: 0.5em; padding-bottom: 0.5em; background-color: #434343; color: white;">
+        <div ng-repeat="link in config.user.links" style="float: left;">
+            <a style="color: white;" href="{{ link.url }}">{{ link.name }}</a>&nbsp;
+        </div>
 
-    <div style="float: right;">
-        <a style="color: white;" target="_blank" href="https://github.com/terma/gigaspace-web-console/blob/master/README.md">Help</a>
+        <div style="float: right;">
+            <a style="color: white;" target="_blank" href="https://github.com/terma/gigaspace-web-console/blob/master/README.md">Help</a>
+        </div>
     </div>
 </div>
 
-<div style="padding-left: 1em; padding-right: 1em; padding-top: 0.5em; background-color: #f7f7f7;">
+<div class="fix-horizontally">
+    <div style="padding-left: 1em; padding-right: 1em; padding-top: 0.5em; background-color: #f7f7f7;">
     <div class="button-dock" style="padding-bottom: 0.5em;">
         <a ng-repeat="gigaspace in config.user.gigaspaces"
            ng-class="context.selectedGigaspace.name == gigaspace.name ? 'selected-button' : 'button'"
@@ -80,6 +84,7 @@
            href="javascript:void(0);">Templates</a>
     </div>
 </div>
+</div>
 
 <div>
     <div ng-if="showTemplates" style="padding-bottom: 0.5em;">
@@ -87,38 +92,6 @@
            href="javascript:void(0);" ng-click="useTemplate(template)"
                 style="margin-right: 0.3em;">{{ ::template.name }}</a>
     </div>
-
-    <!--<div ng-show="context.selectedGigaspace.selectedTab == 'admin'">-->
-        <!--<input type="text" class="mono-text" placeholder="PU name to filter" ng-model="puFilter">-->
-
-        <!--<a href="javascript:void(0);">Restart Partitions</a>-->
-        <!--<a href="javascript:void(0);">Undeploy</a>-->
-
-        <!--<p></p>-->
-
-        <!--<table class="result" style="table-layout: fixed;">-->
-            <!--<thead>-->
-                <!--<tr>-->
-                    <!--<th><input type="checkbox" ng-click="togglePUs()" ng-model="admin.selected"></th>-->
-                    <!--<th>Name</th>-->
-                    <!--<th>Status</th>-->
-                    <!--<th>Instances</th>-->
-                    <!--<th>Mem (Mb)</th>-->
-                    <!--<th>GSCs</th>-->
-                <!--</tr>-->
-            <!--</thead>-->
-            <!--<tbody>-->
-                <!--<tr class="mono-text" ng-repeat="pu in pus | orderBy : 'name' | filter : puFilter">-->
-                    <!--<td><input type="checkbox" ng-model="pu.selected"></td>-->
-                    <!--<td>{{ pu.name }}</td>-->
-                    <!--<td>{{ pu.status }}</td>-->
-                    <!--<td align="center">{{ pu.expectedInstances }} / {{ pu.instances }}</td>-->
-                    <!--<td align="center">{{ pu.mem.max }} / {{ pu.mem.used }}</td>-->
-                    <!--<td>{{ pu.gscs }}</td>-->
-                <!--</tr>-->
-            <!--</tbody>-->
-        <!--</table>-->
-    <!--</div>-->
 
     <div ng-show="context.selectedGigaspace.selectedTab == 'exportImport'" class="normal-padding">
         <p></p>
@@ -267,41 +240,54 @@
     </div>
 
     <div ng-show="context.selectedGigaspace.selectedTab == 'query'">
-        <ui-codemirror ui-codemirror-opts="editorOptions"
-                       ng-model="context.selectedGigaspace.queryTab.selectedEditor.content"
-                       class="mono-text"></ui-codemirror>
-        <div class="normal-padding">
-            <div id="autocompete">
-                <a ng-repeat="item in autocomplete | filter : autocompletePattern | orderBy : '+' | limitTo : 10" href="javascript:void(0);" ng-click="injectAutocomplete(item)">{{ ::item }}</a>
+        <div class="fix-horizontally">
+            <ui-codemirror ui-codemirror-opts="editorOptions"
+                           ng-model="context.selectedGigaspace.queryTab.selectedEditor.content"
+                           class="mono-text"></ui-codemirror>
+        </div>
+
+        <!--<div>-->
+            <div class="fix-horizontally">
+                <div class="normal-padding">
+                    <div id="autocompete">
+                        <a ng-repeat="item in autocomplete | filter : autocompletePattern | orderBy : '+' | limitTo : 10" href="javascript:void(0);" ng-click="injectAutocomplete(item)">{{ ::item }}</a>
+                    </div>
+                    <p/>
+
+                    <a ng-click="executeQuery()" href="javascript:void(0);">Execute</a>
+                    <a ng-click="executeToCsv()" href="javascript:void(0);">To CSV</a>
+
+                    <p ng-show="context.selectedGigaspace.queryTab.selectedEditor.status">
+                        {{ context.selectedGigaspace.queryTab.selectedEditor.status }}
+                    </p>
+                </div>
             </div>
-            <p/>
-
-            <a ng-click="executeQuery()" href="javascript:void(0);">Execute</a>
-            <a ng-click="executeToCsv()" href="javascript:void(0);">To CSV</a>
-
-            <p ng-show="context.selectedGigaspace.queryTab.selectedEditor.status">
-                {{ context.selectedGigaspace.queryTab.selectedEditor.status }}
-            </p>
 
             <div class="query" ng-repeat="query in context.selectedGigaspace.queryTab.selectedEditor.queries">
+                <div class="fix-horizontally">
+                    <h4 class="normal-padding">Results {{ query.data.data.length }} for {{ query.sql }}</h4>
+                </div>
 
-                <h4>Results {{ query.data.data.length }} for {{ query.sql }}</h4>
+                <div er-error="query.error" class="normal-padding"></div>
 
-                <div er-error="query.error"></div>
+                <div class="fix-horizontally">
+                    <p ng-show="query.status" class="normal-padding">{{ query.status }}</p>
 
-                <p ng-show="query.status">{{ query.status }}</p>
-
-                <a ng-show="query.data" href="javascript:void(0);" ng-click="toggleShowAllText(query)">Show/Hide all
-                    text</a>
+                    <div class="normal-padding">
+                        <a ng-show="query.data" href="javascript:void(0);" ng-click="toggleShowAllText(query)">Show/Hide all text</a>
+                    </div>
+                </div>
 
                 <p/>
 
-                <query-result-table qrt-model="query.data"
-                                    qrt-show-all-text="query.data.showAllText"
-                                    qrt-column-is-timestamp="queryColumnIsTimestamp"
-                                    qrt-column-to-timestamp="queryColumnToTimestamp"></query-result-table>
+                <div class="normal-padding">
+                    <query-result-table qrt-model="query.data"
+                                        qrt-show-all-text="query.data.showAllText"
+                                        qrt-column-is-timestamp="queryColumnIsTimestamp"
+                                        qrt-column-to-timestamp="queryColumnToTimestamp"></query-result-table>
+                </div>
             </div>
-        </div>
+        <!--</div>-->
     </div>
 </div>
 

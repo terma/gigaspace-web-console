@@ -1,6 +1,6 @@
 package com.github.terma.gigaspacewebconsole;
 
-import com.github.terma.gigaspacewebconsole.core.config.Config;
+import com.github.terma.gigaspacewebconsole.core.config.ConfigFactory;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
 
@@ -10,7 +10,7 @@ public class Runner {
 
     public void start() {
         // set config
-        System.setProperty(Config.CONFIG_PATH_SYSTEM_PROPERTY, "classpath:/config.json");
+        System.setProperty(ConfigFactory.CONFIG_PATH_SYSTEM_PROPERTY, "classpath:/config.json");
 
         WebAppContext webAppContext = new WebAppContext();
         webAppContext.setContextPath("/driver-web-console");
