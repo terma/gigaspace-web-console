@@ -21,7 +21,6 @@ import com.github.terma.gigaspacewebconsole.provider.driver.GigaSpaceUtils;
 import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.openspaces.core.GigaSpace;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -31,13 +30,10 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-public class ExporterTest {
-
-    private GigaSpace gigaSpace;
+public class ExporterTest extends TestWithGigaSpace {
 
     @Before
     public void before() {
-        gigaSpace = GigaSpaceUtils.getGigaSpace("/./export");
         gigaSpace.clear(null);
 
         GigaSpaceUtils.registerType(gigaSpace, "A");
@@ -52,7 +48,7 @@ public class ExporterTest {
     public void shouldExportAllTypesToFile() throws Exception {
         // given
         ExportRequest request = new ExportRequest();
-        request.url = "/./export";
+        request.url = gigaSpaceUrl;
 
         // when
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -71,7 +67,7 @@ public class ExporterTest {
         // given
         ExportRequest request = new ExportRequest();
         request.types = Arrays.asList("A");
-        request.url = "/./export";
+        request.url = gigaSpaceUrl;
 
         // when
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();

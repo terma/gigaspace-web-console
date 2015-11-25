@@ -47,3 +47,18 @@ String.prototype.closerIndexFromLeft = function (searchStrings, lastPosition) {
     }
     return closerIndex;
 };
+
+function transformResponse(data, headers, status) {
+    if (status == 200)  return angular.fromJson(data);
+    else {
+        var errorPrefix = "/* --- JSON STREAM --- ERROR DELIMITER --- */";
+        var errorBegin = data.indexOf(errorPrefix);
+        if (errorBegin < 0) return data; // as is
+
+        try {
+            return angular.fromJson(data.substring(errorBegin + errorPrefix.length));
+        } catch (e) {
+            return data; // as is
+        }
+    }
+}

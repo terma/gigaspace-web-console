@@ -1,0 +1,66 @@
+<div ng-controller="TypesController">
+    <p ng-show="context.selectedGigaspace.typesTab.status">{{ context.selectedGigaspace.typesTab.status }}</p>
+
+    <div ng-show="context.selectedGigaspace.typesTab.error">
+        <p/>
+        <a href="javascript:void(0);" ng-click="forceStartCheckTypes()">Try Again</a>
+        <pre class="mono-error">{{ context.selectedGigaspace.typesTab.error.exceptionClass }}</pre>
+        <pre class="mono-error">{{ context.selectedGigaspace.typesTab.error.message }}</pre>
+        <pre class="mono-error">{{ context.selectedGigaspace.typesTab.error.stacktrace }}</pre>
+    </div>
+
+    <p/>
+
+    <p ng-show="!context.selectedGigaspace.typesTab.checking && !context.selectedGigaspace.typesTab.error">
+        Monitoring stopped <a href="javascript:void(0);" ng-click="startCheckTypes()">Start Again</a>
+    </p>
+
+    <div ng-show="context.selectedGigaspace.typesTab.data">
+        <input type="text" ng-model="context.selectedGigaspace.typesTab.filter" placeholder="Type Filter"
+               class="mono-text">
+        <a href="javascript:void(0);" ng-click="context.selectedGigaspace.typesTab.hideZero = false"
+           ng-show="context.selectedGigaspace.typesTab.hideZero">Show Zero</a>
+        <a href="javascript:void(0);" ng-click="context.selectedGigaspace.typesTab.hideZero = true"
+           ng-show="!context.selectedGigaspace.typesTab.hideZero">Hide Zero</a>
+
+        <p></p>
+
+        <table class="result">
+            <thead>
+            <tr class="mono-text">
+                <th>Total</th>
+                <th align="right">{{ counts.total.count }}</th>
+                <th align="right">{{ prevCountStatus(counts.total) }}</th>
+                <th>&nbsp;</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat-start="count in context.selectedGigaspace.typesTab.data | filter : filterCounts | orderBy:'name'"
+                class="mono-text"
+                ng-click="context.selectedGigaspace.typesTab.selectedCount = count"
+                ng-class="context.selectedGigaspace.typesTab.selectedCount == count ? 'selected' : ''">
+                <td class="{{ getCountClass(count) }}">{{ count.name }}</td>
+                <td align="right">{{ count.count }}</td>
+                <td align="right">{{ prevCountStatus(count) }}</td>
+                <td>
+                    <a href="javascript:void(0);" ng-click="openQueryTabWithSelectFor(count.name)">select</a>
+                    <a href="javascript:void(0);" ng-click="openQueryTabWithUpdateFor(count.name)">update</a>
+                    <a href="javascript:void(0);" ng-click="openQueryTabWithDeleteFor(count.name)">delete</a>
+                    <a href="javascript:void(0);" ng-click="openQueryTabWithTypeFor(count.name)">type</a>
+                    <a href="javascript:void(0);" ng-click="toggleHistory(count)">history</a>
+                    <a ng-show="count.showHistory" href="javascript:void(0);" ng-click="resetHistory(count)">reset</a>
+                </td>
+            </tr>
+            <tr ng-repeat-end ng-if="count.showHistory">
+                <td colspan="99">
+                    <!--todo Started, Current (Duration)-->
+                    <!--todo Chart with Average, show error connection as negative spike-->
+                    <count-history-chart chc-count="count"/>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+</div>

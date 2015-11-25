@@ -31,30 +31,28 @@ import java.util.Random;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
 
-public class CopierTest {
+public class CopierTest extends TestWithGigaSpace {
 
-    private static GigaSpace sourceGigaSpace;
     private static GigaSpace targetGigaSpace;
 
     @BeforeClass
-    public static void init() {
-        sourceGigaSpace = GigaSpaceUtils.getGigaSpace("/./source");
+    public static void setupGigaspaces() {
         targetGigaSpace = GigaSpaceUtils.getGigaSpace("/./target");
     }
 
     @Test
     public void shouldCopyDocument() throws Exception {
         SpaceTypeDescriptor typeDescriptor = randomDescriptor();
-        sourceGigaSpace.getTypeManager().registerTypeDescriptor(typeDescriptor);
+        gigaSpace.getTypeManager().registerTypeDescriptor(typeDescriptor);
         targetGigaSpace.getTypeManager().registerTypeDescriptor(typeDescriptor);
 
         SpaceDocument spaceDocument = new SpaceDocument(typeDescriptor.getTypeName());
-        sourceGigaSpace.write(spaceDocument);
+        gigaSpace.write(spaceDocument);
 
-        Assert.assertThat(sourceGigaSpace.count(new SpaceDocument(typeDescriptor.getTypeName())), equalTo(1));
+        Assert.assertThat(gigaSpace.count(new SpaceDocument(typeDescriptor.getTypeName())), equalTo(1));
 
         CopyRequest request = new CopyRequest();
-        request.url = "/./source";
+        request.url = gigaSpaceUrl;
         request.sql = "copy " + typeDescriptor.getTypeName();
         request.targetUrl = "/./target";
 
@@ -66,20 +64,20 @@ public class CopierTest {
     @Test
     public void shouldCopyDocumentFromOnly() throws Exception {
         final SpaceTypeDescriptor typeDescriptor = randomDescriptor();
-        sourceGigaSpace.getTypeManager().registerTypeDescriptor(typeDescriptor);
+        gigaSpace.getTypeManager().registerTypeDescriptor(typeDescriptor);
         targetGigaSpace.getTypeManager().registerTypeDescriptor(typeDescriptor);
 
         SpaceDocument spaceDocument1 = new SpaceDocument(typeDescriptor.getTypeName());
-        sourceGigaSpace.write(spaceDocument1);
+        gigaSpace.write(spaceDocument1);
         SpaceDocument spaceDocument2 = new SpaceDocument(typeDescriptor.getTypeName());
-        sourceGigaSpace.write(spaceDocument2);
+        gigaSpace.write(spaceDocument2);
         SpaceDocument spaceDocument3 = new SpaceDocument(typeDescriptor.getTypeName());
-        sourceGigaSpace.write(spaceDocument3);
+        gigaSpace.write(spaceDocument3);
 
-        Assert.assertThat(sourceGigaSpace.count(new SpaceDocument(typeDescriptor.getTypeName())), equalTo(3));
+        Assert.assertThat(gigaSpace.count(new SpaceDocument(typeDescriptor.getTypeName())), equalTo(3));
 
         CopyRequest request = new CopyRequest();
-        request.url = "/./source";
+        request.url = gigaSpaceUrl;
         request.sql = "copy " + typeDescriptor.getTypeName() + " from 1 only 1";
         request.targetUrl = "/./target";
 
@@ -91,20 +89,20 @@ public class CopierTest {
     @Test
     public void shouldCopyDocumentOnly() throws Exception {
         final SpaceTypeDescriptor typeDescriptor = randomDescriptor();
-        sourceGigaSpace.getTypeManager().registerTypeDescriptor(typeDescriptor);
+        gigaSpace.getTypeManager().registerTypeDescriptor(typeDescriptor);
         targetGigaSpace.getTypeManager().registerTypeDescriptor(typeDescriptor);
 
         SpaceDocument spaceDocument1 = new SpaceDocument(typeDescriptor.getTypeName());
-        sourceGigaSpace.write(spaceDocument1);
+        gigaSpace.write(spaceDocument1);
         SpaceDocument spaceDocument2 = new SpaceDocument(typeDescriptor.getTypeName());
-        sourceGigaSpace.write(spaceDocument2);
+        gigaSpace.write(spaceDocument2);
         SpaceDocument spaceDocument3 = new SpaceDocument(typeDescriptor.getTypeName());
-        sourceGigaSpace.write(spaceDocument3);
+        gigaSpace.write(spaceDocument3);
 
-        Assert.assertThat(sourceGigaSpace.count(new SpaceDocument(typeDescriptor.getTypeName())), equalTo(3));
+        Assert.assertThat(gigaSpace.count(new SpaceDocument(typeDescriptor.getTypeName())), equalTo(3));
 
         CopyRequest request = new CopyRequest();
-        request.url = "/./source";
+        request.url = gigaSpaceUrl;
         request.sql = "copy " + typeDescriptor.getTypeName() + " only 1";
         request.targetUrl = "/./target";
 
@@ -122,25 +120,25 @@ public class CopierTest {
     public void shouldCopyWithWhere() throws Exception {
         SpaceTypeDescriptor typeDescriptor = new SpaceTypeDescriptorBuilder("Moma")
                 .idProperty("id", true).create();
-        sourceGigaSpace.getTypeManager().registerTypeDescriptor(typeDescriptor);
+        gigaSpace.getTypeManager().registerTypeDescriptor(typeDescriptor);
         targetGigaSpace.getTypeManager().registerTypeDescriptor(typeDescriptor);
 
         SpaceDocument spaceDocument1 = new SpaceDocument("Moma");
         spaceDocument1.setProperty("a", 1);
-        sourceGigaSpace.write(spaceDocument1);
+        gigaSpace.write(spaceDocument1);
 
         SpaceDocument spaceDocument2 = new SpaceDocument("Moma");
         spaceDocument2.setProperty("a", 2);
-        sourceGigaSpace.write(spaceDocument2);
+        gigaSpace.write(spaceDocument2);
 
         SpaceDocument spaceDocument3 = new SpaceDocument("Moma");
         spaceDocument3.setProperty("a", 3);
-        sourceGigaSpace.write(spaceDocument3);
+        gigaSpace.write(spaceDocument3);
 
-        Assert.assertThat(sourceGigaSpace.count(new SpaceDocument("Moma")), equalTo(3));
+        Assert.assertThat(gigaSpace.count(new SpaceDocument("Moma")), equalTo(3));
 
         CopyRequest request = new CopyRequest();
-        request.url = "/./source";
+        request.url = gigaSpaceUrl;
         request.sql = "copy Moma where a = 2";
         request.targetUrl = "/./target";
 
@@ -155,16 +153,16 @@ public class CopierTest {
     public void shouldCopyAndReset() throws Exception {
         SpaceTypeDescriptor typeDescriptor = new SpaceTypeDescriptorBuilder("Vombat")
                 .idProperty("id", true).create();
-        sourceGigaSpace.getTypeManager().registerTypeDescriptor(typeDescriptor);
+        gigaSpace.getTypeManager().registerTypeDescriptor(typeDescriptor);
         targetGigaSpace.getTypeManager().registerTypeDescriptor(typeDescriptor);
 
         SpaceDocument spaceDocument1 = new SpaceDocument("Vombat");
-        sourceGigaSpace.write(spaceDocument1);
+        gigaSpace.write(spaceDocument1);
 
-        Assert.assertThat(sourceGigaSpace.count(new SpaceDocument("Vombat")), equalTo(1));
+        Assert.assertThat(gigaSpace.count(new SpaceDocument("Vombat")), equalTo(1));
 
         CopyRequest request = new CopyRequest();
-        request.url = "/./source";
+        request.url = gigaSpaceUrl;
         request.sql = "copy Vombat reset id";
         request.targetUrl = "/./target";
 

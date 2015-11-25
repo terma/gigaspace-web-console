@@ -44,6 +44,12 @@
       "libs": [
         "${localRepository}/com/h2database/h2/1.4.188/h2-1.4.188.jar"
       ]
+    },
+    {
+      "name": "com.mysql.jdbc.Driver",
+      "libs": [
+        "${localRepository}/mysql/mysql-connector-java/5.1.37/mysql-connector-java-5.1.37.jar"
+      ]
     }
   ],
   "links": [
@@ -122,6 +128,13 @@
       "user": "",
       "password": "",
       "driver": "org.h2.Driver"
+    },
+    {
+      "name": "mysql",
+      "url": "jdbc:mysql://localhost/test",
+      "user": "",
+      "password": "",
+      "driver": "com.mysql.jdbc.Driver"
     }
   ],
   "templates": [

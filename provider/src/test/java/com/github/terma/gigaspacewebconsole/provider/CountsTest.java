@@ -26,14 +26,12 @@ import org.openspaces.core.GigaSpace;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CountsTest {
+public class CountsTest extends TestWithGigaSpace {
 
     @Test
     public void shouldReturnEmptyResultIfNoTypesInSpace() {
-        GigaSpaceUtils.getGigaSpace("/./ff");
-
         GeneralRequest countsRequest = new GeneralRequest();
-        countsRequest.url = "/./ff?";
+        countsRequest.url = gigaSpaceUrl;
         final CountsResponse countsResponse = new Counts().counts(countsRequest);
 
         // then only Object default
@@ -42,7 +40,7 @@ public class CountsTest {
 
     @Test
     public void shouldReturnCountsOfTypes() {
-        String url = "/./ff1?";
+        String url = gigaSpaceUrl;
         final GigaSpace gigaSpace = GigaSpaceUtils.getGigaSpace(url);
         GigaSpaceUtils.registerType(gigaSpace, "com.a");
 

@@ -31,7 +31,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.zip.ZipInputStream;
 
-public class ImporterTest {
+public class ImporterTest extends TestWithGigaSpace {
 
     private GigaSpace exportGigaSpace;
     private byte[] zip;
@@ -39,22 +39,21 @@ public class ImporterTest {
 
     @Before
     public void before() throws Exception {
-        exportGigaSpace = GigaSpaceUtils.getGigaSpace("/./export-import");
-        exportGigaSpace.clear(null);
+        exportGigaSpace = gigaSpace;
 
-        GigaSpaceUtils.registerType(exportGigaSpace, "A");
-        GigaSpaceUtils.writeDocument(exportGigaSpace, "A");
-        GigaSpaceUtils.writeDocument(exportGigaSpace, "A");
-        Assert.assertEquals(2, exportGigaSpace.count(new SpaceDocument("A")));
+        GigaSpaceUtils.registerType(gigaSpace, "A");
+        GigaSpaceUtils.writeDocument(gigaSpace, "A");
+        GigaSpaceUtils.writeDocument(gigaSpace, "A");
+        Assert.assertEquals(2, gigaSpace.count(new SpaceDocument("A")));
 
-        GigaSpaceUtils.registerType(exportGigaSpace, "B");
-        GigaSpaceUtils.writeDocument(exportGigaSpace, "B");
-        Assert.assertEquals(1, exportGigaSpace.count(new SpaceDocument("B")));
+        GigaSpaceUtils.registerType(gigaSpace, "B");
+        GigaSpaceUtils.writeDocument(gigaSpace, "B");
+        Assert.assertEquals(1, gigaSpace.count(new SpaceDocument("B")));
 
-        GigaSpaceUtils.registerType(exportGigaSpace, "C");
+        GigaSpaceUtils.registerType(gigaSpace, "C");
 
         ExportRequest request = new ExportRequest();
-        request.url = "/./export-import";
+        request.url = gigaSpaceUrl;
 
         // when
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();

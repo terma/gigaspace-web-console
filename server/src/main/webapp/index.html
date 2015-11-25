@@ -7,15 +7,22 @@
     <script type="text/javascript" src="js/jquery-1.11.3.js"></script>
     <script type="text/javascript" src="js/jquery-ui.min.js"></script>
 
+    <link href="c3-0.4.10/c3.min.css" rel="stylesheet" type="text/css">
+
+    <script src="c3-0.4.10/d3.min.js" charset="utf-8"></script>
+    <script src="c3-0.4.10/c3.min.js"></script>
+
     <script type="text/javascript" src="js/angular.min.js"></script>
 
     <script type="text/javascript" src="js/common.js"></script>
     <script type="text/javascript" src="js/fixed-header.js"></script>
     <script type="text/javascript" src="js/fix-horizontally.js"></script>
     <script type="text/javascript" src="js/query-result-table.js"></script>
+    <script type="text/javascript" src="js/count-history-chart.js"></script>
     <script type="text/javascript" src="js/settings.js"></script>
     <script type="text/javascript" src="js/error.js"></script>
     <script type="text/javascript" src="js/engine.js"></script>
+    <script type="text/javascript" src="js/types.js"></script>
 
     <script type="text/javascript" src="js/codemirror.js"></script>
     <script type="text/javascript" src="js/ui-codemirror.min.js"></script>
@@ -184,60 +191,8 @@
             </span>
         </div>
     </div>
-
-    <div ng-show="context.selectedGigaspace.selectedTab == 'types'" class="normal-padding">
-        <p ng-show="context.selectedGigaspace.typesTab.status">{{ context.selectedGigaspace.typesTab.status }}</p>
-
-        <div ng-show="context.selectedGigaspace.typesTab.error">
-            <p/>
-            <a href="javascript:void(0);" ng-click="forceStartCheckTypes()">Try Again</a>
-            <pre class="mono-error">{{ context.selectedGigaspace.typesTab.error.exceptionClass }}</pre>
-            <pre class="mono-error">{{ context.selectedGigaspace.typesTab.error.message }}</pre>
-            <pre class="mono-error">{{ context.selectedGigaspace.typesTab.error.stacktrace }}</pre>
-        </div>
-
-        <p/>
-
-        <p ng-show="!context.selectedGigaspace.typesTab.checking && !context.selectedGigaspace.typesTab.error">
-            Monitoring stopped <a href="javascript:void(0);" ng-click="startCheckTypes()">Start Again</a>
-        </p>
-
-        <div ng-show="context.selectedGigaspace.typesTab.data">
-            <input type="text" ng-model="context.selectedGigaspace.typesTab.filter" placeholder="Type Filter"
-                   class="mono-text">
-            <a href="javascript:void(0);" ng-click="context.selectedGigaspace.typesTab.hideZero = false"
-               ng-show="context.selectedGigaspace.typesTab.hideZero">Show Zero</a>
-            <a href="javascript:void(0);" ng-click="context.selectedGigaspace.typesTab.hideZero = true"
-               ng-show="!context.selectedGigaspace.typesTab.hideZero">Hide Zero</a>
-
-            <p></p>
-
-            <table class="result">
-                <tbody>
-                <tr class="mono-text">
-                    <td>Total</td>
-                    <td align="right">{{ counts.total.count }}</td>
-                    <td align="right">{{ prevCountStatus(counts.total) }}</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr ng-repeat="count in context.selectedGigaspace.typesTab.data | filter : filterCounts | orderBy:'name'"
-                    class="mono-text"
-                    ng-click="context.selectedGigaspace.typesTab.selectedCount = count"
-                    ng-class="context.selectedGigaspace.typesTab.selectedCount == count ? 'selected' : ''">
-                    <td class="{{ getCountClass(count) }}">{{ count.name }}</td>
-                    <td align="right">{{ count.count }}</td>
-                    <td align="right">{{ prevCountStatus(count) }}</td>
-                    <td>
-                        <a href="javascript:void(0);" ng-click="openQueryTabWithSelectFor(count.name)">select</a>
-                        <a href="javascript:void(0);" ng-click="openQueryTabWithUpdateFor(count.name)">update</a>
-                        <a href="javascript:void(0);" ng-click="openQueryTabWithDeleteFor(count.name)">delete</a>
-                        <a href="javascript:void(0);" ng-click="openQueryTabWithTypeFor(count.name)">type</a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+    <div ng-show="context.selectedGigaspace.selectedTab == 'types'" class="normal-padding"
+         ng-include="'types.html'"></div>
 
     <div ng-show="context.selectedGigaspace.selectedTab == 'query'">
         <div class="fix-horizontally">

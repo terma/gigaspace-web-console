@@ -18,11 +18,8 @@ import com.gigaspaces.metadata.SpaceTypeDescriptor;
 import com.gigaspaces.metadata.SpaceTypeDescriptorBuilder;
 import com.github.terma.gigaspacewebconsole.core.ExploreRequest;
 import com.github.terma.gigaspacewebconsole.core.ExploreResponse;
-import com.github.terma.gigaspacewebconsole.provider.driver.DestroeableGigaSpace;
 import com.github.terma.gigaspacewebconsole.provider.driver.GigaSpaceUtils;
-import org.junit.After;
 import org.junit.Test;
-import org.openspaces.core.GigaSpace;
 
 import java.util.Arrays;
 
@@ -30,16 +27,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
-public class ExplorerTest {
-
-    private DestroeableGigaSpace destroeableGigaSpace = GigaSpaceUtils.getUniqueDestroeableGigaSpace();
-    private GigaSpace gigaSpace = destroeableGigaSpace.getGigaSpace();
-    private String url = gigaSpace.getSpace().getURL().getURL();
-
-    @After
-    public void destroy() throws Exception {
-        destroeableGigaSpace.destroy();
-    }
+public class ExplorerTest extends TestWithGigaSpace {
 
     @Test(expected = NullPointerException.class)
     public void throwExceptionIfNullRequest() throws Exception {
@@ -63,7 +51,7 @@ public class ExplorerTest {
         gigaSpace.write(mSpaceDocument);
 
         ExploreRequest request = new ExploreRequest();
-        request.url = url;
+        request.url = gigaSpaceUrl;
         ExploreResponse response = Explorer.explore(request);
 
         assertEquals(3, response.tables.size());
@@ -79,7 +67,7 @@ public class ExplorerTest {
         gigaSpace.getTypeManager().registerTypeDescriptor(typeDescriptor);
 
         ExploreRequest request = new ExploreRequest();
-        request.url = url;
+        request.url = gigaSpaceUrl;
         ExploreResponse response = Explorer.explore(request);
         assertThat(response.tables.size(), equalTo(1));
     }
@@ -93,7 +81,7 @@ public class ExplorerTest {
         gigaSpace.getTypeManager().registerTypeDescriptor(typeDescriptor);
 
         ExploreRequest request = new ExploreRequest();
-        request.url = url;
+        request.url = gigaSpaceUrl;
         ExploreResponse response = Explorer.explore(request);
         assertThat(response.tables.get(1).columns, equalTo(Arrays.asList("fixed1", "fixed2", "id")));
     }
@@ -112,7 +100,7 @@ public class ExplorerTest {
         gigaSpace.write(mSpaceDocument);
 
         ExploreRequest request = new ExploreRequest();
-        request.url = url;
+        request.url = gigaSpaceUrl;
         ExploreResponse response = Explorer.explore(request);
         assertThat(response.tables.get(1).columns, equalTo(Arrays.asList("id", "dynamic1", "dynamic2")));
     }

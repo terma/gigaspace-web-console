@@ -17,7 +17,6 @@ limitations under the License.
 package com.github.terma.gigaspacewebconsole.provider;
 
 import com.github.terma.gigaspacewebconsole.core.ExecuteRequest;
-import com.github.terma.gigaspacewebconsole.core.config.Config;
 import com.github.terma.gigaspacewebconsole.core.config.ConfigFactory;
 import com.github.terma.gigaspacewebconsole.provider.groovy.ObjectGroovyExecuteResponseStream;
 import org.junit.Before;
@@ -26,19 +25,19 @@ import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
 
-public class GroovyExecutorTest {
+public class GroovyExecutorTest extends TestWithGigaSpace {
 
     private ObjectGroovyExecuteResponseStream responseStream = new ObjectGroovyExecuteResponseStream();
     private ExecuteRequest request = new ExecuteRequest();
 
     @BeforeClass
-    public static void init() {
+    public static void configureNoneConfig() {
         System.setProperty(ConfigFactory.CONFIG_PATH_SYSTEM_PROPERTY, ConfigFactory.NONE);
     }
 
     @Before
     public void before() {
-        request.url = "/./" + this.getClass().getName();
+        request.url = gigaSpaceUrl;
     }
 
     @Test
