@@ -14,6 +14,7 @@
  limitations under the License.
  */
 
+// todo if we count very long without user better to stop as now we have history
 App.controller('TypesController', ['$rootScope', '$scope', '$http', '$q', '$timeout',
     function ($rootScope, $scope, $http, $q, $timeout) {
         $scope.context = $rootScope.context; // todo should be removed in future, looks like hack
@@ -25,12 +26,22 @@ App.controller('TypesController', ['$rootScope', '$scope', '$http', '$q', '$time
         };
 
         $scope.toggleHistory = function (count) {
-            count.showHistory = !count.showHistory;
+            if (count.history) {
+                count.history = void 0;
+                notifyCountHistoryCharts();
+            } else {
+                $scope.resetHistory(count);
+            }
         };
 
         $scope.resetHistory = function (count) {
-            count.history = void 0;
+            count.history = {time: ['x'], count: ['data']};
+            notifyCountHistoryCharts();
         };
+
+        function notifyCountHistoryCharts() {
+            $scope.tick = !$scope.tick;
+        }
 
         // todo duplicate from engine.js
         function findPredefinedGigaspace(name) {
@@ -138,10 +149,10 @@ App.controller('TypesController', ['$rootScope', '$scope', '$http', '$q', '$time
                     }
                     count.count = newCount;
 
-                    if (!count.history) count.history = {time: ['x'], count: ['data']};
-                    count.history.time.push(time);
-                    count.history.count.push(newCount);
-                    // todo remove old data to avoid overflow
+                    if (count.history) {
+                        count.history.time.push(time);
+                        count.history.count.push(newCount);
+                    }
                 }
 
                 function findCount(counts, name) {
@@ -188,6 +199,8 @@ App.controller('TypesController', ['$rootScope', '$scope', '$http', '$q', '$time
 
                 if (!typesTab.total) typesTab.total = {count: total};
                 updateCount(typesTab.total, total);
+
+                notifyCountHistoryCharts();
 
                 $timeout(function () {
                     $scope.queryCounts(gigaspace);

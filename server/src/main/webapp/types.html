@@ -48,14 +48,14 @@
                     <a href="javascript:void(0);" ng-click="openQueryTabWithDeleteFor(count.name)">delete</a>
                     <a href="javascript:void(0);" ng-click="openQueryTabWithTypeFor(count.name)">type</a>
                     <a href="javascript:void(0);" ng-click="toggleHistory(count)">history</a>
-                    <a ng-show="count.showHistory" href="javascript:void(0);" ng-click="resetHistory(count)">reset</a>
+                    <a ng-show="count.history" href="javascript:void(0);" ng-click="resetHistory(count)">reset</a>
                 </td>
             </tr>
-            <tr ng-repeat-end ng-if="count.showHistory">
+            <tr ng-repeat-end ng-if="count.history">
                 <td colspan="99">
                     <!--todo Started, Current (Duration)-->
                     <!--todo Chart with Average, show error connection as negative spike-->
-                    <count-history-chart chc-count="count"/>
+                    <count-history-chart chc-count="count" chc-trigger="tick"/>
                 </td>
             </tr>
             </tbody>

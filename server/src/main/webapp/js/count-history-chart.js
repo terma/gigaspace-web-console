@@ -14,15 +14,11 @@
  limitations under the License.
  */
 
-App.directive('countHistoryChart', ['$interval', function ($interval) {
-    log.log('directive called');
-
+App.directive('countHistoryChart', [function () {
     return {
         restrict: 'E',
-        scope: {
-            count: '=chcCount'
-        },
-        link: function ($scope, element) {
+        link: function ($scope, element, attrs) {
+            var count = $scope.$eval(attrs.chcCount);
             var chartDiv = element.append('<div></div>');
 
             var chart = c3.generate({
@@ -32,22 +28,13 @@ App.directive('countHistoryChart', ['$interval', function ($interval) {
                 size: {height: 200, width: 900}
             });
 
-            update();
-
-            var interval = $interval(function () {
+            $scope.$watch(attrs.chcTrigger, function () {
                 update();
-            }, 5000);
-
-            $scope.$on('$destroy', function () {
-                $interval.cancel(interval);
             });
 
             function update() {
-                if (!$scope.count) return;
-                var history = $scope.count.history;
-                if (!history) return;
-
-                chart.load({columns: [history.time, history.count]});
+                if (!count || !count.history) return;
+                chart.load({columns: [count.history.time, count.history.count]});
             }
         }
     }
