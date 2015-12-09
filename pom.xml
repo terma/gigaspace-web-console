@@ -4,7 +4,7 @@
 
     <groupId>com.github.terma.gigaspace-web-console</groupId>
     <artifactId>aggregator</artifactId>
-    <version>1.0.13</version>
+    <version>1.0.13-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>GigaSpace Web Console</name>
@@ -229,7 +229,7 @@
         <developerConnection>scm:git:https://github.com/terma/gigaspace-web-console.git</developerConnection>
         <connection>scm:git:https://github.com/terma/gigaspace-web-console.git</connection>
         <url>https://github.com/terma/gigaspace-web-console</url>
-        <tag>aggregator-1.0.13</tag>
+        <tag>aggregator-1.0.9</tag>
     </scm>
 
     <repositories>
