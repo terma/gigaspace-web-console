@@ -2,21 +2,38 @@
 
 [![Build Status](https://travis-ci.org/terma/gigaspace-web-console.svg)](https://travis-ci.org/terma/gigaspace-web-console) [![Coverage Status](https://coveralls.io/repos/terma/gigaspace-web-console/badge.svg?branch=master&service=github)](https://coveralls.io/github/terma/gigaspace-web-console?branch=master) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.terma.gigaspace-web-console/server/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.terma.gigaspace-web-console/server/)
 
+Powerful alternative for GigaSpace Management Console when you have a lot of work with spaces data, especially for Quality Assurance Team. Open Source Apache 2.0
 
-Free lightweight java web application. Powerful alternative for GigaSpace Management Console when you have a lot of work with spaces data, especially for Quality Assurance Team.
-
-* [Features](#key-features)
+* [42](#42)
+ * [License](#license)
+ * [Contacts](#contacts)
+ * [Features](#key-features)
 * [How to run](#how-to-run)
 * [How to use](#how-to-use)
  * [Execute SQL Queries](#execute-sql-queries)
  * [Registered Types and Counts](#registered-types-and-counts)
+   * [Counts History](#counts-history) 
  * [Execute Groovy](#work-with-groovy)
  * [Copy data between spaces](#copy-data-between-spaces)
  * [Export / Import data](#export--import-data)
 
-# Key Features 
+# 42
 
-_Almost everything what you can't find in GigaSpace Management Console for data quering_
+## License
+
+[Apache 2.0](https://github.com/terma/gigaspace-web-console/blob/master/LICENSE)
+
+## Contacts 
+
+_Thx a lot for any feedback_
+
+* Convert you point to feature or defect [here](https://github.com/terma/gigaspace-web-console/issues)
+* artem.stasuk@gmail.com
+* Skype artem.stasuk
+
+## Key Features 
+
+_Almost everything what you want but can't find in GigaSpace Management Console for data quering_
 
 * Supports all versions of GigaSpace starts from 9.X (never tested with previous) from one page
 * One click switch between different instances, versions and spaces
@@ -141,6 +158,12 @@ That's all
 ## Registered types and counts
 
 ![Registered Types and Counts](https://raw.githubusercontent.com/terma/gigaspace-sql-console/master/img/types.png)
+
+### Counts History
+
+On Types Tab you for any type you can click History to track dynamic of count
+
+![Counts History](https://raw.githubusercontent.com/terma/gigaspace-sql-console/master/img/counts-history.png)
 
 ## Work with Groovy
 
