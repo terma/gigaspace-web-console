@@ -4,6 +4,7 @@
         removeFixed: function (table) {
             var fixedHeader = table.parent().children(".fixed");
             fixedHeader.remove();
+            log.log('remove');
         },
 
         createFixed: function (table) {
@@ -42,13 +43,17 @@
                 var table = $(this);
                 var tableOffset = table.offset();
 
-                var tableOffsetTop = tableOffset.top;
-                var tableOffsetBottom = tableOffsetTop + table.height() - table.children("thead").height();
-
-                if (offsetTop < tableOffsetTop || offsetTop > tableOffsetBottom) {
+                if (table.width() < 1) {
                     fixedHeaders.removeFixed(table);
-                } else if (offsetTop >= tableOffsetTop && offsetTop <= tableOffsetBottom) {
-                    fixedHeaders.showFixed(table, offsetLeft, tableOffset);
+                } else {
+                    var tableOffsetTop = tableOffset.top;
+                    var tableOffsetBottom = tableOffsetTop + table.height() - table.children("thead").height();
+
+                    if (offsetTop < tableOffsetTop || offsetTop > tableOffsetBottom) {
+                        fixedHeaders.removeFixed(table);
+                    } else if (offsetTop >= tableOffsetTop && offsetTop <= tableOffsetBottom) {
+                        fixedHeaders.showFixed(table, offsetLeft, tableOffset);
+                    }
                 }
             });
         }

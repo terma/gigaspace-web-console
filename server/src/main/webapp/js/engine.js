@@ -181,6 +181,8 @@ App.controller("controller", [
         }
 
         $scope.executeQuery = function () {
+            window.fixHorizontally.reset();
+
             if ($scope.isCredentialInvalid()) return;
 
             executeQueryToSmt(function (lines) {
@@ -309,6 +311,7 @@ App.controller("controller", [
 
         $scope.closeTabs = function () {
             $scope.stopCheckTypes();
+            window.fixHorizontally.reset();
         };
 
         $scope.openTypesTab = function () {

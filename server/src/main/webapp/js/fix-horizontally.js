@@ -1,5 +1,13 @@
 (function () {
 
+    window.fixHorizontally = {
+        reset: resetScroll
+    };
+
+    function resetScroll() {
+        $(document).scrollLeft(0);
+    }
+
     function onScroll() {
         var scrollLeft = $(document).scrollLeft();
 
