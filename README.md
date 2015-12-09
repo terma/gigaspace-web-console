@@ -4,9 +4,10 @@
 
 Powerful alternative for GigaSpace Management Console when you have a lot of work with spaces data, especially for Quality Assurance Team. Open Source Apache 2.0
 
-* [License](#license)
-* [Contacts](#contacts)
-* [Features](#key-features)
+* [42](#42)
+ * [License](#license)
+ * [Contacts](#contacts)
+ * [Features](#key-features)
 * [How to run](#how-to-run)
 * [How to use](#how-to-use)
  * [Execute SQL Queries](#execute-sql-queries)
@@ -16,11 +17,13 @@ Powerful alternative for GigaSpace Management Console when you have a lot of wor
  * [Copy data between spaces](#copy-data-between-spaces)
  * [Export / Import data](#export--import-data)
 
-# License
+# 42
+
+## License
 
 [Apache 2.0](https://github.com/terma/gigaspace-web-console/blob/master/LICENSE)
 
-# Contacts 
+## Contacts 
 
 _Thx a lot for any feedback_
 
@@ -28,7 +31,7 @@ _Thx a lot for any feedback_
 * artem.stasuk@gmail.com
 * Skype artem.stasuk
 
-# Key Features 
+## Key Features 
 
 _Almost everything what you want but can't find in GigaSpace Management Console for data quering_
 
