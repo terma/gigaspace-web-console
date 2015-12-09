@@ -10,6 +10,7 @@ Free lightweight java web application. Powerful alternative for GigaSpace Manage
 * [How to use](#how-to-use)
  * [Execute SQL Queries](#execute-sql-queries)
  * [Registered Types and Counts](#registered-types-and-counts)
+   * [Counts History](#counts-history) 
  * [Execute Groovy](#work-with-groovy)
  * [Copy data between spaces](#copy-data-between-spaces)
  * [Export / Import data](#export--import-data)
@@ -141,6 +142,12 @@ That's all
 ## Registered types and counts
 
 ![Registered Types and Counts](https://raw.githubusercontent.com/terma/gigaspace-sql-console/master/img/types.png)
+
+### Counts History
+
+On Types Tab you for any type you can click History to track dynamic of count
+
+![Counts History](https://raw.githubusercontent.com/terma/gigaspace-sql-console/master/img/counts-history.png)
 
 ## Work with Groovy
 
