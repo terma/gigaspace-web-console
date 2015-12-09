@@ -18,7 +18,7 @@ Powerful alternative for GigaSpace Management Console when you have a lot of wor
 
 # License
 
-Apache 2.0
+[Apache 2.0](https://github.com/terma/gigaspace-web-console/blob/master/LICENSE)
 
 # Contacts 
 
