@@ -20,6 +20,7 @@
     <script type="text/javascript" src="js/fixed-header.js"></script>
     <script type="text/javascript" src="js/fix-horizontally.js"></script>
     <script type="text/javascript" src="js/query-result-table.js"></script>
+    <script type="text/javascript" src="js/nice-status.js"></script>
     <script type="text/javascript" src="js/table-goto.js"></script>
     <script type="text/javascript" src="js/count-history-chart.js"></script>
     <script type="text/javascript" src="js/settings.js"></script>
@@ -172,7 +173,7 @@
         <div ng-show="context.selectedGigaspace.copyTab.status">
             <p></p>
 
-            {{ context.selectedGigaspace.copyTab.status }}
+            <span nice-status ns-message="context.selectedGigaspace.copyTab.status"></span>
         </div>
 
         <div er-error="context.selectedGigaspace.copyTab.error"></div>
@@ -183,7 +184,7 @@
 
             <div er-error="query.error"></div>
 
-            <p ng-show="query.status">{{ query.status }}</p>
+            <p ng-if="query.status" nice-status ns-message="query.status"></p>
 
             <span ng-show="query.count != undefined">
                 Was copied {{ query.count }}
@@ -204,48 +205,46 @@
                            class="mono-text"></ui-codemirror>
         </div>
 
-        <!--<div>-->
-            <div class="fix-horizontally">
-                <div class="normal-padding">
-                    <div id="autocompete">
-                        <a ng-repeat="item in autocomplete | filter : autocompletePattern | orderBy : '+' | limitTo : 10" href="javascript:void(0);" ng-click="injectAutocomplete(item)">{{ ::item }}</a>
-                    </div>
-                    <p/>
-
-                    <a ng-click="executeQuery()" href="javascript:void(0);">Execute</a>
-                    <a ng-click="executeToCsv()" href="javascript:void(0);">To CSV</a>
-
-                    <p ng-show="context.selectedGigaspace.queryTab.selectedEditor.status">
-                        {{ context.selectedGigaspace.queryTab.selectedEditor.status }}
-                    </p>
+        <div class="fix-horizontally">
+            <div class="normal-padding">
+                <div id="autocompete">
+                    <a ng-repeat="item in autocomplete | filter : autocompletePattern | orderBy : '+' | limitTo : 10"
+                       href="javascript:void(0);" ng-click="injectAutocomplete(item)">{{ ::item }}</a>
                 </div>
-            </div>
-
-            <div class="query" ng-repeat="query in context.selectedGigaspace.queryTab.selectedEditor.queries">
-                <div class="fix-horizontally">
-                    <h4 class="normal-padding">Results {{ query.data.data.length }} for {{ query.sql }}</h4>
-                </div>
-
-                <div er-error="query.error" class="normal-padding"></div>
-
-                <div class="fix-horizontally">
-                    <p ng-show="query.status" class="normal-padding">{{ query.status }}</p>
-
-                    <div ng-if="query.data" class="normal-padding table-goto-target">
-                        <a href="javascript:void(0);" ng-click="toggleShowAllText(query)">Show/Hide all text</a>
-                    </div>
-                </div>
-
                 <p/>
 
-                <div class="normal-padding">
-                    <query-result-table qrt-model="query.data"
-                                        qrt-show-all-text="query.data.showAllText"
-                                        qrt-column-is-timestamp="queryColumnIsTimestamp"
-                                        qrt-column-to-timestamp="queryColumnToTimestamp"></query-result-table>
+                <a ng-click="executeQuery()" href="javascript:void(0);">Execute</a>
+                <a ng-click="executeToCsv()" href="javascript:void(0);">To CSV</a>
+
+                <p ng-if="context.selectedGigaspace.queryTab.selectedEditor.status" nice-status
+                   ns-message="context.selectedGigaspace.queryTab.selectedEditor.status"></p>
+            </div>
+        </div>
+
+        <div class="query" ng-repeat="query in context.selectedGigaspace.queryTab.selectedEditor.queries">
+            <div class="fix-horizontally">
+                <h4 class="normal-padding">Results {{ query.data.data.length }} for {{ query.sql }}</h4>
+            </div>
+
+            <div er-error="query.error" class="normal-padding"></div>
+
+            <div class="fix-horizontally">
+                <p ng-show="query.status" class="normal-padding" nice-status ns-message="query.status"></p>
+
+                <div ng-if="query.data" class="normal-padding table-goto-target">
+                    <a href="javascript:void(0);" ng-click="toggleShowAllText(query)">Show/Hide all text</a>
                 </div>
             </div>
-        <!--</div>-->
+
+            <p/>
+
+            <div class="normal-padding">
+                <query-result-table qrt-model="query.data"
+                                    qrt-show-all-text="query.data.showAllText"
+                                    qrt-column-is-timestamp="queryColumnIsTimestamp"
+                                    qrt-column-to-timestamp="queryColumnToTimestamp"></query-result-table>
+            </div>
+        </div>
     </div>
 </div>
 

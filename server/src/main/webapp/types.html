@@ -1,5 +1,6 @@
 <div ng-controller="TypesController">
-    <p ng-show="context.selectedGigaspace.typesTab.status">{{ context.selectedGigaspace.typesTab.status }}</p>
+    <p ng-if="context.selectedGigaspace.typesTab.status" nice-status
+       ns-message="context.selectedGigaspace.typesTab.status"></p>
 
     <div ng-show="context.selectedGigaspace.typesTab.error">
         <p/>
