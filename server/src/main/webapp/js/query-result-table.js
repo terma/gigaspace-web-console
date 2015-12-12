@@ -113,6 +113,8 @@ App.directive('queryResultTable', ['$rootScope', '$filter', function ($rootScope
                 });
 
                 element.append(table);
+
+                window.tableGoto(element.parent().parent().find('.table-goto-target'), table);
             }
 
             $scope.$watch(attrs.qrtModel, function (newValue) {
