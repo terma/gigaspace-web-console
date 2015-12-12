@@ -66,7 +66,6 @@ Useful parameters:
 <dependency>
     <groupId>com.github.terma.gigaspace-web-console</groupId>
     <artifactId>server</artifactId>
-    <version>0.0.43</version>
 </dependency>
 ```
 
