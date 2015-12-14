@@ -75,7 +75,7 @@ public class Executor {
             (final SqlResult sqlResult, final ExecuteResponseStream responseStream)
             throws IOException, SQLException {
         responseStream.writeHeader(sqlResult.getColumns());
-        while (sqlResult.next()) responseStream.writeRow(sqlResult.getRow());
+        while (sqlResult.next()) responseStream.writeRow(sqlResult.getRow(), sqlResult.getRowTypes());
         responseStream.close();
     }
 

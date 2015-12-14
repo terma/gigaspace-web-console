@@ -232,7 +232,8 @@
                 <p ng-show="query.status" class="normal-padding" nice-status ns-message="query.status"></p>
 
                 <div ng-if="query.data" class="normal-padding table-goto-target">
-                    <a href="javascript:void(0);" ng-click="toggleShowAllText(query)">Show/Hide all text</a>
+                    <a href="javascript:void(0);" ng-click="toggleShowAllText(query)">All text</a>
+                    <a href="javascript:void(0);" ng-click="toggleTypes(query)">Types</a>
                 </div>
             </div>
 
@@ -241,6 +242,7 @@
             <div class="normal-padding">
                 <query-result-table qrt-model="query.data"
                                     qrt-show-all-text="query.data.showAllText"
+                                    qrt-show-types="query.data.showTypes"
                                     qrt-column-is-timestamp="queryColumnIsTimestamp"
                                     qrt-column-to-timestamp="queryColumnToTimestamp"></query-result-table>
             </div>

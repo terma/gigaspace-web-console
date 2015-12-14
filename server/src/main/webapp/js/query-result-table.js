@@ -14,7 +14,7 @@
  limitations under the License.
  */
 
-var App = angular.module("App", ["ui.codemirror"]);
+var App = angular.module('App', ['ui.codemirror']);
 
 App.directive('queryResultTable', ['$rootScope', '$filter', function ($rootScope, $filter) {
     log.log('directive called');
@@ -34,9 +34,10 @@ App.directive('queryResultTable', ['$rootScope', '$filter', function ($rootScope
 
             var model = void 0;
             var showAllText = false;
+            var showTypes = false;
             var selectedIndex = void 0;
 
-            function renderModel(restoreSelection) {
+            function renderModel() {
                 element.empty();
                 if (!model) return;
 
@@ -73,31 +74,35 @@ App.directive('queryResultTable', ['$rootScope', '$filter', function ($rootScope
                 var tbodyHtml = '';
                 angular.forEach(data, function (row) {
                     var trHtml = '';
-                    angular.forEach(row, function (value) {
-                        var renderValue = value;
 
-                        renderValue = nullAsString(value);
+                    var lengthWithoutType = row.length - 1;
+                    var types = row[row.length - 1];
+
+                    for (var i = 0; i < lengthWithoutType; i++) {
+                        var value = row[i];
+
+                        var renderValue = nullAsString(value);
                         if (!showAllText) {
                             renderValue = limitTo(renderValue, 50);
                             if (value && value.length > 50) renderValue += '...';
                         }
 
+                        var typesHtml = '';
+                        if (showTypes && types[i]) typesHtml = '<span class="result-value-type">' + types[i] + '</span> ';
+
                         var additionalClass = '';
                         if (!value) additionalClass = 'null-text';
 
                         trHtml += '<td class="result-value ' + additionalClass + '" valign="top">'
-                            + renderValue.escapeHtml() + '</td>';
-                    });
+                            + typesHtml + renderValue.escapeHtml() + '</td>';
+                    }
                     tbodyHtml += '<tr>' + trHtml + '</tr>';
                 });
                 tbody.append(tbodyHtml);
 
                 // restore selection
-                log.log('selectedIndex');
-                log.log(selectedIndex);
                 if (selectedIndex !== void 0) angular.element(tbody.children()[selectedIndex]).addClass('selected');
                 else selectedIndex = void 0;
-
 
                 function clickHandler(event) {
                     tbody.children().removeClass('selected');
@@ -127,11 +132,16 @@ App.directive('queryResultTable', ['$rootScope', '$filter', function ($rootScope
                 showAllText = newValue;
                 renderModel(true);
             });
+
+            $scope.$watch(attrs.qrtShowTypes, function (newValue) {
+                showTypes = newValue;
+                renderModel(true);
+            });
         }
     }
 }]);
 
-var htmlEscaper = /[&<>"'\/]/g;
+var htmlEscapeRegex = /[&<>"'\/]/g;
 var htmlEscapes = {
     '&': '&amp;',
     '<': '&lt;',
@@ -142,7 +152,7 @@ var htmlEscapes = {
 };
 
 String.prototype.escapeHtml = function () {
-    return this.replace(htmlEscaper, function (match) {
+    return this.replace(htmlEscapeRegex, function (match) {
         return htmlEscapes[match];
     });
 };

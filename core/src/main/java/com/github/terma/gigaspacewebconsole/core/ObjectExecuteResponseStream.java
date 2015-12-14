@@ -24,7 +24,7 @@ import java.util.Objects;
 public class ObjectExecuteResponseStream implements ExecuteResponseStream {
 
     private List<String> columns = new ArrayList<>();
-    private List<List<String>> data = new ArrayList<>();
+    private List<ObjectRow> data = new ArrayList<>();
 
     @Override
     public void writeHeader(List<String> columns) throws IOException {
@@ -32,8 +32,8 @@ public class ObjectExecuteResponseStream implements ExecuteResponseStream {
     }
 
     @Override
-    public void writeRow(List<String> values) throws IOException {
-        data.add(values);
+    public void writeRow(List<String> values, List<String> types) throws IOException {
+        data.add(new ObjectRow(values, types));
     }
 
     @Override
@@ -45,7 +45,7 @@ public class ObjectExecuteResponseStream implements ExecuteResponseStream {
         return columns;
     }
 
-    public List<List<String>> getData() {
+    public List<ObjectRow> getData() {
         return data;
     }
 
@@ -65,9 +65,9 @@ public class ObjectExecuteResponseStream implements ExecuteResponseStream {
 
     @Override
     public String toString() {
-        return "ObjectExecuteResponseStream{" +
-                "columns=" + columns +
-                ", data=" + data +
+        return "ObjectExecuteResponseStream {" +
+                "columns: " + columns +
+                ", data: " + data +
                 '}';
     }
 

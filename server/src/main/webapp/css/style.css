@@ -84,7 +84,10 @@ body {
 
     unicode-bidi: embed;
     white-space: pre;
+}
 
+.result-value-type {
+    color: #708;
 }
 
 .null-text {

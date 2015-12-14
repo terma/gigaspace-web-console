@@ -23,7 +23,7 @@ public interface ExecuteResponseStream {
 
     void writeHeader(List<String> columns) throws IOException;
 
-    void writeRow(List<String> values) throws IOException;
+    void writeRow(List<String> values, List<String> types) throws IOException;
 
     void close() throws IOException;
 

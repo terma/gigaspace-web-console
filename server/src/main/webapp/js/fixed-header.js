@@ -4,7 +4,6 @@
         removeFixed: function (table) {
             var fixedHeader = table.parent().children(".fixed");
             fixedHeader.remove();
-            log.log('remove');
         },
 
         createFixed: function (table) {

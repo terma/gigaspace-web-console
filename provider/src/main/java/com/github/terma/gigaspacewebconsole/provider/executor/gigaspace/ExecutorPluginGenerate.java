@@ -47,7 +47,7 @@ class ExecutorPluginGenerate implements ExecutorPlugin {
         GigaSpaceUtils.getGigaSpace(request).writeMultiple(spaceDocuments, WriteModifiers.NONE);
 
         responseStream.writeHeader(asList("affected_rows"));
-        responseStream.writeRow(asList(Integer.toString(spaceDocuments.length)));
+        responseStream.writeRow(asList(Integer.toString(spaceDocuments.length)), null);
         responseStream.close();
         return true;
     }

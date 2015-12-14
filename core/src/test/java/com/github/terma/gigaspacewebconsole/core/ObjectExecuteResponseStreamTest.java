@@ -20,8 +20,9 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
@@ -31,37 +32,37 @@ public class ObjectExecuteResponseStreamTest {
     @Test
     public void keepAllWrittenData() throws IOException {
         ObjectExecuteResponseStream responseStream = new ObjectExecuteResponseStream();
-        responseStream.writeRow(Arrays.asList("a", "b"));
-        responseStream.writeRow(Arrays.asList("c"));
+        responseStream.writeRow(asList("a", "b"), asList("String", "String"));
+        responseStream.writeRow(singletonList("c"), singletonList("char"));
 
         assertThat(responseStream.getData(),
-                equalTo(
-                        Arrays.asList(Arrays.asList("a", "b"),
-                                Arrays.asList("c"))));
+                equalTo(asList(
+                        new ObjectRow(asList("a", "b"), asList("String", "String")),
+                        new ObjectRow(singletonList("c"), singletonList("char")))));
     }
 
     @Test
     public void keepHeader() throws IOException {
         ObjectExecuteResponseStream responseStream = new ObjectExecuteResponseStream();
-        responseStream.writeHeader(Arrays.asList("c", "1"));
+        responseStream.writeHeader(asList("c", "1"));
 
-        assertThat(responseStream.getColumns(), equalTo(Arrays.asList("c", "1")));
+        assertThat(responseStream.getColumns(), equalTo(asList("c", "1")));
     }
 
     @Test
     public void supportEquals() throws IOException {
         ObjectExecuteResponseStream responseStream = new ObjectExecuteResponseStream();
-        responseStream.writeHeader(Arrays.asList("c", "1"));
-        responseStream.writeRow(new ArrayList<String>());
-        responseStream.writeRow(Arrays.asList("a", "b"));
+        responseStream.writeHeader(asList("c", "1"));
+        responseStream.writeRow(new ArrayList<String>(), new ArrayList<String>());
+        responseStream.writeRow(asList("a", "b"), asList("String", "String"));
 
         ObjectExecuteResponseStream equalsResponseStream = new ObjectExecuteResponseStream();
-        equalsResponseStream.writeHeader(Arrays.asList("c", "1"));
-        equalsResponseStream.writeRow(new ArrayList<String>());
-        equalsResponseStream.writeRow(Arrays.asList("a", "b"));
+        equalsResponseStream.writeHeader(asList("c", "1"));
+        equalsResponseStream.writeRow(new ArrayList<String>(), new ArrayList<String>());
+        equalsResponseStream.writeRow(asList("a", "b"), asList("String", "String"));
 
         ObjectExecuteResponseStream anotherResponseStream = new ObjectExecuteResponseStream();
-        anotherResponseStream.writeHeader(Arrays.asList("c", "1"));
+        anotherResponseStream.writeHeader(asList("c", "1"));
 
         assertThat(responseStream, equalTo(equalsResponseStream));
         assertThat(responseStream, not(equalTo(anotherResponseStream)));
@@ -70,17 +71,17 @@ public class ObjectExecuteResponseStreamTest {
     @Test
     public void supportHashCode() throws IOException {
         ObjectExecuteResponseStream responseStream = new ObjectExecuteResponseStream();
-        responseStream.writeHeader(Arrays.asList("c", "1"));
-        responseStream.writeRow(new ArrayList<String>());
-        responseStream.writeRow(Arrays.asList("a", "b"));
+        responseStream.writeHeader(asList("c", "1"));
+        responseStream.writeRow(new ArrayList<String>(), new ArrayList<String>());
+        responseStream.writeRow(asList("a", "b"), asList("String", "String"));
 
         ObjectExecuteResponseStream equalResponseStream = new ObjectExecuteResponseStream();
-        equalResponseStream.writeHeader(Arrays.asList("c", "1"));
-        equalResponseStream.writeRow(new ArrayList<String>());
-        equalResponseStream.writeRow(Arrays.asList("a", "b"));
+        equalResponseStream.writeHeader(asList("c", "1"));
+        equalResponseStream.writeRow(new ArrayList<String>(), new ArrayList<String>());
+        equalResponseStream.writeRow(asList("a", "b"), asList("String", "String"));
 
         ObjectExecuteResponseStream anotherResponseStream = new ObjectExecuteResponseStream();
-        anotherResponseStream.writeHeader(Arrays.asList("c", "1"));
+        anotherResponseStream.writeHeader(asList("c", "1"));
 
         assertThat(responseStream.hashCode(), equalTo(equalResponseStream.hashCode()));
         assertThat(responseStream.hashCode(), not(equalTo(anotherResponseStream.hashCode())));
@@ -89,11 +90,12 @@ public class ObjectExecuteResponseStreamTest {
     @Test
     public void niceToString() throws IOException {
         ObjectExecuteResponseStream responseStream = new ObjectExecuteResponseStream();
-        responseStream.writeHeader(Arrays.asList("c", "1"));
-        responseStream.writeRow(new ArrayList<String>());
-        responseStream.writeRow(Arrays.asList("a", "b"));
+        responseStream.writeHeader(asList("c", "1"));
+        responseStream.writeRow(new ArrayList<String>(), new ArrayList<String>());
+        responseStream.writeRow(asList("a", "b"), asList("String", "String"));
 
-        assertThat(responseStream.toString(), equalTo("ObjectExecuteResponseStream{columns=[c, 1], data=[[], [a, b]]}"));
+        assertThat(responseStream.toString(), equalTo("ObjectExecuteResponseStream {columns: [c, 1], " +
+                "data: [Row {values: [], types: []}, Row {values: [a, b], types: [String, String]}]}"));
     }
 
 }
