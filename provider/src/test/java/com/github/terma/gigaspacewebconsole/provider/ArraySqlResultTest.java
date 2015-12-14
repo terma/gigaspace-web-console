@@ -16,21 +16,22 @@ limitations under the License.
 
 package com.github.terma.gigaspacewebconsole.provider;
 
+import junit.framework.Assert;
+import org.junit.Test;
+
 import java.sql.SQLException;
-import java.util.List;
+import java.util.Arrays;
+import java.util.Collections;
 
-public interface SqlResult extends AutoCloseable {
+public class ArraySqlResultTest {
 
-    boolean next() throws SQLException;
+    @Test
+    public void shouldNotSupportRowTypesAndGetEmpty() throws SQLException {
+        ArraySqlResult arraySqlResult = new ArraySqlResult(
+                "", Arrays.asList("a", "b"), Arrays.asList(Arrays.asList("1", "2"), Arrays.asList("3", "4")));
 
-    List<String> getColumns() throws SQLException;
-
-    List<String> getRow() throws SQLException;
-
-    List<String> getRowTypes() throws SQLException;
-
-    void close() throws SQLException;
-
-    String getSql();
+        Assert.assertTrue(arraySqlResult.next());
+        Assert.assertEquals(Collections.EMPTY_LIST, arraySqlResult.getRowTypes());
+    }
 
 }

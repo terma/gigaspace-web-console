@@ -2,7 +2,7 @@
 
 echo "Clear logs..."
 rm ./gs10.log
-rm ./gs95.log
+#rm ./gs95.log
 #rm ./gs97.log
 
 echo "Kill running spaces..."

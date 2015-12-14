@@ -21,8 +21,9 @@ import com.github.terma.gigaspacewebconsole.provider.SqlResult;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Arrays;
 import java.util.List;
+
+import static java.util.Collections.singletonList;
 
 public class UpdateSqlResult implements SqlResult {
 
@@ -44,11 +45,16 @@ public class UpdateSqlResult implements SqlResult {
     }
 
     public List<String> getColumns() throws SQLException {
-        return Arrays.asList("affected_rows");
+        return singletonList("affected_rows");
     }
 
     public List<String> getRow() throws SQLException {
-        return Arrays.asList(Integer.toString(affectedRow));
+        return singletonList(Integer.toString(affectedRow));
+    }
+
+    @Override
+    public List<String> getRowTypes() throws SQLException {
+        return singletonList(Integer.class.getName());
     }
 
     public void close() throws SQLException {

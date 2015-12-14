@@ -16,9 +16,8 @@ limitations under the License.
 
 package com.github.terma.gigaspacewebconsole.provider;
 
-import com.github.terma.gigaspacewebconsole.provider.SqlResult;
-
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.List;
 
 public class ArraySqlResult implements SqlResult {
@@ -49,6 +48,11 @@ public class ArraySqlResult implements SqlResult {
     @Override
     public List<String> getRow() throws SQLException {
         return data.get(position);
+    }
+
+    @Override
+    public List<String> getRowTypes() throws SQLException {
+        return Collections.emptyList();
     }
 
     @Override

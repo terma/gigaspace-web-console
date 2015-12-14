@@ -26,12 +26,12 @@ public class JsonExecuteResponseStream implements ExecuteResponseStream {
 
     private final JsonWriter jsonWriter;
 
-    public JsonExecuteResponseStream(Writer writer) {
+    public JsonExecuteResponseStream(final Writer writer) {
         jsonWriter = new JsonWriter(writer);
     }
 
     @Override
-    public void writeHeader(List<String> columns) throws IOException {
+    public void writeHeader(final List<String> columns) throws IOException {
         jsonWriter.beginObject();
 
         jsonWriter.name("columns");
@@ -42,8 +42,11 @@ public class JsonExecuteResponseStream implements ExecuteResponseStream {
     }
 
     @Override
-    public void writeRow(List<String> values) throws IOException {
-        writeArray(values);
+    public void writeRow(final List<String> values, final List<String> types) throws IOException {
+        jsonWriter.beginArray();
+        writeArrayItems(values);
+        writeArray(types);
+        jsonWriter.endArray();
     }
 
     @Override
@@ -52,10 +55,14 @@ public class JsonExecuteResponseStream implements ExecuteResponseStream {
         jsonWriter.endObject();
     }
 
-    private void writeArray(List<String> values) throws IOException {
+    private void writeArray(final List<String> values) throws IOException {
         jsonWriter.beginArray();
-        for (final String value : values) jsonWriter.value(value);
+        writeArrayItems(values);
         jsonWriter.endArray();
+    }
+
+    private void writeArrayItems(final List<String> values) throws IOException {
+        for (final String value : values) jsonWriter.value(value);
     }
 
 }

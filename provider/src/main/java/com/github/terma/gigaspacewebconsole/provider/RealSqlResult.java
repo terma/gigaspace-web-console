@@ -16,9 +16,6 @@ limitations under the License.
 
 package com.github.terma.gigaspacewebconsole.provider;
 
-import com.github.terma.gigaspacewebconsole.provider.ConverterHelper;
-import com.github.terma.gigaspacewebconsole.provider.SqlResult;
-
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -33,7 +30,8 @@ public class RealSqlResult implements SqlResult {
     private final String sql;
     private final ConverterHelper converterHelper;
 
-    public RealSqlResult(final Statement statement, final String sql, ConverterHelper converterHelper) throws SQLException {
+    public RealSqlResult(final Statement statement, final String sql,
+                         final ConverterHelper converterHelper) throws SQLException {
         this.sql = sql;
         this.converterHelper = converterHelper;
         this.resultSet = statement.getResultSet();
@@ -44,6 +42,7 @@ public class RealSqlResult implements SqlResult {
         }
     }
 
+    @SuppressWarnings("unused")
     public ResultSet getResultSet() {
         return resultSet;
     }
@@ -62,6 +61,17 @@ public class RealSqlResult implements SqlResult {
             row.add(converterHelper.getFormattedValue(resultSet, column));
         }
         return row;
+    }
+
+    @Override
+    public List<String> getRowTypes() throws SQLException {
+        List<String> types = new ArrayList<>();
+        for (final String column : columns) {
+            Object value = resultSet.getObject(column);
+            if (value == null) types.add(null);
+            else types.add(value.getClass().getName());
+        }
+        return types;
     }
 
     public void close() throws SQLException {

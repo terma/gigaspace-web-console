@@ -35,7 +35,7 @@ public class CsvExecuteResponseStream implements ExecuteResponseStream {
     }
 
     @Override
-    public void writeRow(final List<String> values) throws IOException {
+    public void writeRow(final List<String> values, List<String> types) throws IOException {
         csvPrinter.printRecord(values);
     }
 

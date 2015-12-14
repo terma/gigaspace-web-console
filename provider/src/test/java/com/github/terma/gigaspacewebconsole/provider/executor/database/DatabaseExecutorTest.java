@@ -2,6 +2,7 @@ package com.github.terma.gigaspacewebconsole.provider.executor.database;
 
 import com.github.terma.gigaspacewebconsole.core.ExecuteRequest;
 import com.github.terma.gigaspacewebconsole.core.ObjectExecuteResponseStream;
+import com.github.terma.gigaspacewebconsole.core.ObjectRow;
 import com.github.terma.gigaspacewebconsole.core.config.ConfigFactory;
 import com.github.terma.gigaspacewebconsole.provider.executor.DatabaseExecutor;
 import junit.framework.Assert;
@@ -9,7 +10,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.util.Collections;
+import static java.util.Collections.singletonList;
 
 public class DatabaseExecutorTest {
 
@@ -52,7 +53,7 @@ public class DatabaseExecutorTest {
 
         Assert.assertEquals(1, responseStream.getColumns().size());
         Assert.assertEquals(1, responseStream.getData().size());
-        Assert.assertEquals(Collections.singletonList("12"), responseStream.getData().get(0));
+        Assert.assertEquals(new ObjectRow(singletonList("12"), singletonList("java.lang.Integer")), responseStream.getData().get(0));
     }
 
     @Test
@@ -64,7 +65,7 @@ public class DatabaseExecutorTest {
 
         Assert.assertEquals(1, responseStream.getColumns().size());
         Assert.assertEquals(1, responseStream.getData().size());
-        Assert.assertEquals(Collections.singletonList("0"), responseStream.getData().get(0));
+        Assert.assertEquals(new ObjectRow(singletonList("0"), singletonList("java.lang.Integer")), responseStream.getData().get(0));
     }
 
 }

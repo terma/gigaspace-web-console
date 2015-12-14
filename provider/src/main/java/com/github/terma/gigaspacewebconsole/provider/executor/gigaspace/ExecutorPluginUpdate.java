@@ -57,7 +57,7 @@ class ExecutorPluginUpdate implements ExecutorPlugin {
 
         ChangeResult changeResult = GigaSpaceUtils.getGigaSpace(request).change(query, changeSet);
         responseStream.writeHeader(asList("affected_rows"));
-        responseStream.writeRow(asList(Integer.toString(changeResult.getNumberOfChangedEntries())));
+        responseStream.writeRow(asList(Integer.toString(changeResult.getNumberOfChangedEntries())), null);
         responseStream.close();
     }
 

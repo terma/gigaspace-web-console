@@ -26,6 +26,9 @@
             columns.push({name: $(th).text(), element: th});
         });
 
+        // remove old goto
+        $(target).find('.table-goto').remove();
+
         var goTo = $('<a href="javascript:void(0);" class="table-goto">GoTo</a>');
         goTo.click(function (e) {
             var ul = $('<ul class="dropdown"></ul>');
