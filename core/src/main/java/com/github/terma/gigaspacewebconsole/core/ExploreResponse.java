@@ -19,5 +19,10 @@ public class ExploreResponse {
 
     public List<ExploreTable> tables;
 
+    @Override
+    public String toString() {
+        return "ExploreResponse {" + "tables: " + tables + '}';
+    }
+
 }
 

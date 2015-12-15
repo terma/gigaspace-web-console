@@ -16,7 +16,11 @@ package com.github.terma.gigaspacewebconsole.core;
 import java.util.List;
 
 public class CountsResponse {
-
     public List<Count> counts;
+
+    @Override
+    public String toString() {
+        return "CountsResponse {" + "counts: " + counts + '}';
+    }
 
 }

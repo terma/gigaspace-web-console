@@ -17,4 +17,11 @@ public class AppVersionRequest {
 
     public String appVersion;
 
+    @Override
+    public String toString() {
+        return "AppVersionRequest {" +
+                "appVersion: '" + appVersion + '\'' +
+                '}';
+    }
+
 }

@@ -25,7 +25,7 @@ public class GeneralRequest extends AppVersionRequest {
 
     @Override
     public String toString() {
-        return "{ url = '" + url + "', user = '" + user + "', password = **** " + ", driver = '" + driver + "\' }";
+        return "GeneralRequest {url: '" + url + "', user: '" + user + "', password: **** " + ", driver: '" + driver + "\'}";
     }
 
 }

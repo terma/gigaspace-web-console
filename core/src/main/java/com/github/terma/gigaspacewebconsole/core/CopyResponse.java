@@ -17,4 +17,10 @@ public class CopyResponse {
 
     public int count;
 
+    @Override
+    public String toString() {
+        return "CopyResponse {" +
+                "count: " + count +
+                '}';
+    }
 }

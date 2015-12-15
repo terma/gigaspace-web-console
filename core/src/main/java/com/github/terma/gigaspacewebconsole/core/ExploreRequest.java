@@ -15,4 +15,9 @@ package com.github.terma.gigaspacewebconsole.core;
 
 public class ExploreRequest extends GeneralRequest {
 
+    @Override
+    public String toString() {
+        return "ExploreRequest {url: '" + url + "', user: '" + user + "', password: **** " + ", driver: '" + driver + "\'}";
+    }
+
 }

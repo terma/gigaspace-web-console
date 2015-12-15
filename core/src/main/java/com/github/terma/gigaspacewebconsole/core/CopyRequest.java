@@ -19,4 +19,12 @@ public class CopyRequest extends ExecuteRequest {
     public String targetPassword;
     public String targetUrl;
 
+    @Override
+    public String toString() {
+        return "CopyRequest {url: '" + url + "', user: '" + user
+                + "', password: **** " + ", driver: '" + driver + "', sql: '" + sql
+                + "', targetUser: '" + targetUser + "', targetPassword: '****', " +
+                "targetUrl: '" + targetUrl + "'}";
+    }
+
 }
