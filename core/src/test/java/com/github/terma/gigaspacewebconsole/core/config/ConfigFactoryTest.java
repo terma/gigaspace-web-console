@@ -19,7 +19,17 @@ package com.github.terma.gigaspacewebconsole.core.config;
 import junit.framework.Assert;
 import org.junit.Test;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
 public class ConfigFactoryTest {
+
+    @Test(expected = InvocationTargetException.class)
+    public void justUtilClassCantCreateNew() throws Exception {
+        Constructor<ConfigFactory> constructor = ConfigFactory.class.getDeclaredConstructor();
+        constructor.setAccessible(true);
+        constructor.newInstance();
+    }
 
     @Test
     public void shouldReadInternalConfig() {
@@ -86,6 +96,28 @@ public class ConfigFactoryTest {
     }
 
     @Test
+    public void whenTypeIsLocalAndNoLocalRunnedGsReturnConfigWithDefaul() {
+        System.setProperty(ConfigFactory.CONFIG_PATH_SYSTEM_PROPERTY, ConfigFactory.LOCAL);
+
+        UserConfig userConfig = ConfigFactory.readUser();
+
+        Assert.assertNotNull(userConfig);
+        Assert.assertEquals(1, userConfig.gigaspaces.size());
+        Assert.assertEquals(0, userConfig.converters.size());
+    }
+
+    @Test
+    public void whenConfigPathNoneGetEmptyConfig() {
+        System.setProperty(ConfigFactory.CONFIG_PATH_SYSTEM_PROPERTY, ConfigFactory.NONE);
+
+        UserConfig userConfig = ConfigFactory.readUser();
+
+        Assert.assertNotNull(userConfig);
+        Assert.assertEquals(0, userConfig.gigaspaces.size());
+        Assert.assertEquals(0, userConfig.converters.size());
+    }
+
+    @Test
     public void shouldReadConfigFromRealFile() {
         System.setProperty(ConfigFactory.CONFIG_PATH_SYSTEM_PROPERTY, "file:src/test/resources/config.json");
 
@@ -94,6 +126,12 @@ public class ConfigFactoryTest {
         Assert.assertNotNull(userConfig);
         Assert.assertEquals(2, userConfig.gigaspaces.size());
         Assert.assertEquals(1, userConfig.converters.size());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldThrowExceptionIfCantFindRealFile() {
+        System.setProperty(ConfigFactory.CONFIG_PATH_SYSTEM_PROPERTY, "file:abrakadabra/config.json");
+        ConfigFactory.readUser();
     }
 
     @Test(expected = IllegalArgumentException.class)

@@ -19,4 +19,11 @@ public class ConfigTemplate {
     public String name;
     public String sql;
 
+    @Override
+    public String toString() {
+        return "ConfigTemplate {" +
+                "name: '" + name + '\'' +
+                ", sql: '" + sql + '\'' +
+                '}';
+    }
 }

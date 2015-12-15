@@ -14,7 +14,13 @@ limitations under the License.
 package com.github.terma.gigaspacewebconsole.core.config;
 
 public class InternalConfig {
-
     public String appVersion;
+
+    @Override
+    public String toString() {
+        return "InternalConfig {" +
+                "appVersion: '" + appVersion + '\'' +
+                '}';
+    }
 
 }

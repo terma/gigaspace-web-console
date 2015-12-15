@@ -28,4 +28,16 @@ public class UserConfig {
     public List<ConfigDriver> drivers = new ArrayList<>();
     public List<ConfigTemplate> templates = new ArrayList<>();
 
+    @Override
+    public String toString() {
+        return "UserConfig {" +
+                "version: '" + version + '\'' +
+                ", links: " + links +
+                ", converters: " + converters +
+                ", gigaspaces: " + gigaspaces +
+                ", drivers: " + drivers +
+                ", templates: " + templates +
+                '}';
+    }
+
 }

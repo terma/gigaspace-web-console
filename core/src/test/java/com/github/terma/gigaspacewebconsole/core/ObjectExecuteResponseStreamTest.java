@@ -98,4 +98,11 @@ public class ObjectExecuteResponseStreamTest {
                 "data: [Row {values: [], types: []}, Row {values: [a, b], types: [String, String]}]}"));
     }
 
+    @Test
+    public void closeDoesntDoAnything() throws IOException {
+        ObjectExecuteResponseStream responseStream = new ObjectExecuteResponseStream();
+        responseStream.close();
+        responseStream.close();
+    }
+
 }
