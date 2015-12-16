@@ -16,25 +16,19 @@ limitations under the License.
 
 package com.github.terma.gigaspacewebconsole.server;
 
-import com.github.terma.gigaspacewebconsole.core.GeneralRequest;
+import com.google.gson.Gson;
 
-public class CountsServlet extends JsonServlet<GeneralRequest> {
+import java.io.PrintWriter;
 
-    @Override
-    protected Object doJson(GeneralRequest request) throws Exception {
-        return CachedProviderResolver.getProvider(request.driver).counts(request);
-    }
+public abstract class JsonServlet<T> extends StreamJsonServlet<T> {
 
-    @SuppressWarnings("unchecked")
-    @Override
-    protected Class getRequestClass() {
-        return GeneralRequest.class;
-    }
-
+    private final Gson gson = new Gson();
 
     @Override
-    protected Validator<GeneralRequest> getValidator() {
-        return new AppVersionValidator<>();
+    protected final void doPost(final T request, final PrintWriter writer) throws Exception {
+        writer.append(gson.toJson(doJson(request)));
     }
+
+    protected abstract Object doJson(final T request) throws Exception;
 
 }

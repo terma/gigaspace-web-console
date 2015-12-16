@@ -5,17 +5,17 @@
          version="2.5">
 
     <listener>
-        <listener-class>com.github.terma.gigaspacewebconsole.ContextListener</listener-class>
+        <listener-class>com.github.terma.gigaspacewebconsole.server.ContextListener</listener-class>
     </listener>
 
     <filter>
         <filter-name>NoCacheFilter</filter-name>
-        <filter-class>com.github.terma.gigaspacewebconsole.NoCacheFilter</filter-class>
+        <filter-class>com.github.terma.gigaspacewebconsole.server.NoCacheFilter</filter-class>
     </filter>
 
     <servlet>
         <servlet-name>ConfigServlet</servlet-name>
-        <servlet-class>com.github.terma.gigaspacewebconsole.ConfigAndAppVersionServlet</servlet-class>
+        <servlet-class>com.github.terma.gigaspacewebconsole.server.ConfigAndAppVersionServlet</servlet-class>
     </servlet>
 
     <servlet>
@@ -25,17 +25,17 @@
 
     <servlet>
         <servlet-name>ExecuteServlet</servlet-name>
-        <servlet-class>com.github.terma.gigaspacewebconsole.ExecuteServlet</servlet-class>
+        <servlet-class>com.github.terma.gigaspacewebconsole.server.ExecuteServlet</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>GroovyExecuteServlet</servlet-name>
-        <servlet-class>com.github.terma.gigaspacewebconsole.GroovyExecuteServlet</servlet-class>
+        <servlet-class>com.github.terma.gigaspacewebconsole.server.GroovyExecuteServlet</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>ExecuteToCsvServlet</servlet-name>
-        <servlet-class>com.github.terma.gigaspacewebconsole.ExecuteToCsvServlet</servlet-class>
+        <servlet-class>com.github.terma.gigaspacewebconsole.server.ExecuteToCsvServlet</servlet-class>
     </servlet>
 
     <servlet>
@@ -45,17 +45,17 @@
 
     <servlet>
         <servlet-name>CopyServlet</servlet-name>
-        <servlet-class>com.github.terma.gigaspacewebconsole.CopyServlet</servlet-class>
+        <servlet-class>com.github.terma.gigaspacewebconsole.server.CopyServlet</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>ExportServlet</servlet-name>
-        <servlet-class>com.github.terma.gigaspacewebconsole.ExportServlet</servlet-class>
+        <servlet-class>com.github.terma.gigaspacewebconsole.server.ExportServlet</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>ImportServlet</servlet-name>
-        <servlet-class>com.github.terma.gigaspacewebconsole.ImportServlet</servlet-class>
+        <servlet-class>com.github.terma.gigaspacewebconsole.server.ImportServlet</servlet-class>
     </servlet>
 
     <filter-mapping>

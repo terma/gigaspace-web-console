@@ -20,8 +20,18 @@ import java.io.Serializable;
 
 class TypeDescriptor implements Serializable {
 
+    private static final long serialVersionUID = 0L;
+
     public String typeName;
     public String spaceIdProperty;
     public String routingProperty;
+
+    @Override
+    public String toString() {
+        return "TypeDescriptor {" +
+                "typeName: '" + typeName + '\'' +
+                ", spaceIdProperty: '" + spaceIdProperty + '\'' +
+                ", routingProperty: '" + routingProperty + '\'' + '}';
+    }
 
 }

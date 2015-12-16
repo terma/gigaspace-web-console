@@ -16,25 +16,16 @@ limitations under the License.
 
 package com.github.terma.gigaspacewebconsole.server;
 
-import com.github.terma.gigaspacewebconsole.core.GeneralRequest;
+public class StringUtils {
 
-public class CountsServlet extends JsonServlet<GeneralRequest> {
+    private static final int MAX_FILE_NAME_LENGTH = 50;
 
-    @Override
-    protected Object doJson(GeneralRequest request) throws Exception {
-        return CachedProviderResolver.getProvider(request.driver).counts(request);
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    protected Class getRequestClass() {
-        return GeneralRequest.class;
-    }
-
-
-    @Override
-    protected Validator<GeneralRequest> getValidator() {
-        return new AppVersionValidator<>();
+    public static String safeCsvFileName(String sql) {
+        sql = sql.replace(' ', '_');
+        sql = sql.replaceAll("[^-_a-zA-Z0-9]", "");
+        sql = sql.replaceAll("_{2,}", "_");
+        if (sql.length() > MAX_FILE_NAME_LENGTH) sql = sql.substring(0, MAX_FILE_NAME_LENGTH - 1);
+        return sql + ".csv";
     }
 
 }

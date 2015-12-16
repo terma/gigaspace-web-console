@@ -16,24 +16,26 @@ limitations under the License.
 
 package com.github.terma.gigaspacewebconsole.server;
 
-import com.github.terma.gigaspacewebconsole.core.GeneralRequest;
+import com.github.terma.gigaspacewebconsole.core.ExecuteRequest;
+import com.github.terma.gigaspacewebconsole.core.GroovyExecuteResponseStream;
 
-public class CountsServlet extends JsonServlet<GeneralRequest> {
+import java.io.PrintWriter;
+
+public class GroovyExecuteServlet extends StreamJsonServlet<ExecuteRequest> {
 
     @Override
-    protected Object doJson(GeneralRequest request) throws Exception {
-        return CachedProviderResolver.getProvider(request.driver).counts(request);
+    protected void doPost(final ExecuteRequest request, final PrintWriter writer) throws Exception {
+        final GroovyExecuteResponseStream responseStream = new JsonGroovyExecuteResponseStream(writer);
+        CachedProviderResolver.getProvider(request.driver).execute(request, responseStream);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    protected Class getRequestClass() {
-        return GeneralRequest.class;
+    protected Class<ExecuteRequest> getRequestClass() {
+        return ExecuteRequest.class;
     }
 
-
     @Override
-    protected Validator<GeneralRequest> getValidator() {
+    protected Validator<ExecuteRequest> getValidator() {
         return new AppVersionValidator<>();
     }
 

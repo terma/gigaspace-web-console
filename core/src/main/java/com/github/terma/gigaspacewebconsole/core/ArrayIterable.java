@@ -14,27 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package com.github.terma.gigaspacewebconsole.server;
+package com.github.terma.gigaspacewebconsole.core;
 
-import com.github.terma.gigaspacewebconsole.core.GeneralRequest;
+import java.util.Iterator;
 
-public class CountsServlet extends JsonServlet<GeneralRequest> {
+public class ArrayIterable implements Iterable<Object> {
 
-    @Override
-    protected Object doJson(GeneralRequest request) throws Exception {
-        return CachedProviderResolver.getProvider(request.driver).counts(request);
+    private final Object array;
+
+    public ArrayIterable(final Object array) {
+        if (array == null) throw new NullPointerException("Can't create iterable for null array");
+        this.array = array;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    protected Class getRequestClass() {
-        return GeneralRequest.class;
-    }
-
-
-    @Override
-    protected Validator<GeneralRequest> getValidator() {
-        return new AppVersionValidator<>();
+    public Iterator<Object> iterator() {
+        return new ArrayIterator(array);
     }
 
 }

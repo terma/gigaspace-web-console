@@ -16,24 +16,22 @@ limitations under the License.
 
 package com.github.terma.gigaspacewebconsole.server;
 
-import com.github.terma.gigaspacewebconsole.core.GeneralRequest;
+import com.github.terma.gigaspacewebconsole.core.CopyRequest;
 
-public class CountsServlet extends JsonServlet<GeneralRequest> {
+public class CopyServlet extends JsonServlet<CopyRequest> {
 
     @Override
-    protected Object doJson(GeneralRequest request) throws Exception {
-        return CachedProviderResolver.getProvider(request.driver).counts(request);
+    protected Object doJson(CopyRequest request) throws Exception {
+        return CachedProviderResolver.getProvider(request.driver).copy(request);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    protected Class getRequestClass() {
-        return GeneralRequest.class;
+    protected Class<CopyRequest> getRequestClass() {
+        return CopyRequest.class;
     }
 
-
     @Override
-    protected Validator<GeneralRequest> getValidator() {
+    protected Validator<CopyRequest> getValidator() {
         return new AppVersionValidator<>();
     }
 

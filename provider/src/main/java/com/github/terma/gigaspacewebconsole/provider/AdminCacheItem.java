@@ -19,8 +19,12 @@ package com.github.terma.gigaspacewebconsole.provider;
 import org.openspaces.admin.Admin;
 
 class AdminCacheItem {
-
     public Admin admin;
     public long lastUsage;
+
+    @Override
+    public String toString() {
+        return "AdminCacheItem {" + "admin: " + admin + ", lastUsage: " + lastUsage + '}';
+    }
 
 }

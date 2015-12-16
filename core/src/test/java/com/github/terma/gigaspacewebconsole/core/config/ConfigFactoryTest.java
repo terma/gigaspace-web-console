@@ -96,7 +96,7 @@ public class ConfigFactoryTest {
     }
 
     @Test
-    public void whenTypeIsLocalAndNoLocalRunnedGsReturnConfigWithDefaul() {
+    public void whenTypeIsLocalAndNoLocalRunnedGsReturnConfigWithDefault() {
         System.setProperty(ConfigFactory.CONFIG_PATH_SYSTEM_PROPERTY, ConfigFactory.LOCAL);
 
         UserConfig userConfig = ConfigFactory.readUser();

@@ -16,25 +16,23 @@ limitations under the License.
 
 package com.github.terma.gigaspacewebconsole.server;
 
-import com.github.terma.gigaspacewebconsole.core.GeneralRequest;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 
-public class CountsServlet extends JsonServlet<GeneralRequest> {
+class ExecuteException {
 
-    @Override
-    protected Object doJson(GeneralRequest request) throws Exception {
-        return CachedProviderResolver.getProvider(request.driver).counts(request);
-    }
+    public final String exceptionClass;
+    public final String message;
+    public final String stacktrace;
 
-    @SuppressWarnings("unchecked")
-    @Override
-    protected Class getRequestClass() {
-        return GeneralRequest.class;
-    }
+    public ExecuteException(final Throwable e) {
+        exceptionClass = e.getClass().getCanonicalName();
+        message = e.getMessage();
 
-
-    @Override
-    protected Validator<GeneralRequest> getValidator() {
-        return new AppVersionValidator<>();
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+        final PrintStream ps = new PrintStream(out);
+        e.printStackTrace(ps);
+        stacktrace = out.toString();
     }
 
 }
