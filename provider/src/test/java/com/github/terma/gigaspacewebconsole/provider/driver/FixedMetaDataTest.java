@@ -32,7 +32,7 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-public class GoodMetaDataTest {
+public class FixedMetaDataTest {
 
     private Connection connection;
     private DatabaseMetaData metaData;
@@ -40,7 +40,7 @@ public class GoodMetaDataTest {
     @Before
     public void before() throws SQLException, ClassNotFoundException {
         connection = new Connection(Driver.JDBC_PREFIX + "/./meta-data");
-        metaData = new GoodMetaData(connection);
+        metaData = new FixedMetaData(connection);
 
     }
 
@@ -72,7 +72,7 @@ public class GoodMetaDataTest {
         GigaSpaceUtils.registerType(gigaSpace, "Dida");
 
         Connection connection = new Connection(Driver.JDBC_PREFIX + "/./meta-data-non-empty");
-        ResultSet tables = new GoodMetaData(connection).getTables(null, null, null, null);
+        ResultSet tables = new FixedMetaData(connection).getTables(null, null, null, null);
         assertThat(tables.next(), equalTo(true));
         assertThat(tables.getString(1), equalTo(null));
         assertThat(tables.getString(2), equalTo(null));

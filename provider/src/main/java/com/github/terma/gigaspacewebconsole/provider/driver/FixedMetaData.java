@@ -26,11 +26,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-public class GoodMetaData extends GDatabaseMetaData {
+public class FixedMetaData extends GDatabaseMetaData {
 
     private final Connection connection;
 
-    public GoodMetaData(Connection connection) {
+    public FixedMetaData(Connection connection) {
         super(connection);
         this.connection = connection;
     }

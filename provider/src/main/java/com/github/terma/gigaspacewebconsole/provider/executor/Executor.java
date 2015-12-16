@@ -45,6 +45,14 @@ public class Executor {
         this.converterHelper = converterHelper;
     }
 
+    private static void sqlResultToResponseStream
+            (final SqlResult sqlResult, final ExecuteResponseStream responseStream)
+            throws IOException, SQLException {
+        responseStream.writeHeader(sqlResult.getColumns());
+        while (sqlResult.next()) responseStream.writeRow(sqlResult.getRow(), sqlResult.getRowTypes());
+        responseStream.close();
+    }
+
     public void execute(final ExecuteRequest request, final ExecuteResponseStream responseStream) throws Exception {
         request.sql = preprocessor.preprocess(request.sql);
 
@@ -65,18 +73,10 @@ public class Executor {
         final Connection connection = connectionFactory.get(request);
         final Statement statement = connection.createStatement();
         if (statement.execute(request.sql)) {
-            return new RealSqlResult(statement, request.sql, converterHelper);
+            return new RealSqlResult(statement.getResultSet(), request.sql, converterHelper);
         } else {
             return new UpdateSqlResult(statement, request.sql);
         }
-    }
-
-    private static void sqlResultToResponseStream
-            (final SqlResult sqlResult, final ExecuteResponseStream responseStream)
-            throws IOException, SQLException {
-        responseStream.writeHeader(sqlResult.getColumns());
-        while (sqlResult.next()) responseStream.writeRow(sqlResult.getRow(), sqlResult.getRowTypes());
-        responseStream.close();
     }
 
 }

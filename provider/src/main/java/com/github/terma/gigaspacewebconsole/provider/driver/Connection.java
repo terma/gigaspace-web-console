@@ -44,7 +44,7 @@ public class Connection extends GConnection {
 
     @Override
     public DatabaseMetaData getMetaData() {
-        return new GoodMetaData(this);
+        return new FixedMetaData(this);
     }
 
     ISpaceProxy getSpace() {

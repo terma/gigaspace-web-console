@@ -14,22 +14,30 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package com.github.terma.gigaspacewebconsole.provider.driver;
+package com.github.terma.gigaspacewebconsole.server;
 
-import junit.framework.Assert;
 import org.junit.Test;
 
-import java.sql.DatabaseMetaData;
-import java.sql.SQLException;
-import java.util.Properties;
-
-public class ConnectionTest {
+public class ExplorerServletTest {
 
     @Test
-    public void shouldHaveGoodMetaData() throws SQLException {
-        Connection connection = new Connection("jdbc:com.github.terma.gigaspacewebconsole:/./connection", new Properties());
-        DatabaseMetaData databaseMetaData = connection.getMetaData();
-        Assert.assertTrue(databaseMetaData instanceof FixedMetaData);
+    public void t() {
+        // gigaspace-web-console
+        // servlet accept/parse request
+        // resolver deliver parsed request to provider
+        // provider call service
+
+
+
+        // todo run jetty instance with servlets
+        // todo test particular servlet with real datasource
+        // so it will cover servlet
+        // url mapping
+        // json parsing
+        // app version validation
+        // connection to real datasource
+
+
     }
 
 }
