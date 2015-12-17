@@ -18,4 +18,12 @@ public class ConfigLink {
     public String name;
     public String url;
 
+    @Override
+    public String toString() {
+        return "ConfigLink {" +
+                "name: '" + name + '\'' +
+                ", url: '" + url + '\'' +
+                '}';
+    }
+
 }

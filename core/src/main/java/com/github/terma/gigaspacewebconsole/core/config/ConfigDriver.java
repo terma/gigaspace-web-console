@@ -20,4 +20,11 @@ public class ConfigDriver {
     public String name;
     public List<String> libs;
 
+    @Override
+    public String toString() {
+        return "ConfigDriver {" +
+                "name: '" + name + '\'' +
+                ", libs: " + libs + '}';
+    }
+
 }

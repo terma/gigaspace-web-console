@@ -22,4 +22,15 @@ public class ConfigDatabase {
     public String driver;
     public boolean secure;
 
+    @Override
+    public String toString() {
+        return "ConfigDatabase {" +
+                "name:'" + name + '\'' +
+                ", url:'" + url + '\'' +
+                ", user:'" + user + '\'' +
+                ", driver:'" + driver + '\'' +
+                ", secure:" + secure +
+                '}';
+    }
+
 }

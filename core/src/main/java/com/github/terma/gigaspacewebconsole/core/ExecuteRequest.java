@@ -17,4 +17,10 @@ public class ExecuteRequest extends GeneralRequest {
 
     public String sql;
 
+    @Override
+    public String toString() {
+        return "ExecuteRequest {url: '" + url + "', user: '" + user
+                + "', password: **** " + ", driver: '" + driver + "', sql: '" + sql + "'}";
+    }
+
 }

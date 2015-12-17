@@ -25,4 +25,12 @@ public class ObjectGroovyExecuteResult {
     public List<String> columns;
     public List<List<String>> data = new ArrayList<>();
 
+    @Override
+    public String toString() {
+        return "ObjectGroovyExecuteResult {" +
+                "header: '" + header + '\'' +
+                ", columns: " + columns +
+                ", data: " + data + '}';
+    }
+
 }

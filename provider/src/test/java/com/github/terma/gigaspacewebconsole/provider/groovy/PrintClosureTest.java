@@ -18,7 +18,7 @@ package com.github.terma.gigaspacewebconsole.provider.groovy;
 
 import com.gigaspaces.document.SpaceDocument;
 import com.github.terma.gigaspacewebconsole.core.config.ConfigFactory;
-import com.github.terma.gigaspacewebconsole.provider.ArrayIterable;
+import com.github.terma.gigaspacewebconsole.core.ArrayIterable;
 import junit.framework.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;

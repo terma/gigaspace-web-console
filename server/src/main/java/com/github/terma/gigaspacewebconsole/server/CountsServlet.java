@@ -16,10 +16,6 @@ limitations under the License.
 
 package com.github.terma.gigaspacewebconsole.server;
 
-import com.github.terma.gigaspacewebconsole.AppVersionValidator;
-import com.github.terma.gigaspacewebconsole.CachedProviderResolver;
-import com.github.terma.gigaspacewebconsole.JsonServlet;
-import com.github.terma.gigaspacewebconsole.Validator;
 import com.github.terma.gigaspacewebconsole.core.GeneralRequest;
 
 public class CountsServlet extends JsonServlet<GeneralRequest> {

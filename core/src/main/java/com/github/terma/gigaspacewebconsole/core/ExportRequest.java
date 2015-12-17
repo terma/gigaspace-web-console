@@ -22,4 +22,10 @@ public class ExportRequest extends GeneralRequest {
 
     public List<String> types;
 
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + " {url: '" + url + "', user: '" + user
+                + "', password: **** " + ", driver: '" + driver + "', types: " + types + "}";
+    }
+
 }

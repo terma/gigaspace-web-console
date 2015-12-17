@@ -18,4 +18,12 @@ public class Count {
     public String name;
     public int count;
 
+    @Override
+    public String toString() {
+        return "Count {" +
+                "name: '" + name + '\'' +
+                ", count: " + count +
+                '}';
+    }
+
 }

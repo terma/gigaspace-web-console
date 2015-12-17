@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class ConfigFactory {
+public final class ConfigFactory {
 
     public static final String DEFAULT_GS_HOST = "localhost";
     public static final int DEFAULT_GS_PORT = 4176;

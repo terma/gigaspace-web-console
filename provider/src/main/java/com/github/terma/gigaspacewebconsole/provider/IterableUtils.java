@@ -16,6 +16,8 @@ limitations under the License.
 
 package com.github.terma.gigaspacewebconsole.provider;
 
+import com.github.terma.gigaspacewebconsole.core.ArrayIterable;
+
 public class IterableUtils {
 
     public static Iterable asIterable(Object object) {

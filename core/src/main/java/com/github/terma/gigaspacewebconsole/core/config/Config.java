@@ -21,4 +21,11 @@ public class Config {
     public UserConfig user;
     public InternalConfig internal;
 
+    @Override
+    public String toString() {
+        return "Config {" +
+                "user: " + user +
+                ", internal: " + internal +
+                '}';
+    }
 }

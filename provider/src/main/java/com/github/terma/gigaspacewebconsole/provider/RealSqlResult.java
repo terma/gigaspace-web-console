@@ -30,11 +30,11 @@ public class RealSqlResult implements SqlResult {
     private final String sql;
     private final ConverterHelper converterHelper;
 
-    public RealSqlResult(final Statement statement, final String sql,
+    public RealSqlResult(final ResultSet resultSet, final String sql,
                          final ConverterHelper converterHelper) throws SQLException {
         this.sql = sql;
         this.converterHelper = converterHelper;
-        this.resultSet = statement.getResultSet();
+        this.resultSet = resultSet;
 
         columns = new ArrayList<>();
         for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {

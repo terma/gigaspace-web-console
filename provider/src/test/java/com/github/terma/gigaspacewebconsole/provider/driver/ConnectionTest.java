@@ -29,7 +29,7 @@ public class ConnectionTest {
     public void shouldHaveGoodMetaData() throws SQLException {
         Connection connection = new Connection("jdbc:com.github.terma.gigaspacewebconsole:/./connection", new Properties());
         DatabaseMetaData databaseMetaData = connection.getMetaData();
-        Assert.assertTrue(databaseMetaData instanceof GoodMetaData);
+        Assert.assertTrue(databaseMetaData instanceof FixedMetaData);
     }
 
 }

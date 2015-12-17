@@ -36,8 +36,8 @@ public class SqlClosure extends Closure {
     }
 
     @Override
-    public Object call(Object arguments) {
-        if (arguments == null) throw new NullPointerException("Can't sql null!");
+    public Object call(Object argument) {
+        if (argument == null) throw new NullPointerException("Can't sql null!");
 
         final ExecuteRequest concreteRequest = new ExecuteRequest();
         concreteRequest.driver = request.driver;
@@ -45,7 +45,7 @@ public class SqlClosure extends Closure {
         concreteRequest.user = request.user;
         concreteRequest.password = request.password;
 
-        concreteRequest.sql = arguments.toString();
+        concreteRequest.sql = argument.toString();
 
         try {
             final SqlResult sqlResult = GigaSpaceExecutor.INSTANCE.originalExecute(concreteRequest);

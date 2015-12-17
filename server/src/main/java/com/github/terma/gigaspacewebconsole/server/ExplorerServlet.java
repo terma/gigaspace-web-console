@@ -16,11 +16,6 @@ limitations under the License.
 
 package com.github.terma.gigaspacewebconsole.server;
 
-import com.github.terma.gigaspacewebconsole.AppVersionValidator;
-import com.github.terma.gigaspacewebconsole.CachedProviderResolver;
-import com.github.terma.gigaspacewebconsole.JsonServlet;
-import com.github.terma.gigaspacewebconsole.Validator;
-import com.github.terma.gigaspacewebconsole.core.CopyRequest;
 import com.github.terma.gigaspacewebconsole.core.ExploreRequest;
 
 public class ExplorerServlet extends JsonServlet<ExploreRequest> {
