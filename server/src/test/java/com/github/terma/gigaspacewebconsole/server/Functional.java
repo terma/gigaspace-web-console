@@ -1,4 +1,4 @@
-package com.github.terma.gigaspacewebconsole;
+package com.github.terma.gigaspacewebconsole.server;
 
 import junit.framework.Assert;
 import org.junit.Test;
