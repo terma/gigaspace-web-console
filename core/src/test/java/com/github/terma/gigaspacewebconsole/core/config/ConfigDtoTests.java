@@ -25,6 +25,7 @@ public class ConfigDtoTests {
         Assert.assertEquals("ConfigLink {name: 'null', url: 'null'}", new ConfigLink().toString());
         Assert.assertEquals("ConfigTemplate {name: 'null', sql: 'null'}", new ConfigTemplate().toString());
         Assert.assertEquals("InternalConfig {appVersion: 'null'}", new InternalConfig().toString());
+        Assert.assertEquals("Config {user: null, internal: null}", new Config().toString());
 
         Assert.assertEquals(
                 "UserConfig {version: 'null', links: [], converters: [], gigaspaces: [], drivers: [], templates: []}",

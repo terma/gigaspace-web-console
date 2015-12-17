@@ -38,6 +38,7 @@ public class CoreDtoTest {
     @Parameterized.Parameters
     public static List<Object[]> parms() {
         return Arrays.asList(
+                new Object[]{ExploreTable.class, "ExploreTable {name: 'null', columns: null}"},
                 new Object[]{AppVersionRequest.class, "AppVersionRequest {appVersion: 'null'}"},
                 new Object[]{CopyRequest.class, "CopyRequest {url: 'null', user: 'null', password: **** , driver: 'null', sql: 'null', targetUser: 'null', targetPassword: '****', targetUrl: 'null'}"},
                 new Object[]{CopyResponse.class, "CopyResponse {count: 0}"},

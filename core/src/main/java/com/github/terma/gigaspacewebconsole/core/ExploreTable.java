@@ -14,15 +14,14 @@ limitations under the License.
 package com.github.terma.gigaspacewebconsole.core;
 
 import java.util.List;
-import java.util.Objects;
 
 public class ExploreTable {
 
     public String name;
     public List<String> columns;
 
+    @SuppressWarnings("unused")
     public ExploreTable() {
-
     }
 
     public ExploreTable(String name, List<String> columns) {
@@ -32,24 +31,7 @@ public class ExploreTable {
 
     @Override
     public String toString() {
-        return "ExploreTable{" +
-                "name='" + name + '\'' +
-                ", columns=" + columns +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ExploreTable that = (ExploreTable) o;
-        return Objects.equals(name, that.name) &&
-                Objects.equals(columns, that.columns);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, columns);
+        return "ExploreTable {" + "name: '" + name + '\'' + ", columns: " + columns + '}';
     }
 
 }

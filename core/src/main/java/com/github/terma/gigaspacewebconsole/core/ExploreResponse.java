@@ -21,7 +21,7 @@ public class ExploreResponse {
 
     @Override
     public String toString() {
-        return "ExploreResponse {" + "tables: " + tables + '}';
+        return "ExploreResponse {tables: " + tables + '}';
     }
 
 }
