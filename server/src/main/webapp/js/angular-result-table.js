@@ -17,8 +17,6 @@
 var App = angular.module('App', ['ui.codemirror']);
 
 App.directive('queryResultTable', ['$rootScope', '$filter', function ($rootScope, $filter) {
-    log.log('directive called');
-
     return {
         restrict: 'E',
 
@@ -43,6 +41,9 @@ App.directive('queryResultTable', ['$rootScope', '$filter', function ($rootScope
 
                 var columns = model.columns;
                 var data = model.data;
+
+                // when row length +1 compare to columns means we have types info in last non-named column
+                var withTypes = columns.length > 0 && data.length > 0 && columns.length + 1 == data[0].length;
 
                 var table = angular.element('<table class="result fixMe" style="table-layout: fixed;"></table>');
                 var thead = angular.element('<thead></thead>');
@@ -75,8 +76,8 @@ App.directive('queryResultTable', ['$rootScope', '$filter', function ($rootScope
                 angular.forEach(data, function (row) {
                     var trHtml = '';
 
-                    var lengthWithoutType = row.length - 1;
-                    var types = row[row.length - 1];
+                    var lengthWithoutType = withTypes ? row.length - 1 : row.length;
+                    var types = withTypes ? row[row.length - 1] : void 0;
 
                     for (var i = 0; i < lengthWithoutType; i++) {
                         var value = row[i];
@@ -88,7 +89,7 @@ App.directive('queryResultTable', ['$rootScope', '$filter', function ($rootScope
                         }
 
                         var typesHtml = '';
-                        if (showTypes && types[i]) typesHtml = '<span class="result-value-type">' + types[i] + '</span> ';
+                        if (withTypes && showTypes && types[i]) typesHtml = '<span class="result-value-type">' + types[i] + '</span> ';
 
                         var additionalClass = '';
                         if (!value) additionalClass = 'null-text';
@@ -119,23 +120,34 @@ App.directive('queryResultTable', ['$rootScope', '$filter', function ($rootScope
 
                 element.append(table);
 
-                window.tableGoto(element.parent().parent().find('.table-goto-target'), table);
+                // other
+                var aContainer = element.parent().parent().find('.table-goto-target');
+
+                // add types button if need
+                aContainer.find('.table-types').remove();
+                if (withTypes) {
+                    var typesA = angular.element('<a href="javascript:void(0);" class="table-types" style="margin-right: 5px;">Types</a>');
+                    typesA.click(function () {
+                        showTypes = !showTypes;
+                        renderModel();
+                    });
+                    aContainer.append(typesA);
+                }
+
+                // add goto button
+                // todo replace hardcoded path to button container on configurable
+                window.tableGoto(aContainer, table);
             }
 
             $scope.$watch(attrs.qrtModel, function (newValue) {
                 model = newValue;
                 showAllText = false;
-                renderModel(false);
+                renderModel();
             });
 
             $scope.$watch(attrs.qrtShowAllText, function (newValue) {
                 showAllText = newValue;
-                renderModel(true);
-            });
-
-            $scope.$watch(attrs.qrtShowTypes, function (newValue) {
-                showTypes = newValue;
-                renderModel(true);
+                renderModel();
             });
         }
     }

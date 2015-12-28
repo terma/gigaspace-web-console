@@ -25,7 +25,7 @@ sleep 5
 
 echo "Starting GS-10..."
 export LOOKUPLOCATORS=127.0.0.1:4700
-export EXT_JAVA_OPTIONS="-Dcom.gs.multicast.discoveryPort=4700"
+export EXT_JAVA_OPTIONS="-Dcom.gs.multicast.discoveryPort=4700 -Xmx4g"
 nohup /Users/terma/Downloads/gigaspaces-xap-premium-10.0.1-ga/bin/gs-agent.sh > ./gs10.log &
 sleep 30
 
