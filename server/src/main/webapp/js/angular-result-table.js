@@ -17,8 +17,6 @@
 var App = angular.module('App', ['ui.codemirror']);
 
 App.directive('queryResultTable', ['$rootScope', '$filter', function ($rootScope, $filter) {
-    log.log('directive called');
-
     return {
         restrict: 'E',
 

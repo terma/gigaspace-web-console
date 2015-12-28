@@ -19,7 +19,10 @@
     <script type="text/javascript" src="js/common.js"></script>
     <script type="text/javascript" src="js/fixed-header.js"></script>
     <script type="text/javascript" src="js/fix-horizontally.js"></script>
-    <script type="text/javascript" src="js/query-result-table.js"></script>
+
+    <script type="text/javascript" src="js/angular-result-table.js"></script>
+    <script type="text/javascript" src="js/angular-season-a.js"></script>
+
     <script type="text/javascript" src="js/nice-status.js"></script>
     <script type="text/javascript" src="js/table-goto.js"></script>
     <script type="text/javascript" src="js/count-history-chart.js"></script>
@@ -213,7 +216,7 @@
                 </div>
                 <p/>
 
-                <a ng-click="executeQuery()" href="javascript:void(0);">Execute</a>
+                <season-a sa-click="executeQuery()" sa-title="Execute"></season-a>
                 <a ng-click="executeToCsv()" href="javascript:void(0);">To CSV</a>
 
                 <p ng-if="context.selectedGigaspace.queryTab.selectedEditor.status" nice-status
