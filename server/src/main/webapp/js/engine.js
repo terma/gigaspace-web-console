@@ -122,10 +122,6 @@ App.controller("controller", [
             query.data.textLengthLimit = query.data.showAllText ? 100000 : 50;
         };
 
-        $scope.toggleTypes = function (query) {
-            query.data.showTypes = !query.data.showTypes;
-        };
-
         function getLines(text) {
             return text == undefined ? [] : text.split("\n");
         }
@@ -704,8 +700,6 @@ App.controller("controller", [
 
                         function showColumnsAutocomplete(tableName) {
                             $scope.loadStructure(function (structure) {
-
-
                                 $scope.autocompletePattern = void 0;
                                 $scope.autocompleteType = 'columns';
                                 $scope.autocomplete = [];

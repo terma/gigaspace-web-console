@@ -122,23 +122,34 @@ App.directive('queryResultTable', ['$rootScope', '$filter', function ($rootScope
 
                 element.append(table);
 
-                window.tableGoto(element.parent().parent().find('.table-goto-target'), table);
+                // other
+                var aContainer = element.parent().parent().find('.table-goto-target');
+
+                // add types button if need
+                aContainer.find('.table-types').remove();
+                if (withTypes) {
+                    var typesA = angular.element('<a href="javascript:void(0);" class="table-types" style="margin-right: 5px;">Types</a>');
+                    typesA.click(function () {
+                        showTypes = !showTypes;
+                        renderModel();
+                    });
+                    aContainer.append(typesA);
+                }
+
+                // add goto button
+                // todo replace hardcoded path to button container on configurable
+                window.tableGoto(aContainer, table);
             }
 
             $scope.$watch(attrs.qrtModel, function (newValue) {
                 model = newValue;
                 showAllText = false;
-                renderModel(false);
+                renderModel();
             });
 
             $scope.$watch(attrs.qrtShowAllText, function (newValue) {
                 showAllText = newValue;
-                renderModel(true);
-            });
-
-            $scope.$watch(attrs.qrtShowTypes, function (newValue) {
-                showTypes = newValue;
-                renderModel(true);
+                renderModel();
             });
         }
     }
