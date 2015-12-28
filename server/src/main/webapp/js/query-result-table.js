@@ -44,6 +44,9 @@ App.directive('queryResultTable', ['$rootScope', '$filter', function ($rootScope
                 var columns = model.columns;
                 var data = model.data;
 
+                // when row length +1 compare to columns means we have types info in last non-named column
+                var withTypes = columns.length > 0 && data.length > 0 && columns.length + 1 == data[0].length;
+
                 var table = angular.element('<table class="result fixMe" style="table-layout: fixed;"></table>');
                 var thead = angular.element('<thead></thead>');
                 table.append(thead);
@@ -75,8 +78,8 @@ App.directive('queryResultTable', ['$rootScope', '$filter', function ($rootScope
                 angular.forEach(data, function (row) {
                     var trHtml = '';
 
-                    var lengthWithoutType = row.length - 1;
-                    var types = row[row.length - 1];
+                    var lengthWithoutType = withTypes ? row.length - 1 : row.length;
+                    var types = withTypes ? row[row.length - 1] : void 0;
 
                     for (var i = 0; i < lengthWithoutType; i++) {
                         var value = row[i];
@@ -88,7 +91,7 @@ App.directive('queryResultTable', ['$rootScope', '$filter', function ($rootScope
                         }
 
                         var typesHtml = '';
-                        if (showTypes && types[i]) typesHtml = '<span class="result-value-type">' + types[i] + '</span> ';
+                        if (withTypes && showTypes && types[i]) typesHtml = '<span class="result-value-type">' + types[i] + '</span> ';
 
                         var additionalClass = '';
                         if (!value) additionalClass = 'null-text';
