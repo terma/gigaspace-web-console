@@ -40,6 +40,14 @@ class AdminCache {
         this(TimeUnit.MINUTES.toMillis(10));
     }
 
+    private static AdminCacheKey requestToKey(final GeneralRequest request) {
+        if (GigaSpaceUrl.isLocal(request.url)) {
+            return new AdminCacheKey(null, request.user, request.password);
+        } else {
+            return new AdminCacheKey(GigaSpaceUrl.parseLocators(request.url), request.user, request.password);
+        }
+    }
+
     public synchronized void clearExpired() {
         Iterator<Map.Entry<AdminCacheKey, AdminCacheItem>> iterator = cache.entrySet().iterator();
         while (iterator.hasNext()) {
@@ -60,13 +68,26 @@ class AdminCache {
         if (item == null) {
             final AdminFactory adminFactory = new AdminFactory();
             adminFactory.useDaemonThreads(true);
-            // reduce amount of info which admin collects
-//            adminFactory.setDiscoveryServices(Space.class);
+
+            /**
+             * Next property reduce amount of info which admin collects.
+             * However we don't use it as GS 9.5 doesn't support it.
+             *
+             * <code>adminFactory.setDiscoveryServices(Space.class);</code>
+             */
 
             LOGGER.fine("Creating admin for " + key + "...");
-            if (key.locators == null) {
-                adminFactory.discoverUnmanagedSpaces();
-            } else {
+
+            /**
+             * By default gigaspace admin lookup only spaces which where deployed in real GigaSpace
+             * nor embedded! This property enable to lookup embedded as well.
+             *
+             * Don't worry it's not enable multicast lookup. It still depends on multicast false/true settings
+             * which you can setup by system properties.
+             */
+            adminFactory.discoverUnmanagedSpaces();
+
+            if (key.locators != null) {
                 adminFactory.userDetails(request.user, request.password);
                 adminFactory.addLocators(key.locators);
             }
@@ -86,14 +107,6 @@ class AdminCache {
 
     public synchronized int size() {
         return cache.size();
-    }
-
-    private static AdminCacheKey requestToKey(final GeneralRequest request) {
-        if (GigaSpaceUrl.isLocal(request.url)) {
-            return new AdminCacheKey(null, request.user, request.password);
-        } else {
-            return new AdminCacheKey(GigaSpaceUrl.parseLocators(request.url), request.user, request.password);
-        }
     }
 
 }

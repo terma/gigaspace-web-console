@@ -29,8 +29,13 @@ import java.util.List;
 public class DataPreload {
 
     public static void main(String[] args) {
-        GigaSpace gigaSpace = GigaSpaceUtils.getGigaSpace("jini:/*/*/gs10?locators=127.0.0.1:4700");
+//        GigaSpace gigaSpace = GigaSpaceUtils.getGigaSpace("jini:/*/*/gs10?locators=127.0.0.1:4700");
+        GigaSpace gigaSpace = GigaSpaceUtils.getGigaSpace("jini:/*/*/gs95?locators=localhost:4300");
 
+        fill(gigaSpace);
+    }
+
+    public static void fill(GigaSpace gigaSpace) {
         smallData(gigaSpace);
         longData(gigaSpace);
         otherData(gigaSpace);

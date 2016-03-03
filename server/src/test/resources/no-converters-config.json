@@ -16,8 +16,8 @@
     {
       "name": "GS-9.5",
       "libs": [
-        "${localRepository}/com/gigaspaces/gs-runtime/9.5.0-M7/gs-runtime-9.5.0-M7.jar",
-        "${localRepository}/com/gigaspaces/gs-openspaces/9.5.0-M7/gs-openspaces-9.5.0-M7.jar",
+        "${localRepository}/com/gigaspaces/gs-runtime/9.7.0-10491-M6/gs-runtime-9.7.0-10491-M6.jar",
+        "${localRepository}/com/gigaspaces/gs-openspaces/9.7.0-10491-M6/gs-openspaces-9.7.0-10491-M6.jar",
         "${localRepository}/org/springframework/spring-beans/3.2.4.RELEASE/spring-beans-3.2.4.RELEASE.jar",
         "${localRepository}/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar",
         // todo only for embedded spaces
@@ -118,6 +118,13 @@
     {
       "name": "GS-9.7",
       "url": "jini:/*/*/gs97?locators=localhost:4500",
+      "user": "",
+      "password": "",
+      "driver": "GS-9.7"
+    },
+    {
+      "name": "embedded",
+      "url": "jini:/*/*/embedded?locators=localhost:4174",
       "user": "",
       "password": "",
       "driver": "GS-9.7"
