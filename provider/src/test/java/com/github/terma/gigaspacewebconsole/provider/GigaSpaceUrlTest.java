@@ -64,6 +64,7 @@ public class GigaSpaceUrlTest {
         assertEquals("space", GigaSpaceUrl.parseSpace("jini:/*/space?locators=yy.com.ab:1200"));
         assertEquals("space", GigaSpaceUrl.parseSpace("jini:/*/space?"));
         assertEquals("space", GigaSpaceUrl.parseSpace("/./space?"));
+        assertEquals("a-b", GigaSpaceUrl.parseSpace("/./a-b?"));
     }
 
     @Test(expected = IllegalArgumentException.class)
