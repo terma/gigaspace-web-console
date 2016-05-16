@@ -13,6 +13,7 @@ Powerful alternative for GigaSpace Management Console when you have a lot of wor
  * [Execute SQL Queries](#execute-sql-queries)
  * [Registered Types and Counts](#registered-types-and-counts)
    * [Counts History](#counts-history) 
+   * [Counts By Partitions](#counts-by-partitions) 
  * [Execute Groovy](#work-with-groovy)
  * [Copy data between spaces](#copy-data-between-spaces)
  * [Export / Import data](#export--import-data)
@@ -118,7 +119,7 @@ Useful parameters:
 
 When you start your console first time after configuration you will see:
 
-![Start](https://raw.githubusercontent.com/terma/gigaspace-sql-console/master/img/start.png)
+![Start](https://raw.githubusercontent.com/terma/gigaspace-web-console/master/img/start.png)
 
 ## Execute SQL queries
 
@@ -132,7 +133,7 @@ Select preconfigured space or type url details and click on -Query- tab
 * When value size for one cell more ```50``` result will be truncated, so ```result``` plus ```...``` to show full result just click on ```Show/Hide all text``` under each result table
 * For columns which looks like timestamp you can click on ```T?``` after column name so console shows result in date format for example ```1424054208000``` will be show as ```1424054208000 = Mon, 16 Feb 2015 02:36:48 GMT```
 
-![Execute SQL Queries](https://raw.githubusercontent.com/terma/gigaspace-sql-console/master/img/execute.png)
+![Execute SQL Queries](https://raw.githubusercontent.com/terma/gigaspace-web-console/master/img/execute.png)
 
 ### Work with timestamps
 
@@ -156,13 +157,20 @@ That's all
 
 ## Registered types and counts
 
-![Registered Types and Counts](https://raw.githubusercontent.com/terma/gigaspace-sql-console/master/img/types.png)
+![Registered Types and Counts](https://raw.githubusercontent.com/terma/gigaspace-web-console/master/img/types.png)
 
 ### Counts History
 
 On Types Tab you for any type you can click History to track dynamic of count
 
-![Counts History](https://raw.githubusercontent.com/terma/gigaspace-sql-console/master/img/counts-history.png)
+![Counts History](https://raw.githubusercontent.com/terma/gigaspace-web-console/master/img/counts-history.png)
+
+### Counts By Partitions
+
+By switching Partitions/Space on Types Tab you can see count for space or partitions. That helps a lot 
+when you need to how good your routing keys
+
+![Counts By Partitions](https://raw.githubusercontent.com/terma/gigaspace-web-console/master/img/counts-by-partitions.png)
 
 ## Work with Groovy
 
@@ -171,7 +179,7 @@ Sometimes you have complex queries which depends on each other or complex calcul
 First of all enable groovy by adding ```groovy``` word in first line of editor.
 Second, create simple [Groovy](http://groovy.codehaus.org/) script and run it in console!
 
-![Execute Groovy Script](https://raw.githubusercontent.com/terma/gigaspace-sql-console/master/img/groovy.png)
+![Execute Groovy Script](https://raw.githubusercontent.com/terma/gigaspace-web-console/master/img/groovy.png)
 
 A few additional words about Groovy in console. Withing your script you can use all groovy features (don't forget about proper import) plus a few additional: 
 
@@ -205,7 +213,7 @@ gs.clear(null)
 
 ## Copy data between spaces
 
-![Copy data between spaces](https://raw.githubusercontent.com/terma/gigaspace-sql-console/master/img/copy.png)
+![Copy data between spaces](https://raw.githubusercontent.com/terma/gigaspace-web-console/master/img/copy.png)
 
 ### Copy part of data
 
