@@ -28,7 +28,7 @@ public class GigaSpaceProvider implements Provider {
     private final Counts countsProvider = new Counts();
 
     @Override
-    public CountsResponse counts(final GeneralRequest request) {
+    public CountsResponse counts(final CountsRequest request) {
         return countsProvider.counts(request);
     }
 

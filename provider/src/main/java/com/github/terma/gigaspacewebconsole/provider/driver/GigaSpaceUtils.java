@@ -51,13 +51,13 @@ public class GigaSpaceUtils {
         return getDestoeableGigaSpace(url).getGigaSpace();
     }
 
-    public static DestroeableGigaSpace getDestoeableGigaSpace(final String url) {
+    public static DestroyableGigaSpace getDestoeableGigaSpace(final String url) {
         UrlSpaceConfigurer urlSpaceConfigurer = new UrlSpaceConfigurer(url);
         GigaSpace gigaSpace = new GigaSpaceConfigurer(urlSpaceConfigurer.create()).create();
-        return new DestroeableGigaSpace(gigaSpace, urlSpaceConfigurer);
+        return new DestroyableGigaSpace(gigaSpace, urlSpaceConfigurer);
     }
 
-    public static DestroeableGigaSpace getUniqueDestroeableGigaSpace() {
+    public static DestroyableGigaSpace getUniqueDestroeableGigaSpace() {
         return getDestoeableGigaSpace("/./unique-giga-space-" + idGenerator.incrementAndGet());
     }
 

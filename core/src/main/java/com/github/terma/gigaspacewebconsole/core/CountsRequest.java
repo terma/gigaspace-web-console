@@ -16,17 +16,8 @@ limitations under the License.
 
 package com.github.terma.gigaspacewebconsole.core;
 
-public class GeneralRequest extends AppVersionRequest {
+public class CountsRequest extends GeneralRequest {
 
-    public String user;
-    public String password;
-    public String driver;
-    public String url;
-
-    @Override
-    public String toString() {
-        return this.getClass().getSimpleName() + " {url: '" + url + "', user: '" + user
-                + "', password: **** " + ", driver: '" + driver + "\'}";
-    }
+    public boolean byPartitions;
 
 }

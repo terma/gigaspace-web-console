@@ -13,28 +13,29 @@ limitations under the License.
 
 package com.github.terma.gigaspacewebconsole.provider;
 
-import com.github.terma.gigaspacewebconsole.provider.driver.DestroeableGigaSpace;
+import com.github.terma.gigaspacewebconsole.provider.driver.DestroyableGigaSpace;
 import com.github.terma.gigaspacewebconsole.provider.driver.GigaSpaceUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.openspaces.core.GigaSpace;
 
+@SuppressWarnings("WeakerAccess")
 public abstract class TestWithGigaSpace {
 
-    protected DestroeableGigaSpace destroeableGigaSpace;
+    protected DestroyableGigaSpace destroyableGigaSpace;
     protected GigaSpace gigaSpace;
     protected String gigaSpaceUrl;
 
     @Before
     public void init() {
-        destroeableGigaSpace = GigaSpaceUtils.getUniqueDestroeableGigaSpace();
-        gigaSpace = destroeableGigaSpace.getGigaSpace();
-        gigaSpaceUrl = destroeableGigaSpace.getGigaSpace().getSpace().getURL().getURL();
+        destroyableGigaSpace = GigaSpaceUtils.getUniqueDestroeableGigaSpace();
+        gigaSpace = destroyableGigaSpace.getGigaSpace();
+        gigaSpaceUrl = destroyableGigaSpace.getGigaSpace().getSpace().getURL().getURL();
     }
 
     @After
     public void destroy() throws Exception {
-        destroeableGigaSpace.destroy();
+        if (destroyableGigaSpace != null) destroyableGigaSpace.destroy();
     }
 
 }

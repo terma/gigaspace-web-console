@@ -16,8 +16,8 @@ limitations under the License.
 
 package com.github.terma.gigaspacewebconsole.provider;
 
+import com.github.terma.gigaspacewebconsole.core.CountsRequest;
 import com.github.terma.gigaspacewebconsole.core.CountsResponse;
-import com.github.terma.gigaspacewebconsole.core.GeneralRequest;
 import com.github.terma.gigaspacewebconsole.provider.driver.GigaSpaceUtils;
 import junit.framework.Assert;
 import org.junit.Test;
@@ -30,7 +30,7 @@ public class CountsTest extends TestWithGigaSpace {
 
     @Test
     public void shouldReturnEmptyResultIfNoTypesInSpace() {
-        GeneralRequest countsRequest = new GeneralRequest();
+        CountsRequest countsRequest = new CountsRequest();
         countsRequest.url = gigaSpaceUrl;
         final CountsResponse countsResponse = new Counts().counts(countsRequest);
 
@@ -40,16 +40,15 @@ public class CountsTest extends TestWithGigaSpace {
 
     @Test
     public void shouldReturnCountsOfTypes() {
-        String url = gigaSpaceUrl;
-        final GigaSpace gigaSpace = GigaSpaceUtils.getGigaSpace(url);
+        final GigaSpace gigaSpace = GigaSpaceUtils.getGigaSpace(gigaSpaceUrl);
         GigaSpaceUtils.registerType(gigaSpace, "com.a");
 
         GigaSpaceUtils.writeDocument(gigaSpace, "com.a");
         GigaSpaceUtils.writeDocument(gigaSpace, "com.a");
         GigaSpaceUtils.writeDocument(gigaSpace, "com.a");
 
-        GeneralRequest countsRequest = new GeneralRequest();
-        countsRequest.url = url;
+        CountsRequest countsRequest = new CountsRequest();
+        countsRequest.url = gigaSpaceUrl;
         final CountsResponse countsResponse = new Counts().counts(countsRequest);
 
         // then
@@ -60,6 +59,35 @@ public class CountsTest extends TestWithGigaSpace {
         Assert.assertEquals(new HashMap<String, Integer>() {{
             put("com.a", 3);
             put("java.lang.Object", 0);
+        }}, counts);
+    }
+
+    /**
+     * Not useful test as free GigaSpace license provides only one partitions.
+     * No way to test count partitions.
+     */
+    @Test
+    public void shouldReturnCountsByTypesAndPartitions() {
+        final GigaSpace gigaSpace = GigaSpaceUtils.getGigaSpace(gigaSpaceUrl);
+        GigaSpaceUtils.registerType(gigaSpace, "com.a");
+
+        GigaSpaceUtils.writeDocument(gigaSpace, "com.a");
+        GigaSpaceUtils.writeDocument(gigaSpace, "com.a");
+        GigaSpaceUtils.writeDocument(gigaSpace, "com.a");
+
+        CountsRequest countsRequest = new CountsRequest();
+        countsRequest.url = gigaSpaceUrl;
+        countsRequest.byPartitions = true;
+        final CountsResponse countsResponse = new Counts().counts(countsRequest);
+
+        // then
+        Assert.assertEquals(2, countsResponse.counts.size());
+        Map<String, Integer> counts = new HashMap<>();
+        counts.put(countsResponse.counts.get(0).name, countsResponse.counts.get(0).count);
+        counts.put(countsResponse.counts.get(1).name, countsResponse.counts.get(1).count);
+        Assert.assertEquals(new HashMap<String, Integer>() {{
+            put(gigaSpace.getName() + " [1] com.a", 3);
+            put(gigaSpace.getName() + " [1] java.lang.Object", 0);
         }}, counts);
     }
 

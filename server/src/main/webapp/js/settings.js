@@ -36,6 +36,7 @@ angular.module('App').factory('settings', [function () {
 
                     typesTab: {
                         hideZero: settings.gigaspaces[i].typesTab.hideZero,
+                        byPartitions: settings.gigaspaces[i].typesTab.byPartitions,
                         filter: settings.gigaspaces[i].typesTab.filter,
                         selectedCount: settings.gigaspaces[i].typesTab.selectedCount
                     },

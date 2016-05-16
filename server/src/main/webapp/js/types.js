@@ -118,6 +118,15 @@ App.controller('TypesController', ['$rootScope', '$scope', '$http', '$q', '$time
 
             return status;
         };
+        
+        $scope.toggleByPartitions = function () {
+            var typesTab = $scope.context.selectedGigaspace.typesTab;
+            if (typesTab.byPartitions) {
+                typesTab.byPartitions = void 0;
+            } else {
+                typesTab.byPartitions = true;
+            }
+        };
 
         $scope.queryCounts = function (gigaspace) {
             if (!gigaspace.typesTab.checking) return; // stopped
@@ -127,7 +136,8 @@ App.controller('TypesController', ['$rootScope', '$scope', '$http', '$q', '$time
                 user: gigaspace.user,
                 password: gigaspace.password,
                 driver: gigaspace.driver,
-                appVersion: $scope.config.internal.appVersion
+                appVersion: $scope.config.internal.appVersion,
+                byPartitions: $scope.context.selectedGigaspace.typesTab.byPartitions
             };
 
             $http({

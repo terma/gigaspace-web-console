@@ -26,7 +26,7 @@ import java.io.OutputStream;
 public class DatabaseProvider implements Provider {
 
     @Override
-    public CountsResponse counts(GeneralRequest request) {
+    public CountsResponse counts(CountsRequest request) {
         throw new UnsupportedOperationException("We don't support count for DB, please wait future releases!");
     }
 

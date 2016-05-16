@@ -23,6 +23,10 @@
            ng-show="context.selectedGigaspace.typesTab.hideZero">Show Zero</a>
         <a href="javascript:void(0);" ng-click="context.selectedGigaspace.typesTab.hideZero = true"
            ng-show="!context.selectedGigaspace.typesTab.hideZero">Hide Zero</a>
+        <a href="javascript:void(0);" ng-click="toggleByPartitions()"
+           ng-show="!context.selectedGigaspace.typesTab.byPartitions">Partitions</a>
+        <a href="javascript:void(0);" ng-click="toggleByPartitions()"
+           ng-show="context.selectedGigaspace.typesTab.byPartitions">Space</a>
 
         <p></p>
 
@@ -30,8 +34,8 @@
             <thead>
             <tr class="mono-text">
                 <th>Total</th>
-                <th align="right">{{ counts.total.count }}</th>
-                <th align="right">{{ prevCountStatus(counts.total) }}</th>
+                <th align="right">{{ context.selectedGigaspace.typesTab.total.count }}</th>
+                <th align="right">{{ prevCountStatus(context.selectedGigaspace.typesTab.total) }}</th>
                 <th>&nbsp;</th>
             </tr>
             </thead>

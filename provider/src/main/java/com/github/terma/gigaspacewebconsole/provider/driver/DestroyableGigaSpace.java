@@ -19,12 +19,12 @@ package com.github.terma.gigaspacewebconsole.provider.driver;
 import org.openspaces.core.GigaSpace;
 import org.openspaces.core.space.UrlSpaceConfigurer;
 
-public class DestroeableGigaSpace {
+public class DestroyableGigaSpace {
 
     private final GigaSpace gigaSpace;
     private final UrlSpaceConfigurer urlSpaceConfigurer;
 
-    public DestroeableGigaSpace(GigaSpace gigaSpace, UrlSpaceConfigurer urlSpaceConfigurer) {
+    public DestroyableGigaSpace(GigaSpace gigaSpace, UrlSpaceConfigurer urlSpaceConfigurer) {
         this.gigaSpace = gigaSpace;
         this.urlSpaceConfigurer = urlSpaceConfigurer;
     }

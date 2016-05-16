@@ -18,8 +18,8 @@ package com.github.terma.gigaspacewebconsole.provider;
 
 import com.gigaspaces.cluster.activeelection.SpaceMode;
 import com.github.terma.gigaspacewebconsole.core.Count;
+import com.github.terma.gigaspacewebconsole.core.CountsRequest;
 import com.github.terma.gigaspacewebconsole.core.CountsResponse;
-import com.github.terma.gigaspacewebconsole.core.GeneralRequest;
 import org.openspaces.admin.Admin;
 import org.openspaces.admin.space.Space;
 import org.openspaces.admin.space.SpaceInstance;
@@ -30,6 +30,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
+@SuppressWarnings("WeakerAccess")
 public class Counts {
 
     private static final Logger LOGGER = Logger.getLogger(Counts.class.getName());
@@ -42,7 +43,7 @@ public class Counts {
         }
     }
 
-    public CountsResponse counts(GeneralRequest request) {
+    public CountsResponse counts(CountsRequest request) {
         final CountsResponse countsResponse = new CountsResponse();
         countsResponse.counts = new ArrayList<>();
 
@@ -57,11 +58,18 @@ public class Counts {
             final Map<String, Integer> counts = new HashMap<>();
             for (final SpaceInstance spaceInstance : spaceInstances) {
                 if (spaceInstance.getMode() != SpaceMode.BACKUP) {
+
+                    // cross space instance types
                     for (final Map.Entry<String, Integer> countItem : instanceToCounts(spaceInstance).entrySet()) {
                         LOGGER.fine("Space instance " + spaceInstance + " has " + countItem + " types");
-                        Integer count = counts.get(countItem.getKey());
-                        if (count == null) count = 0;
-                        counts.put(countItem.getKey(), count + countItem.getValue());
+
+                        if (request.byPartitions) {
+                            counts.put(spaceInstance.getSpaceInstanceName() + " " + countItem.getKey(), countItem.getValue());
+                        } else {
+                            Integer count = counts.get(countItem.getKey());
+                            if (count == null) count = 0;
+                            counts.put(countItem.getKey(), count + countItem.getValue());
+                        }
                     }
                 }
             }
