@@ -137,6 +137,7 @@ App.controller('TypesController', ['$rootScope', '$scope', '$http', '$q', '$time
                 password: gigaspace.password,
                 driver: gigaspace.driver,
                 appVersion: $scope.config.internal.appVersion,
+                unmanaged: gigaspace.unmanaged,
                 byPartitions: $scope.context.selectedGigaspace.typesTab.byPartitions
             };
 

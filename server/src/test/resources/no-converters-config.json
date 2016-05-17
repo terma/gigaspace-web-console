@@ -99,7 +99,8 @@
       "url": "/./local",
       "user": "",
       "password": "",
-      "driver": "GS-10"
+      "driver": "GS-10",
+      "unmanaged": true
     },
     {
       "name": "GS-10",

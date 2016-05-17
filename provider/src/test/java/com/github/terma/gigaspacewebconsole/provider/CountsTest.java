@@ -32,6 +32,7 @@ public class CountsTest extends TestWithGigaSpace {
     public void shouldReturnEmptyResultIfNoTypesInSpace() {
         CountsRequest countsRequest = new CountsRequest();
         countsRequest.url = gigaSpaceUrl;
+        countsRequest.unmanaged = true;
         final CountsResponse countsResponse = new Counts().counts(countsRequest);
 
         // then only Object default
@@ -49,6 +50,7 @@ public class CountsTest extends TestWithGigaSpace {
 
         CountsRequest countsRequest = new CountsRequest();
         countsRequest.url = gigaSpaceUrl;
+        countsRequest.unmanaged = true;
         final CountsResponse countsResponse = new Counts().counts(countsRequest);
 
         // then
@@ -78,6 +80,7 @@ public class CountsTest extends TestWithGigaSpace {
         CountsRequest countsRequest = new CountsRequest();
         countsRequest.url = gigaSpaceUrl;
         countsRequest.byPartitions = true;
+        countsRequest.unmanaged = true;
         final CountsResponse countsResponse = new Counts().counts(countsRequest);
 
         // then

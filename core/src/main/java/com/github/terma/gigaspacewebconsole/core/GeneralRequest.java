@@ -23,10 +23,15 @@ public class GeneralRequest extends AppVersionRequest {
     public String driver;
     public String url;
 
+    /**
+     * {@link com.github.terma.gigaspacewebconsole.core.config.ConfigDatabase#unmanaged}
+     */
+    public boolean unmanaged;
+
     @Override
     public String toString() {
         return this.getClass().getSimpleName() + " {url: '" + url + "', user: '" + user
-                + "', password: **** " + ", driver: '" + driver + "\'}";
+                + "', password: **** " + ", driver: '" + driver + "\', unmanaged: " + unmanaged + "}";
     }
 
 }

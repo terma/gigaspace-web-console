@@ -84,6 +84,7 @@ App.controller("controller", [
 
             gigaspace.url = predefinedGigaspace.url;
             gigaspace.driver = predefinedGigaspace.driver;
+            gigaspace.unmanaged = predefinedGigaspace.unmanaged;
             if (predefinedGigaspace.user) gigaspace.user = predefinedGigaspace.user;
             if (predefinedGigaspace.password) gigaspace.password = predefinedGigaspace.password;
 
@@ -104,8 +105,11 @@ App.controller("controller", [
         };
 
         $("input.connection").keydown(function (e) {
-            if (e.keyCode == 13) $scope.executeQuery();
-            else $scope.stopCheckTypes();
+            // todo by pressing enter in connection input do proper action for selected tab
+            if ($scope.context.selectedGigaspace.selectedTab === 'query') {
+                if (e.keyCode == 13) $scope.executeQuery();
+                else $scope.stopCheckTypes();
+            }
         });
 
         $("select").change(function () {

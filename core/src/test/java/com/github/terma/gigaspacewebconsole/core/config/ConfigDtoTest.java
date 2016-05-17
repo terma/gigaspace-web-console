@@ -20,7 +20,7 @@ public class ConfigDtoTest {
 
     @Test
     public void justCodeCoverageForDtoClasses() {
-        Assert.assertEquals("ConfigDatabase {name:'null', url:'null', user:'null', driver:'null', secure:false}", new ConfigDatabase().toString());
+        Assert.assertEquals("ConfigDatabase {name:'null', url:'null', user:'null', driver:'null', secure:false, unmanaged: false}", new ConfigDatabase().toString());
         Assert.assertEquals("ConfigDriver {name: 'null', libs: null}", new ConfigDriver().toString());
         Assert.assertEquals("ConfigLink {name: 'null', url: 'null'}", new ConfigLink().toString());
         Assert.assertEquals("ConfigTemplate {name: 'null', sql: 'null'}", new ConfigTemplate().toString());

@@ -21,11 +21,19 @@ class AdminCacheKey {
     public final String locators;
     public final String user;
     public final String password;
+    public final boolean unmanaged;
 
-    public AdminCacheKey(String locators, String user, String password) {
+    public AdminCacheKey(String locators, String user, String password, boolean unmanaged) {
         this.locators = locators;
         this.user = user;
         this.password = password;
+        this.unmanaged = unmanaged;
+    }
+
+    @Override
+    public String toString() {
+        return "AdminCacheKey {locators: '" + locators + '\'' +
+                ", user: '" + user + "\', password='****'" + ", unmanaged: " + unmanaged + '}';
     }
 
     @Override
@@ -33,13 +41,13 @@ class AdminCacheKey {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        AdminCacheKey key = (AdminCacheKey) o;
+        AdminCacheKey that = (AdminCacheKey) o;
 
-        if (locators != null ? !locators.equals(key.locators) : key.locators != null) return false;
-        if (password != null ? !password.equals(key.password) : key.password != null) return false;
-        if (user != null ? !user.equals(key.user) : key.user != null) return false;
+        if (unmanaged != that.unmanaged) return false;
+        if (locators != null ? !locators.equals(that.locators) : that.locators != null) return false;
+        if (user != null ? !user.equals(that.user) : that.user != null) return false;
+        return password != null ? password.equals(that.password) : that.password == null;
 
-        return true;
     }
 
     @Override
@@ -47,12 +55,8 @@ class AdminCacheKey {
         int result = locators != null ? locators.hashCode() : 0;
         result = 31 * result + (user != null ? user.hashCode() : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (unmanaged ? 1 : 0);
         return result;
-    }
-
-    @Override
-    public String toString() {
-        return "locators: " + locators + ", user: " + user;
     }
 
 }

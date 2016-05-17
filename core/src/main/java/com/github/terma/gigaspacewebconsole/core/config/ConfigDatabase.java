@@ -13,6 +13,8 @@ limitations under the License.
 
 package com.github.terma.gigaspacewebconsole.core.config;
 
+import com.github.terma.gigaspacewebconsole.core.CountsRequest;
+
 public class ConfigDatabase {
 
     public String name;
@@ -22,15 +24,22 @@ public class ConfigDatabase {
     public String driver;
     public boolean secure;
 
+    /**
+     * Valid only for GigaSpace
+     * <p>
+     * That settings we use only for special case: when your space is running not by GSC (real GS cluster)
+     * but that's embedded space in your application. {@link org.openspaces.admin.Admin} can't discover
+     * that space by default. You will not see {@link CountsRequest}
+     * To fix that set that property
+     * <p>
+     * {@link org.openspaces.admin.AdminFactory#discoverUnmanagedSpaces}
+     */
+    public boolean unmanaged;
+
     @Override
     public String toString() {
-        return "ConfigDatabase {" +
-                "name:'" + name + '\'' +
-                ", url:'" + url + '\'' +
-                ", user:'" + user + '\'' +
-                ", driver:'" + driver + '\'' +
-                ", secure:" + secure +
-                '}';
+        return "ConfigDatabase {" + "name:'" + name + '\'' + ", url:'" + url + '\'' + ", user:'" + user + '\'' +
+                ", driver:'" + driver + '\'' + ", secure:" + secure + ", unmanaged: " + unmanaged + "}";
     }
 
 }

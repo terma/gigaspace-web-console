@@ -42,9 +42,9 @@ class AdminCache {
 
     private static AdminCacheKey requestToKey(final GeneralRequest request) {
         if (GigaSpaceUrl.isLocal(request.url)) {
-            return new AdminCacheKey(null, request.user, request.password);
+            return new AdminCacheKey(null, request.user, request.password, request.unmanaged);
         } else {
-            return new AdminCacheKey(GigaSpaceUrl.parseLocators(request.url), request.user, request.password);
+            return new AdminCacheKey(GigaSpaceUrl.parseLocators(request.url), request.user, request.password, request.unmanaged);
         }
     }
 
@@ -78,14 +78,23 @@ class AdminCache {
 
             LOGGER.fine("Creating admin for " + key + "...");
 
-            /**
-             * By default gigaspace admin lookup only spaces which where deployed in real GigaSpace
-             * nor embedded! This property enable to lookup embedded as well.
-             *
-             * Don't worry it's not enable multicast lookup. It still depends on multicast false/true settings
-             * which you can setup by system properties.
-             */
-            adminFactory.discoverUnmanagedSpaces();
+            if (key.unmanaged) {
+                /**
+                 * By default gigaspace admin lookup only spaces which where deployed in real GigaSpace
+                 * nor embedded! This property enable to lookup embedded as well.
+                 *
+                 * Don't worry it's not enable multicast lookup. It still depends on multicast false/true settings
+                 * which you can setup by system properties.
+                 *
+                 * You will be supervised why we don't enable that feature for any space?
+                 *
+                 * The answer is pretty simple with enabled discover it works in a few times slower for
+                 * space deployed to real GS cluster.
+                 *
+                 * So we enabled it only when user really need it for particular space.
+                 */
+                adminFactory.discoverUnmanagedSpaces();
+            }
 
             if (key.locators != null) {
                 adminFactory.userDetails(request.user, request.password);

@@ -72,6 +72,7 @@ public class CountsStabilityTest {
         public Void call() {
             CountsRequest countsRequest = new CountsRequest();
             countsRequest.url = space;
+            countsRequest.unmanaged = true;
             final CountsResponse countsResponse = new Counts().counts(countsRequest);
             Assert.assertEquals(1, countsResponse.counts.size());
             return null;
