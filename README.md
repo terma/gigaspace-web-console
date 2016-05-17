@@ -100,13 +100,13 @@ Useful parameters:
   "comment": "predefined list of GigaSpace spaces which you have, so you don't need to enter all details manualy on page. Any way you can customize them from UI too",
   "gigaspaces": [
     {
-      "comment": "Name for user",
-      "name": "GS-10",
-      "url": "jini:/*/*/gs10?locators=localhost:4700",
-      "user": "",
-      "password": "",
-      "comment": "name from section gs which just show what version of GigaSpace use for that instance, if empty will use first from list or if empty list will take default from app classpath",
-      "gs": ""
+      "name": "GS-10 - visible name",
+      "url": "jini:/*/*/gs10?locators=localhost:4700 - GS URL",
+      "user": "could be blank if you have unsecured space",
+      "password": "could be blank if you have unsecured space",
+      "driver": "",
+      "unmanaged": "set to true if your space is deployed outside of GS cluster like embedded space",
+      "secure": "set to true if you want UI to check that you enter password before any query so no locked account"
     }
   ]
 }
