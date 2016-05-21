@@ -1,20 +1,20 @@
 /*
  Copyright 2015 Artem Stasiuk
 
- Licensed under the Apache License, Version 2.0 (the "License");
+ Licensed under the Apache License, Version 2.0 (the 'License');
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
  http://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
+ distributed under the License is distributed on an 'AS IS' BASIS,
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License.
  */
 
-// todo add support column name with "-"
+// todo add support column name with '-'
 
 App.filter('nullAsString', function () {
     return function (value) {
@@ -22,8 +22,8 @@ App.filter('nullAsString', function () {
     };
 });
 
-App.controller("controller", [
-    '$rootScope' ,"$scope", "$http", "$q", "$timeout", "$filter", "settings",
+App.controller('controller', [
+    '$rootScope' ,'$scope', '$http', '$q', '$timeout', '$filter', 'settings',
     function ($rootScope, $scope, $http, $q, $timeout, $filter, settings) {
 
         /*
@@ -50,7 +50,7 @@ App.controller("controller", [
         function keepSelectedEditorCursor() {
             // todo keep not only line but selection as well
             $scope.context.selectedGigaspace.queryTab.selectedEditor.cursor = $scope.codeMirrorEditor.getCursor().line;
-            log.log("store cursor in " + $scope.context.selectedGigaspace.queryTab.cursor);
+            log.log('store cursor in ' + $scope.context.selectedGigaspace.queryTab.cursor);
         }
 
         $scope.selectGigaspace = function (predefinedGigaspace) {
@@ -58,13 +58,13 @@ App.controller("controller", [
             if (!gigaspace) {
                 gigaspace = {
                     name: predefinedGigaspace.name,
-                    selectedTab: "query",
+                    selectedTab: 'query',
                     typesTab: {},
                     queryTab: {
                         editors: []
                     }
                 };
-                log.log("Add new gigaspace:");
+                log.log('Add new gigaspace:');
                 log.log(gigaspace);
                 $scope.context.gigaspaces.push(gigaspace);
             }
@@ -96,7 +96,7 @@ App.controller("controller", [
             }
 
             // select gigaspace
-            log.log("select gigaspace:");
+            log.log('select gigaspace:');
             log.log(gigaspace);
             $scope.context.selectedGigaspace = gigaspace;
 
@@ -104,7 +104,7 @@ App.controller("controller", [
             asyncGoToAndFocus($scope.context.selectedGigaspace.queryTab.selectedEditor.cursor);
         };
 
-        $("input.connection").keydown(function (e) {
+        $('input.connection').keydown(function (e) {
             // todo by pressing enter in connection input do proper action for selected tab
             if ($scope.context.selectedGigaspace.selectedTab === 'query') {
                 if (e.keyCode == 13) $scope.executeQuery();
@@ -112,11 +112,11 @@ App.controller("controller", [
             }
         });
 
-        $("select").change(function () {
+        $('select').change(function () {
             $scope.stopCheckTypes();
         });
 
-        $("ui-codemirror").keydown(function (e) {
+        $('ui-codemirror').keydown(function (e) {
             if (e.ctrlKey && e.keyCode == 13) $scope.executeQuery();
             else $scope.stopCheckTypes();
         });
@@ -127,11 +127,11 @@ App.controller("controller", [
         };
 
         function getLines(text) {
-            return text == undefined ? [] : text.split("\n");
+            return text == undefined ? [] : text.split('\n');
         }
 
         function isCommentedOrEmpty(string) {
-            return string.trim().length == 0 || string.indexOf("//") == 0 || string.indexOf("#") == 0 || string.indexOf("--") == 0;
+            return string.trim().length == 0 || string.indexOf('//') == 0 || string.indexOf('#') == 0 || string.indexOf('--') == 0;
         }
 
         var executionCancellerList = [];
@@ -139,7 +139,7 @@ App.controller("controller", [
 
         function cancelDefers(defers) {
             for (var i = 0; i < defers.length; i++) {
-                defers[i].resolve("cancelled by user!");
+                defers[i].resolve('cancelled by user!');
             }
             defers.length = 0;
         }
@@ -162,7 +162,7 @@ App.controller("controller", [
 
                 if (sqlList.length > 0) {
                     $scope.context.selectedGigaspace.queryTab.selectedEditor.status =
-                        "Only last SQL will be exported to CSV " + sqlToExecute;
+                        'Only last SQL will be exported to CSV ' + sqlToExecute;
                 }
 
                 var request = {
@@ -174,14 +174,14 @@ App.controller("controller", [
                     appVersion: $scope.config.internal.appVersion
                 };
 
-                var form = $("<form></form>").attr("action", "execute-to-csv").attr("method", "post");
-                form.append($("<input>").attr("type", "hidden").attr("name", "json").attr("value", angular.toJson(request)));
-                form.appendTo("body").submit().remove();
+                var form = $('<form></form>').attr('action', 'execute-to-csv').attr('method', 'post');
+                form.append($('<input>').attr('type', 'hidden').attr('name', 'json').attr('value', angular.toJson(request)));
+                form.appendTo('body').submit().remove();
             });
         };
 
         function groovyScript(lines) {
-            return lines.length > 0 && lines[0] == "groovy";
+            return lines.length > 0 && lines[0] == 'groovy';
         }
 
         $scope.executeQuery = function () {
@@ -194,22 +194,22 @@ App.controller("controller", [
                     lines.splice(0, 1); // remove groovy line
 
                     var editor = $scope.context.selectedGigaspace.queryTab.selectedEditor;
-                    editor.status = "Executing...";
+                    editor.status = 'Executing...';
 
                     var request = {
                         url: $scope.context.selectedGigaspace.url,
                         user: $scope.context.selectedGigaspace.user,
                         password: $scope.context.selectedGigaspace.password,
                         driver: $scope.context.selectedGigaspace.driver,
-                        sql: lines.mkString("\n"),
+                        sql: lines.mkString('\n'),
                         appVersion: $scope.config.internal.appVersion
                     };
 
                     $http({
-                        url: "groovy-execute",
-                        method: "POST",
+                        url: 'groovy-execute',
+                        method: 'POST',
                         data: request,
-                        headers: {'Content-Type': "application/json"},
+                        headers: {'Content-Type': 'application/json'},
                         transformResponse: transformResponse
                     }).success(function (res) { // array of result
                         for (var i = 0; i < res.length; i++) {
@@ -231,7 +231,7 @@ App.controller("controller", [
                 } else { // real SQL lines
                     for (var j = 0; j < lines.length; j++) {
                         var sql = lines[j];
-                        log.log("start execute sql:");
+                        log.log('start execute sql:');
                         log.log(sql);
                         executeOneQuery({sql: sql});
                     }
@@ -247,23 +247,23 @@ App.controller("controller", [
 
             var content = $scope.codeMirrorEditor.getSelection()
                 || $scope.context.selectedGigaspace.queryTab.selectedEditor.content;
-            log.log("content to execute:");
+            log.log('content to execute:');
             log.log(content);
 
             var sqlList = filterCommentedAndEmpty(getLines(content));
             if (sqlList.length > 0) executeQueries(sqlList);
 
             if (sqlList.length == 0) {
-                log.log("nothing to execute");
-                $scope.context.selectedGigaspace.queryTab.selectedEditor.status = "Nothing to execute";
+                log.log('nothing to execute');
+                $scope.context.selectedGigaspace.queryTab.selectedEditor.status = 'Nothing to execute';
             }
         }
 
         function responseToError(response) {
-            if (!response) return {"message": "Can't connect to server!"};
-            else if (typeof response == "string") return {
-                "exceptionClass": "Unknown Error! Please, please ping us with that!",
-                "message": response
+            if (!response) return {'message': 'Can\'t connect to server!'};
+            else if (typeof response == 'string') return {
+                'exceptionClass': 'Unknown Error! Please, please ping us with that!',
+                'message': response
             };
             else return response;
         }
@@ -271,7 +271,7 @@ App.controller("controller", [
         function executeOneQuery(query) {
             $scope.context.selectedGigaspace.queryTab.selectedEditor.queries.push(query);
 
-            query.status = "Executing...";
+            query.status = 'Executing...';
 
             var executionCanceller = $q.defer();
             executionCancellerList.push(executionCanceller);
@@ -285,13 +285,13 @@ App.controller("controller", [
                 appVersion: $scope.config.internal.appVersion
             };
 
-            query.status = "Executing...";
+            query.status = 'Executing...';
             $http({
-                url: "execute",
-                method: "POST",
+                url: 'execute',
+                method: 'POST',
                 data: request,
                 timeout: executionCanceller.promise,
-                headers: {'Content-Type': "application/json"},
+                headers: {'Content-Type': 'application/json'},
                 transformResponse: transformResponse
             }).success(function (res) {
                 query.status = undefined;
@@ -309,7 +309,7 @@ App.controller("controller", [
             if ($scope.context.selectedGigaspace.typesTab.checking) {
                 $scope.context.selectedGigaspace.typesTab.status = undefined;
                 $scope.context.selectedGigaspace.typesTab.checking = false;
-                log.log("checking stopped");
+                log.log('checking stopped');
             }
         };
 
@@ -320,28 +320,29 @@ App.controller("controller", [
 
         $scope.openTypesTab = function () {
             $scope.closeTabs();
-            $scope.context.selectedGigaspace.selectedTab = "types";
+            $scope.context.selectedGigaspace.selectedTab = 'types';
+        };
+        
+        $scope.openTab = function (tab) {
+            $scope.closeTabs();
+            $scope.context.selectedGigaspace.selectedTab = tab;
         };
 
         $scope.openAdminTab = function () {
-            $scope.closeTabs();
-            $scope.context.selectedGigaspace.selectedTab = "admin";
+            $scope.openTab('admin');
         };
 
         $scope.openQueryTab = function () {
-            $scope.closeTabs();
-            $scope.context.selectedGigaspace.selectedTab = "query";
+            $scope.openTab('query');
             asyncFocus();
         };
 
         $scope.openCopyTab = function () {
-            $scope.closeTabs();
-            $scope.context.selectedGigaspace.selectedTab = "copy";
+            $scope.openTab('copy');
         };
 
         $scope.openExportImportTab = function () {
-            $scope.closeTabs();
-            $scope.context.selectedGigaspace.selectedTab = "exportImport";
+            $scope.openTab('exportImport');
         };
 
         $scope.export = function () {
@@ -351,7 +352,7 @@ App.controller("controller", [
             //var typesString = $scope.context.selectedGigaspace.exportImportTab.types;
             //if (typesString) {
             // todo parse types
-            //typesString.splite(",")
+            //typesString.splite(',')
             //}
 
             var request = {
@@ -363,14 +364,14 @@ App.controller("controller", [
                 appVersion: $scope.config.internal.appVersion
             };
 
-            var form = $("<form></form>").attr("action", "export").attr("method", "post");
-            form.append($("<input></input>").attr("type", "hidden").attr("name", "json").attr("value", angular.toJson(request)));
-            form.appendTo("body").submit().remove();
+            var form = $('<form></form>').attr('action', 'export').attr('method', 'post');
+            form.append($('<input></input>').attr('type', 'hidden').attr('name', 'json').attr('value', angular.toJson(request)));
+            form.appendTo('body').submit().remove();
         };
 
         $scope.startImport = function () {
-            log.log("enrich import form with json");
-            $("#import-json").val(angular.toJson({
+            log.log('enrich import form with json');
+            $('#import-json').val(angular.toJson({
                 url: $scope.context.selectedGigaspace.url,
                 user: $scope.context.selectedGigaspace.user,
                 password: $scope.context.selectedGigaspace.password,
@@ -382,7 +383,7 @@ App.controller("controller", [
         function openQueryTabWith(sql, replaceContent) {
             $scope.openQueryTab();
             var content = $scope.context.selectedGigaspace.queryTab.selectedEditor.content;
-            var updatedContent = (!replaceContent && content) ? content + "\n" + sql : sql;
+            var updatedContent = (!replaceContent && content) ? content + '\n' + sql : sql;
             asyncUpdateAndGoToEndAndFocus(updatedContent);
         }
 
@@ -411,19 +412,19 @@ App.controller("controller", [
         }
 
         $scope.openQueryTabWithSelectFor = function (typeName) {
-            openQueryTabWith("select * from " + typeName + " where rownum < 50");
+            openQueryTabWith('select * from ' + typeName + ' where rownum < 50');
         };
 
         $scope.openQueryTabWithUpdateFor = function (typeName) {
-            openQueryTabWith("update " + typeName + " set ? where ?");
+            openQueryTabWith('update ' + typeName + ' set ? where ?');
         };
 
         $scope.openQueryTabWithDeleteFor = function (typeName) {
-            openQueryTabWith("delete from " + typeName + " where ?");
+            openQueryTabWith('delete from ' + typeName + ' where ?');
         };
 
         $scope.openQueryTabWithTypeFor = function (typeName) {
-            openQueryTabWith("groovy\nout gs.typeManager.getTypeDescriptor('" + typeName + "')", true);
+            openQueryTabWith('groovy\nout gs.typeManager.getTypeDescriptor(\'' + typeName + '\')', true);
         };
 
         $scope.toggleTemplates = function () {
@@ -444,20 +445,20 @@ App.controller("controller", [
             $scope.context.selectedGigaspace.copyTab.queries = [];
 
             var content = $scope.context.selectedGigaspace.copyTab.content;
-            log.log("content to copy:");
+            log.log('content to copy:');
             log.log(content);
 
             var sqlList = filterCommentedAndEmpty(getLines(content));
             for (var j = 0; j < sqlList.length; j++) {
                 var sql = sqlList[j];
-                log.log("start copy for sql:");
+                log.log('start copy for sql:');
                 log.log(sql);
                 copyOne({sql: sql});
             }
 
             if (sqlList.length == 0) {
-                log.log("nothing to copy");
-                $scope.context.selectedGigaspace.copyTab.status = "Nothing to copy";
+                log.log('nothing to copy');
+                $scope.context.selectedGigaspace.copyTab.status = 'Nothing to copy';
             }
         };
 
@@ -473,7 +474,7 @@ App.controller("controller", [
             // > 13 - reduce to ms
 
             function secTimestampToTime(string) {
-                return msTimestampToTime(string + "000");
+                return msTimestampToTime(string + '000');
             }
 
             function msTimestampToTime(string) {
@@ -492,12 +493,12 @@ App.controller("controller", [
 
             for (var i = 0; i < data.length; i++) {
                 var value = data[i][columnIndex];
-                data[i][columnIndex] = value + " > " + stringToTime(value);
+                data[i][columnIndex] = value + ' > ' + stringToTime(value);
             }
         };
 
         $scope.selectTargetGigaspace = function (gigaspace) {
-            log.log("select target g");
+            log.log('select target g');
             log.log($scope.context.selectedGigaspace.copyTab);
             $scope.context.selectedGigaspace.copyTab.targetUrl = gigaspace.url;
             $scope.context.selectedGigaspace.copyTab.targetUser = gigaspace.user;
@@ -506,7 +507,7 @@ App.controller("controller", [
 
         $scope.togglePUs = function () {
             var selected = $scope.admin.selected;
-            var filteredPUs = $filter("filter")($scope.pus, $scope.puFilter);
+            var filteredPUs = $filter('filter')($scope.pus, $scope.puFilter);
             for (var i = 0; i < filteredPUs.length; i++) {
                 filteredPUs[i].selected = selected;
             }
@@ -515,7 +516,7 @@ App.controller("controller", [
         function copyOne(query) {
             $scope.context.selectedGigaspace.copyTab.queries.push(query);
 
-            query.status = "Copying...";
+            query.status = 'Copying...';
 
             var copyDefer = $q.defer();
             copyingDefers.push(copyDefer);
@@ -533,11 +534,11 @@ App.controller("controller", [
             };
 
             $http({
-                url: "copy",
-                method: "POST",
+                url: 'copy',
+                method: 'POST',
                 data: request,
                 timeout: copyDefer.promise,
-                headers: {'Content-Type': "application/json"},
+                headers: {'Content-Type': 'application/json'},
                 transformResponse: transformResponse
             }).success(function (res) {
                 query.status = undefined;
@@ -551,9 +552,9 @@ App.controller("controller", [
 
         $scope.loadConfig = function () {
             $http({
-                url: "config",
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
+                url: 'config',
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
                 transformResponse: transformResponse
             }).success(function (res) {
                 $scope.config = res;
@@ -562,7 +563,7 @@ App.controller("controller", [
                 $rootScope.context = $scope.context; // todo remove in future because that hack
 
                 // register event to store context before unload
-                window.addEventListener("beforeunload", function () {
+                window.addEventListener('beforeunload', function () {
                     keepSelectedEditorCursor();
                     settings.store($scope.context);
                 });
@@ -570,7 +571,7 @@ App.controller("controller", [
                 // restore selected gigaspace, first or default
                 if (!$scope.context.selectedGigaspace) {
                     if ($scope.config.user.gigaspaces.length > 0) $scope.selectGigaspace($scope.config.user.gigaspaces[0]);
-                    else $scope.selectGigaspace({name: "New"});
+                    else $scope.selectGigaspace({name: 'New'});
                 } else {
                     var predefinedGigaspace = findPredefinedGigaspace($scope.context.selectedGigaspace.name);
                     if (predefinedGigaspace) $scope.selectGigaspace(predefinedGigaspace);
@@ -578,7 +579,7 @@ App.controller("controller", [
             }).error(function (res) {
                 // todo show error if can't load config, as temporary solution
                 log.log(res);
-                alert("Oops... \n" + res);
+                alert('Oops... \n' + res);
             });
         };
 
@@ -615,14 +616,15 @@ App.controller("controller", [
         };
 
         $scope.isCredentialInvalid = function () {
-            $('input.source[type="password"]').removeClass('border-error');
+            var passwordInput = $('input.source[type=\'password\']');
+            passwordInput.removeClass('border-error');
             var gigaspace = findPredefinedGigaspace($scope.context.selectedGigaspace.name);
             if (gigaspace) {
                 if (gigaspace.secure) {
                     if (!nonEmptyString($scope.context.selectedGigaspace.user)
                         || !nonEmptyString($scope.context.selectedGigaspace.password)) {
-                        $('input.source[type="password"]').focus();
-                        $('input.source[type="password"]').addClass('border-error');
+                        passwordInput.focus();
+                        passwordInput.addClass('border-error');
                         return true;
                     }
                 }
@@ -646,7 +648,7 @@ App.controller("controller", [
             } else {
                 if (!$scope.isCredentialCorrect()) return;
 
-                if (autocompleteCancel) autocompleteCancel.resolve("cancelled by user!");
+                if (autocompleteCancel) autocompleteCancel.resolve('cancelled by user!');
                 autocompleteCancel = $q.defer();
 
                 var request = {
@@ -674,14 +676,14 @@ App.controller("controller", [
         };
 
         $scope.editorOptions = {
-            mode: "text/x-sql",
+            mode: 'text/x-sql',
             indentWithTabs: true,
             smartIndent: true,
             lineWrapping: true,
             lineNumbers: false,
             matchBrackets: true,
             autofocus: true,
-            placeholder: "SQL to execute, support lists, use #, // or -- for comment",
+            placeholder: 'SQL to execute, support lists, use #, // or -- for comment',
             hint: CodeMirror.hint.sql,
             onLoad: function (cm) {
                 $scope.codeMirrorEditor = cm;
@@ -754,53 +756,53 @@ App.controller("controller", [
             }
         };
 
-        $scope.puFilter = "";
+        $scope.puFilter = '';
         $scope.components = [];
         $scope.pus = [{
-            name: "my-space",
+            name: 'my-space',
             space: true,
             expectedInstances: 40,
             instances: 39,
-            gscs: "9000123, 12323, 112324",
+            gscs: '9000123, 12323, 112324',
             mem: {
                 max: 9000,
                 used: 8000
             }
         }, {
-            name: "listener-1",
+            name: 'listener-1',
             expectedInstances: 1,
             instances: 1
         }, {
-            name: "processor-my-super",
+            name: 'processor-my-super',
             expectedInstances: 1,
             instances: 0
         }, {
-            name: "processor-my-super",
+            name: 'processor-my-super',
             expectedInstances: 1,
             instances: 0
         }, {
-            name: "processor-my-super",
+            name: 'processor-my-super',
             expectedInstances: 1,
             instances: 0
         }, {
-            name: "processor-my-super",
+            name: 'processor-my-super',
             expectedInstances: 1,
             instances: 0
         }, {
-            name: "processor-my-a",
+            name: 'processor-my-a',
             expectedInstances: 1,
             instances: 0
         }, {
-            name: "processor-my-b",
+            name: 'processor-my-b',
             expectedInstances: 1,
             instances: 1,
-            status: "DEPLOYED"
+            status: 'DEPLOYED'
         }, {
-            name: "processor-my-c",
+            name: 'processor-my-c',
             expectedInstances: 1,
             instances: 1
         }, {
-            name: "another-big-space-app",
+            name: 'another-big-space-app',
             space: true,
             expectedInstances: 10,
             instances: 10
