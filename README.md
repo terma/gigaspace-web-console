@@ -15,7 +15,7 @@ Powerful alternative for GigaSpace Management Console when you have a lot of wor
     * [Counts History](#counts-history)
     * [Counts By Partitions](#counts-by-partitions)
  * [Execute Groovy](#work-with-groovy)
-  * [JSON](#work-with-json)
+    * [JSON](#work-with-json)
  * [Copy data between spaces](#copy-data-between-spaces)
  * [Export / Import data](#export--import-data)
 
