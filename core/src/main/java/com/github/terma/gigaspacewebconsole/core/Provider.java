@@ -27,7 +27,7 @@ public interface Provider {
 
     CopyResponse copy(CopyRequest request) throws Exception;
 
-    void execute(ExecuteRequest request, GroovyExecuteResponseStream responseStream) throws Exception;
+    void groovyExecute(ExecuteRequest request, GroovyExecuteResponseStream responseStream) throws Exception;
 
     void export(ExportRequest request, OutputStream outputStream) throws Exception;
 

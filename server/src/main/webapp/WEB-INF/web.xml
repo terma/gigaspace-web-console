@@ -34,6 +34,11 @@
     </servlet>
 
     <servlet>
+        <servlet-name>GroovyExecuteToCsvServlet</servlet-name>
+        <servlet-class>com.github.terma.gigaspacewebconsole.server.GroovyExecuteToCsvServlet</servlet-class>
+    </servlet>
+
+    <servlet>
         <servlet-name>ExecuteToCsvServlet</servlet-name>
         <servlet-class>com.github.terma.gigaspacewebconsole.server.ExecuteToCsvServlet</servlet-class>
     </servlet>
@@ -81,6 +86,11 @@
     <servlet-mapping>
         <servlet-name>GroovyExecuteServlet</servlet-name>
         <url-pattern>/groovy-execute</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>GroovyExecuteToCsvServlet</servlet-name>
+        <url-pattern>/groovy-execute-to-csv</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>

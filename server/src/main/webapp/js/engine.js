@@ -23,7 +23,7 @@ App.filter('nullAsString', function () {
 });
 
 App.controller('controller', [
-    '$rootScope' ,'$scope', '$http', '$q', '$timeout', '$filter', 'settings',
+    '$rootScope', '$scope', '$http', '$q', '$timeout', '$filter', 'settings',
     function ($rootScope, $scope, $http, $q, $timeout, $filter, settings) {
 
         /*
@@ -157,12 +157,28 @@ App.controller('controller', [
         $scope.executeToCsv = function () {
             if ($scope.isCredentialInvalid()) return;
 
-            executeQueryToSmt(function (sqlList) {
-                var sqlToExecute = sqlList[sqlList.length - 1];
+            executeQueryToSmt(function (lines) {
+                var sqlToExecute = void 0;
+                var action = void 0;
 
-                if (sqlList.length > 0) {
-                    $scope.context.selectedGigaspace.queryTab.selectedEditor.status =
-                        'Only last SQL will be exported to CSV ' + sqlToExecute;
+                if (groovyScript(lines)) { // groovy script
+                    lines.splice(0, 1); // remove groovy line
+
+                    sqlToExecute = lines.mkString('\n');
+                    action = 'groovy-execute-to-csv';
+
+                    if (lines.length > 0) {
+                        $scope.context.selectedGigaspace.queryTab.selectedEditor.status =
+                            'Exported to CSV';
+                    }
+                } else { // real SQL lines
+                    sqlToExecute = lines[lines.length - 1];
+                    action = 'execute-to-csv';
+
+                    if (lines.length > 0) {
+                        $scope.context.selectedGigaspace.queryTab.selectedEditor.status =
+                            'Only last SQL will be exported to CSV ' + sqlToExecute;
+                    }
                 }
 
                 var request = {
@@ -174,7 +190,7 @@ App.controller('controller', [
                     appVersion: $scope.config.internal.appVersion
                 };
 
-                var form = $('<form></form>').attr('action', 'execute-to-csv').attr('method', 'post');
+                var form = $('<form></form>').attr('action', action).attr('method', 'post');
                 form.append($('<input>').attr('type', 'hidden').attr('name', 'json').attr('value', angular.toJson(request)));
                 form.appendTo('body').submit().remove();
             });
@@ -322,7 +338,7 @@ App.controller('controller', [
             $scope.closeTabs();
             $scope.context.selectedGigaspace.selectedTab = 'types';
         };
-        
+
         $scope.openTab = function (tab) {
             $scope.closeTabs();
             $scope.context.selectedGigaspace.selectedTab = tab;

@@ -41,7 +41,7 @@ public class DatabaseProvider implements Provider {
     }
 
     @Override
-    public void execute(ExecuteRequest request, GroovyExecuteResponseStream responseStream) throws Exception {
+    public void groovyExecute(ExecuteRequest request, GroovyExecuteResponseStream responseStream) throws Exception {
         throw new UnsupportedOperationException("We don't support groovy for DB, please wait future releases!");
     }
 
