@@ -15,6 +15,7 @@ Powerful alternative for GigaSpace Management Console when you have a lot of wor
     * [Counts History](#counts-history)
     * [Counts By Partitions](#counts-by-partitions)
  * [Execute Groovy](#work-with-groovy)
+  * [JSON](#work-with-json)
  * [Copy data between spaces](#copy-data-between-spaces)
  * [Export / Import data](#export--import-data)
 
@@ -197,7 +198,7 @@ public interface SqlResult {
 * ```java void out(message: java.lang.Object)``` - print any result to console output
 * ```java gs``` - ref on GigaSpace instance
 
-### Working with JSON
+### Work with JSON
 
 If you want to work with JSON stored in document fields you can use Groovy JSON API http://docs.groovy-lang.org/latest/html/gapi/groovy/json/JsonSlurper.html
 
