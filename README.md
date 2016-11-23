@@ -197,6 +197,19 @@ public interface SqlResult {
 * ```java void out(message: java.lang.Object)``` - print any result to console output
 * ```java gs``` - ref on GigaSpace instance
 
+### Working with JSON
+
+If you want to work with JSON stored in document fields you can use Groovy JSON API http://docs.groovy-lang.org/latest/html/gapi/groovy/json/JsonSlurper.html
+
+Example:
+
+```groovy
+groovy
+def slurper = new groovy.json.JsonSlurper()
+def result = slurper.parseText('{"person":{"name":"Guillaume","age":33,"pets":["dog","cat"]}}')
+result.person.name
+```
+
 ### Useful fast scripts
 
 Show space type description:
