@@ -43,7 +43,7 @@ public class GigaSpaceProvider implements Provider {
     }
 
     @Override
-    public void execute(final ExecuteRequest request, final GroovyExecuteResponseStream responseStream) throws Exception {
+    public void groovyExecute(final ExecuteRequest request, final GroovyExecuteResponseStream responseStream) throws Exception {
         GroovyExecutor.execute(request, responseStream);
     }
 

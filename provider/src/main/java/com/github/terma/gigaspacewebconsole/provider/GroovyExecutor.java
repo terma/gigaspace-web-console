@@ -31,6 +31,7 @@ import org.codehaus.groovy.control.CompilerConfiguration;
 import org.codehaus.groovy.control.customizers.ImportCustomizer;
 import org.openspaces.core.GigaSpace;
 
+@SuppressWarnings("WeakerAccess")
 public class GroovyExecutor {
 
     public static void execute

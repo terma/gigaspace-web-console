@@ -64,6 +64,21 @@ public class GroovyExecutorTest extends TestWithGigaSpace {
         assertEquals("fff", responseStream.results.get(0).data.get(0).get(0));
     }
 
+    /**
+     * <a href="http://docs.groovy-lang.org/latest/html/gapi/groovy/json/JsonSlurper.html">Documentation</a>
+     *
+     * @throws Exception - could be
+     */
+    @Test
+    public void shouldSupportGroovyJson() throws Exception {
+        request.sql = "new groovy.json.JsonSlurper().parseText('{\"person\":{\"name\":\"Guillaume\"}}').person.name";
+
+        GroovyExecutor.execute(request, responseStream);
+
+        assertEquals(1, responseStream.results.size());
+        assertEquals("Guillaume", responseStream.results.get(0).data.get(0).get(0));
+    }
+
     @Test
     public void shouldNotPrintByDefaultIfLastNotResult() throws Exception {
         request.sql = "";
