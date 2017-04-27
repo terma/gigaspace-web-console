@@ -149,6 +149,7 @@
                     <useReleaseProfile>true</useReleaseProfile>
                     <releaseProfiles>nexus</releaseProfiles>
                     <goals>deploy</goals>
+                    <arguments>-Dmaven.test.skip=true</arguments>
                 </configuration>
             </plugin>
 
