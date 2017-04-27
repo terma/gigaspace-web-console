@@ -1,5 +1,5 @@
 /*
-Copyright 2015-2016 Artem Stasiuk
+Copyright 2015-2017 Artem Stasiuk
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -33,10 +33,13 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 public class Exporter {
+
+    private static final Logger LOGGER = Logger.getLogger(Exporter.class.getSimpleName());
 
     private final static Set<String> IGNORING_TYPES = new HashSet<String>() {{
         add("java.lang.Object");
@@ -52,6 +55,7 @@ public class Exporter {
         final ZipOutputStream zipOutputStream = new ZipOutputStream(outputStream);
 
         for (final String type : types) {
+            LOGGER.info(type + " create iterator...");
             final GSIterator iterator = new IteratorBuilder(gigaSpace)
                     .addTemplate(new SpaceDocument(type))
                     .bufferSize(BUFFER_SIZE)
@@ -64,14 +68,20 @@ public class Exporter {
 
             final TypeDescriptor typeDescriptor = getTypeDescriptor(gigaSpace, type);
             objectOutputStream.writeObject(typeDescriptor);
+            LOGGER.info(type + " export type");
 
+            int count = 0;
             while (iterator.hasNext()) {
                 final Object spaceDocument = iterator.next();
                 objectOutputStream.writeObject(spaceDocument);
+                objectOutputStream.reset();
+                count++;
+                if (count % 10000 == 0) LOGGER.info(type + " export " + count + "...");
             }
 
             objectOutputStream.flush();
             zipOutputStream.closeEntry();
+            LOGGER.info(type + " exported " + count);
         }
 
         zipOutputStream.close();

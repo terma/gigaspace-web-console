@@ -1,5 +1,5 @@
 /*
-Copyright 2015-2016 Artem Stasiuk
+Copyright 2015-2017 Artem Stasiuk
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,30 +17,62 @@ limitations under the License.
 package com.github.terma.gigaspacewebconsole.provider;
 
 import com.gigaspaces.document.SpaceDocument;
+import com.gigaspaces.metadata.SpaceTypeDescriptor;
+import com.gigaspaces.metadata.SpaceTypeDescriptorBuilder;
+import com.github.terma.gigaspacewebconsole.core.ExportRequest;
 import com.github.terma.gigaspacewebconsole.provider.driver.GigaSpaceUtils;
 import org.openspaces.core.GigaSpace;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.math.BigDecimal;
+import java.util.Date;
+
 public class ExporterNfr {
 
-    public static void main(String[] args) {
-        System.out.println(Runtime.getRuntime().maxMemory() / 1024 / 1024);
+    public static void main(String[] args) throws Exception {
+        final String typeName = "TestExportType";
+        final int count = 1000 * 1000;
 
-        final GigaSpace gigaSpace = GigaSpaceUtils.getGigaSpace("/./exporter-nfr");
-        GigaSpaceUtils.registerType(gigaSpace, "TestType");
+        final File file = File.createTempFile("gigaspace-web-console-exporter-test", "zip");
+        file.deleteOnExit();
 
-        // generate big amount of data
+        String url = "jini:/*/*/gs10?locators=127.0.0.1:4700";
+        System.out.println("Connecting to " + url + "...");
+        GigaSpace gigaSpace = GigaSpaceUtils.getGigaSpace(url);
+
+        if (gigaSpace.getTypeManager().getTypeDescriptor(typeName) == null) {
+            System.out.println("Register type...");
+            SpaceTypeDescriptor typeDescriptor =
+                    new SpaceTypeDescriptorBuilder(typeName)
+                            .idProperty("id", true).create();
+            gigaSpace.getTypeManager().registerTypeDescriptor(typeDescriptor);
+        }
+
+        System.out.println("Load x" + count + " data...");
+        gigaSpace.clear(new SpaceDocument(typeName));
         final BufferedWriter bufferedWriter = new BufferedWriter(gigaSpace);
-        for (int i = 0; i < 10000; i++) {
-            SpaceDocument testType = new SpaceDocument("TestType");
-            testType.setProperty("A", System.currentTimeMillis());
-            testType.setProperty("name", "Text for name" + System.currentTimeMillis());
-            bufferedWriter.write(testType);
+        for (int i = 0; i < count; i++) {
+            SpaceDocument document = new SpaceDocument(typeName);
+            document.setProperty("name", "test object name " + i);
+            document.setProperty("pseudo_number", i);
+            document.setProperty("creation_time", new Date());
+            document.setProperty("value", new BigDecimal(System.currentTimeMillis()));
+            bufferedWriter.write(document);
         }
         bufferedWriter.flush();
 
+        System.out.println("Export...");
 
+        ExportRequest exportRequest = new ExportRequest();
+        exportRequest.url = url;
 
-        System.out.println("OPA");
+        try (OutputStream outputStream = new FileOutputStream(file)) {
+            Exporter.execute(exportRequest, outputStream);
+        }
+
+        System.out.println("Test done, file size: " + (file.length() / 1024 / 1024) + " mb");
     }
 
 }
