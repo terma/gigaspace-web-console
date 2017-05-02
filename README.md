@@ -11,6 +11,7 @@ Powerful alternative for GigaSpace Management Console when you have a lot of wor
 * [How to run](#how-to-run)
 * [How to use](#how-to-use)
  * [Execute SQL Queries](#execute-sql-queries)
+    * [SQL on JSON](#sql-on-json)
  * [Registered Types and Counts](#registered-types-and-counts)
     * [Counts History](#counts-history)
     * [Counts By Partitions](#counts-by-partitions)
@@ -154,7 +155,31 @@ _This type of query required full scan so be careful on PROD =)_
 
 ```select * from MyDocs where property 'P-2016%'```
 
-That's all
+### SQL on JSON
+
+In case if your database does not support native JSON column type or you just need to perform
+complex query on data stored in JSON format in database. Use function 
+```sql_on_json(<SQL to select JSON>) <SQL on JSON converted to DB>``` 
+
+#### How it works:
+1. Execute ```SQL to select JSON``` and get first row
+1. Extract first column which expected to be ```string or clob``` with JSON object
+1. Convert all fields of JSON object with type array to tables in in-memory database
+1. Execute ```<SQL on JSON converted to DB>``` on top of created database
+1. Provide result
+
+#### Example:
+
+Given: 
+* database with ```create table ACCOUNT (state varchar(4000))```
+* table has row ```insert into ACCOUNT values ("{transactions:[{id:10,orderid:23}],orders:[{id:23}]}")```
+When:
+* execute SQL ```sql_on_json(select state from ACCOUNT limit 1) select * from transactions t where t.orderid in (select id from orders)```
+Then:
+
+ id | orderid  
+ ------------- | ------- 
+ 10      | 23  
 
 ## Registered types and counts
 
