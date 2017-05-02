@@ -27,7 +27,7 @@ public class AppVersionValidator<T extends AppVersionRequest> implements Validat
 
     @Override
     public void validate(T request) throws Exception {
-        if (!appVersion.equals(request.appVersion)) {
+        if (request.appVersion != null && !appVersion.equals(request.appVersion)) {
             throw new ServletException(
                     "Wow! Your console was updated to version " + appVersion
                             + ". Please refresh page (F5 or Ctrl-R) and enjoy with new features. Thx");

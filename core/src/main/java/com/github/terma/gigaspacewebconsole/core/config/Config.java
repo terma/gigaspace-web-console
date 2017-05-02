@@ -23,9 +23,6 @@ public class Config {
 
     @Override
     public String toString() {
-        return "Config {" +
-                "user: " + user +
-                ", internal: " + internal +
-                '}';
+        return "Config {" + "user: " + user + ", internal: " + internal + '}';
     }
 }
