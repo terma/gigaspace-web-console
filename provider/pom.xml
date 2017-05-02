@@ -53,6 +53,11 @@
             <artifactId>gs-runtime</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.github.terma</groupId>
+            <artifactId>sql-on-json</artifactId>
+        </dependency>
+
         <!-- tests -->
 
         <dependency>

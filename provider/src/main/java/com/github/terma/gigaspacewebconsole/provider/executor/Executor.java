@@ -23,9 +23,7 @@ import com.github.terma.gigaspacewebconsole.provider.RealSqlResult;
 import com.github.terma.gigaspacewebconsole.provider.SqlResult;
 import com.github.terma.gigaspacewebconsole.provider.groovy.UpdateSqlResult;
 
-import java.io.IOException;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
@@ -45,14 +43,6 @@ public class Executor {
         this.converterHelper = converterHelper;
     }
 
-    private static void sqlResultToResponseStream
-            (final SqlResult sqlResult, final ExecuteResponseStream responseStream)
-            throws IOException, SQLException {
-        responseStream.writeHeader(sqlResult.getColumns());
-        while (sqlResult.next()) responseStream.writeRow(sqlResult.getRow(), sqlResult.getRowTypes());
-        responseStream.close();
-    }
-
     public void execute(final ExecuteRequest request, final ExecuteResponseStream responseStream) throws Exception {
         request.sql = preprocessor.preprocess(request.sql);
 
@@ -65,7 +55,7 @@ public class Executor {
 
     private void originalExecute(ExecuteRequest request, ExecuteResponseStream responseStream) throws Exception {
         try (final SqlResult sqlResult = originalExecute(request)) {
-            sqlResultToResponseStream(sqlResult, responseStream);
+            ResponseUtil.sqlResultToResponseStream(sqlResult, responseStream);
         }
     }
 
