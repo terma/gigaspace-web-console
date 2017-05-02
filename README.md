@@ -171,10 +171,16 @@ complex query on data stored in JSON format in database. Use function
 #### Example:
 
 Given: 
-* database with ```create table ACCOUNT (state varchar(4000))```
-* table has row ```insert into ACCOUNT values ("{transactions:[{id:10,orderid:23}],orders:[{id:23}]}")```
+```
+create table ACCOUNT (state varchar(4000))
+insert into ACCOUNT values ("{transactions:[{id:10,orderid:23}],orders:[{id:23}]}")
+```
+
 When:
-* execute SQL ```sql_on_json(select state from ACCOUNT limit 1) select * from transactions t where t.orderid in (select id from orders)```
+```
+sql_on_json(select state from ACCOUNT limit 1) select * from transactions t where t.orderid in (select id from orders)
+```
+
 Then:
 
  id | orderid  
