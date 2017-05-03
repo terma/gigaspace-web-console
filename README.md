@@ -157,6 +157,8 @@ _This type of query required full scan so be careful on PROD =)_
 
 ### SQL on JSON
 
+Based on https://github.com/terma/sql-on-json
+
 In case if your database does not support native JSON column type or you just need to perform
 complex query on data stored in JSON format in database. Use function 
 ```sql_on_json(<SQL to select JSON>) <SQL on JSON converted to DB>``` 
