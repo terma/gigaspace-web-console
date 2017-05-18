@@ -27,8 +27,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 /**
- * sql_on_json(select STATE from A where id = (select max(id) from A))) select * from thresholds t where t.limit &gt; 10
- * sql_on_json(select STATE from A where rownum &lt; 2) select * from thresholds t where t.limit &gt; 10
+ * <pre>sql_on_json(select STATE from A where id = (select max(id) from A))) select * from thresholds t where t.limit &gt; 10</pre>
+ * <pre>sql_on_json(select STATE from A where rownum &lt; 2) select * from thresholds t where t.limit &gt; 10</pre>
+ *
+ * @see DatabaseExecutor
  */
 public class SqlOnJsonPlugin implements ExecutorPlugin {
 
