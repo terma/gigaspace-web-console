@@ -38,7 +38,7 @@ public class RealSqlResult implements SqlResult {
 
         columns = new ArrayList<>();
         for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
-            columns.add(resultSet.getMetaData().getColumnName(i));
+            columns.add(resultSet.getMetaData().getColumnLabel(i));
         }
     }
 
