@@ -16,15 +16,15 @@ limitations under the License.
 
 package com.github.terma.gigaspacewebconsole.provider.executor;
 
+import com.github.terma.gigaspacewebconsole.core.config.ConfigLocator;
 import com.github.terma.gigaspacewebconsole.provider.ConverterHelper;
 
-import java.util.ArrayList;
 import java.util.Collections;
 
 public class DatabaseExecutor {
 
     private static final ConnectionFactory connectionFactory = new DatabaseConnectionFactory();
-    private static final ConverterHelper converterHelper = new ConverterHelper(new ArrayList<String>());
+    private static final ConverterHelper converterHelper = new ConverterHelper(ConfigLocator.CONFIG.user.converters);
 
     public static final Executor INSTANCE = new Executor(
             connectionFactory,
