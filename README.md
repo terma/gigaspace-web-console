@@ -12,6 +12,8 @@ Powerful alternative for GigaSpace Management Console when you have a lot of wor
 * [How to use](#how-to-use)
  * [Execute SQL Queries](#execute-sql-queries)
     * [SQL on JSON](#sql-on-json)
+ * [Nice representation custom datatypes](#nice-representation-custom-datatypes)
+    * [Representation for Oracle XML Type](#representation-for-oracle-xml-type)
  * [Registered Types and Counts](#registered-types-and-counts)
     * [Counts History](#counts-history)
     * [Counts By Partitions](#counts-by-partitions)
@@ -188,6 +190,72 @@ Then:
  id | orderid  
  ------------- | ------- 
  10      | 23  
+
+### Nice representation custom datatypes
+
+Gigaspace can store any type of data marked as ```java.io.Serializable```, default configuration of console support converters (nice representation) for all types and next complex nested types:
+* ```com.gigaspaces.document.SpaceDocument```
+* ```com.gigaspaces.entry.VirtualEntry```
+* ```com.gigaspaces.document.DocumentProperties```
+* ```java.util.Map```
+* ```java.lang.Iterable```
+
+#### Converter for custom type:
+ 
+* create class with one method (you don't need to implement any interface or abstract class):
+```java
+public static String convert(Object o) {
+   if (o instanceof <MY_TYPE>) return <MY REPRESENTATION>;
+   else return null; // should return null when doesn't support incoming type so it could be handled by other converter
+}
+```
+* add converter in console classpath
+* add it to console configuration in to section ```converters```, for example:
+```json
+"converters": [
+    "MY_CONVERTER_FULL_CLASS_NAME_1",
+    "MY_CONVERTER_FULL_CLASS_NAME_2"
+]
+```
+
+#### Representation for Oracle XML Type
+
+Standard Oracle JDBC driver doesn't not support native XML datatype. As result sometimes you will see
+```NullPointerException``` or just get ```null``` value for that column, however you can fix that:
+
+* First of all add to class path next dependencies (check proper version):
+```xml
+<dependency>
+  <groupId>com.oracle</groupId>
+  <artifactId>xdb</artifactId>
+  <version>11.2.0</version>
+</dependency>
+<dependency>
+  <groupId>oracle.xml</groupId>
+  <artifactId>xmlparserv2</artifactId>
+  <version>11.2.0.2.0</version>
+</dependency>
+```
+* Then create converter for Oracle XML Type ```oracle.xdb.XMLType```:
+```java
+public class OracleXmlTypeConverter {
+
+    public static String convert(final Object value) {
+        if (value instanceof XMLType) {
+            final XMLType xmlTypeValue = (XMLType) value;
+            try {
+                return xmlTypeValue.getStringVal();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            return null;
+        }
+    }
+
+}
+```
+* add it to classpath of your console
 
 ## Registered types and counts
 
