@@ -73,6 +73,12 @@
                 <artifactId>gs-openspaces</artifactId>
                 <version>${gsVersion}</version>
                 <scope>provided</scope>
+                <exclusions>
+                    <exclusion>
+                        <groupId>hsqldb</groupId>
+                        <artifactId>hsqldb</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <dependency>
