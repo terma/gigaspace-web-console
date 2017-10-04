@@ -72,7 +72,7 @@ public class SqlOnJsonPlugin implements ExecutorPlugin {
                 if (json == null) throw new IllegalArgumentException("Null JSON for " + request.sql);
 
                 try (
-                        final Connection jsonConnection = SqlOnJson.convertPlain(json);
+                        final Connection jsonConnection = new SqlOnJson().convertPlain(json);
                         final PreparedStatement jsonPs = jsonConnection.prepareStatement(jsonSql);
                         final ResultSet jsonRs = jsonPs.executeQuery()
                 ) {
